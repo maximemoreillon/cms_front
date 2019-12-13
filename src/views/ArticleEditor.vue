@@ -1,11 +1,18 @@
 <template>
 
-  <div >
+  <div class="article_editor_view">
+
+    <input type="text" v-model="article_data.title" placeholder="Title">
 
     <quill-editor
-      v-model="article_data.content"
       ref="myQuillEditor"
-      :options="editorOption"/>
+      v-model="article_data.content"
+      v-bind:options="editorOption"/>
+
+    <div class="submit_button_container">
+      <button type="button" v-on:click="submit()">submit</button>
+
+    </div>
 
   </div>
 
@@ -21,11 +28,12 @@
 export default {
   data () {
     return {
+
       article_data: {
-        _id: null,
+        // default set to undefined
+        _id: undefined,
         title: "",
         summary: "",
-        img_src: "",
         content: 'test',
       },
 
@@ -34,27 +42,32 @@ export default {
       }
     }
   },
-  // manually control the data synchronization
-  // 如果需要手动控制数据同步，父组件需要显式地处理changed事件
+
   methods: {
-
-    save(){
-      console.log({
-        date: new Date(),
-        cateogies: ['Machine learning', 'IoT', 'Web development'],
-        title: this.title,
-        summary: this.summary,
-        content: this.content,
+    submit(){
+      this.axios.post('https://cms.maximemoreillon.com/edit_article', this.article_data)
+      .then(response => {
+        console.log(response.data)
+        this.$router.push('/article_list')
       })
+      .catch(error => alert(error))
     }
-
-
   },
   computed: {
     editor() {
       return this.$refs.myQuillEditor.quill
     }
   },
+  mounted(){
+    // If ID is prewsent in query, get the article corresponding to that ID
+    if('_id' in this.$route.query){
+      this.axios.post('https://cms.maximemoreillon.com/get_article', {_id: this.$route.query._id})
+      .then(response => {
+        this.article_data = response.data
+      })
+      .catch(error => alert(error))
+    }
+  }
 
 }
 </script>

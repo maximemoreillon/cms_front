@@ -1,13 +1,17 @@
 <template>
   <div class="container" >
 
-    <div
+    <!-- the article -->
+    <article
       v-if="article_data"
-      ref="article_content"
       class="article_content"
-      v-html="this.article_data.content">
+      ref="article_content"
+      v-html="article_data.content"/>
 
-    </div>
+      <!-- Not founnd message -->
+    <div class="icon_button" v-else>Article not found</div>
+
+    <IconButton icon="mdi-pencil" v-on:buttonClicked="edit_article(article_data._id)"/>
 
   </div>
 
@@ -16,47 +20,54 @@
 
 <script>
 
+import IconButton from '@/components/vue_icon_button/IconButton.vue'
 
-  export default {
-    data () {
-      return {
-        article_data: null,
-        modal_image_src: "",
+export default {
+  components: {
+    IconButton
+  },
+  data () {
+    return {
+      article_data: null,
+
+      modal_image_src: "",
+    }
+  },
+
+  mounted() {
+    this.get_content();
+  },
+  methods: {
+    get_content(){
+      if('_id' in this.$route.query){
+        this.axios.post('https://cms.maximemoreillon.com/get_article', {_id: this.$route.query._id})
+        .then(response => {
+          this.article_data = response.data
+        })
+        .catch(error => alert(error))
       }
     },
-
-    mounted() {
-      this.get_content();
+    add_event_listeners_for_image_modals(){
+      this.$refs.article_content.querySelectorAll('img').forEach(img => {
+        img.addEventListener("click", event => {
+          console.log("alright")
+          this.modal_image_src = event.target.src
+        }, false)
+      })
     },
-    methods: {
-      get_content(){
-        this.article_data = {
-          content: "<h1>Hello world</h1><p>This is great!</p><img src='https://cdn.maximemoreillon.com/logo/thick/logo.png'>"
-        },
-        this.$nextTick(() => {
-          this.add_event_listeners_for_image_modals();
-        })
-      },
-      add_event_listeners_for_image_modals(){
-        this.$refs.article_content.querySelectorAll('img').forEach(img => {
-          img.addEventListener("click", event => {
-            console.log("alright")
-            this.modal_image_src = event.target.src
-          }, false)
-        })
-      },
-    }
-
+    edit_article(_id){
+      if('_id' in this.$route.query){
+        this.$router.push({ path: 'article_editor', query: { _id: _id } })
+      }
+    },
   }
+
+}
 </script>
 
 
 <style>
 
-
-.article_content h2{
-  color: #c00000;
-}
 
 .article_content img {
   /* test CSS for images */
