@@ -2,15 +2,24 @@
 
   <div class="article_editor_view">
 
+
     <input type="text" v-model="article_data.title" placeholder="Title">
 
+    <input type="text" v-model="article_data.summary" placeholder="Summary">
+
+    <input type="search" placeholder="Category">
+
+    <IconButton icon="mdi-content-save" v-on:buttonClicked="submit()"/>
+
+    <!-- edit for the content of the article -->
     <quill-editor
       ref="myQuillEditor"
       v-model="article_data.content"
       v-bind:options="editorOption"/>
 
     <div class="submit_button_container">
-      <button type="button" v-on:click="submit()">submit</button>
+
+
 
     </div>
 
@@ -20,21 +29,28 @@
 </template>
 
 <script>
-
-
-
-//Quill.register('modules/imageResize', ImageResize);
+import IconButton from '@/components/vue_icon_button/IconButton.vue'
 
 export default {
+  components: {
+    IconButton,
+  },
   data () {
     return {
 
+      // Default values for an article, overwritten if loaded with axios
       article_data: {
-        // default set to undefined
+        // default set to undefined for MongoDB
         _id: undefined,
-        title: "",
-        summary: "",
-        content: 'test',
+
+        title: '',
+
+        summary: '',
+
+        category: '',
+
+        // Content edited in quill
+        content: '',
       },
 
       editorOption: {
@@ -47,8 +63,7 @@ export default {
     submit(){
       this.axios.post('https://cms.maximemoreillon.com/edit_article', this.article_data)
       .then(response => {
-        console.log(response.data)
-        this.$router.push('/article_list')
+        this.$router.push({ path: '/article', query: { _id: response.data._id } })
       })
       .catch(error => alert(error))
     }

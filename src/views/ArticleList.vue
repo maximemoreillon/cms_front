@@ -12,7 +12,9 @@
         {{article.title}}
       </div>
 
-      <div class="actions_container">
+
+
+      <div class="actions_container" v-if="false">
 
         <!--
         <button type="button" v-on:click="view_article(article._id)">View</button>
@@ -20,7 +22,7 @@
         <button type="button" v-on:click="delete_article(article._id)">Delete</button>
         -->
 
-        <IconButton v-if="false" icon="mdi-arrow-right" v-on:buttonClicked="view_article(article._id)"/>
+        <IconButton  icon="mdi-arrow-right" v-on:buttonClicked="view_article(article._id)"/>
 
       </div>
 
@@ -78,10 +80,12 @@ export default {
 
 .article_preview_container {
 
-  border: 2px solid #dddddd;
+  border: 1px solid #dddddd;
   margin: 25px;
   padding: 10px;
   flex-basis: 200px;
+
+  cursor: pointer;
 }
 
 .actions_container {

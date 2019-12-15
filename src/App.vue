@@ -15,11 +15,13 @@
 
 <style>
 
+
 * {
   box-sizing: border-box;
 }
 
 body {
+  font-family: Arial,Helvetica Neue,Helvetica,sans-serif;
   margin: 0;
 }
 
@@ -35,5 +37,8 @@ nav a {
   justify-content: center;
 
   padding: 10px;
+
+  text-decoration: none;
+  color: #222222;
 }
 </style>

@@ -1,17 +1,18 @@
 <template>
   <div class="container" >
 
+    <IconButton icon="mdi-pencil" v-on:buttonClicked="edit_article(article_data._id)"/>
+
     <!-- the article -->
     <article
       v-if="article_data"
-      class="article_content"
       ref="article_content"
       v-html="article_data.content"/>
 
       <!-- Not founnd message -->
     <div class="icon_button" v-else>Article not found</div>
 
-    <IconButton icon="mdi-pencil" v-on:buttonClicked="edit_article(article_data._id)"/>
+
 
   </div>
 
@@ -36,6 +37,7 @@ export default {
 
   mounted() {
     this.get_content();
+
   },
   methods: {
     get_content(){
@@ -43,6 +45,9 @@ export default {
         this.axios.post('https://cms.maximemoreillon.com/get_article', {_id: this.$route.query._id})
         .then(response => {
           this.article_data = response.data
+
+          setTimeout(this.add_event_listeners_for_image_modals,100);
+
         })
         .catch(error => alert(error))
       }
@@ -50,8 +55,8 @@ export default {
     add_event_listeners_for_image_modals(){
       this.$refs.article_content.querySelectorAll('img').forEach(img => {
         img.addEventListener("click", event => {
-          console.log("alright")
-          this.modal_image_src = event.target.src
+          console.log(event.target.src)
+          //this.modal_image_src = event.target.src
         }, false)
       })
     },
@@ -68,16 +73,41 @@ export default {
 
 <style>
 
-
-.article_content img {
-  /* test CSS for images */
-  outline: 1px solid red;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 100px;
+article {
+  margin: 25px;
 }
 
 
+article img {
+  /* test CSS for images */
+
+  /*
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  */
+  float: right;
+  width: 200px;
+  margin: 0 10px;
+}
+
+
+article pre {
+  background-color: #222222;
+  color: white;
+  padding: 15px;
+}
+
+@media only screen and (max-width: 600px) {
+  article img {
+    /* test CSS for images */
+
+    float: none;
+    width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
 
 </style>
