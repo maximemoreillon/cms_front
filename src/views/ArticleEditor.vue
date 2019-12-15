@@ -9,7 +9,8 @@
 
     <input type="search" placeholder="Category">
 
-    <IconButton icon="mdi-content-save" v-on:buttonClicked="submit()"/>
+    <IconButton icon="mdi-content-save" v-on:buttonClicked="submit_article()"/>
+    <IconButton icon="mdi-delete" v-on:buttonClicked="delete_article()"/>
 
     <!-- edit for the content of the article -->
     <quill-editor
@@ -44,34 +45,43 @@ export default {
         _id: undefined,
 
         title: '',
-
         summary: '',
 
-        category: '',
+        creation_date: new Date(),
 
         // Content edited in quill
         content: '',
       },
 
       editorOption: {
-
+        modules: {
+          clipboard: {
+            matchVisual: false
+          }
+        }
       }
     }
   },
 
   methods: {
-    submit(){
+    submit_article(){
       this.axios.post('https://cms.maximemoreillon.com/edit_article', this.article_data)
       .then(response => {
         this.$router.push({ path: '/article', query: { _id: response.data._id } })
       })
       .catch(error => alert(error))
-    }
+    },
+    delete_article(){
+      this.axios.post('https://cms.maximemoreillon.com/delete_article', {_id: this.article_data._id})
+      .then( () =>  this.$router.push({ path: '/article_list' }))
+      .catch(error => alert(error))
+    },
+    edit_article(_id){
+      this.$router.push({ path: 'article_editor', query: { _id: _id } })
+    },
   },
   computed: {
-    editor() {
-      return this.$refs.myQuillEditor.quill
-    }
+
   },
   mounted(){
     // If ID is prewsent in query, get the article corresponding to that ID
@@ -79,6 +89,8 @@ export default {
       this.axios.post('https://cms.maximemoreillon.com/get_article', {_id: this.$route.query._id})
       .then(response => {
         this.article_data = response.data
+        // Add the date of edition
+        this.article_data.edit_date = new Date();
       })
       .catch(error => alert(error))
     }

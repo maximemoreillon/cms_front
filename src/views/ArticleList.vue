@@ -2,32 +2,36 @@
 
   <div class="article_list_view">
 
+
     <div
       class="article_preview_container"
       v-for="article in articles"
       v-bind:key="article._id"
       v-on:click="view_article(article._id)">
 
-      <div class="">
+      <!-- content that appears on the report card -->
+      <div
+        class="article_title"
+        v-if="article.title">
         {{article.title}}
       </div>
 
-
-
-      <div class="actions_container" v-if="false">
-
-        <!--
-        <button type="button" v-on:click="view_article(article._id)">View</button>
-        <button type="button" v-on:click="edit_article(article._id)">Edit</button>
-        <button type="button" v-on:click="delete_article(article._id)">Delete</button>
-        -->
-
-        <IconButton  icon="mdi-arrow-right" v-on:buttonClicked="view_article(article._id)"/>
-
+      <!-- fallback if title does not exist -->
+      <div
+        class="article_title"
+        v-else>
+        Untitled article
       </div>
 
+      <!-- date -->
+      <div class="article_date" v-if="article.creation_date">
+        {{format_date(new Date(article.creation_date))}}
+      </div>
 
     </div>
+
+
+
 
   </div>
 
@@ -35,11 +39,9 @@
 </template>
 
 <script>
-import IconButton from '@/components/vue_icon_button/IconButton.vue'
-
 export default {
   components: {
-    IconButton
+
   },
   data () {
     return {
@@ -47,19 +49,15 @@ export default {
     }
   },
   methods: {
-    delete_article(_id){
-      this.axios.post('https://cms.maximemoreillon.com/delete_article', {_id: _id})
-      .then(response => {
-        console.log(response.data)
-      })
-      .catch(error => alert(error))
-    },
-    edit_article(_id){
-      this.$router.push({ path: 'article_editor', query: { _id: _id } })
-    },
     view_article(_id){
       this.$router.push({ path: 'article', query: { _id: _id } })
     },
+    format_date(date){
+      var mm = date.getMonth() + 1; // getMonth() is zero-based
+      var dd = date.getDate();
+
+      return [date.getFullYear(), (mm>9 ? '' : '0') + mm, (dd>9 ? '' : '0') + dd ].join('/');
+    }
   },
   mounted() {
     this.axios.post('https://cms.maximemoreillon.com/get_article_list')
@@ -76,20 +74,27 @@ export default {
 
 .article_list_view {
   display: flex;
+  flex-wrap: wrap;
 }
 
 .article_preview_container {
 
   border: 1px solid #dddddd;
-  margin: 25px;
+  margin: 10px;
   padding: 10px;
   flex-basis: 200px;
 
   cursor: pointer;
 }
 
-.actions_container {
-  text-align: right;
+.article_title {
+  font-weight: bold;
 }
+.article_date {
+  color: #666666;
+  font-size: 75%;
+}
+
+
 
 </style>
