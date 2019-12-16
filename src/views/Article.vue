@@ -85,8 +85,6 @@ export default {
     add_event_listeners_for_image_modals(){
       this.$refs.article_content.querySelectorAll('img').forEach(img => {
         img.addEventListener("click", event => {
-          console.log(event.target.src)
-          //this.modal_image_src = event.target.src
           this.modal.open = true;
           this.modal.image_src = event.target.src;
         }, false)

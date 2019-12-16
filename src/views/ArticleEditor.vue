@@ -4,11 +4,10 @@
 
 
     <input type="text" v-model="article_data.title" placeholder="Title">
-
     <input type="text" v-model="article_data.summary" placeholder="Summary">
-
     <input type="search" placeholder="Category">
 
+    <!-- action buttons -->
     <IconButton icon="mdi-content-save" v-on:buttonClicked="submit_article()"/>
     <IconButton icon="mdi-delete" v-on:buttonClicked="delete_article()"/>
 
@@ -18,11 +17,6 @@
       v-model="article_data.content"
       v-bind:options="editorOption"/>
 
-    <div class="submit_button_container">
-
-
-
-    </div>
 
   </div>
 
@@ -72,9 +66,12 @@ export default {
       .catch(error => alert(error))
     },
     delete_article(){
-      this.axios.post('https://cms.maximemoreillon.com/delete_article', {_id: this.article_data._id})
-      .then( () =>  this.$router.push({ path: '/article_list' }))
-      .catch(error => alert(error))
+      if(confirm('Delete article?')){
+        this.axios.post('https://cms.maximemoreillon.com/delete_article', {_id: this.article_data._id})
+        .then( () =>  this.$router.push({ path: '/article_list' }))
+        .catch(error => alert(error))
+      }
+
     },
     edit_article(_id){
       this.$router.push({ path: 'article_editor', query: { _id: _id } })
