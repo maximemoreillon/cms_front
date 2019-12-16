@@ -5,9 +5,12 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: null,
+    user: false,
   },
   mutations: {
+    toggle_auth(state) {
+      state.user = !state.user
+    }
   },
   actions: {
   },

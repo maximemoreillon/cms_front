@@ -2,21 +2,45 @@
 
   <div class="article_editor_view">
 
+    <div class="toolbar" v-if="article_data">
 
-    <input type="text" v-model="article_data.title" placeholder="Title">
-    <input type="text" v-model="article_data.summary" placeholder="Summary">
-    <label for="">Public</label> <input type="checkbox">
-    <input type="search" placeholder="Category">
+      <div class="dates_container">
+        <div class="" v-if="article_data.creation_date">Published on {{format_date(article_data.creation_date)}}</div>
+        <div class="" v-if="article_data.edit_date">Last edited on {{format_date(article_data.edit_date)}}</div>
+      </div>
 
-    <!-- action buttons -->
-    <IconButton icon="mdi-content-save" v-on:buttonClicked="submit_article()"/>
-    <IconButton icon="mdi-delete" v-on:buttonClicked="delete_article()"/>
+      <IconButton
+        v-if="article_data._id"
+        class="right_aligned"
+        icon="mdi-arrow-left"
+        v-on:buttonClicked="view_article()"/>
+      <IconButton
+        v-bind:class="{right_aligned: !article_data._id}"
+        icon="mdi-content-save"
+        v-on:buttonClicked="submit_article()"/>
+      <IconButton
+        icon="mdi-delete"
+        v-on:buttonClicked="delete_article()"/>
+      <IconButton
+        v-bind:icon="article_data.published ? 'mdi-earth' : 'mdi-lock'"
+        v-on:buttonClicked="toggle_published()"/>
+    </div>
 
-    <!-- edit for the content of the article -->
-    <quill-editor
-      ref="myQuillEditor"
-      v-model="article_data.content"
-      v-bind:options="editorOption"/>
+    <!-- wrapper for authentication detection -->
+    <div class="" v-if="$store.state.user">
+      <div class="toolbar">
+        <!-- action buttons -->
+
+      </div>
+
+      <!-- editor for the content of the article -->
+      <quill-editor
+        ref="myQuillEditor"
+        v-model="article_data.content"
+        v-bind:options="editorOption"/>
+    </div>
+    <div class="" v-else>Article cannot be edited by unauthenticated user</div>
+
 
 
   </div>
@@ -26,11 +50,13 @@
 
 <script>
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
+import {formatDate} from '@/mixins/formatDate.js'
 
 export default {
   components: {
     IconButton,
   },
+  mixins: [formatDate],
   data () {
     return {
 
@@ -39,8 +65,7 @@ export default {
         // default set to undefined for MongoDB
         _id: undefined,
 
-        title: '',
-        summary: '',
+        published: false,
 
         creation_date: new Date(),
 
@@ -60,13 +85,13 @@ export default {
             [{ 'list': 'ordered'}, { 'list': 'bullet' }],
             [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
             [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-            [{ 'direction': 'rtl' }],                         // text direction
+            //[{ 'direction': 'rtl' }],                         // text direction
 
             [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
             [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
 
             [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
-            [{ 'font': [] }],
+            //[{ 'font': [] }],
             [{ 'align': [] }],
 
             ['image', 'video'],
@@ -82,6 +107,9 @@ export default {
   },
 
   methods: {
+    toggle_published(){
+      this.article_data.published = !this.article_data.published;
+    },
     submit_article(){
       this.axios.post('https://cms.maximemoreillon.com/edit_article', this.article_data)
       .then(response => {
@@ -97,8 +125,8 @@ export default {
       }
 
     },
-    edit_article(_id){
-      this.$router.push({ path: 'article_editor', query: { _id: _id } })
+    view_article(){
+      this.$router.push({ path: 'article', query: { _id: this.article_data._id } })
     },
   },
   computed: {
@@ -126,7 +154,17 @@ export default {
 
 <style>
 
-
+.toolbar {
+  margin: 10px 0;
+  display: flex;
+}
+.right_aligned {
+  margin-left: auto;
+}
+.dates_container{
+  font-size: 80%;
+  color: #444444;
+}
 
 
 

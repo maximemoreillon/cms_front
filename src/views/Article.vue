@@ -1,15 +1,20 @@
 <template>
   <div class="container" >
 
-    <div class="toolbar">
-      <IconButton icon="mdi-pencil" v-on:buttonClicked="edit_article(article_data._id)"/>
-    </div>
+    <!-- Toolbar, currently just for edit button -->
+    <!-- TODO: Wrap everything in v-if="article_data" -->
+    <div class="toolbar" v-if="article_data">
 
-    <div class="article_metadata" v-if="article_data">
+      <div class="dates_container">
+        <div class="" v-if="article_data.creation_date">Published on {{format_date(article_data.creation_date)}}</div>
+        <div class="" v-if="article_data.edit_date">Last edited on {{format_date(article_data.edit_date)}}</div>
+      </div>
 
-      <div class="" v-if="article_data.creation_date">Published on: {{article_data.creation_date}}</div>
-      <div class="" v-if="article_data.edit_date">Last edited on: {{article_data.edit_date}}</div>
-
+      <IconButton
+        class="right_aligned"
+        icon="mdi-pencil"
+        v-on:buttonClicked="edit_article(article_data._id)"
+        v-if="$store.state.user"/>
     </div>
 
 
@@ -31,10 +36,8 @@
       <img
         class="modal_image"
         v-bind:src="modal.image_src"
-        alt="">
+        alt=""/>
     </Modal>
-
-
 
   </div>
 
@@ -45,12 +48,14 @@
 
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import Modal from '@/components/vue_modal/Modal.vue'
+import {formatDate} from '@/mixins/formatDate.js'
 
 export default {
   components: {
     IconButton,
     Modal
   },
+  mixins: [formatDate],
   data () {
     return {
       article_data: null,
@@ -102,9 +107,19 @@ export default {
 
 
 <style>
+.toolbar {
+  margin: 10px 0;
+  display: flex;
+}
+.right_aligned {
+  margin-left: auto;
+}
+.dates_container{
+  font-size: 80%;
+  color: #444444;
+}
 
 article {
-  margin: 25px;
 }
 
 
