@@ -5,6 +5,7 @@
 
     <input type="text" v-model="article_data.title" placeholder="Title">
     <input type="text" v-model="article_data.summary" placeholder="Summary">
+    <label for="">Public</label> <input type="checkbox">
     <input type="search" placeholder="Category">
 
     <!-- action buttons -->
@@ -51,8 +52,31 @@ export default {
         modules: {
           clipboard: {
             matchVisual: false
-          }
+          },
+          toolbar: [
+            ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+            ['blockquote', 'code-block'],
+
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
+            [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
+            [{ 'direction': 'rtl' }],                         // text direction
+
+            [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+
+            [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+            [{ 'font': [] }],
+            [{ 'align': [] }],
+
+            ['image', 'video'],
+
+            ['clean']
+          ],
+
+
         }
+
       }
     }
   },
@@ -78,7 +102,10 @@ export default {
     },
   },
   computed: {
-
+    // What is this used for?
+    editor() {
+      return this.$refs.myQuillEditor.quill
+    }
   },
   mounted(){
     // If ID is prewsent in query, get the article corresponding to that ID

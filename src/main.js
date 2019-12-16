@@ -15,7 +15,7 @@ import 'quill/dist/quill.bubble.css'
 axios.defaults.withCredentials = true  // enable axios post cookie, default false
 axios.defaults.crossDomain = true
 
-Vue.use(VueQuillEditor)
+Vue.use(VueQuillEditor, /* { default global options } */)
 Vue.use(VueAxios, axios)
 
 Vue.config.productionTip = false
