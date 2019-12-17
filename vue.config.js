@@ -5,6 +5,7 @@ module.exports = {
       disableHostCheck: true,
       host: '0.0.0.0'
   },
+  // Needed for quill modules
   configureWebpack: {
     plugins: [
       new webpack.ProvidePlugin({

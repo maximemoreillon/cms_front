@@ -54,9 +54,11 @@
 
       <!-- editor for the content of the article -->
       <quill-editor
+        v-if="!article_loading"
         class="editor"
         v-model="article_data.content"
         v-bind:options="editorOption"/>
+      <Loader v-else/>
 
     </div>
     <div class="" v-else>Article cannot be edited by unauthenticated user</div>
@@ -72,15 +74,20 @@
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import {formatDate} from '@/mixins/formatDate.js'
 import Toolbar from '@/components/Toolbar.vue'
+import Loader from '@/components/vue_loader/Loader.vue'
 
 export default {
   components: {
     IconButton,
-    Toolbar
+    Toolbar,
+    Loader,
   },
   mixins: [formatDate],
   data () {
     return {
+
+      article_loading: false,
+
       // Default values for an article, overwritten if loaded with axios
       article_data: {
         // default set to undefined for MongoDB
@@ -102,11 +109,11 @@ export default {
         modules: {
 
           imageDrop: true,
-          /*
+
           imageResize: {
             modules: [ 'Resize', 'DisplaySize'  ]
           },
-          */
+
           clipboard: {
             matchVisual: false
           },
@@ -126,7 +133,7 @@ export default {
             //[{ 'font': [] }],
             [{ 'align': [] }],
 
-            ['image', 'video'],
+            ['link','image', 'video'],
 
             ['clean']
           ],
@@ -139,6 +146,24 @@ export default {
   },
 
   methods: {
+    get_article_if_exists(){
+      // If ID is present in query, get the article corresponding to that ID
+      if('_id' in this.$route.query){
+        this.article_loading = true;
+        this.axios.post('https://cms.maximemoreillon.com/get_article', {_id: this.$route.query._id})
+        .then(response => {
+
+          if(response.data){
+            this.article_data = response.data
+            // Add the date of edition
+            this.article_data.edit_date = new Date();
+          }
+          this.article_loading = false;
+
+        })
+        .catch(error => alert(error))
+      }
+    },
     toggle_published(){
       this.article_data.published = !this.article_data.published;
     },
@@ -165,22 +190,7 @@ export default {
 
   },
   mounted(){
-
-    // If ID is present in query, get the article corresponding to that ID
-    if('_id' in this.$route.query){
-      this.axios.post('https://cms.maximemoreillon.com/get_article', {_id: this.$route.query._id})
-      .then(response => {
-
-        if(response.data){
-          this.article_data = response.data
-          // Add the date of edition
-          this.article_data.edit_date = new Date();
-        }
-
-      })
-      .catch(error => alert(error))
-    }
-
+    this.get_article_if_exists();
   }
 
 }

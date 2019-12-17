@@ -3,12 +3,20 @@
   <div class="article_list_view">
 
 
-    <Toolbar v-if="$store.state.user">
+    <Toolbar >
 
-      
+      <IconButton
+        icon="mdi-filter"/>
+
+      <IconButton
+        icon="mdi-sort-variant"/>
+
       <div class="growing_spacer"/>
 
-      <IconButton icon="mdi-plus" v-on:buttonClicked="new_article()"/>
+      <IconButton
+        v-if="$store.state.user"
+        icon="mdi-plus"
+        v-on:buttonClicked="new_article()"/>
     </Toolbar>
 
 
@@ -22,7 +30,7 @@
     </div>
 
     <!-- loader -->
-    <div class="loader" v-else>Loading...</div>
+    <Loader v-else/>
 
   </div>
 
@@ -33,12 +41,14 @@
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import ArticlePreview from '@/components/ArticlePreview.vue'
 import Toolbar from '@/components/Toolbar.vue'
+import Loader from '@/components/vue_loader/Loader.vue'
 
 export default {
   components: {
     IconButton,
     ArticlePreview,
-    Toolbar
+    Toolbar,
+    Loader
   },
   data () {
     return {

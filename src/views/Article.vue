@@ -42,7 +42,7 @@
       v-html="article_data.content"/>
 
     <!-- messages when no content -->
-    <div class="" v-else-if="article_loading">Loading...</div>
+    <Loader v-else-if="article_loading"/>
     <div class="" v-else>Article not found</div>
 
     <!-- modal for images -->
@@ -65,6 +65,7 @@
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import Modal from '@/components/vue_modal/Modal.vue'
 import Toolbar from '@/components/Toolbar.vue'
+import Loader from '@/components/vue_loader/Loader.vue'
 
 import {formatDate} from '@/mixins/formatDate.js'
 
@@ -72,7 +73,8 @@ export default {
   components: {
     IconButton,
     Modal,
-    Toolbar
+    Toolbar,
+    Loader
   },
   mixins: [formatDate],
   data () {
@@ -158,6 +160,12 @@ article pre {
   background-color: #222222;
   color: white;
   padding: 15px;
+}
+
+article a {
+  font-weight: bold;
+  text-decoration: none;
+  color: #c00000;
 }
 
 .modal_image {
