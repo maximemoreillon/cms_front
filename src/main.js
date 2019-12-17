@@ -20,6 +20,21 @@ Vue.use(VueAxios, axios)
 
 Vue.config.productionTip = false
 
+
+// Check auth at each route
+router.beforeEach((to, from, next) => {
+
+  // Authentication
+  axios.post('https://authentication.maximemoreillon.com/status')
+  .then(response => {
+    if(response.data.logged_in) store.commit('update_user',response.data.username)
+    else store.commit('update_user', undefined)
+    next();
+  })
+  .catch(error => console.log(error))
+
+});
+
 new Vue({
   router,
   store,

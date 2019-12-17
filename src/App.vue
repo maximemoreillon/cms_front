@@ -2,31 +2,18 @@
 
   <div id="app">
 
-    <header>
-      Header
-    </header>
-
     <nav>
       <img class="logo" src="@/assets/logo/logo.svg" alt="logo">
       <router-link to="/">Home</router-link>
       <router-link to="/about">About</router-link>
       <router-link to="/article_list">Articles</router-link>
-      <span
-        class="mdi"
-        v-on:click="$store.commit('toggle_auth')"
-        v-bind:class="$store.state.user ? 'mdi-logout' : 'mdi-login'"/>
     </nav>
 
-
-
-    <main>
+    <!-- ID set for quill -->
+    <main id="main">
       <router-view/>
     </main>
 
-
-    <footer>
-
-    </footer>
 
   </div>
 
@@ -35,6 +22,9 @@
 <script>
 export default {
   name: 'App',
+  mounted() {
+
+  }
 }
 </script>
 
@@ -60,20 +50,22 @@ body {
 
 #app {
 
+  /*
   max-width: 1000px;
   margin-left: auto;
   margin-right: auto;
+  */
 
+
+  /* height is fixed, scrolling through main done using overflow */
   height: 100vh;
 
   /* layout using grid */
   display: grid;
   grid-template-areas:
-    'nav main'
-    'nav footer';
+    'nav main';
   grid-template-columns: auto 1fr;
-  grid-template-rows: 1fr auto;
-  grid-gap: 0 25px;
+  grid-template-rows: 1fr;
 }
 
 nav {
@@ -94,7 +86,7 @@ header {
 .logo {
   width: 100px;
 
-  margin: 15px;
+  margin: 25px;
 
   /* animation */
   animation-name: logo_rotation;
@@ -105,7 +97,7 @@ header {
 
 nav a {
 
-  font-size: 150%;
+  font-size: 135%;
 
   display: flex;
   justify-content: center;
@@ -127,7 +119,6 @@ nav span {
 
 nav a:hover {
   border-right: 3px solid #666666;
-  color: #666666;
 }
 
 nav a.router-link-exact-active {
@@ -137,17 +128,77 @@ nav a.router-link-exact-active {
 main {
   grid-area: main;
   display: block; /* IE fix */
+
+  height: 100%;
+  overflow-y: auto;
+
+  /* not ideal */
+  padding: 25px;
+}
+
+main::-webkit-scrollbar {
+    width: 2px;
+    background-color: #F5F5F5;
+}
+
+main::-webkit-scrollbar-thumb {
+    background-color: #c00000;
 }
 
 footer{
   grid-area: footer;
   text-align: center;
+  display: none;
 }
-
 
 
 @keyframes logo_rotation {
   0% {transform: rotate(0deg);}
   100% {transform: rotate(360deg);}
 }
+
+
+@media (orientation: portrait) {
+  #app {
+    margin: 0;
+    grid-template-areas:
+      'nav'
+      'main';
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  nav {
+    margin: 0 5px;
+    flex-direction: row;
+    align-items: stretch;
+    border: none;
+    border-bottom: 1px solid #dddddd;
+  }
+
+  nav a {
+    display: flex;
+    align-items: center;
+    border: none;
+    border-bottom: 3px solid transparent;
+  }
+
+  nav a:hover {
+    border: none;
+    border-bottom: 3px solid #666666;
+    color: #666666;
+  }
+
+  nav a.router-link-exact-active {
+    border: none;
+    border-bottom: 3px solid #c00000;
+  }
+
+  .logo {
+    width: 30px;
+    height: 30px;
+    margin-right: auto;
+  }
+}
+
 </style>

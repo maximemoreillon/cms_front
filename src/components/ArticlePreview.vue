@@ -87,12 +87,20 @@ export default {
 
 
 
+
+
 .article_preview .article_title {
   font-weight: bold;
   font-size: 120%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+
+  transition: color 0.25s;
+}
+
+.article_preview:hover .article_title {
+  color: #c00000;
 }
 
 .article_preview .article_metadata {

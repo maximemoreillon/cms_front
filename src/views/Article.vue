@@ -12,9 +12,14 @@
 
       <IconButton
         class="right_aligned"
+        icon="mdi-arrow-left"
+        v-on:buttonClicked="$router.push({ path: 'article_list' })"/>
+
+      <IconButton
         icon="mdi-pencil"
         v-on:buttonClicked="edit_article(article_data._id)"
         v-if="$store.state.user"/>
+
     </div>
 
 

@@ -2,35 +2,33 @@
 
   <div class="article_editor_view">
 
-    <div class="toolbar" v-if="article_data">
 
-      <div class="dates_container">
-        <div class="" v-if="article_data.creation_date">Published on {{format_date(article_data.creation_date)}}</div>
-        <div class="" v-if="article_data.edit_date">Last edited on {{format_date(article_data.edit_date)}}</div>
-      </div>
-
-      <IconButton
-        v-if="article_data._id"
-        class="right_aligned"
-        icon="mdi-arrow-left"
-        v-on:buttonClicked="view_article()"/>
-      <IconButton
-        v-bind:class="{right_aligned: !article_data._id}"
-        icon="mdi-content-save"
-        v-on:buttonClicked="submit_article()"/>
-      <IconButton
-        icon="mdi-delete"
-        v-on:buttonClicked="delete_article()"/>
-      <IconButton
-        v-bind:icon="article_data.published ? 'mdi-earth' : 'mdi-lock'"
-        v-on:buttonClicked="toggle_published()"/>
-    </div>
 
     <!-- wrapper for authentication detection -->
-    <div class="" v-if="$store.state.user">
-      <div class="toolbar">
-        <!-- action buttons -->
+    <div class="authentication_wrapper" v-if="$store.state.user">
 
+      <div class="toolbar" v-if="article_data">
+
+        <div class="dates_container">
+          <div class="" v-if="article_data.creation_date">Published on {{format_date(article_data.creation_date)}}</div>
+          <div class="" v-if="article_data.edit_date">Last edited on {{format_date(article_data.edit_date)}}</div>
+        </div>
+
+        <IconButton
+          v-if="article_data._id"
+          class="right_aligned"
+          icon="mdi-arrow-left"
+          v-on:buttonClicked="view_article()"/>
+        <IconButton
+          v-bind:class="{right_aligned: !article_data._id}"
+          icon="mdi-content-save"
+          v-on:buttonClicked="submit_article()"/>
+        <IconButton
+          icon="mdi-delete"
+          v-on:buttonClicked="delete_article()"/>
+        <IconButton
+          v-bind:icon="article_data.published ? 'mdi-earth' : 'mdi-lock'"
+          v-on:buttonClicked="toggle_published()"/>
       </div>
 
       <!-- editor for the content of the article -->
@@ -74,6 +72,9 @@ export default {
       },
 
       editorOption: {
+        scrollingContainer: '#main', // prevents jumping back to top of editor when pasting
+        theme: 'bubble',
+        bounds: '#main', // Preventing bubble from rendering behind nav
         modules: {
           clipboard: {
             matchVisual: false
@@ -140,9 +141,13 @@ export default {
     if('_id' in this.$route.query){
       this.axios.post('https://cms.maximemoreillon.com/get_article', {_id: this.$route.query._id})
       .then(response => {
-        this.article_data = response.data
-        // Add the date of edition
-        this.article_data.edit_date = new Date();
+
+        if(response.data){
+          this.article_data = response.data
+          // Add the date of edition
+          this.article_data.edit_date = new Date();
+        }
+
       })
       .catch(error => alert(error))
     }
