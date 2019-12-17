@@ -1,0 +1,43 @@
+<template>
+  <div class="toolbar">
+    <slot></slot>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Toolbar',
+
+}
+</script>
+
+<style scoped>
+
+
+.toolbar{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  border-bottom: 1px solid #dddddd;
+  padding: 5px 0;
+}
+
+.toolbar > *:not(:first-child){
+  margin-left: 10px;
+}
+
+.growing_spacer{
+  flex-grow: 1;
+}
+
+input[type="search"]{
+  border: none;
+  border-bottom: 1px solid #444444;
+}
+
+.dates_container {
+  font-size: 80%;
+  color: #666666;
+}
+
+</style>

@@ -7,12 +7,31 @@
     <!-- wrapper for authentication detection -->
     <div class="authentication_wrapper" v-if="$store.state.user">
 
-      <div class="toolbar" v-if="article_data">
+      <Toolbar v-if="article_data">
 
         <div class="dates_container">
           <div class="" v-if="article_data.creation_date">Published on {{format_date(article_data.creation_date)}}</div>
           <div class="" v-if="article_data.edit_date">Last edited on {{format_date(article_data.edit_date)}}</div>
         </div>
+
+        <div class="category_container">
+          <label for="category_search">Category: </label>
+          <input
+            id="category_search"
+            type="search"
+            list="category_list"
+            v-model="article_data.category"/>
+        </div>
+
+        <div class="growing_spacer"/>
+
+
+        <datalist id="category_list">
+          <option
+            v-for="(category, i) in $store.state.categories"
+            v-bind:value="category"
+            v-bind:key="i"/>
+        </datalist>
 
         <IconButton
           v-if="article_data._id"
@@ -27,15 +46,18 @@
           icon="mdi-delete"
           v-on:buttonClicked="delete_article()"/>
         <IconButton
-          v-bind:icon="article_data.published ? 'mdi-earth' : 'mdi-lock'"
+          v-bind:icon="article_data.published ? 'mdi-lock' : 'mdi-earth'"
           v-on:buttonClicked="toggle_published()"/>
-      </div>
+
+      </Toolbar>
+
 
       <!-- editor for the content of the article -->
       <quill-editor
-        ref="myQuillEditor"
+        class="editor"
         v-model="article_data.content"
         v-bind:options="editorOption"/>
+
     </div>
     <div class="" v-else>Article cannot be edited by unauthenticated user</div>
 
@@ -49,21 +71,23 @@
 <script>
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import {formatDate} from '@/mixins/formatDate.js'
+import Toolbar from '@/components/Toolbar.vue'
 
 export default {
   components: {
     IconButton,
+    Toolbar
   },
   mixins: [formatDate],
   data () {
     return {
-
       // Default values for an article, overwritten if loaded with axios
       article_data: {
         // default set to undefined for MongoDB
         _id: undefined,
 
         published: false,
+        category: "",
 
         creation_date: new Date(),
 
@@ -73,25 +97,32 @@ export default {
 
       editorOption: {
         scrollingContainer: '#main', // prevents jumping back to top of editor when pasting
-        theme: 'bubble',
+        theme: 'snow',
         bounds: '#main', // Preventing bubble from rendering behind nav
         modules: {
+
+          imageDrop: true,
+          /*
+          imageResize: {
+            modules: [ 'Resize', 'DisplaySize'  ]
+          },
+          */
           clipboard: {
             matchVisual: false
           },
           toolbar: [
-            ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+            ['bold', 'italic', 'underline', 'strike'],
             ['blockquote', 'code-block'],
 
             [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-            [{ 'script': 'sub'}, { 'script': 'super' }],      // superscript/subscript
-            [{ 'indent': '-1'}, { 'indent': '+1' }],          // outdent/indent
-            //[{ 'direction': 'rtl' }],                         // text direction
+            [{ 'script': 'sub'}, { 'script': 'super' }],
+            [{ 'indent': '-1'}, { 'indent': '+1' }],
+            //[{ 'direction': 'rtl' }],
 
-            [{ 'size': ['small', false, 'large', 'huge'] }],  // custom dropdown
+            [{ 'size': ['small', false, 'large', 'huge'] }],
             [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
 
-            [{ 'color': [] }, { 'background': [] }],          // dropdown with defaults from theme
+            [{ 'color': [] }, { 'background': [] }],
             //[{ 'font': [] }],
             [{ 'align': [] }],
 
@@ -131,13 +162,11 @@ export default {
     },
   },
   computed: {
-    // What is this used for?
-    editor() {
-      return this.$refs.myQuillEditor.quill
-    }
+
   },
   mounted(){
-    // If ID is prewsent in query, get the article corresponding to that ID
+
+    // If ID is present in query, get the article corresponding to that ID
     if('_id' in this.$route.query){
       this.axios.post('https://cms.maximemoreillon.com/get_article', {_id: this.$route.query._id})
       .then(response => {
@@ -151,6 +180,7 @@ export default {
       })
       .catch(error => alert(error))
     }
+
   }
 
 }
@@ -159,17 +189,13 @@ export default {
 
 <style>
 
-.toolbar {
-  margin: 10px 0;
-  display: flex;
+
+.editor{
+  margin-top: 15px;
+  /* SUPER DIRTY */
+  height: 75vh;
 }
-.right_aligned {
-  margin-left: auto;
-}
-.dates_container{
-  font-size: 80%;
-  color: #444444;
-}
+
 
 
 

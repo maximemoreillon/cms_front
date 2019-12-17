@@ -3,10 +3,13 @@
   <div class="article_list_view">
 
 
-    <div class="toolbar" v-if="$store.state.user">
-      <div class="">Sort by: Date</div>
+    <Toolbar v-if="$store.state.user">
+
+      
+      <div class="growing_spacer"/>
+
       <IconButton icon="mdi-plus" v-on:buttonClicked="new_article()"/>
-    </div>
+    </Toolbar>
 
 
     <div class="articles_container" v-if="!articles_loading">
@@ -29,15 +32,18 @@
 <script>
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import ArticlePreview from '@/components/ArticlePreview.vue'
+import Toolbar from '@/components/Toolbar.vue'
 
 export default {
   components: {
     IconButton,
-    ArticlePreview
+    ArticlePreview,
+    Toolbar
   },
   data () {
     return {
       articles: [],
+
       articles_loading: false,
     }
   },
@@ -45,15 +51,25 @@ export default {
     new_article(){
       this.$router.push({ path: 'article_editor' })
     },
+    get_articles(category){
+      this.articles_loading = true;
+      this.axios.post('https://cms.maximemoreillon.com/get_article_list', {
+        category: category
+      })
+      .then(response => {
+        this.articles = response.data;
+        this.articles_loading = false;
+      })
+      .catch(error => alert(error))
+    },
   },
+  beforeRouteUpdate (to, from, next) {
+    this.get_articles(to.query.category)
+    next();
+  },
+
   mounted() {
-    this.articles_loading = true;
-    this.axios.post('https://cms.maximemoreillon.com/get_article_list')
-    .then(response => {
-      this.articles = response.data;
-      this.articles_loading = false;
-    })
-    .catch(error => alert(error))
+    this.get_articles(this.$route.query.category);
   },
   computed: {
 
@@ -64,12 +80,8 @@ export default {
 
 <style scoped>
 
-.toolbar {
-  display: flex;
-  justify-content: space-between;
-}
-
 .articles_container {
+
   /* IE fallback behavior */
   display: flex;
   flex-wrap: wrap;
@@ -77,7 +89,8 @@ export default {
   /* Normal behavior */
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
-  grid-column-gap: 10px;
+  grid-gap: 10px;
+  margin-top: 10px;
 }
 
 

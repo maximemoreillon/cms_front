@@ -10,12 +10,25 @@
 
 
 
+
+
     <!-- Article title, consists of first h1 of the content -->
     <div class="article_title">{{article_title}}</div>
 
     <!-- date and publish status-->
     <div class="article_metadata" v-if="article.creation_date">
+
       <span class="article_date">{{format_date(article.creation_date)}}</span>
+
+      <span class="article_category" v-if="! ('category' in $route.query) && article.category">
+        {{article.category}}
+      </span>
+      <span class="article_category" v-else-if="! ('category' in $route.query)">
+        Uncategorized
+      </span>
+
+
+
     </div>
 
     <!-- alt set to empty string to display nothing if no thumbnail -->
@@ -74,42 +87,51 @@ export default {
 </script>
 
 <style scoped>
+
 .article_preview {
   position: relative;
-  margin: 10px;
   padding: 10px;
   flex-basis: 400px;
 
   cursor: pointer;
 
-  box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  /*box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);*/
+  border: 1px solid #dddddd;
+  transition: border-color 0.25s;
+}
+
+.article_preview:hover {
+  border-color: #c00000;
 }
 
 
 
-
-
 .article_preview .article_title {
+
+  /* DIRTY */
+  margin-top: 10px;
+
   font-weight: bold;
   font-size: 120%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-
-  transition: color 0.25s;
 }
 
-.article_preview:hover .article_title {
-  color: #c00000;
-}
+
 
 .article_preview .article_metadata {
   font-size: 75%;
   display: flex;
+  color: #666666;
+}
+
+.article_preview .article_metadata > * {
+  margin-right: 5px;
 }
 
 .article_preview .article_date {
-  color: #666666;
+
 }
 
 .publishing_status {
@@ -128,6 +150,7 @@ export default {
   float: left;
   margin-right: 10px;
 }
+
 
 
 </style>

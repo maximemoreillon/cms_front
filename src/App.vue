@@ -5,8 +5,17 @@
     <nav>
       <img class="logo" src="@/assets/logo/logo.svg" alt="logo">
       <router-link to="/">Home</router-link>
-      <router-link to="/about">About</router-link>
-      <router-link to="/article_list">Articles</router-link>
+
+
+      <!--<router-link to="/about">About</router-link>-->
+      <!--<router-link v-bind:to="{ path: 'article_list', query: { category: 'project' }}">Projects</router-link>-->
+
+      <router-link
+        v-for="(category, i) in $store.state.categories" v-bind:key="i"
+        v-bind:to="{ path: 'article_list', query: { category: category }}">
+      {{category}}</router-link>
+
+      <router-link to="/article_list">All</router-link>
     </nav>
 
     <!-- ID set for quill -->
@@ -22,6 +31,11 @@
 <script>
 export default {
   name: 'App',
+  data(){
+    return {
+      categories: [],
+    }
+  },
   mounted() {
 
   }
@@ -69,7 +83,7 @@ body {
 }
 
 nav {
-  margin: 15px 0;
+  margin: 25px 0;
   grid-area: nav;
   display: flex;
   flex-direction: column;
@@ -87,6 +101,7 @@ header {
   width: 100px;
 
   margin: 25px;
+  margin-top: 0;
 
   /* animation */
   animation-name: logo_rotation;
@@ -133,6 +148,7 @@ main {
   overflow-y: auto;
 
   /* not ideal */
+  /* matches the nav margin */
   padding: 25px;
 }
 
@@ -169,7 +185,7 @@ footer{
   }
 
   nav {
-    margin: 0 5px;
+    margin: 0 25px;
     flex-direction: row;
     align-items: stretch;
     border: none;
@@ -186,7 +202,6 @@ footer{
   nav a:hover {
     border: none;
     border-bottom: 3px solid #666666;
-    color: #666666;
   }
 
   nav a.router-link-exact-active {
@@ -195,6 +210,7 @@ footer{
   }
 
   .logo {
+    margin: 25px 0;
     width: 30px;
     height: 30px;
     margin-right: auto;
