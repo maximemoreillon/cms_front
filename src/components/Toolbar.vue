@@ -20,6 +20,7 @@ export default {
   align-items: center;
   border-bottom: 1px solid #dddddd;
   padding: 5px 0;
+  margin-bottom: 25px;
 }
 
 .toolbar > *:not(:first-child){

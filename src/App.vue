@@ -37,7 +37,8 @@ export default {
     }
   },
   mounted() {
-
+    this.$store.commit('check_authentication');
+    this.$store.commit('update_categories');
   }
 }
 </script>
@@ -144,7 +145,7 @@ main {
   grid-area: main;
   display: block; /* IE fix */
 
-  height: 100%;
+  /* height is set with grid */
   overflow-y: auto;
 
   /* not ideal */

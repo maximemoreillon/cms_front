@@ -32,30 +32,9 @@ Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
 
 
-// Check auth at each route
 router.beforeEach((to, from, next) => {
-
-  // Authentication
-  axios.post('https://authentication.maximemoreillon.com/status')
-  .then(response => {
-    if(response.data.logged_in) store.commit('update_user',response.data.username)
-    else store.commit('update_user', undefined)
-    next();
-  })
-  .catch(error => console.log(error))
-
-  // Article categories
-  // Get article categories
-  axios.post('https://cms.maximemoreillon.com/get_article_categories')
-  .then(response => {
-    let distinct_categories = [... new Set(response.data.map(e => e.category))]
-    .filter(e => e != undefined)
-    .filter(e => e != '')
-    store.commit('update_categories',distinct_categories)
-  })
-  .catch(error => console.log(error))
-
-
+  store.commit('check_authentication')
+  next();
 });
 
 new Vue({
