@@ -2,12 +2,12 @@
 
   <div class="article_editor_view">
 
-
-
     <!-- wrapper for authentication detection -->
-    <div class="authentication_wrapper" v-if="$store.state.user">
+    <div
+      class="authentication_wrapper"
+      v-if="$store.state.user && !article_loading">
 
-      <Toolbar v-if="article_data">
+      <Toolbar>
 
         <div class="dates_container">
           <div class="" v-if="article_data.creation_date">Published on {{format_date(article_data.creation_date)}}</div>
@@ -54,14 +54,16 @@
 
       <!-- editor for the content of the article -->
       <quill-editor
-        v-if="!article_loading"
-        class="editor"
         v-model="article_data.content"
         v-bind:options="editorOption"/>
-      <Loader v-else/>
 
     </div>
-    <div class="" v-else>Article cannot be edited by unauthenticated user</div>
+
+    <Loader v-if="$store.state.user && article_loading"/>
+
+    <div class="" v-if="!$store.state.user">Article cannot be edited by unauthenticated user</div>
+
+    <!-- Todo: Add case for article not found -->
 
 
 
@@ -170,6 +172,7 @@ export default {
     submit_article(){
       this.axios.post('https://cms.maximemoreillon.com/edit_article', this.article_data)
       .then(response => {
+        this.$store.commit('update_categories')
         this.$router.push({ path: '/article', query: { _id: response.data._id } })
       })
       .catch(error => alert(error))
@@ -177,7 +180,10 @@ export default {
     delete_article(){
       if(confirm('Delete article?')){
         this.axios.post('https://cms.maximemoreillon.com/delete_article', {_id: this.article_data._id})
-        .then( () =>  this.$router.push({ path: '/article_list' }))
+        .then( () => {
+          this.$store.commit('update_categories')
+          this.$router.push({ path: '/article_list' })
+        })
         .catch(error => alert(error))
       }
 
@@ -199,11 +205,30 @@ export default {
 
 <style>
 
+.article_editor_view{
+  height: 100%;
 
-.editor{
-  margin-top: 15px;
-  /* SUPER DIRTY */
-  height: 75vh;
+}
+.authentication_wrapper{
+  position: relative;
+  height: 100%;
+
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+}
+.quill-editor{
+
+  height: 100%;
+
+
+  /* if set any differently, the editor overflows */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
 }
 
 
