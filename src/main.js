@@ -33,7 +33,6 @@ Vue.config.productionTip = false
 
 
 router.beforeEach((to, from, next) => {
-  store.commit('check_authentication')
   next();
 });
 

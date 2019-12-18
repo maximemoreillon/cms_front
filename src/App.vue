@@ -31,11 +31,6 @@
 <script>
 export default {
   name: 'App',
-  data(){
-    return {
-      categories: [],
-    }
-  },
   mounted() {
     this.$store.commit('check_authentication');
     this.$store.commit('update_categories');
@@ -48,6 +43,16 @@ export default {
 
 * {
   box-sizing: border-box;
+}
+
+/* Customize scollbar */
+*::-webkit-scrollbar {
+    width: 2px;
+    background-color: #F5F5F5;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #c00000;
 }
 
 body {
@@ -64,12 +69,6 @@ body {
 }
 
 #app {
-
-  /*
-  max-width: 1000px;
-  margin-left: auto;
-  margin-right: auto;
-  */
 
 
   /* height is fixed, scrolling through main done using overflow */
@@ -93,10 +92,6 @@ nav {
   border-right: 1px solid #dddddd;
 }
 
-header {
-  grid-area: header;
-  display: none;
-}
 
 .logo {
   width: 100px;
@@ -153,28 +148,13 @@ main {
   padding: 25px;
 }
 
-main::-webkit-scrollbar {
-    width: 2px;
-    background-color: #F5F5F5;
-}
-
-main::-webkit-scrollbar-thumb {
-    background-color: #c00000;
-}
-
-footer{
-  grid-area: footer;
-  text-align: center;
-  display: none;
-}
-
 
 @keyframes logo_rotation {
   0% {transform: rotate(0deg);}
   100% {transform: rotate(360deg);}
 }
 
-
+/* smartphone view */
 @media (orientation: portrait) {
   #app {
     margin: 0;
@@ -211,9 +191,11 @@ footer{
   }
 
   .logo {
-    margin: 25px 0;
+    margin: 15px 0;
     width: 30px;
     height: 30px;
+
+    /* align other items of the nav on the right */
     margin-right: auto;
   }
 }

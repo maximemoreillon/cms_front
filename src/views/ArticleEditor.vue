@@ -88,6 +88,7 @@ export default {
   data () {
     return {
 
+      // Show the loader or not
       article_loading: false,
 
       // Default values for an article, overwritten if loaded with axios
@@ -170,18 +171,24 @@ export default {
       this.article_data.published = !this.article_data.published;
     },
     submit_article(){
+      // Show loader to prevent user from double submitting
+      this.article_loading = true;
       this.axios.post('https://cms.maximemoreillon.com/edit_article', this.article_data)
       .then(response => {
         this.$store.commit('update_categories')
+        this.article_loading = false;
         this.$router.push({ path: '/article', query: { _id: response.data._id } })
       })
       .catch(error => alert(error))
     },
     delete_article(){
+      // Show loader to prevent user from double submitting
+      this.article_loading = true;
       if(confirm('Delete article?')){
         this.axios.post('https://cms.maximemoreillon.com/delete_article', {_id: this.article_data._id})
         .then( () => {
           this.$store.commit('update_categories')
+          this.article_loading = false;
           this.$router.push({ path: '/article_list' })
         })
         .catch(error => alert(error))
@@ -221,8 +228,8 @@ export default {
 }
 .quill-editor{
 
+  /* take all available vertical space */
   height: 100%;
-
 
   /* if set any differently, the editor overflows */
   display: flex;
