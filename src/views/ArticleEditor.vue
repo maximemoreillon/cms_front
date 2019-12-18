@@ -242,7 +242,6 @@ export default {
 
 
 .quill_wrapper {
-  //outline: 1px solid green;
   /* take all vertical space */
   flex-grow: 1;
   position: relative;
@@ -250,21 +249,16 @@ export default {
 
 
 .quill-editor{
+  /* Must match dimensions of wrapper */
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
 
+  height: 100%; /* should be set to 100% */
 
-
-  /* SUPER DIRTY! */
-  height: calc(100% - 100px);
-
-
-
-  //outline: 1px solid blue;
-
-
+  display: flex;
+  flex-direction: column;
 
 }
 
@@ -278,10 +272,10 @@ export default {
 
 
 
+  flex-grow: 1;
+  height: auto !important;
+  overflow-y: auto;
 
-
-
-  //outline: 1px solid red;
 
 }
 
