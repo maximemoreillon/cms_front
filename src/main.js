@@ -2,8 +2,10 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+
 import VueQuillEditor, {Quill} from 'vue-quill-editor'
 import ImageResize from 'quill-image-resize-module';
 import { ImageDrop } from 'quill-image-drop-module'

@@ -53,9 +53,19 @@
 
 
       <!-- editor for the content of the article -->
-      <quill-editor
-        v-model="article_data.content"
-        v-bind:options="editorOption"/>
+      <div class="quill_wrapper" ref="quill_wrapper">
+
+        <quill-editor
+          ref="quill_editor"
+          v-bind:styles="quill_editor_style_object"
+          v-model="article_data.content"
+          v-bind:options="editorOption"/>
+
+      </div>
+
+
+
+
 
     </div>
 
@@ -106,9 +116,9 @@ export default {
       },
 
       editorOption: {
-        scrollingContainer: '#main', // prevents jumping back to top of editor when pasting
+        //scrollingContainer: '#quill_editor', // prevents jumping back to top of editor when pasting
+        /*bounds: '#quill_editor', // Preventing bubble from rendering behind nav*/
         theme: 'snow',
-        bounds: '#main', // Preventing bubble from rendering behind nav
         modules: {
 
           imageDrop: true,
@@ -125,18 +135,18 @@ export default {
             ['blockquote', 'code-block'],
 
             [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-            [{ 'script': 'sub'}, { 'script': 'super' }],
-            [{ 'indent': '-1'}, { 'indent': '+1' }],
+            //[{ 'script': 'sub'}, { 'script': 'super' }],
+            //[{ 'indent': '-1'}, { 'indent': '+1' }],
             //[{ 'direction': 'rtl' }],
 
-            [{ 'size': ['small', false, 'large', 'huge'] }],
+            //[{ 'size': ['small', false, 'large', 'huge'] }],
             [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
 
-            [{ 'color': [] }, { 'background': [] }],
+            //[{ 'color': [] }, { 'background': [] }],
             //[{ 'font': [] }],
             [{ 'align': [] }],
 
-            ['link','image', 'video'],
+            ['link','image','video'],
 
             ['clean']
           ],
@@ -200,7 +210,10 @@ export default {
     },
   },
   computed: {
-
+    quill_editor_style_object(){
+      //console.log(this.$refs.quill_wrapper.$el.height)
+      return {}
+    }
   },
   mounted(){
     this.get_article_if_exists();
@@ -214,29 +227,75 @@ export default {
 
 .article_editor_view{
   height: 100%;
-
 }
+
 .authentication_wrapper{
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+
+
+
+}
+
+
+.quill_wrapper {
+  //outline: 1px solid green;
+  /* take all vertical space */
+  flex-grow: 1;
   position: relative;
-  height: 100%;
-
-
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-
 }
+
+
 .quill-editor{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
 
-  /* take all available vertical space */
-  height: 100%;
 
-  /* if set any differently, the editor overflows */
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
+
+  /* SUPER DIRTY! */
+  height: calc(100% - 100px);
+
+
+
+  //outline: 1px solid blue;
+
+
 
 }
+
+.ql-container {
+  /* area below the toolbar */
+
+  /* MEMO
+  ql-container is height 100%. Which means it will have the same size as .quill editor
+  Consequently, with the toolbar, ql-container will overflow
+  */
+
+
+
+
+
+
+  //outline: 1px solid red;
+
+}
+
+.ql-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+
+
 
 
 

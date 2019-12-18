@@ -6,8 +6,7 @@
       <img class="logo" src="@/assets/logo/logo.svg" alt="logo">
       <router-link to="/">Home</router-link>
 
-
-      <!--<router-link to="/about">About</router-link>-->
+      <!-- hard coded route -->
       <!--<router-link v-bind:to="{ path: 'article_list', query: { category: 'project' }}">Projects</router-link>-->
 
       <router-link
@@ -18,8 +17,7 @@
       <router-link to="/article_list">All</router-link>
     </nav>
 
-    <!-- ID set for quill -->
-    <main id="main">
+    <main>
       <router-view/>
     </main>
 
@@ -46,6 +44,7 @@ export default {
 }
 
 /* Customize scollbar */
+/*
 *::-webkit-scrollbar {
     width: 2px;
     background-color: #F5F5F5;
@@ -54,6 +53,7 @@ export default {
 *::-webkit-scrollbar-thumb {
     background-color: #c00000;
 }
+*/
 
 body {
   /* default override */
@@ -143,7 +143,6 @@ main {
   /* height is set with grid */
   overflow-y: auto;
 
-  /* not ideal */
   /* matches the nav margin */
   padding: 25px;
 }

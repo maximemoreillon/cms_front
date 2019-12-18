@@ -108,9 +108,6 @@ export default {
 
 .article_preview .article_title {
 
-  /* DIRTY */
-  margin-top: 10px;
-
   font-weight: bold;
   font-size: 120%;
   white-space: nowrap;
@@ -148,6 +145,7 @@ export default {
   height: 80px;
   object-fit: contain;
   float: left;
+  margin-top: 5px;
   margin-right: 10px;
 }
 
