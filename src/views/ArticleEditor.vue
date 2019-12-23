@@ -14,12 +14,7 @@
           <div class="" v-if="article_data.edit_date">Last edited on {{format_date(article_data.edit_date)}}</div>
         </div>
 
-
-
         <div class="growing_spacer"/>
-
-
-
 
         <IconButton
           v-if="article_data._id"
@@ -59,9 +54,12 @@
 
 
       <!-- editor for the content of the article -->
-      <quill-editor
-        v-model="article_data.content"
-        v-bind:options="editorOption"/>
+      <div class="quill_wrapper">
+        <quill-editor
+          v-model="article_data.content"
+          v-bind:options="editorOption"/>
+      </div>
+
 
     </div>
 
@@ -252,30 +250,68 @@ export default {
 
 .article_editor_view{
   height: 100%;
-
 }
+
 .authentication_wrapper{
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+
+
+
+}
+
+
+.quill_wrapper {
+  /* take all vertical space */
+  flex-grow: 1;
   position: relative;
-  height: 100%;
-
-
-  display: flex;
-  flex-direction: column;
-  align-items: stretch;
-
 }
+
+
 .quill-editor{
+  /* Must match dimensions of wrapper */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
 
-  height: 100%;
+  height: 100%; /* should be set to 100% */
 
-
-  /* if set any differently, the editor overflows */
   display: flex;
   flex-direction: column;
-  align-items: stretch;
 
 }
 
+.ql-container {
+  /* area below the toolbar */
+
+  /* MEMO
+  ql-container is height 100%. Which means it will have the same size as .quill editor
+  Consequently, with the toolbar, ql-container will overflow
+  */
+
+
+
+  flex-grow: 1;
+  height: auto !important;
+  overflow-y: auto;
+
+
+}
+
+.ql-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.metadata_wrapper{
+  margin: 5px;
+}
 input[type="search"]{
   border: none;
   border-bottom: 1px solid #444444;
