@@ -67,6 +67,7 @@ export default {
         category: category
       })
       .then(response => {
+        console.log(response.data)
         this.articles = response.data;
         this.articles_loading = false;
       })

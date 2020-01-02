@@ -31,10 +31,7 @@ export default {
   flex-grow: 1;
 }
 
-input[type="search"]{
-  border: none;
-  border-bottom: 1px solid #444444;
-}
+
 
 .dates_container {
   font-size: 80%;
