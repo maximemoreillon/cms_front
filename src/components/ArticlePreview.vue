@@ -43,6 +43,13 @@
       v-if="article.summary"
       v-bind:msg="article.summary"/>
 
+    <div class="tags_container" v-if="article.tags">
+      <div class="tag" v-for="(tag, tag_index) in article.tags" v-bind:key="tag_index">
+        {{tag}}
+      </div>
+
+    </div>
+
 
   </div>
 </template>
@@ -155,6 +162,17 @@ export default {
   object-fit: contain;
   float: left;
   margin-right: 10px;
+}
+
+.tag {
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  padding: 5px;
+  margin: 5px;
+}
+
+.tag:first-child {
+  margin-left: 0;
 }
 
 

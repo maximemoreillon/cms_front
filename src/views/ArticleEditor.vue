@@ -35,6 +35,7 @@
       </Toolbar>
 
       <div class="metadata_wrapper">
+
         <div class="category_container">
           <label for="category_search">Category: </label>
           <input
@@ -42,14 +43,35 @@
             type="search"
             list="category_list"
             v-model="article_data.category"/>
+
+            <datalist id="category_list">
+              <option
+                v-for="(category, i) in $store.state.categories"
+                v-bind:value="category"
+                v-bind:key="i"/>
+            </datalist>
+
         </div>
 
-        <datalist id="category_list">
-          <option
-            v-for="(category, i) in $store.state.categories"
-            v-bind:value="category"
-            v-bind:key="i"/>
-        </datalist>
+        <div class="tags_wrapper">
+          <label for="category_search">Tags: </label>
+          <span class="tag" v-for="(tag, index) in article_data.tags" v-bind:key="index">
+            <span>{{tag}}</span>
+            <IconButton
+              icon="mdi-close"
+              size="100%"
+              v-on:buttonClicked="delete_tag(index)"/>
+          </span>
+          <input type="search" ref="tag_input" v-on:keyup.enter="add_tag()">
+          <IconButton
+            icon="mdi-plus"
+            v-on:buttonClicked="add_tag()"/>
+
+
+
+
+        </div>
+
       </div>
 
 
@@ -101,16 +123,14 @@ export default {
 
         published: false,
 
-
         creation_date: new Date(),
 
         // Content edited in quill
         content: '',
 
-        title: 'Untitled',
-        summary: 'No summary',
+        // Article metadata
         category: '',
-        thumbnail_src: '',
+        tags: [],
 
       },
 
@@ -213,6 +233,13 @@ export default {
     view_article(){
       this.$router.push({ path: 'article', query: { _id: this.article_data._id } })
     },
+    add_tag(){
+      this.article_data.tags.push(this.$refs.tag_input.value);
+      this.$refs.tag_input.value = ""
+    },
+    delete_tag(index){
+        this.article_data.tags.splice(index,1)
+    }
   },
   computed: {
     article_title(){
@@ -237,6 +264,7 @@ export default {
       if(first_img) return first_img.src
       else return ""
     }
+
   },
   mounted(){
     this.get_article_if_exists();
@@ -312,6 +340,24 @@ export default {
 .metadata_wrapper{
   margin: 5px;
 }
+
+.tags_wrapper {
+
+}
+.tags_container {
+  display: flex;
+}
+
+.tag {
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  margin: 5px;
+  padding: 5px;
+}
+.tag:first-child {
+  margin-left: 0;
+}
+
 input[type="search"]{
   border: none;
   border-bottom: 1px solid #444444;
