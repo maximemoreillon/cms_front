@@ -24,6 +24,11 @@
         v-on:buttonClicked="$router.push({ path: 'article_list' })"/>
 
       <IconButton
+        icon="mdi-download"
+        v-on:buttonClicked="download_as_html_file()"
+        v-if="$store.state.user"/>
+
+      <IconButton
         icon="mdi-pencil"
         v-on:buttonClicked="edit_article(article_data._id)"
         v-if="$store.state.user"/>
@@ -121,6 +126,18 @@ export default {
         this.$router.push({ path: 'article_editor', query: { _id: _id } })
       }
     },
+    download_as_html_file(){
+      var a = window.document.createElement('a');
+      a.href = window.URL.createObjectURL(new Blob([this.article_data.content], {type: 'text/html'}));
+      a.download = 'test.html';
+
+      // Append anchor to body.
+      document.body.appendChild(a);
+      a.click();
+
+      // Remove anchor from body
+      document.body.removeChild(a);
+    }
   }
 
 }

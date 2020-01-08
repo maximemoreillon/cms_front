@@ -185,11 +185,12 @@ export default {
         this.axios.post('https://cms.maximemoreillon.com/get_article', {_id: this.$route.query._id})
         .then(response => {
 
-          if(response.data){
-            this.article_data = response.data
-            // Add the date of edition
-            this.article_data.edit_date = new Date();
-          }
+          this.article_data = response.data
+
+          // Add the date of edition
+          this.article_data.edit_date = new Date();
+
+          // Unflag as loading
           this.article_loading = false;
 
         })
@@ -234,11 +235,12 @@ export default {
       this.$router.push({ path: 'article', query: { _id: this.article_data._id } })
     },
     add_tag(){
+      if(!('tags' in this.article_data)) this.$set(this.article_data,'tags',[])
       this.article_data.tags.push(this.$refs.tag_input.value);
       this.$refs.tag_input.value = ""
     },
     delete_tag(index){
-        this.article_data.tags.splice(index,1)
+      this.article_data.tags.splice(index,1)
     }
   },
   computed: {
