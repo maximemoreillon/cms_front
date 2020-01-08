@@ -14,6 +14,8 @@
           <div class="" v-if="article_data.edit_date">Last edited on {{format_date(article_data.edit_date)}}</div>
         </div>
 
+        <input type="file" ref="html_file_input" v-on:change="parse_file($event)">
+
         <div class="growing_spacer"/>
 
         <IconButton
@@ -241,6 +243,13 @@ export default {
     },
     delete_tag(index){
       this.article_data.tags.splice(index,1)
+    },
+    parse_file(event){
+      let file = event.srcElement.files[0]
+      const reader = new FileReader()
+      reader.onload = event => this.article_data.content = event.target.result
+      reader.onerror = error => console.log(error)
+      reader.readAsText(file) // you could also read images and other binaries
     }
   },
   computed: {
