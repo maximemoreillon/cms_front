@@ -64,7 +64,19 @@
               size="100%"
               v-on:buttonClicked="delete_tag(index)"/>
           </span>
-          <input type="search" ref="tag_input" v-on:keyup.enter="add_tag()">
+          <input
+            type="search"
+            ref="tag_input"
+            list="existing_tag_list"
+            v-on:keyup.enter="add_tag()">
+
+          <datalist id="existing_tag_list">
+            <option
+              v-for="(existing_tag, i) in existing_tags"
+              v-bind:value="existing_tag"
+              v-bind:key="i"/>
+          </datalist>
+
           <IconButton
             icon="mdi-plus"
             v-on:buttonClicked="add_tag()"/>
@@ -117,6 +129,7 @@ export default {
     return {
 
       article_loading: false,
+      existing_tags: [],
 
       // Default values for an article, overwritten if loaded with axios
       article_data: {
@@ -244,7 +257,20 @@ export default {
     delete_tag(index){
       this.article_data.tags.splice(index,1)
     },
+    get_existing_tags(){
+      this.axios.post('https://cms.maximemoreillon.com/get_tags')
+      .then(response => {
+        console.log(response.data)
+        this.existing_tags.splice(0,this.existing_tags.length)
+        for (let tag of response.data) {
+          this.existing_tags.push(tag)
+        }
+
+      })
+      .catch(error => alert(error))
+    },
     parse_file(event){
+      // Load text files into article content
       let file = event.srcElement.files[0]
       const reader = new FileReader()
       reader.onload = event => this.article_data.content = event.target.result
@@ -279,6 +305,7 @@ export default {
   },
   mounted(){
     this.get_article_if_exists();
+    this.get_existing_tags();
   }
 
 }
