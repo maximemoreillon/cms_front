@@ -17,6 +17,7 @@ import 'quill/dist/quill.bubble.css'
 
 axios.defaults.withCredentials = true  // enable axios post cookie, default false
 axios.defaults.crossDomain = true
+axios.defaults.timeout = 3000
 
 // Use inline css instead of quill classes
 Quill.register(Quill.import('attributors/style/align'), true);

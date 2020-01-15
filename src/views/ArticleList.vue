@@ -63,12 +63,24 @@ export default {
     },
     get_articles(category){
       this.articles_loading = true;
+      this.articles.splice(0,this.articles.length)
       this.axios.post('https://cms.maximemoreillon.com/get_article_list', {
         category: category
       })
       .then(response => {
         console.log(response.data)
-        this.articles = response.data;
+        response.data.forEach(article => {
+          this.articles.push(article)
+        })
+
+        // Crashes the app
+        /*
+        for (let article of response.data) {
+          this.articles.push(article)
+        }
+        */
+        // Seems to hang here
+        //this.articles = response.data;
         this.articles_loading = false;
       })
       .catch(error => alert(error))

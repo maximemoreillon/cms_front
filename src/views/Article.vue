@@ -174,6 +174,9 @@ article img {
 
 
 article pre {
+  /* white-space: pre-wrap; */
+  overflow-x: auto;
+
   background-color: #222222;
   color: white;
   padding: 15px;
