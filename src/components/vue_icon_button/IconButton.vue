@@ -1,6 +1,9 @@
 <template>
+
+  <!-- TODO: Change from SPAN to BUTTON -->
   <span
     class="mdi icon_button"
+    v-bind:style="{ fontSize: size}"
     v-on:click="button_clicked()"
     v-bind:class="[icon, {loading: loading}]">
 
@@ -15,6 +18,12 @@ export default {
   props: {
     icon: String,
     loading: Boolean,
+    size: {
+      type: String,
+      default(){
+        return "150%";
+      }
+    }
   },
   methods: {
     button_clicked(){
@@ -28,11 +37,11 @@ export default {
 .icon_button {
   position: relative;
   cursor: pointer;
-  font-size: 150%;
+
   transition: color 0.25s;
   color: #444444;
 
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
 }
