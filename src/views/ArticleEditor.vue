@@ -90,8 +90,7 @@
 
 
       <!-- editor for the content of the article -->
-
-      <div class="editor">
+      <div class="editor_wrapper">
         <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
           <div class="menubar">
             <button
@@ -206,9 +205,11 @@
           </div>
         </editor-menu-bar>
 
-        <editor-content class="editor__content" :editor="editor" />
-
+        <div class="editor">
+          <editor-content class="editor__content" :editor="editor" />
+        </div>
       </div>
+
 
 
 
@@ -506,10 +507,36 @@ input[type="search"]{
   border-bottom: 1px solid #dddddd;
   display: flex;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
-.editor {
+.editor_wrapper {
   border: 1px solid #dddddd;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
 }
+
+
+.editor {
+
+  flex-grow: 1;
+  position: relative;
+
+
+}
+
+.editor__content{
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+
+  overflow-y: auto;
+}
+
 
 </style>

@@ -12,7 +12,7 @@ import '@mdi/font/css/materialdesignicons.css';
 
 axios.defaults.withCredentials = true  // enable axios post cookie, default false
 axios.defaults.crossDomain = true
-axios.defaults.timeout = 3000
+axios.defaults.timeout = 10000
 
 
 
