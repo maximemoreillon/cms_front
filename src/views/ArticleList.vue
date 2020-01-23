@@ -68,19 +68,12 @@ export default {
         category: category
       })
       .then(response => {
-        console.log(response.data)
-        response.data.forEach(article => {
-          this.articles.push(article)
-        })
+        this.articles.splice(0,this.articles.length);
 
-        // Crashes the app
-        /*
-        for (let article of response.data) {
-          this.articles.push(article)
+        for (const [index, article] of response.data.entries()) {
+          setTimeout(() => this.articles.push(article), 10*index)
         }
-        */
-        // Seems to hang here
-        //this.articles = response.data;
+
         this.articles_loading = false;
       })
       .catch(error => alert(error))

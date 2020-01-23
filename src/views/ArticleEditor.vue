@@ -19,7 +19,7 @@
         <div class="growing_spacer"/>
 
         <IconButton
-          v-if="article_data._id"
+          v-if="$route.query._id"
           class="right_aligned"
           icon="mdi-arrow-left"
           v-on:buttonClicked="view_article()"/>
@@ -90,11 +90,126 @@
 
 
       <!-- editor for the content of the article -->
-      <div class="quill_wrapper">
-        <quill-editor
-          v-model="article_data.content"
-          v-bind:options="editorOption"/>
+
+      <div class="editor">
+        <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
+          <div class="menubar">
+            <button
+              class="menubar__button"
+              :class="{ 'is-active': isActive.bold() }"
+              @click="commands.bold">
+              <span class="mdi mdi-format-bold" />
+            </button>
+
+            <button
+              class="menubar__button"
+              :class="{ 'is-active': isActive.italic() }"
+              @click="commands.italic">
+              <span class="mdi mdi-format-italic" />
+            </button>
+
+            <button
+              class="menubar__button"
+              :class="{ 'is-active': isActive.strike() }"
+              @click="commands.strike">
+              <span class="mdi mdi-format-strikethrough" />
+            </button>
+
+            <button
+              class="menubar__button"
+              :class="{ 'is-active': isActive.underline() }"
+              @click="commands.underline">
+              <span class="mdi mdi-format-underline" />
+            </button>
+
+            <button
+              class="menubar__button"
+              :class="{ 'is-active': isActive.code() }"
+              @click="commands.code">
+              <span class="mdi mdi-code-tags" />
+            </button>
+
+            <button
+              class="menubar__button"
+              :class="{ 'is-active': isActive.paragraph() }"
+              @click="commands.paragraph">
+              <span class="mdi mdi-format-paragraph" />
+            </button>
+
+            <button
+              class="menubar__button"
+              :class="{ 'is-active': isActive.heading({ level: 1 }) }"
+              @click="commands.heading({ level: 1 })">
+              <span class="mdi mdi-format-header-1" />
+            </button>
+
+            <button
+              class="menubar__button"
+              :class="{ 'is-active': isActive.heading({ level: 2 }) }"
+              @click="commands.heading({ level: 2 })">
+              <span class="mdi mdi-format-header-2" />
+            </button>
+
+            <button
+              class="menubar__button"
+              :class="{ 'is-active': isActive.heading({ level: 3 }) }"
+              @click="commands.heading({ level: 3 })">
+              <span class="mdi mdi-format-header-3" />
+            </button>
+
+            <button
+              class="menubar__button"
+              :class="{ 'is-active': isActive.bullet_list() }"
+              @click="commands.bullet_list">
+              <span class="mdi mdi-format-list-bulleted" />
+            </button>
+
+            <button
+              class="menubar__button"
+              :class="{ 'is-active': isActive.ordered_list() }"
+              @click="commands.ordered_list">
+              <span class="mdi mdi-format-list-numbered" />
+            </button>
+
+            <button
+              class="menubar__button"
+              :class="{ 'is-active': isActive.blockquote() }"
+              @click="commands.blockquote">
+              <span class="mdi mdi-format-quote-close" />
+            </button>
+
+            <button
+              class="menubar__button"
+              :class="{ 'is-active': isActive.code_block() }"
+              @click="commands.code_block">
+              <span class="mdi mdi-code-tags" />
+            </button>
+
+            <button
+              class="menubar__button"
+              @click="commands.horizontal_rule">
+              <span class="mdi mdi-minus" />
+            </button>
+
+            <button
+              class="menubar__button"
+              @click="commands.undo">
+              <span class="mdi mdi-undo" />
+            </button>
+
+            <button
+              class="menubar__button"
+              @click="commands.redo">
+              <span class="mdi mdi-redo" />
+            </button>
+
+          </div>
+        </editor-menu-bar>
+
+        <editor-content class="editor__content" :editor="editor" />
+
       </div>
+
 
 
     </div>
@@ -102,7 +217,7 @@
     <Loader v-if="$store.state.user && article_loading"/>
 
     <div class="" v-if="!$store.state.user">
-      Article cannot be edited by unauthenticated user
+      Articles cannot be edited by unauthenticated user
     </div>
 
     <!-- Todo: Add case for article not found -->
@@ -115,18 +230,77 @@
 <script>
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import {formatDate} from '@/mixins/formatDate.js'
+
 import Toolbar from '@/components/Toolbar.vue'
 import Loader from '@/components/vue_loader/Loader.vue'
+
+import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
+import {
+  Blockquote,
+  CodeBlock,
+  HardBreak,
+  Heading,
+  HorizontalRule,
+  OrderedList,
+  BulletList,
+  ListItem,
+  TodoItem,
+  TodoList,
+  Bold,
+  Code,
+  Italic,
+  Link,
+  Strike,
+  Underline,
+  History,
+} from 'tiptap-extensions'
+
+
 
 export default {
   components: {
     IconButton,
     Toolbar,
     Loader,
+
+    // editor
+    EditorContent,
+    EditorMenuBar,
   },
   mixins: [formatDate],
   data () {
     return {
+
+
+
+      editor: new Editor({
+        extensions: [
+          new Blockquote(),
+          new BulletList(),
+          new CodeBlock(),
+          new HardBreak(),
+          new Heading({ levels: [1, 2, 3] }),
+          new HorizontalRule(),
+          new ListItem(),
+          new OrderedList(),
+          new TodoItem(),
+          new TodoList(),
+          new Link(),
+          new Bold(),
+          new Code(),
+          new Italic(),
+          new Strike(),
+          new Underline(),
+          new History(),
+        ],
+        content: "YOLO",
+        onUpdate: ({ getHTML }) => {
+          this.article_data.content = getHTML();
+          this.set_article_title();
+          this.set_article_summary();
+          this.set_article_thumbnail_src();
+        },
+      }),
 
       article_loading: false,
       existing_tags: [],
@@ -141,66 +315,45 @@ export default {
         creation_date: new Date(),
 
         // Content edited in quill
-        content: '',
+        content: null,
 
         // Article metadata
         category: '',
         tags: [],
+        title: '',
+        summary: '',
+        thumbnail_src: '',
 
       },
 
-      editorOption: {
-        scrollingContainer: '#main', // prevents jumping back to top of editor when pasting
-        theme: 'snow',
-        bounds: '#main', // Preventing bubble from rendering behind nav
-        modules: {
 
-          imageDrop: true,
-
-          imageResize: {
-            modules: [ 'Resize', 'DisplaySize'  ]
-          },
-
-          clipboard: {
-            matchVisual: false
-          },
-          toolbar: [
-            ['bold', 'italic', 'underline', 'strike'],
-            ['blockquote', 'code-block'],
-
-            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-            [{ 'script': 'sub'}, { 'script': 'super' }],
-            [{ 'indent': '-1'}, { 'indent': '+1' }],
-            //[{ 'direction': 'rtl' }],
-
-            [{ 'size': ['small', false, 'large', 'huge'] }],
-            [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-
-            [{ 'color': [] }, { 'background': [] }],
-            //[{ 'font': [] }],
-            [{ 'align': [] }],
-
-            ['link','image', 'video'],
-
-            ['clean']
-          ],
-
-
-        }
-
-      }
     }
+  },
+  mounted(){
+    this.get_article_if_exists();
+    this.get_existing_tags();
+  },
+  beforeDestroy() {
+    // Always destroy your editor instance when it's no longer needed
+    this.editor.destroy();
   },
 
   methods: {
+    editor_updated({ getHTML }){
+      this.article_data.content = getHTML;
+    },
     get_article_if_exists(){
       // If ID is present in query, get the article corresponding to that ID
       if('_id' in this.$route.query){
-        this.article_loading = true;
+        // this gets titptap to throw errors
+        //this.article_loading = true;
+
         this.axios.post('https://cms.maximemoreillon.com/get_article', {_id: this.$route.query._id})
         .then(response => {
 
           this.article_data = response.data
+          this.editor.setContent(this.article_data.content);
+
 
           // Add the date of edition
           this.article_data.edit_date = new Date();
@@ -219,11 +372,6 @@ export default {
 
       // Show loader to prevent user from re-submitting
       this.article_loading = true;
-
-      // adding computed data
-      this.article_data.title = this.article_title
-      this.article_data.summary = this.article_summary
-      this.article_data.thumbnail_src = this.article_thumbnail_src
 
       this.axios.post('https://cms.maximemoreillon.com/edit_article', this.article_data)
       .then(response => {
@@ -247,7 +395,7 @@ export default {
 
     },
     view_article(){
-      this.$router.push({ path: 'article', query: { _id: this.article_data._id } })
+      this.$router.push({ path: 'article', query: { _id: this.$route.query._id } })
     },
     add_tag(){
       if(!('tags' in this.article_data)) this.$set(this.article_data,'tags',[])
@@ -260,7 +408,6 @@ export default {
     get_existing_tags(){
       this.axios.post('https://cms.maximemoreillon.com/get_tags')
       .then(response => {
-        console.log(response.data)
         this.existing_tags.splice(0,this.existing_tags.length)
         for (let tag of response.data) {
           this.existing_tags.push(tag)
@@ -276,37 +423,28 @@ export default {
       reader.onload = event => this.article_data.content = event.target.result
       reader.onerror = error => console.log(error)
       reader.readAsText(file) // you could also read images and other binaries
-    }
-  },
-  computed: {
-    article_title(){
+    },
+    set_article_title(){
       // get article title from content
       var virtual_container = document.createElement('div');
       virtual_container.innerHTML = this.article_data.content
       var first_h1 = virtual_container.getElementsByTagName('h1')[0]
-      if(first_h1)return first_h1.innerHTML
-      else return "Untitled"
+      if(first_h1) this.article_data.title = first_h1.innerHTML
     },
-    article_summary(){
+    set_article_summary(){
       var virtual_container = document.createElement('div');
       virtual_container.innerHTML = this.article_data.content
       var first_p = virtual_container.getElementsByTagName('p')[0]
-      if(first_p) return first_p.innerHTML
-      else return ""
+      if(first_p) this.article_data.summary = first_p.innerHTML
     },
-    article_thumbnail_src(){
+    set_article_thumbnail_src(){
       var virtual_container = document.createElement('div');
       virtual_container.innerHTML = this.article_data.content
       var first_img = virtual_container.getElementsByTagName('img')[0]
-      if(first_img) return first_img.src
-      else return ""
-    }
-
+      if(first_img) this.article_data.thumbnail_src = first_img.src
+    },
   },
-  mounted(){
-    this.get_article_if_exists();
-    this.get_existing_tags();
-  }
+
 
 }
 </script>
@@ -320,60 +458,10 @@ export default {
 
 .authentication_wrapper{
   height: 100%;
-
   display: flex;
   flex-direction: column;
-
-
-
-
 }
 
-
-.quill_wrapper {
-  /* take all vertical space */
-  flex-grow: 1;
-  position: relative;
-}
-
-
-.quill-editor{
-  /* Must match dimensions of wrapper */
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-
-  height: 100%; /* should be set to 100% */
-
-  display: flex;
-  flex-direction: column;
-
-}
-
-.ql-container {
-  /* area below the toolbar */
-
-  /* MEMO
-  ql-container is height 100%. Which means it will have the same size as .quill editor
-  Consequently, with the toolbar, ql-container will overflow
-  */
-
-
-
-  flex-grow: 1;
-  height: auto !important;
-  overflow-y: auto;
-
-
-}
-
-.ql-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-}
 
 .metadata_wrapper{
   margin: 5px;
@@ -386,12 +474,14 @@ export default {
   display: flex;
 }
 
+
 .tag {
   border: 1px solid #dddddd;
   border-radius: 5px;
   margin: 5px;
   padding: 5px;
 }
+
 .tag:first-child {
   margin-left: 0;
 }
@@ -401,6 +491,25 @@ input[type="search"]{
   border-bottom: 1px solid #444444;
 }
 
+.menubar__button{
+  cursor: pointer;
+  background-color: white;
+  border: none;
+  font-size: 150%;
+}
 
+.menubar__button.is-active{
+  color: #c00000;
+}
+
+.menubar{
+  border-bottom: 1px solid #dddddd;
+  display: flex;
+  justify-content: center;
+}
+
+.editor {
+  border: 1px solid #dddddd;
+}
 
 </style>

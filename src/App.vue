@@ -65,13 +65,6 @@ body {
 
 #app {
 
-  /*
-  max-width: 1000px;
-  margin-left: auto;
-  margin-right: auto;
-  */
-
-
   /* height is fixed, scrolling through main done using overflow */
   height: 100vh;
 
@@ -217,5 +210,8 @@ footer{
     margin-right: auto;
   }
 }
+
+/* END OF TEMPLATING STUFF */
+
 
 </style>
