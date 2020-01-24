@@ -91,7 +91,7 @@
 
       <!-- editor for the content of the article -->
       <div class="editor_wrapper">
-        <editor-menu-bar :editor="editor" v-slot="{ commands, isActive }">
+        <editor-menu-bar :editor="editor" v-slot="{ commands, isActive, getMarkAttrs }">
           <div class="menubar">
             <button
               class="menubar__button"
@@ -202,6 +202,22 @@
               <span class="mdi mdi-redo" />
             </button>
 
+
+
+            <form class="menububble__form" v-if="linkMenuIsActive" @submit.prevent="setLinkUrl(commands.link, linkUrl)">
+              <input class="menububble__input" type="text" v-model="linkUrl" placeholder="https://" ref="linkInput" @keydown.esc="hideLinkMenu"/>
+              <button class="menubar__button" @click="setLinkUrl(commands.link, null)" type="button">
+                <span class="mdi mdi-delete" />
+              </button>
+            </form>
+
+            <button v-else
+              class="menubar__button"
+              :class="{ 'is-active': isActive.link() }"
+              @click="showLinkMenu(getMarkAttrs('link'))">
+              <span class="mdi mdi-link" />
+            </button>
+
           </div>
         </editor-menu-bar>
 
@@ -254,6 +270,8 @@ import {
   Strike,
   Underline,
   History,
+  Placeholder,
+  Image,
 } from 'tiptap-extensions'
 
 
@@ -274,36 +292,13 @@ export default {
 
 
 
-      editor: new Editor({
-        extensions: [
-          new Blockquote(),
-          new BulletList(),
-          new CodeBlock(),
-          new HardBreak(),
-          new Heading({ levels: [1, 2, 3] }),
-          new HorizontalRule(),
-          new ListItem(),
-          new OrderedList(),
-          new TodoItem(),
-          new TodoList(),
-          new Link(),
-          new Bold(),
-          new Code(),
-          new Italic(),
-          new Strike(),
-          new Underline(),
-          new History(),
-        ],
-        content: "YOLO",
-        onUpdate: ({ getHTML }) => {
-          this.article_data.content = getHTML();
-          this.set_article_title();
-          this.set_article_summary();
-          this.set_article_thumbnail_src();
-        },
-      }),
+      editor: null,
 
-      article_loading: false,
+      // stuff for links
+      linkUrl: null,
+      linkMenuIsActive: false,
+
+      article_loading: true,
       existing_tags: [],
 
       // Default values for an article, overwritten if loaded with axios
@@ -333,6 +328,8 @@ export default {
   mounted(){
     this.get_article_if_exists();
     this.get_existing_tags();
+
+
   },
   beforeDestroy() {
     // Always destroy your editor instance when it's no longer needed
@@ -340,6 +337,45 @@ export default {
   },
 
   methods: {
+    create_editor(){
+      this.editor = new Editor({
+        extensions: [
+          new Blockquote(),
+          new BulletList(),
+          new CodeBlock(),
+          new HardBreak(),
+          new Heading({ levels: [1, 2, 3] }),
+          new HorizontalRule(),
+          new ListItem(),
+          new OrderedList(),
+          new TodoItem(),
+          new TodoList(),
+          new Link(),
+          new Bold(),
+          new Code(),
+          new Italic(),
+          new Strike(),
+          new Underline(),
+          new History(),
+          new Image(),
+          new Placeholder({
+            emptyEditorClass: 'is-editor-empty',
+            emptyNodeClass: 'is-empty',
+            emptyNodeText: 'Write something …',
+            showOnlyWhenEditable: true,
+            showOnlyCurrent: true,
+          }),
+        ],
+        content: "",
+        onUpdate: ({ getHTML }) => {
+          this.article_data.content = getHTML();
+          this.set_article_title();
+          this.set_article_summary();
+          this.set_article_thumbnail_src();
+        },
+      })
+    },
+
     editor_updated({ getHTML }){
       this.article_data.content = getHTML;
     },
@@ -347,12 +383,13 @@ export default {
       // If ID is present in query, get the article corresponding to that ID
       if('_id' in this.$route.query){
         // this gets titptap to throw errors
-        //this.article_loading = true;
+        this.article_loading = true;
 
         this.axios.post('https://cms.maximemoreillon.com/get_article', {_id: this.$route.query._id})
         .then(response => {
 
           this.article_data = response.data
+          this.create_editor();
           this.editor.setContent(this.article_data.content);
 
 
@@ -362,8 +399,13 @@ export default {
           // Unflag as loading
           this.article_loading = false;
 
+
         })
         .catch(error => alert(error))
+      }
+      else {
+        this.article_loading = false;
+        this.create_editor();
       }
     },
     toggle_published(){
@@ -444,6 +486,24 @@ export default {
       var first_img = virtual_container.getElementsByTagName('img')[0]
       if(first_img) this.article_data.thumbnail_src = first_img.src
     },
+
+    // used by tiptap for links
+    showLinkMenu(attrs) {
+      this.linkUrl = attrs.href
+      this.linkMenuIsActive = true
+      this.$nextTick(() => {
+        this.$refs.linkInput.focus()
+      })
+    },
+    hideLinkMenu() {
+      this.linkUrl = null
+      this.linkMenuIsActive = false
+    },
+    setLinkUrl(command, url) {
+      command({ href: url })
+      this.hideLinkMenu()
+    },
+
   },
 
 
@@ -511,6 +571,7 @@ input[type="search"]{
 }
 
 .editor_wrapper {
+  margin-top: 10px;
   border: 1px solid #dddddd;
   flex-grow: 1;
   display: flex;
@@ -536,6 +597,15 @@ input[type="search"]{
   height: 100%;
 
   overflow-y: auto;
+}
+
+.editor p.is-editor-empty:first-child::before {
+  content: attr(data-empty-text);
+  float: left;
+  color: #aaa;
+  pointer-events: none;
+  height: 0;
+  font-style: italic;
 }
 
 

@@ -4,7 +4,7 @@
 
     <nav>
       <img class="logo" src="@/assets/logo/logo.svg" alt="logo">
-      <router-link to="/">Home</router-link>
+      <router-link to="/">All articles</router-link>
 
 
       <!--<router-link to="/about">About</router-link>-->
@@ -12,10 +12,10 @@
 
       <router-link
         v-for="(category, i) in $store.state.categories" v-bind:key="i"
-        v-bind:to="{ path: 'article_list', query: { category: category }}">
-      {{category}}</router-link>
+        v-bind:to="{ name: 'article_list', query: { category: category }}">
+        {{category}}</router-link>
 
-      <router-link to="/article_list">All</router-link>
+      <!--<router-link to="/article_list">All</router-link>-->
     </nav>
 
     <!-- ID set for quill -->

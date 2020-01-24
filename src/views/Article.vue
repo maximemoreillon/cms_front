@@ -21,7 +21,7 @@
       <IconButton
         class="right_aligned"
         icon="mdi-arrow-left"
-        v-on:buttonClicked="$router.push({ path: 'article_list' })"/>
+        v-on:buttonClicked="$router.push({ name: 'article_list' })"/>
 
       <IconButton
         icon="mdi-download"
