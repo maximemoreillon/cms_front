@@ -54,10 +54,12 @@
     <Modal
       v-bind:open="modal.open"
       v-on:close="modal.open = false">
+
       <img
         class="modal_image"
         v-bind:src="modal.image_src"
         alt=""/>
+
     </Modal>
 
   </div>
@@ -190,7 +192,9 @@ article a {
 
 .modal_image {
   width: 60vw;
+  height: 60vh;
   margin: 10px;
+  object-fit: contain;
 }
 
 .published_indicator{
