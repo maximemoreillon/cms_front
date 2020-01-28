@@ -76,6 +76,9 @@ import Loader from '@/components/vue_loader/Loader.vue'
 
 import {formatDate} from '@/mixins/formatDate.js'
 
+import highlight from 'highlight.js'
+
+
 export default {
   components: {
     IconButton,
@@ -110,6 +113,14 @@ export default {
           this.article_data = response.data
 
           setTimeout(this.add_event_listeners_for_image_modals,100);
+
+
+          setTimeout(() => {
+            document.querySelectorAll('pre code').forEach((block) => {
+              highlight.highlightBlock(block);
+            })
+          },10);
+
 
         })
         .catch(error => alert(error))
@@ -148,6 +159,8 @@ export default {
 
 <style>
 
+@import url("//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/styles/obsidian.min.css");
+
 
 article {
 }
@@ -179,9 +192,9 @@ article pre {
   /* white-space: pre-wrap; */
   overflow-x: auto;
 
-  background-color: #222222;
-  color: white;
-  padding: 15px;
+  //background-color: #222222;
+  //color: white;
+  //padding: 15px;
 }
 
 article a {

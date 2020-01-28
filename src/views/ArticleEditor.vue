@@ -245,6 +245,8 @@
 </template>
 
 <script>
+
+
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import {formatDate} from '@/mixins/formatDate.js'
 
@@ -253,6 +255,7 @@ import Loader from '@/components/vue_loader/Loader.vue'
 
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
 import {
+  CodeBlockHighlight,
   Blockquote,
   CodeBlock,
   HardBreak,
@@ -273,6 +276,9 @@ import {
   Placeholder,
   Image,
 } from 'tiptap-extensions'
+
+import javascript from 'highlight.js/lib/languages/javascript'
+import css from 'highlight.js/lib/languages/css'
 
 
 
@@ -364,6 +370,12 @@ export default {
             emptyNodeText: 'Write something …',
             showOnlyWhenEditable: true,
             showOnlyCurrent: true,
+          }),
+          new CodeBlockHighlight({
+            languages: {
+              javascript,
+              css,
+            },
           }),
         ],
         content: "",
@@ -513,6 +525,9 @@ export default {
 
 <style>
 
+/* not exactly super nice */
+@import url("//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/styles/obsidian.min.css");
+
 .article_editor_view{
   height: 100%;
 }
@@ -606,6 +621,12 @@ input[type="search"]{
   pointer-events: none;
   height: 0;
   font-style: italic;
+}
+
+pre{
+  background-color: #282b2e;
+  padding: 10px;
+  color: #ffffff;
 }
 
 
