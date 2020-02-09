@@ -10,7 +10,7 @@
       <Toolbar>
 
         <div class="dates_container">
-          <div class="" v-if="article_data.creation_date">Published on {{format_date(article_data.creation_date)}}</div>
+          <div class="" v-if="article_data.creation_date">Created on {{format_date(article_data.creation_date)}}</div>
           <div class="" v-if="article_data.edit_date">Last edited on {{format_date(article_data.edit_date)}}</div>
         </div>
 
@@ -315,6 +315,7 @@ export default {
         published: false,
 
         creation_date: new Date(),
+        edit_date: new Date(),
 
         // Content edited in quill
         content: null,

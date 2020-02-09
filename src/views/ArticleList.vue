@@ -22,10 +22,13 @@
 
     <div class="articles_container" v-if="!articles_loading">
 
+
       <ArticlePreview
         v-for="article in articles"
         v-bind:key="article._id"
         v-bind:article="article"/>
+
+
 
     </div>
 
@@ -70,8 +73,8 @@ export default {
       .then(response => {
         this.articles.splice(0,this.articles.length);
 
-        for (const [index, article] of response.data.entries()) {
-          setTimeout(() => this.articles.push(article), 10*index)
+        for (var article of response.data) {
+          this.articles.push(article)
         }
 
         this.articles_loading = false;

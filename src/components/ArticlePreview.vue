@@ -8,14 +8,10 @@
       v-if="article.published && $store.state.user"
       class="publishing_status mdi mdi-earth"/>
 
-
-
-
-
     <!-- Article title, consists of first h1 of the content -->
     <div class="article_title">{{article.title}}</div>
 
-    <!-- date and publish status-->
+    <!-- date and category -->
     <div class="article_metadata" v-if="article.creation_date">
 
       <span class="article_date">{{format_date(article.creation_date)}}</span>
@@ -27,8 +23,6 @@
         Uncategorized
       </span>
 
-
-
     </div>
 
     <!-- alt set to empty string to display nothing if no thumbnail -->
@@ -39,9 +33,9 @@
       alt="">
 
     <!-- Summary -->
-    <dot class="article_summary"
+    <div class="article_summary"
       v-if="article.summary"
-      v-bind:msg="article.summary"/>
+      v-html="article.summary"/>
 
     <div class="tags_container" v-if="article.tags">
       <div class="tag" v-for="(tag, tag_index) in article.tags" v-bind:key="tag_index">
@@ -56,7 +50,6 @@
 
 <script>
 import {formatDate} from '@/mixins/formatDate.js'
-import dot from 'vue-text-dot'
 
 
 export default {
@@ -64,38 +57,12 @@ export default {
   props: {
     article: Object
   },
-  components: {
-    dot,
-  },
   mixins: [formatDate],
   methods: {
     view_article(_id){
       this.$router.push({ path: 'article', query: { _id: _id } })
     },
   },
-  computed: {
-    article_title(){
-      var virtual_container = document.createElement('div');
-      virtual_container.innerHTML = this.article.content
-      var first_h1 = virtual_container.getElementsByTagName('h1')[0]
-      if(first_h1)return first_h1.innerHTML
-      else return "Untitled"
-    },
-    article_summary(){
-      var virtual_container = document.createElement('div');
-      virtual_container.innerHTML = this.article.content
-      var first_p = virtual_container.getElementsByTagName('p')[0]
-      if(first_p) return first_p.innerHTML
-      else return ""
-    },
-    article_thumbnail_src(){
-      var virtual_container = document.createElement('div');
-      virtual_container.innerHTML = this.article.content
-      var first_img = virtual_container.getElementsByTagName('img')[0]
-      if(first_img) return first_img.src
-      else return ""
-    }
-  }
 }
 </script>
 
@@ -151,9 +118,11 @@ export default {
   float: right;
 }
 
-.article_preview .article_summary {
+.article_summary {
   margin-top: 5px;
   line-height: 120%;
+  max-height: 100px;
+  overflow-y: hidden;
 }
 
 .article_thumbnail {
