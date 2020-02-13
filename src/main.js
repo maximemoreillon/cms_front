@@ -4,22 +4,32 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import VueCookies from 'vue-cookies'
 
 import '@mdi/font/css/materialdesignicons.css';
-
-// require styles
-
-
-axios.defaults.withCredentials = true  // enable axios post cookie, default false
-axios.defaults.crossDomain = true
-axios.defaults.timeout = 10000
 
 
 
 Vue.use(VueAxios, axios)
+Vue.use(VueCookies)
 
 Vue.config.productionTip = false
 
+
+// Redirect to login screen if not logged in (i.e. does not have JWT in cookies)
+router.beforeEach((to, from, next) => {
+
+  if(Vue.$cookies.get("jwt")) {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${Vue.$cookies.get('jwt')}`
+  }
+  else {
+    delete axios.defaults.headers.common['Authorization']
+    window.location.href = "https://authentication.maximemoreillon.com/";
+  }
+
+  next();
+
+});
 
 router.beforeEach((to, from, next) => {
   store.commit('check_authentication')

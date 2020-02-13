@@ -2,24 +2,21 @@
 
   <div id="app">
 
+
+
+
     <nav>
       <img class="logo" src="@/assets/logo/logo.svg" alt="logo">
       <router-link to="/">All articles</router-link>
-
-
-      <!--<router-link to="/about">About</router-link>-->
-      <!--<router-link v-bind:to="{ path: 'article_list', query: { category: 'project' }}">Projects</router-link>-->
 
       <router-link
         v-for="(category, i) in $store.state.categories" v-bind:key="i"
         v-bind:to="{ name: 'article_list', query: { category: category }}">
         {{category}}</router-link>
 
-      <!--<router-link to="/article_list">All</router-link>-->
     </nav>
 
-    <!-- ID set for quill -->
-    <main id="main">
+    <main>
       <router-view/>
     </main>
 
@@ -29,11 +26,19 @@
 </template>
 
 <script>
+//import AppTemplate from '@moreillon/vue_application_template'
+
 export default {
   name: 'App',
+  components: {
+    //AppTemplate
+  },
   data(){
     return {
       categories: [],
+      navigation: [
+        {route: '/', icon: '', label: 'All articles'},
+      ]
     }
   },
   mounted() {

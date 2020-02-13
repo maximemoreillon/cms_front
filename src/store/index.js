@@ -11,19 +11,9 @@ export default new Vuex.Store({
   },
   mutations: {
     check_authentication(state){
-      console.log('[Auth] Checking authentication')
-      axios.post('https://authentication.maximemoreillon.com/status')
-      .then(response => {
-        if(response.data.logged_in) {
-          console.log('[Auth] Logged in')
-          state.user = response.data.username;
-        }
-        else {
-          console.log('[Auth] Logged out')
-          state.user = undefined;
-        }
-      })
-      .catch(error => console.log(error))
+      // KIND OF A DIRTY FIX
+      if(this.$cookies.get('jwt')) state.user = response.data.username
+      else state.user = undefined
     },
     update_categories(state){
       axios.post('https://cms.maximemoreillon.com/get_article_categories')
