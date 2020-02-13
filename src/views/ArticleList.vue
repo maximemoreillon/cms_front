@@ -14,7 +14,7 @@
       <div class="growing_spacer"/>
 
       <IconButton
-        v-if="$store.state.user"
+        v-if="$store.state.logged_in"
         icon="mdi-plus"
         v-on:buttonClicked="new_article()"/>
     </Toolbar>

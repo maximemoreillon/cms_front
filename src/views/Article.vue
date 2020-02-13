@@ -12,7 +12,7 @@
       <!-- publish indicator -->
       <span
         class="mdi mdi-earth published_indicator"
-        v-if="article_data.published && $store.state.user">
+        v-if="article_data.published && $store.state.logged_in">
         Published
       </span>
 
@@ -26,12 +26,12 @@
       <IconButton
         icon="mdi-download"
         v-on:buttonClicked="download_as_html_file()"
-        v-if="$store.state.user"/>
+        v-if="$store.state.logged_in"/>
 
       <IconButton
         icon="mdi-pencil"
         v-on:buttonClicked="edit_article(article_data._id)"
-        v-if="$store.state.user"/>
+        v-if="$store.state.logged_in"/>
 
     </Toolbar>
 

@@ -5,7 +5,7 @@
     <!-- wrapper for authentication detection -->
     <div
       class="authentication_wrapper"
-      v-if="$store.state.user && !article_loading">
+      v-if="$store.state.logged_in && !article_loading">
 
       <Toolbar>
 
@@ -231,9 +231,9 @@
 
     </div>
 
-    <Loader v-if="$store.state.user && article_loading"/>
+    <Loader v-if="$store.state.logged_in && article_loading"/>
 
-    <div class="" v-if="!$store.state.user">
+    <div class="" v-if="!$store.state.logged_in">
       Articles cannot be edited by unauthenticated user
     </div>
 

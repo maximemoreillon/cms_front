@@ -6,14 +6,13 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: undefined,
+    logged_in: false,
     categories: [],
   },
   mutations: {
     check_authentication(state){
-      // KIND OF A DIRTY FIX
-      if(this.$cookies.get('jwt')) state.user = response.data.username
-      else state.user = undefined
+      if(Vue.$cookies.get('jwt')) state.logged_in = true
+      else state.logged_in = false
     },
     update_categories(state){
       axios.post('https://cms.maximemoreillon.com/get_article_categories')
