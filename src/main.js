@@ -19,17 +19,18 @@ Vue.config.productionTip = false
 // Redirect to login screen if not logged in (i.e. does not have JWT in cookies)
 router.beforeEach((to, from, next) => {
 
+  // Save authentication state in Vuex
   store.commit('check_authentication')
 
-
+  // deal with authentication header
   if(Vue.$cookies.get("jwt")) {
     axios.defaults.headers.common['Authorization'] = `Bearer ${Vue.$cookies.get('jwt')}`
-    next();
   }
   else {
     delete axios.defaults.headers.common['Authorization']
-    window.location.href = "https://authentication.maximemoreillon.com/";
   }
+
+  next();
 
 
 
