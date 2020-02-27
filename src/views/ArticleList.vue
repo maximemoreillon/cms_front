@@ -79,7 +79,10 @@ export default {
 
         this.articles_loading = false;
       })
-      .catch(error => alert(error))
+      .catch(error => {
+        console.log(error.response.data)
+        alert(error.response.data)
+      })
     },
   },
   beforeRouteUpdate (to, from, next) {
@@ -90,9 +93,6 @@ export default {
   mounted() {
     this.get_articles(this.$route.query.category);
   },
-  computed: {
-
-  }
 }
 </script>
 
