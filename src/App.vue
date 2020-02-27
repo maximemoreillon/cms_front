@@ -14,6 +14,17 @@
         v-bind:to="{ name: 'article_list', query: { category: category }}">
         {{category}}</router-link>
 
+      <div class="version_info">
+        <div class="">
+          CMS v0.3
+        </div>
+        <div class="">
+          Maxime MOREILLON
+        </div>
+
+
+      </div>
+
     </nav>
 
     <main>
@@ -214,6 +225,13 @@ footer{
     height: 30px;
     margin-right: auto;
   }
+}
+
+.version_info{
+  margin-top: auto;
+  text-align: center;
+  color: #444444;
+  font-size: 75%;
 }
 
 /* END OF TEMPLATING STUFF */
