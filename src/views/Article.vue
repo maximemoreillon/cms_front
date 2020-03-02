@@ -10,28 +10,27 @@
       </div>
 
       <!-- publish indicator -->
-      <span
-        class="mdi mdi-earth published_indicator"
-        v-if="article_data.published && $store.state.logged_in">
-        Published
-      </span>
+      <earth-icon class="publishing_status" v-if="article_data.published && $store.state.logged_in"/>
 
       <div class="growing_spacer"/>
 
       <IconButton
-        class="right_aligned"
-        icon="mdi-arrow-left"
-        v-on:buttonClicked="$router.push({ name: 'article_list' })"/>
+        v-if="$route.query._id"
+        v-on:buttonClicked="$router.push({ name: 'article_list' })">
+        <arrow-left-icon />
+      </IconButton>
 
       <IconButton
-        icon="mdi-download"
         v-on:buttonClicked="download_as_html_file()"
-        v-if="$store.state.logged_in"/>
+        v-if="$store.state.logged_in">
+        <download-icon />
+      </IconButton>
 
       <IconButton
-        icon="mdi-pencil"
         v-on:buttonClicked="edit_article(article_data._id)"
-        v-if="$store.state.logged_in"/>
+        v-if="$store.state.logged_in">
+        <pencil-icon />
+      </IconButton>
 
     </Toolbar>
 
@@ -79,12 +78,25 @@ import {formatDate} from '@/mixins/formatDate.js'
 import highlight from 'highlight.js'
 
 
+import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue';
+import EarthIcon from 'vue-material-design-icons/Earth.vue';
+import PencilIcon from 'vue-material-design-icons/Pencil.vue';
+import DownloadIcon from 'vue-material-design-icons/Download.vue';
+
+
+
 export default {
   components: {
     IconButton,
     Modal,
     Toolbar,
-    Loader
+    Loader,
+
+    // Icons
+    EarthIcon,
+    ArrowLeftIcon,
+    PencilIcon,
+    DownloadIcon
   },
   mixins: [formatDate],
   data () {
@@ -120,6 +132,8 @@ export default {
               highlight.highlightBlock(block);
             })
           },10);
+
+
 
 
         })
@@ -159,7 +173,6 @@ export default {
 
 <style>
 
-@import url("//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/styles/obsidian.min.css");
 
 
 article {
@@ -184,24 +197,9 @@ article img {
   width: 200px;
   margin: 0 10px;
   */
-  cursor: pointer !important;
 }
 
 
-article pre {
-  /* white-space: pre-wrap; */
-  overflow-x: auto;
-
-  //background-color: #222222;
-  //color: white;
-  //padding: 15px;
-}
-
-article a {
-  font-weight: bold;
-  text-decoration: none;
-  color: #c00000;
-}
 
 .modal_image {
   width: 60vw;

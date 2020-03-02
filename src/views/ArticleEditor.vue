@@ -20,19 +20,27 @@
 
         <IconButton
           v-if="$route.query._id"
-          class="right_aligned"
-          icon="mdi-arrow-left"
-          v-on:buttonClicked="view_article()"/>
+          v-on:buttonClicked="view_article()">
+          <arrow-left-icon />
+        </IconButton>
+
+
         <IconButton
-          v-bind:class="{right_aligned: !article_data._id}"
-          icon="mdi-content-save"
-          v-on:buttonClicked="submit_article()"/>
+          v-on:buttonClicked="submit_article()">
+          <content-save-icon />
+        </IconButton>
+
         <IconButton
-          icon="mdi-delete"
-          v-on:buttonClicked="delete_article()"/>
+          v-on:buttonClicked="delete_article()">
+          <delete-icon />
+        </IconButton>
+
+
         <IconButton
-          v-bind:icon="article_data.published ? 'mdi-lock' : 'mdi-earth'"
-          v-on:buttonClicked="toggle_published()"/>
+          v-on:buttonClicked="toggle_published()">
+          <earth-icon v-if="article_data.published"/>
+          <lock-icon v-else/>
+          </IconButton>
 
       </Toolbar>
 
@@ -55,15 +63,17 @@
 
         </div>
 
+        <!-- Tags -->
         <div class="tags_wrapper">
           <label for="category_search">Tags: </label>
-          <span class="tag" v-for="(tag, index) in article_data.tags" v-bind:key="index">
-            <span>{{tag}}</span>
-            <IconButton
-              icon="mdi-close"
-              size="100%"
-              v-on:buttonClicked="delete_tag(index)"/>
-          </span>
+
+          <Tag
+            v-for="(tag, index) in article_data.tags"
+            v-bind:key="index"
+            v-bind:label="tag"
+            removable
+            v-on:remove="delete_tag(index)"/>
+
           <input
             type="search"
             ref="tag_input"
@@ -78,11 +88,9 @@
           </datalist>
 
           <IconButton
-            icon="mdi-plus"
-            v-on:buttonClicked="add_tag()"/>
-
-
-
+            v-on:buttonClicked="add_tag()">
+            <plus-icon/>
+          </IconButton>
 
         </div>
 
@@ -94,136 +102,140 @@
         <editor-menu-bar :editor="editor" v-slot="{ commands, isActive, getMarkAttrs }">
           <div class="menubar">
             <button
-              class="menubar__button"
+              class="menubar_button"
               :class="{ 'is-active': isActive.bold() }"
               @click="commands.bold">
-              <span class="mdi mdi-format-bold" />
+              <format-bold-icon />
             </button>
 
             <button
-              class="menubar__button"
+              class="menubar_button"
               :class="{ 'is-active': isActive.italic() }"
               @click="commands.italic">
-              <span class="mdi mdi-format-italic" />
+              <format-italic-icon />
             </button>
 
             <button
-              class="menubar__button"
+              class="menubar_button"
               :class="{ 'is-active': isActive.strike() }"
               @click="commands.strike">
-              <span class="mdi mdi-format-strikethrough" />
+              <format-strikethrough-icon />
             </button>
 
             <button
-              class="menubar__button"
+              class="menubar_button"
               :class="{ 'is-active': isActive.underline() }"
               @click="commands.underline">
-              <span class="mdi mdi-format-underline" />
+              <format-underline-icon />
             </button>
 
             <button
-              class="menubar__button"
+              class="menubar_button"
               :class="{ 'is-active': isActive.code() }"
               @click="commands.code">
-              <span class="mdi mdi-code-tags" />
+              <code-tags-icon />
             </button>
 
             <button
-              class="menubar__button"
+              class="menubar_button"
               :class="{ 'is-active': isActive.paragraph() }"
               @click="commands.paragraph">
-              <span class="mdi mdi-format-paragraph" />
+              <format-paragraph-icon />
             </button>
 
             <button
-              class="menubar__button"
+              class="menubar_button"
               :class="{ 'is-active': isActive.heading({ level: 1 }) }"
               @click="commands.heading({ level: 1 })">
-              <span class="mdi mdi-format-header-1" />
+              <format-header-1-icon />
             </button>
 
             <button
-              class="menubar__button"
+              class="menubar_button"
               :class="{ 'is-active': isActive.heading({ level: 2 }) }"
               @click="commands.heading({ level: 2 })">
-              <span class="mdi mdi-format-header-2" />
+              <format-header-2-icon />
             </button>
 
             <button
-              class="menubar__button"
+              class="menubar_button"
               :class="{ 'is-active': isActive.heading({ level: 3 }) }"
               @click="commands.heading({ level: 3 })">
-              <span class="mdi mdi-format-header-3" />
+              <format-header-3-icon />
             </button>
 
             <button
-              class="menubar__button"
+              class="menubar_button"
               :class="{ 'is-active': isActive.bullet_list() }"
               @click="commands.bullet_list">
-              <span class="mdi mdi-format-list-bulleted" />
+              <format-list-bulleted-icon />
             </button>
 
             <button
-              class="menubar__button"
+              class="menubar_button"
               :class="{ 'is-active': isActive.ordered_list() }"
               @click="commands.ordered_list">
-              <span class="mdi mdi-format-list-numbered" />
+              <format-list-numbered-icon />
             </button>
 
             <button
-              class="menubar__button"
+              class="menubar_button"
               :class="{ 'is-active': isActive.blockquote() }"
               @click="commands.blockquote">
-              <span class="mdi mdi-format-quote-close" />
+              <format-quote-close-icon />
             </button>
 
             <button
-              class="menubar__button"
+              class="menubar_button"
               :class="{ 'is-active': isActive.code_block() }"
               @click="commands.code_block">
-              <span class="mdi mdi-code-tags" />
+              <code-tags-icon />
             </button>
 
-            <button
-              class="menubar__button"
-              @click="commands.horizontal_rule">
-              <span class="mdi mdi-minus" />
-            </button>
 
             <button
-              class="menubar__button"
+              class="menubar_button"
               @click="commands.undo">
-              <span class="mdi mdi-undo" />
+              <undo-icon />
             </button>
 
             <button
-              class="menubar__button"
+              class="menubar_button"
               @click="commands.redo">
-              <span class="mdi mdi-redo" />
+              <redo-icon />
             </button>
 
 
 
-            <form class="menububble__form" v-if="linkMenuIsActive" @submit.prevent="setLinkUrl(commands.link, linkUrl)">
-              <input class="menububble__input" type="text" v-model="linkUrl" placeholder="https://" ref="linkInput" @keydown.esc="hideLinkMenu"/>
-              <button class="menubar__button" @click="setLinkUrl(commands.link, null)" type="button">
-                <span class="mdi mdi-delete" />
+            <form
+              class="menububble__form"
+              v-if="linkMenuIsActive"
+              v-on:submit.prevent="setLinkUrl(commands.link, linkUrl)">
+              <input
+                class="menububble__input"
+                type="text" v-model="linkUrl"
+                placeholder="https://"
+                ref="linkInput"
+                v-on:keydown.esc="hideLinkMenu"/>
+              <button class="menubar_button" v-on:click="setLinkUrl(commands.link, null)" type="button">
+                <delete-icon />
               </button>
             </form>
 
             <button v-else
-              class="menubar__button"
-              :class="{ 'is-active': isActive.link() }"
-              @click="showLinkMenu(getMarkAttrs('link'))">
-              <span class="mdi mdi-link" />
+              class="menubar_button"
+              v-bind:class="{ 'is-active': isActive.link() }"
+              v-on:click="showLinkMenu(getMarkAttrs('link'))">
+              <link-icon />
             </button>
 
           </div>
         </editor-menu-bar>
 
         <div class="editor">
-          <editor-content class="editor__content" :editor="editor" />
+          <editor-content class="editor_content" :editor="editor" />
         </div>
+
       </div>
 
 
@@ -252,6 +264,7 @@ import {formatDate} from '@/mixins/formatDate.js'
 
 import Toolbar from '@/components/Toolbar.vue'
 import Loader from '@/components/vue_loader/Loader.vue'
+import Tag from '@/components/Tag.vue'
 
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
 import {
@@ -277,20 +290,81 @@ import {
   Image,
 } from 'tiptap-extensions'
 
+import Iframe from '@/components/Iframe.js'
+
+
 import javascript from 'highlight.js/lib/languages/javascript'
 import css from 'highlight.js/lib/languages/css'
+import bash from 'highlight.js/lib/languages/bash'
+import python from 'highlight.js/lib/languages/python'
+import shell from 'highlight.js/lib/languages/shell'
+import dockerfile from 'highlight.js/lib/languages/dockerfile'
+import cpp from 'highlight.js/lib/languages/cpp'
+import xml from 'highlight.js/lib/languages/xml'
 
+
+
+
+// MDI Icons
+import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue';
+import DeleteIcon from 'vue-material-design-icons/Delete.vue';
+import ContentSaveIcon from 'vue-material-design-icons/ContentSave.vue';
+import LockIcon from 'vue-material-design-icons/Lock.vue';
+import EarthIcon from 'vue-material-design-icons/Earth.vue';
+import CodeTagsIcon from 'vue-material-design-icons/CodeTags.vue';
+import FormatHeader1Icon from 'vue-material-design-icons/FormatHeader1.vue';
+import FormatHeader2Icon from 'vue-material-design-icons/FormatHeader2.vue';
+import FormatHeader3Icon from 'vue-material-design-icons/FormatHeader3.vue';
+import FormatParagraphIcon from 'vue-material-design-icons/FormatParagraph.vue';
+import FormatBoldIcon from 'vue-material-design-icons/FormatBold.vue';
+import FormatItalicIcon from 'vue-material-design-icons/FormatItalic.vue';
+import FormatStrikethroughIcon from 'vue-material-design-icons/FormatStrikethrough.vue';
+import FormatUnderlineIcon from 'vue-material-design-icons/FormatUnderline.vue';
+import FormatListBulletedIcon from 'vue-material-design-icons/FormatListBulleted.vue';
+import FormatListNumberedIcon from 'vue-material-design-icons/FormatListNumbered.vue';
+import FormatQuoteCloseIcon from 'vue-material-design-icons/FormatQuoteClose.vue';
+import UndoIcon from 'vue-material-design-icons/Undo.vue';
+import RedoIcon from 'vue-material-design-icons/Redo.vue';
+import LinkIcon from 'vue-material-design-icons/Link.vue';
+import PlusIcon from 'vue-material-design-icons/Plus.vue';
 
 
 export default {
   components: {
+
     IconButton,
     Toolbar,
     Loader,
+    Tag,
 
     // editor
     EditorContent,
     EditorMenuBar,
+
+    // Icons
+    ArrowLeftIcon,
+    DeleteIcon,
+    ContentSaveIcon,
+    LockIcon,
+    EarthIcon,
+    CodeTagsIcon,
+    FormatHeader1Icon,
+    FormatHeader2Icon,
+    FormatHeader3Icon,
+    FormatBoldIcon,
+    FormatItalicIcon,
+    FormatStrikethroughIcon,
+    FormatUnderlineIcon,
+    FormatParagraphIcon,
+    FormatListBulletedIcon,
+    FormatListNumberedIcon,
+    FormatQuoteCloseIcon,
+    UndoIcon,
+    RedoIcon,
+    LinkIcon,
+    PlusIcon,
+
+
   },
   mixins: [formatDate],
   data () {
@@ -317,10 +391,9 @@ export default {
         creation_date: new Date(),
         edit_date: new Date(),
 
-        // Content edited in quill
         content: null,
 
-        // Article metadata
+        // Article metadata (generated when inputing data)
         category: '',
         tags: [],
         title: '',
@@ -335,8 +408,6 @@ export default {
   mounted(){
     this.get_article_if_exists();
     this.get_existing_tags();
-
-
   },
   beforeDestroy() {
     // Always destroy your editor instance when it's no longer needed
@@ -365,6 +436,7 @@ export default {
           new Underline(),
           new History(),
           new Image(),
+
           new Placeholder({
             emptyEditorClass: 'is-editor-empty',
             emptyNodeClass: 'is-empty',
@@ -372,25 +444,38 @@ export default {
             showOnlyWhenEditable: true,
             showOnlyCurrent: true,
           }),
+
+
           new CodeBlockHighlight({
             languages: {
               javascript,
               css,
+              shell,
+              python,
+              bash,
+              dockerfile,
+              cpp,
+              xml,
+
             },
           }),
+
+          new Iframe(),
+
+
+
         ],
         content: "",
         onUpdate: ({ getHTML }) => {
-          this.article_data.content = getHTML();
+
+          this.article_data.content = getHTML()
+
           this.set_article_title();
           this.set_article_summary();
           this.set_article_thumbnail_src();
+
         },
       })
-    },
-
-    editor_updated({ getHTML }){
-      this.article_data.content = getHTML;
     },
     get_article_if_exists(){
       // If ID is present in query, get the article corresponding to that ID
@@ -473,7 +558,7 @@ export default {
       .catch(error => alert(error))
     },
     parse_file(event){
-      // Load text files into article content
+      // Load text files and turn them into article content
       let file = event.srcElement.files[0]
       const reader = new FileReader()
       reader.onload = event => this.article_data.content = event.target.result
@@ -481,19 +566,21 @@ export default {
       reader.readAsText(file) // you could also read images and other binaries
     },
     set_article_title(){
-      // get article title from content
+      // get article title from content (first h1 tag of the content)
       var virtual_container = document.createElement('div');
       virtual_container.innerHTML = this.article_data.content
       var first_h1 = virtual_container.getElementsByTagName('h1')[0]
       if(first_h1) this.article_data.title = first_h1.innerHTML
     },
     set_article_summary(){
+      // get article summary from content (first p tag of the content)
       var virtual_container = document.createElement('div');
       virtual_container.innerHTML = this.article_data.content
       var first_p = virtual_container.getElementsByTagName('p')[0]
       if(first_p) this.article_data.summary = first_p.innerHTML
     },
     set_article_thumbnail_src(){
+      // get article thumbnail from content (first img tag of the content)
       var virtual_container = document.createElement('div');
       virtual_container.innerHTML = this.article_data.content
       var first_img = virtual_container.getElementsByTagName('img')[0]
@@ -524,11 +611,8 @@ export default {
 </script>
 
 
-<style>
-
-/* not exactly super nice */
-@import url("//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.18.0/build/styles/obsidian.min.css");
-
+<!-- not scoped so as to affect embedded components -->
+<style >
 .article_editor_view{
   height: 100%;
 }
@@ -544,38 +628,22 @@ export default {
   margin: 5px;
 }
 
-.tags_wrapper {
-
-}
-.tags_container {
-  display: flex;
-}
 
 
-.tag {
-  border: 1px solid #dddddd;
-  border-radius: 5px;
-  margin: 5px;
-  padding: 5px;
-}
-
-.tag:first-child {
-  margin-left: 0;
-}
 
 input[type="search"]{
   border: none;
   border-bottom: 1px solid #444444;
 }
 
-.menubar__button{
+.menubar_button{
   cursor: pointer;
   background-color: white;
   border: none;
   font-size: 150%;
 }
 
-.menubar__button.is-active{
+.menubar_button.is-active{
   color: #c00000;
 }
 
@@ -596,14 +664,11 @@ input[type="search"]{
 
 
 .editor {
-
   flex-grow: 1;
   position: relative;
-
-
 }
 
-.editor__content{
+.editor_content{
   position: absolute;
   top: 0;
   left: 0;
@@ -615,6 +680,7 @@ input[type="search"]{
   overflow-y: auto;
 }
 
+/* Not sure what this does */
 .editor p.is-editor-empty:first-child::before {
   content: attr(data-empty-text);
   float: left;
@@ -624,11 +690,17 @@ input[type="search"]{
   font-style: italic;
 }
 
-pre{
-  background-color: #282b2e;
-  padding: 10px;
-  color: #ffffff;
+code {
+  /* manually applying style because tiptap doesn't apply the hljs class to code */
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #282b2e;
+  color: #e0e2e4;
 }
+
+
+
 
 
 </style>

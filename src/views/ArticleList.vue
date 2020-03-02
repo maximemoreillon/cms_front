@@ -5,18 +5,15 @@
 
     <Toolbar >
 
-      <IconButton
-        icon="mdi-filter"/>
-
-      <IconButton
-        icon="mdi-sort-variant"/>
 
       <div class="growing_spacer"/>
 
       <IconButton
         v-if="$store.state.logged_in"
-        icon="mdi-plus"
-        v-on:buttonClicked="new_article()"/>
+        v-on:buttonClicked="new_article()">
+        <plus-icon/>
+      </IconButton>
+
     </Toolbar>
 
 
@@ -46,12 +43,20 @@ import ArticlePreview from '@/components/ArticlePreview.vue'
 import Toolbar from '@/components/Toolbar.vue'
 import Loader from '@/components/vue_loader/Loader.vue'
 
+// icons
+import PlusIcon from 'vue-material-design-icons/Plus.vue';
+
+
+
 export default {
   components: {
     IconButton,
     ArticlePreview,
     Toolbar,
-    Loader
+    Loader,
+
+    // icons
+    PlusIcon,
   },
   data () {
     return {

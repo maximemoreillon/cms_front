@@ -6,9 +6,6 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueCookies from 'vue-cookies'
 
-import '@mdi/font/css/materialdesignicons.css';
-
-
 
 Vue.use(VueAxios, axios)
 Vue.use(VueCookies)

@@ -39,6 +39,9 @@
 <script>
 //import AppTemplate from '@moreillon/vue_application_template'
 
+// That is the correct way to do import styles:
+import 'highlight.js/styles/obsidian.css'
+
 export default {
   name: 'App',
   components: {
@@ -55,6 +58,10 @@ export default {
   mounted() {
     this.$store.commit('check_authentication');
     this.$store.commit('update_categories');
+
+
+
+
   }
 }
 </script>
@@ -162,6 +169,7 @@ main {
   padding: 25px;
 }
 
+/* scroll bars */
 main::-webkit-scrollbar {
     width: 2px;
     background-color: #F5F5F5;
@@ -170,6 +178,23 @@ main::-webkit-scrollbar {
 main::-webkit-scrollbar-thumb {
     background-color: #c00000;
 }
+
+/* Main Style shared by all views */
+
+main a {
+  font-weight: bold;
+  text-decoration: none;
+  color: #c00000;
+}
+
+/* TEMPORARY */
+/*
+main pre {
+  background-color: #222222;
+  color: white;
+}
+*/
+
 
 footer{
   grid-area: footer;

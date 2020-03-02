@@ -4,9 +4,7 @@
     v-on:click="view_article(article._id)">
 
     <!-- indictor for published -->
-    <span
-      v-if="article.published && $store.state.user"
-      class="publishing_status mdi mdi-earth"/>
+    <earth-icon class="publishing_status" v-if="article.published && $store.state.logged_in"/>
 
     <!-- Article title, consists of first h1 of the content -->
     <div class="article_title">{{article.title}}</div>
@@ -19,9 +17,8 @@
       <span class="article_category" v-if="! ('category' in $route.query) && article.category">
         {{article.category}}
       </span>
-      <span class="article_category" v-else-if="! ('category' in $route.query)">
-        Uncategorized
-      </span>
+
+      <span class="article_category" v-else-if="! ('category' in $route.query)">Uncategorized</span>
 
     </div>
 
@@ -38,9 +35,12 @@
       v-html="article.summary"/>
 
     <div class="tags_container" v-if="article.tags">
-      <div class="tag" v-for="(tag, tag_index) in article.tags" v-bind:key="tag_index">
-        {{tag}}
-      </div>
+
+      <Tag
+        v-for="(tag, tag_index) in article.tags"
+        v-bind:key="tag_index"
+        v-bind:label="tag"
+        searchable/>
 
     </div>
 
@@ -50,6 +50,8 @@
 
 <script>
 import {formatDate} from '@/mixins/formatDate.js'
+import Tag from '@/components/Tag.vue'
+import EarthIcon from 'vue-material-design-icons/Earth.vue';
 
 
 export default {
@@ -58,6 +60,12 @@ export default {
     article: Object
   },
   mixins: [formatDate],
+  components: {
+    Tag,
+
+    // Icons
+    EarthIcon
+  },
   methods: {
     view_article(_id){
       this.$router.push({ path: 'article', query: { _id: _id } })
@@ -86,7 +94,7 @@ export default {
 
 
 
-.article_preview .article_title {
+.article_title {
 
   /* DIRTY */
   margin-top: 10px;
@@ -100,17 +108,17 @@ export default {
 
 
 
-.article_preview .article_metadata {
+.article_metadata {
   font-size: 75%;
   display: flex;
   color: #666666;
 }
 
-.article_preview .article_metadata > * {
+.article_metadata > * {
   margin-right: 5px;
 }
 
-.article_preview .article_date {
+.article_date {
 
 }
 
@@ -133,16 +141,14 @@ export default {
   margin-right: 10px;
 }
 
-.tag {
-  border: 1px solid #dddddd;
-  border-radius: 5px;
-  padding: 5px;
-  margin: 5px;
+
+.tags_container {
+  display: flex;
+  flex-wrap: wrap;
 }
 
-.tag:first-child {
-  margin-left: 0;
-}
+
+
 
 
 
