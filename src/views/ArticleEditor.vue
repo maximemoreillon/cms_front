@@ -14,38 +14,50 @@
           <div class="" v-if="article_data.edit_date">Last edited on {{format_date(article_data.edit_date)}}</div>
         </div>
 
-        <input type="file" ref="html_file_input" v-on:change="parse_file($event)">
+        <!-- Allow loading of HTML file -->
+        <div class="" v-if="false">
+          <input type="file" ref="html_file_input" v-on:change="parse_file($event)">
+        </div>
+
 
         <div class="growing_spacer"/>
 
         <IconButton
           v-if="$route.query._id"
-          v-on:buttonClicked="view_article()">
+          v-on:click="view_article()">
           <arrow-left-icon />
         </IconButton>
 
+        <IconButton
+          v-bind:active="editable"
+          v-on:click="editable = !editable">
+          <pencil-icon/>
+        </IconButton>
+
+
 
         <IconButton
-          v-on:buttonClicked="submit_article()">
+          v-on:click="submit_article()">
           <content-save-icon />
         </IconButton>
 
         <IconButton
-          v-on:buttonClicked="delete_article()">
+          v-on:click="delete_article()">
           <delete-icon />
         </IconButton>
 
 
         <IconButton
-          v-on:buttonClicked="toggle_published()">
-          <earth-icon v-if="article_data.published"/>
-          <lock-icon v-else/>
-          </IconButton>
+          v-on:click="toggle_published()"
+          v-bind:active="article_data.published">
+          <earth-icon/>
+        </IconButton>
 
       </Toolbar>
 
+      <!-- Tags and category -->
       <div class="metadata_wrapper">
-
+        <!-- Category -->
         <div class="category_container">
           <label for="category_search">Category: </label>
           <input
@@ -54,18 +66,18 @@
             list="category_list"
             v-model="article_data.category"/>
 
-            <datalist id="category_list">
-              <option
-                v-for="(category, i) in $store.state.categories"
-                v-bind:value="category"
-                v-bind:key="i"/>
-            </datalist>
-
+          <datalist id="category_list">
+            <option
+              v-for="(category, i) in $store.state.categories"
+              v-bind:value="category"
+              v-bind:key="i"/>
+          </datalist>
         </div>
 
         <!-- Tags -->
         <div class="tags_wrapper">
-          <label for="category_search">Tags: </label>
+
+          <label for="tag_search">Tags: </label>
 
           <Tag
             v-for="(tag, index) in article_data.tags"
@@ -75,10 +87,12 @@
             v-on:remove="delete_tag(index)"/>
 
           <input
+            id="tag_search"
             type="search"
             ref="tag_input"
             list="existing_tag_list"
-            v-on:keyup.enter="add_tag()">
+            v-on:keyup.enter="add_tag()"
+            v-on:keyup.delete="delete_last_Tag()">
 
           <datalist id="existing_tag_list">
             <option
@@ -87,10 +101,6 @@
               v-bind:key="i"/>
           </datalist>
 
-          <IconButton
-            v-on:buttonClicked="add_tag()">
-            <plus-icon/>
-          </IconButton>
 
         </div>
 
@@ -101,146 +111,136 @@
       <div class="editor_wrapper">
         <editor-menu-bar :editor="editor" v-slot="{ commands, isActive, getMarkAttrs }">
           <div class="menubar">
-            <button
-              class="menubar_button"
-              :class="{ 'is-active': isActive.bold() }"
+
+            <IconButton
+              v-bind:active="isActive.bold()"
               @click="commands.bold">
               <format-bold-icon />
-            </button>
+            </IconButton>
 
-            <button
-              class="menubar_button"
-              :class="{ 'is-active': isActive.italic() }"
+            <IconButton
+              v-bind:active="isActive.italic()"
               @click="commands.italic">
               <format-italic-icon />
-            </button>
+            </IconButton>
 
-            <button
-              class="menubar_button"
-              :class="{ 'is-active': isActive.strike() }"
+            <IconButton
+              v-bind:active="isActive.strike()"
               @click="commands.strike">
               <format-strikethrough-icon />
-            </button>
+            </IconButton>
 
-            <button
-              class="menubar_button"
-              :class="{ 'is-active': isActive.underline() }"
+            <IconButton
+              v-bind:active="isActive.underline()"
               @click="commands.underline">
               <format-underline-icon />
-            </button>
+            </IconButton>
 
-            <button
-              class="menubar_button"
-              :class="{ 'is-active': isActive.code() }"
+            <IconButton
+              v-bind:active="isActive.code()"
               @click="commands.code">
               <code-tags-icon />
-            </button>
+            </IconButton>
 
-            <button
-              class="menubar_button"
-              :class="{ 'is-active': isActive.paragraph() }"
+            <IconButton
+              v-bind:active="isActive.paragraph()"
               @click="commands.paragraph">
               <format-paragraph-icon />
-            </button>
+            </IconButton>
 
-            <button
-              class="menubar_button"
-              :class="{ 'is-active': isActive.heading({ level: 1 }) }"
+            <IconButton
+              v-bind:active="isActive.heading({ level: 1 })"
               @click="commands.heading({ level: 1 })">
               <format-header-1-icon />
-            </button>
+            </IconButton>
 
-            <button
-              class="menubar_button"
-              :class="{ 'is-active': isActive.heading({ level: 2 }) }"
+            <IconButton
+              v-bind:active="isActive.heading({ level: 2 })"
               @click="commands.heading({ level: 2 })">
               <format-header-2-icon />
-            </button>
+            </IconButton>
 
-            <button
-              class="menubar_button"
-              :class="{ 'is-active': isActive.heading({ level: 3 }) }"
+            <IconButton
+              v-bind:active="isActive.heading({ level: 3 })"
               @click="commands.heading({ level: 3 })">
               <format-header-3-icon />
-            </button>
+            </IconButton>
 
-            <button
-              class="menubar_button"
-              :class="{ 'is-active': isActive.bullet_list() }"
+            <IconButton
+              v-bind:active="isActive.bullet_list()"
               @click="commands.bullet_list">
               <format-list-bulleted-icon />
-            </button>
+            </IconButton>
 
-            <button
-              class="menubar_button"
-              :class="{ 'is-active': isActive.ordered_list() }"
+            <IconButton
+              v-bind:active="isActive.ordered_list()"
               @click="commands.ordered_list">
               <format-list-numbered-icon />
-            </button>
+            </IconButton>
 
-            <button
-              class="menubar_button"
-              :class="{ 'is-active': isActive.blockquote() }"
+            <IconButton
+              v-bind:active="isActive.blockquote()"
               @click="commands.blockquote">
               <format-quote-close-icon />
-            </button>
+            </IconButton>
 
-            <button
-              class="menubar_button"
-              :class="{ 'is-active': isActive.code_block() }"
+            <IconButton
+              v-bind:active="isActive.code_block()"
               @click="commands.code_block">
               <code-tags-icon />
-            </button>
+            </IconButton>
 
 
-            <button
-              class="menubar_button"
+            <IconButton
               @click="commands.undo">
               <undo-icon />
-            </button>
+            </IconButton>
 
-            <button
-              class="menubar_button"
+            <IconButton
               @click="commands.redo">
               <redo-icon />
-            </button>
+            </IconButton>
+
+            <IconButton
+              @click="showImagePrompt(commands.image)">
+              <image-icon />
+            </IconButton>
 
 
-
+            <!-- Input form for the links -->
             <form
-              class="menububble__form"
               v-if="linkMenuIsActive"
               v-on:submit.prevent="setLinkUrl(commands.link, linkUrl)">
               <input
-                class="menububble__input"
                 type="text" v-model="linkUrl"
                 placeholder="https://"
                 ref="linkInput"
                 v-on:keydown.esc="hideLinkMenu"/>
-              <button class="menubar_button" v-on:click="setLinkUrl(commands.link, null)" type="button">
+              <IconButton class="menubar_button" v-on:click="setLinkUrl(commands.link, null)" type="button">
                 <delete-icon />
-              </button>
+              </IconButton>
             </form>
 
-            <button v-else
+            <IconButton v-else
               class="menubar_button"
               v-bind:class="{ 'is-active': isActive.link() }"
               v-on:click="showLinkMenu(getMarkAttrs('link'))">
               <link-icon />
-            </button>
+            </IconButton>
 
           </div>
         </editor-menu-bar>
 
+        <!-- The content of the editor -->
         <div class="editor">
-          <editor-content class="editor_content" :editor="editor" />
+
+          <editor-content
+            class="editor_content"
+            :editor="editor"/>
+            
         </div>
 
       </div>
-
-
-
-
     </div>
 
     <Loader v-if="$store.state.logged_in && article_loading"/>
@@ -259,9 +259,8 @@
 <script>
 
 
-import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import {formatDate} from '@/mixins/formatDate.js'
-
+import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import Toolbar from '@/components/Toolbar.vue'
 import Loader from '@/components/vue_loader/Loader.vue'
 import Tag from '@/components/Tag.vue'
@@ -292,7 +291,7 @@ import {
 
 import Iframe from '@/components/Iframe.js'
 
-
+// HLJS languages
 import javascript from 'highlight.js/lib/languages/javascript'
 import css from 'highlight.js/lib/languages/css'
 import bash from 'highlight.js/lib/languages/bash'
@@ -305,11 +304,11 @@ import xml from 'highlight.js/lib/languages/xml'
 
 
 
-// MDI Icons
+// Icons
 import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue';
 import DeleteIcon from 'vue-material-design-icons/Delete.vue';
 import ContentSaveIcon from 'vue-material-design-icons/ContentSave.vue';
-import LockIcon from 'vue-material-design-icons/Lock.vue';
+//import LockIcon from 'vue-material-design-icons/Lock.vue';
 import EarthIcon from 'vue-material-design-icons/Earth.vue';
 import CodeTagsIcon from 'vue-material-design-icons/CodeTags.vue';
 import FormatHeader1Icon from 'vue-material-design-icons/FormatHeader1.vue';
@@ -326,16 +325,18 @@ import FormatQuoteCloseIcon from 'vue-material-design-icons/FormatQuoteClose.vue
 import UndoIcon from 'vue-material-design-icons/Undo.vue';
 import RedoIcon from 'vue-material-design-icons/Redo.vue';
 import LinkIcon from 'vue-material-design-icons/Link.vue';
-import PlusIcon from 'vue-material-design-icons/Plus.vue';
-
+//import PlusIcon from 'vue-material-design-icons/Plus.vue';
+import PencilIcon from 'vue-material-design-icons/Pencil.vue';
+//import PencilOffIcon from 'vue-material-design-icons/PencilOff.vue';
+import ImageIcon from 'vue-material-design-icons/Image.vue';
 
 export default {
   components: {
 
-    IconButton,
     Toolbar,
     Loader,
     Tag,
+    IconButton,
 
     // editor
     EditorContent,
@@ -345,7 +346,7 @@ export default {
     ArrowLeftIcon,
     DeleteIcon,
     ContentSaveIcon,
-    LockIcon,
+    //LockIcon,
     EarthIcon,
     CodeTagsIcon,
     FormatHeader1Icon,
@@ -362,7 +363,10 @@ export default {
     UndoIcon,
     RedoIcon,
     LinkIcon,
-    PlusIcon,
+    //PlusIcon,
+    PencilIcon,
+    //PencilOffIcon,
+    ImageIcon,
 
 
   },
@@ -370,53 +374,9 @@ export default {
   data () {
     return {
 
-
-
-      editor: null,
-
-      // stuff for links
-      linkUrl: null,
-      linkMenuIsActive: false,
-
-      article_loading: true,
-      existing_tags: [],
-
-      // Default values for an article, overwritten if loaded with axios
-      article_data: {
-        // default set to undefined for MongoDB
-        _id: undefined,
-
-        published: false,
-
-        creation_date: new Date(),
-        edit_date: new Date(),
-
-        content: null,
-
-        // Article metadata (generated when inputing data)
-        category: '',
-        tags: [],
-        title: '',
-        summary: '',
-        thumbnail_src: '',
-
-      },
-
-
-    }
-  },
-  mounted(){
-    this.get_article_if_exists();
-    this.get_existing_tags();
-  },
-  beforeDestroy() {
-    // Always destroy your editor instance when it's no longer needed
-    this.editor.destroy();
-  },
-
-  methods: {
-    create_editor(){
-      this.editor = new Editor({
+      // The tiptap editor, is actually created in mounted
+      //editor: null,
+      editor: new Editor({
         extensions: [
           new Blockquote(),
           new BulletList(),
@@ -445,7 +405,6 @@ export default {
             showOnlyCurrent: true,
           }),
 
-
           new CodeBlockHighlight({
             languages: {
               javascript,
@@ -456,27 +415,82 @@ export default {
               dockerfile,
               cpp,
               xml,
-
             },
           }),
 
           new Iframe(),
-
-
-
         ],
+
+        editable: true,
         content: "",
+
         onUpdate: ({ getHTML }) => {
 
           this.article_data.content = getHTML()
 
+          // Parse the article to find metadata
           this.set_article_title();
           this.set_article_summary();
           this.set_article_thumbnail_src();
 
         },
+      }), // end of new Editor ()
+
+
+
+      // Default values for an article, overwritten if loaded with axios
+      // This gets sent to the DB
+      article_data: {
+        // default set to undefined for MongoDB
+        _id: undefined,
+
+        published: false,
+
+        creation_date: new Date(),
+        edit_date: new Date(),
+
+        content: null,
+
+        // Article metadata (generated when inputing data)
+        category: '',
+        tags: [],
+        title: '',
+        summary: '',
+        thumbnail_src: '',
+
+      },
+
+      // stuff for links
+      linkUrl: null,
+      linkMenuIsActive: false,
+
+      editable: true,
+
+      article_loading: true,
+      existing_tags: [],
+
+
+    }
+  },
+  watch: {
+    // used for readonly mode
+    editable() {
+      this.editor.setOptions({
+        editable: this.editable,
       })
     },
+  },
+  mounted(){
+    this.get_article_if_exists();
+    this.get_existing_tags();
+
+  },
+  beforeDestroy() {
+    // Always destroy your editor instance when it's no longer needed
+    this.editor.destroy();
+  },
+
+  methods: {
     get_article_if_exists(){
       // If ID is present in query, get the article corresponding to that ID
       if('_id' in this.$route.query){
@@ -486,24 +500,17 @@ export default {
         this.axios.post('https://cms.maximemoreillon.com/get_article', {_id: this.$route.query._id})
         .then(response => {
 
-          this.article_data = response.data
-          this.create_editor();
+          this.article_data = response.data;
           this.editor.setContent(this.article_data.content);
-
-
-          // Add the date of edition
-          this.article_data.edit_date = new Date();
 
           // Unflag as loading
           this.article_loading = false;
-
-
         })
         .catch(error => alert(error))
       }
       else {
+
         this.article_loading = false;
-        this.create_editor();
       }
     },
     toggle_published(){
@@ -513,6 +520,9 @@ export default {
 
       // Show loader to prevent user from re-submitting
       this.article_loading = true;
+
+      // Add the date of edition
+      this.article_data.edit_date = new Date();
 
       this.axios.post('https://cms.maximemoreillon.com/edit_article', this.article_data)
       .then(response => {
@@ -535,9 +545,11 @@ export default {
       }
 
     },
+
     view_article(){
       this.$router.push({ path: 'article', query: { _id: this.$route.query._id } })
     },
+
     add_tag(){
       if(!('tags' in this.article_data)) this.$set(this.article_data,'tags',[])
       this.article_data.tags.push(this.$refs.tag_input.value);
@@ -545,6 +557,9 @@ export default {
     },
     delete_tag(index){
       this.article_data.tags.splice(index,1)
+    },
+    delete_last_Tag(){
+      this.article_data.tags.pop();
     },
     get_existing_tags(){
       this.axios.post('https://cms.maximemoreillon.com/get_tags')
@@ -604,6 +619,13 @@ export default {
       this.hideLinkMenu()
     },
 
+    showImagePrompt(command) {
+      const src = prompt('Enter the url of your image here')
+      if (src !== null) {
+        command({ src })
+      }
+    },
+
   },
 
 
@@ -626,7 +648,16 @@ export default {
 
 .metadata_wrapper{
   margin: 5px;
+
+  display: flex;
 }
+
+.metadata_wrapper > div:not(:first-child) {
+  margin-left: 10px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
 
 
 
@@ -680,7 +711,7 @@ input[type="search"]{
   overflow-y: auto;
 }
 
-/* Not sure what this does */
+/* Used for the placeholder */
 .editor p.is-editor-empty:first-child::before {
   content: attr(data-empty-text);
   float: left;
@@ -690,7 +721,7 @@ input[type="search"]{
   font-style: italic;
 }
 
-code {
+pre code {
   /* manually applying style because tiptap doesn't apply the hljs class to code */
   display: block;
   overflow-x: auto;

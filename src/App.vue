@@ -13,18 +13,6 @@
         v-for="(category, i) in $store.state.categories" v-bind:key="i"
         v-bind:to="{ name: 'article_list', query: { category: category }}">
         {{category}}</router-link>
-
-      <div class="version_info">
-        <div class="">
-          CMS v0.3
-        </div>
-        <div class="">
-          Maxime MOREILLON
-        </div>
-
-
-      </div>
-
     </nav>
 
     <main>
@@ -187,6 +175,8 @@ main a {
   color: #c00000;
 }
 
+
+
 /* TEMPORARY */
 /*
 main pre {
@@ -260,6 +250,31 @@ footer{
 }
 
 /* END OF TEMPLATING STUFF */
+
+
+.icon_button {
+  border: none;
+  outline: none; /* remove theblue halo when clicking */
+  background-color: transparent;
+  position: relative;
+  cursor: pointer;
+
+  transition: color 0.25s;
+  color: #444444;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.icon_button:hover {
+  color: #802020;
+}
+
+.icon_button.active {
+  color: #c00000;
+}
 
 
 </style>

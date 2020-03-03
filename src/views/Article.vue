@@ -2,15 +2,42 @@
   <div class="container" >
 
     <!-- Toolbar, currently just for edit button -->
-    <Toolbar v-if="article_data">
+    <Toolbar v-if="article">
 
-      <div class="dates_container" v-if="article_data">
-        <div class="" v-if="article_data.creation_date">Created: {{format_date(article_data.creation_date)}}</div>
-        <div class="" v-if="article_data.edit_date">Last edited: {{format_date(article_data.edit_date)}}</div>
+      <div class="dates_container" v-if="article">
+        <div class="" v-if="article.creation_date">Created: {{format_date(article.creation_date)}}</div>
+        <div class="" v-if="article.edit_date">Last edited: {{format_date(article.edit_date)}}</div>
       </div>
 
       <!-- publish indicator -->
-      <earth-icon class="publishing_status" v-if="article_data.published && $store.state.logged_in"/>
+      <div
+        class="published_indicator"
+        v-if="article.published && $store.state.logged_in">
+        <earth-icon class="publishing_status"/>
+        <span>Published</span>
+      </div>
+
+      <div class="category_wrapper">
+        <span class="article_category" v-if="! ('category' in $route.query) && article.category">
+          Category: {{article.category}}
+        </span>
+
+        <span class="article_category" v-else-if="! ('category' in $route.query)">Uncategorized</span>
+      </div>
+
+
+
+
+      <!-- Tags -->
+      <div class="tags_wrapper">
+        <span>Tags: </span>
+        <Tag
+          v-for="(tag, tag_index) in article.tags"
+          v-bind:key="tag_index"
+          v-bind:label="tag"
+          searchable/>
+      </div>
+
 
       <div class="growing_spacer"/>
 
@@ -27,7 +54,7 @@
       </IconButton>
 
       <IconButton
-        v-on:buttonClicked="edit_article(article_data._id)"
+        v-on:buttonClicked="edit_article(article._id)"
         v-if="$store.state.logged_in">
         <pencil-icon />
       </IconButton>
@@ -41,9 +68,9 @@
 
     <!-- the article content -->
     <article
-      v-if="article_data"
+      v-if="article"
       ref="article_content"
-      v-html="article_data.content"/>
+      v-html="article.content"/>
 
     <!-- messages when no content -->
     <Loader v-else-if="article_loading"/>
@@ -73,6 +100,8 @@ import Modal from '@/components/vue_modal/Modal.vue'
 import Toolbar from '@/components/Toolbar.vue'
 import Loader from '@/components/vue_loader/Loader.vue'
 
+import Tag from '@/components/Tag.vue'
+
 import {formatDate} from '@/mixins/formatDate.js'
 
 import highlight from 'highlight.js'
@@ -91,6 +120,7 @@ export default {
     Modal,
     Toolbar,
     Loader,
+    Tag,
 
     // Icons
     EarthIcon,
@@ -101,7 +131,7 @@ export default {
   mixins: [formatDate],
   data () {
     return {
-      article_data: null,
+      article: null,
       article_loading: false,
 
       modal: {
@@ -122,7 +152,7 @@ export default {
         this.axios.post('https://cms.maximemoreillon.com/get_article', {_id: this.$route.query._id})
         .then(response => {
           this.article_loading = false;
-          this.article_data = response.data
+          this.article = response.data
 
           setTimeout(this.add_event_listeners_for_image_modals,100);
 
@@ -155,7 +185,7 @@ export default {
     },
     download_as_html_file(){
       var a = window.document.createElement('a');
-      a.href = window.URL.createObjectURL(new Blob([this.article_data.content], {type: 'text/html'}));
+      a.href = window.URL.createObjectURL(new Blob([this.article.content], {type: 'text/html'}));
       a.download = 'test.html';
 
       // Append anchor to body.
@@ -209,9 +239,15 @@ article img {
 }
 
 .published_indicator{
-  border: 1px solid #444444;
+  border: 1px solid #dddddd;
   border-radius: 5px;
-  padding: 5px;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.published_indicator > * {
+  margin: 0 5px;
 }
 
 

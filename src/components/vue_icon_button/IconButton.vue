@@ -1,11 +1,16 @@
 <template>
+
   <button
     class="icon_button"
     v-bind:style="{ fontSize: size}"
+    v-bind:class="{active: active}"
     v-on:click="button_clicked()"
     type="button">
+
     <slot></slot>
+
   </button>
+
 </template>
 
 <script>
@@ -19,11 +24,18 @@ export default {
     size: {
       type: String,
       default(){ return "100%" }
+    },
+    active: {
+      type: Boolean,
+      default(){ return false }
     }
   },
   methods: {
     button_clicked(){
-      if(!this.loading) this.$emit('buttonClicked')
+      this.$emit('click')
+
+      // For legacy support
+      this.$emit('buttonClicked')
     }
   },
 
@@ -46,12 +58,12 @@ export default {
   align-items: center;
 }
 
-.icon_button.loading {
-  color: #aaaaaa;
-  cursor:not-allowed;
-}
 
 .icon_button:hover {
+  color: #802020;
+}
+
+.icon_button.active {
   color: #c00000;
 }
 

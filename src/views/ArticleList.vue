@@ -69,12 +69,14 @@ export default {
     new_article(){
       this.$router.push({ path: 'article_editor' })
     },
-    get_articles(category){
-      this.articles_loading = true;
+    get_articles(query){
+
+      this.articles_loading = true
+
+      // Delete all articles
       this.articles.splice(0,this.articles.length)
-      this.axios.post('https://cms.maximemoreillon.com/get_article_list', {
-        category: category
-      })
+
+      this.axios.post('https://cms.maximemoreillon.com/get_article_list', query)
       .then(response => {
         this.articles.splice(0,this.articles.length);
 
@@ -85,18 +87,24 @@ export default {
         this.articles_loading = false;
       })
       .catch(error => {
-        console.log(error.response.data)
         alert(error.response.data)
       })
     },
   },
+
   beforeRouteUpdate (to, from, next) {
-    this.get_articles(to.query.category)
+    this.get_articles({
+      category: to.query.category,
+      tags: to.query.tags
+    })
     next();
   },
 
   mounted() {
-    this.get_articles(this.$route.query.category);
+    this.get_articles({
+      category: this.$route.query.category,
+      tags: this.$route.query.tags
+    });
   },
 }
 </script>

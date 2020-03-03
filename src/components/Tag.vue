@@ -33,7 +33,7 @@ export default {
   methods: {
     tag_clicked(){
       if(this.searchable){
-        this.$emit('search')
+        this.$router.push({ name: 'article_list', query: { tags: [this.label] } })
       }
     }
   },
