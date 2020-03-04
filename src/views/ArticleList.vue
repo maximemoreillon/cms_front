@@ -70,61 +70,34 @@ export default {
     new_article(){
       this.$router.push({ path: 'article_editor' })
     },
-    get_articles(query){
+    get_articles(){
 
       this.articles_loading = true
 
       // Delete all articles
       this.articles.splice(0,this.articles.length)
 
-      this.axios.post('http://192.168.1.2:8050/get_article_list_neo4j', query)
+      this.axios.post(process.env.VUE_APP_API_URL + '/get_article_list_neo4j', {})
       .then(response => {
 
 
         response.data.forEach( record => {
-
-
-          let article_node = record._fields[record._fieldLookup['article']]
-          let tag_node = record._fields[record._fieldLookup['tag']]
-
-          let found_article = this.articles.find( article => {
-            return article.identity.low === article_node.identity.low
-          })
-
-          if(!found_article){
-            this.articles.push(article_node)
-            this.articles[this.articles.length-1].tags = []
-          }
-
-          if(tag_node){
-            this.articles[this.articles.length-1].tags.push(tag_node)
-          }
-
+          let article = record._fields[record._fieldLookup['article']]
+          this.articles.push(article)
         });
 
 
         this.articles_loading = false;
       })
       .catch(error => {
-        console.log(error)
+        console.log(error.response.data)
       })
 
     },
   },
 
-  beforeRouteUpdate (to, from, next) {
-    this.get_articles({
-      category: to.query.category,
-      tags: to.query.tags
-    })
-    next();
-  },
-
   mounted() {
-    this.get_articles({
-      category: this.$route.query.category,
-      tags: this.$route.query.tags
-    });
+    this.get_articles();
   },
 }
 </script>

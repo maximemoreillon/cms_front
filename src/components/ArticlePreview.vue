@@ -26,14 +26,17 @@
       v-if="article.properties.summary"
       v-html="article.properties.summary"/>
 
-    <div class="tags_container" v-if="article.tags">
+    <div class="tags_container" v-if="tags">
 
       <Tag
-        v-for="tag in article.tags"
+        v-for="tag in tags"
         v-bind:key="tag.identity.low"
         v-bind:tag="tag"/>
 
     </div>
+
+    <!-- TODO: replace with loader -->
+    <div class="tags_container" v-else-if="tags_loading">Loading</div>
 
 
   </div>
@@ -52,6 +55,12 @@ export default {
   props: {
     article: Object
   },
+  data() {
+    return {
+      tags: [],
+      tags_loading: false,
+    }
+  },
   mixins: [
     formatDate,
     //parseArticleRecord
@@ -62,12 +71,29 @@ export default {
     // Icons
     EarthIcon
   },
+  mounted() {
+    this.get_tags()
+  },
   methods: {
+    get_tags(){
+      this.tags_loading = true
+      this.axios.post(process.env.VUE_APP_API_URL + '/get_tags_of_article', {
+        id: this.article.identity.low
+      })
+      .then(response => {
 
-  },
-  computed: {
-
-  },
+        this.tags.splice(0,this.tags.length)
+        response.data.forEach(record => {
+          let tag = record._fields[record._fieldLookup['tag']]
+          this.tags.push(tag)
+        })
+        this.tags_loading = false
+      })
+      .catch(error => {
+        console.log(error.response.data)
+      })
+    }
+  }
 }
 </script>
 

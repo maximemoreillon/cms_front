@@ -141,7 +141,7 @@ export default {
         this.loading = true;
 
 
-        this.axios.post('http://192.168.1.2:8050/get_article_neo4j', {id: this.$route.query.id})
+        this.axios.post(process.env.VUE_APP_API_URL + '/get_article_neo4j', {id: this.$route.query.id})
         .then(response => {
 
           this.loading = false;

@@ -12,7 +12,7 @@
       <router-link
         v-for="nav_item in $store.state.navigation_items"
         v-bind:key="nav_item.identity.low"
-        v-bind:to="{ name: 'article_list', query: { tag: nav_item.properties.name }}">
+        v-bind:to="{ name: 'tag', query: { id: nav_item.identity.low }}">
         {{nav_item.properties.name}}
       </router-link>
     </nav>
@@ -48,6 +48,8 @@ export default {
   mounted() {
     this.$store.commit('check_authentication');
     this.$store.commit('update_categories');
+
+    console.log(process.env.VUE_APP_API_URL)
 
 
 

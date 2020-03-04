@@ -55,7 +55,7 @@
 
         <IconButton
           v-on:click="toggle_published()"
-          v-bind:active="article.published">
+          v-bind:active="article.properties.published">
           <earth-icon/>
         </IconButton>
 
@@ -492,7 +492,7 @@ export default {
         this.article_loading = true;
 
 
-        this.axios.post('http://192.168.1.2:8050/get_article_neo4j', {id: this.$route.query.id})
+        this.axios.post(process.env.VUE_APP_API_URL + '/get_article_neo4j', {id: this.$route.query.id})
         .then(response => {
 
           // parsing neo4j record for article
@@ -521,7 +521,8 @@ export default {
       }
     },
     toggle_published(){
-      this.article.published = !this.article.published;
+
+      this.article.properties.published = !this.article.properties.published;
     },
     submit_article(){
 
@@ -534,7 +535,7 @@ export default {
 
       if(this.$route.query.id){
         // if the article has an ID, update
-        this.axios.post('http://192.168.1.2:8050/update_article_neo4j', {
+        this.axios.post(process.env.VUE_APP_API_URL + '/update_article_neo4j', {
           // WARNING: Getting ID from query is not very robust
           article: this.article,
           tags: this.tags,
@@ -551,7 +552,7 @@ export default {
       }
       else {
         // The article does not have an ID => create
-        this.axios.post('http://192.168.1.2:8050/create_article_neo4j', {
+        this.axios.post(process.env.VUE_APP_API_URL + '/create_article_neo4j', {
           article: this.article,
           tags: this.tags,
         })
@@ -571,7 +572,7 @@ export default {
         this.article_loading = true;
 
         // WARNING: using the query to get the ID is not very robust...
-        this.axios.post('http://192.168.1.2:8050/delete_article_neo4j', {id: this.$route.query.id})
+        this.axios.post(process.env.VUE_APP_API_URL + '/delete_article_neo4j', {id: this.$route.query.id})
         .then( () => {
           this.article_loading = false;
           this.$router.push({ name: 'article_list' })
@@ -586,7 +587,7 @@ export default {
 
     add_tag(){
 
-      this.axios.post('http://192.168.1.2:8050/create_tag_neo4j', {
+      this.axios.post(process.env.VUE_APP_API_URL + '/create_tag_neo4j', {
         tag_name: this.$refs.tag_input.value
       })
       .then(response => {
@@ -608,7 +609,7 @@ export default {
     get_existing_tags(){
 
 
-      this.axios.post('http://192.168.1.2:8050/get_tag_list_neo4j', {})
+      this.axios.post(process.env.VUE_APP_API_URL + '/get_tag_list_neo4j', {})
       .then(response => {
 
         // Recreate list of tags

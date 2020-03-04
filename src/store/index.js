@@ -15,7 +15,7 @@ export default new Vuex.Store({
       else state.logged_in = false
     },
     update_categories(state){
-      axios.post('http://192.168.1.2:8050/get_navigation_items')
+      axios.post(process.env.VUE_APP_API_URL + '/get_navigation_items')
       .then(response => {
         console.log(response.data)
         console.log(state.navigation_items)
