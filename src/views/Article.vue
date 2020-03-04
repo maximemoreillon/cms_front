@@ -169,31 +169,6 @@ export default {
 
         })
         .catch(error => alert(error))
-
-        /*
-        // MongoDB version
-        this.axios.post('https://cms.maximemoreillon.com/get_article', {_id: this.$route.query._id})
-        .then(response => {
-          this.loading = false;
-          this.article = response.data
-
-          setTimeout(this.add_event_listeners_for_image_modals,100);
-
-
-          setTimeout(() => {
-            document.querySelectorAll('pre code').forEach((block) => {
-              highlight.highlightBlock(block);
-            })
-          },10);
-
-
-
-
-        })
-        .catch(error => alert(error))
-
-        */
-
       }
     },
     add_event_listeners_for_image_modals(){

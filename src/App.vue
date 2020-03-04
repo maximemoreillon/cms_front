@@ -48,12 +48,6 @@ export default {
   mounted() {
     this.$store.commit('check_authentication');
     this.$store.commit('update_categories');
-
-    console.log(process.env.VUE_APP_API_URL)
-
-
-
-
   }
 }
 </script>

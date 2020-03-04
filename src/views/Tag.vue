@@ -87,17 +87,10 @@ export default {
               this.articles.push(article)
             });
 
-
-
-
           })
-          .catch(error => console.log(error))
-
-
-
+          .catch(error => console.log(error.response.data))
         })
-        .catch(error => console.log(error))
-
+        .catch(error => console.log(error.response.data))
       }
     },
 
