@@ -17,9 +17,6 @@ export default new Vuex.Store({
     update_categories(state){
       axios.post(process.env.VUE_APP_API_URL + '/get_navigation_items')
       .then(response => {
-        console.log(response.data)
-        console.log(state.navigation_items)
-
         state.navigation_items.splice(0,state.navigation_items.length)
         response.data.forEach( record => {
           let tag = record._fields[record._fieldLookup['tag']]
