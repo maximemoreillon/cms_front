@@ -10,8 +10,8 @@
       <Toolbar>
 
         <div class="dates_container">
-          <div class="" v-if="article_data.creation_date">Created on {{format_date(article_data.creation_date)}}</div>
-          <div class="" v-if="article_data.edit_date">Last edited on {{format_date(article_data.edit_date)}}</div>
+          <div class="" v-if="article.properties.creation_date">Created on {{format_date(article.properties.creation_date)}}</div>
+          <div class="" v-if="article.properties.edit_date">Last edited on {{format_date(article.properties.edit_date)}}</div>
         </div>
 
         <!-- Allow loading of HTML file -->
@@ -23,8 +23,14 @@
         <div class="growing_spacer"/>
 
         <IconButton
-          v-if="$route.query._id"
-          v-on:click="view_article()">
+          v-if="$route.query.id"
+          v-on:click="$router.push({ name: 'article', query: { id: $route.query.id } })">
+          <arrow-left-icon />
+        </IconButton>
+
+        <IconButton
+          v-else
+          v-on:click="$router.push({ name: 'article_list' })">
           <arrow-left-icon />
         </IconButton>
 
@@ -49,62 +55,43 @@
 
         <IconButton
           v-on:click="toggle_published()"
-          v-bind:active="article_data.published">
+          v-bind:active="article.published">
           <earth-icon/>
         </IconButton>
 
       </Toolbar>
 
-      <!-- Tags and category -->
-      <div class="metadata_wrapper">
-        <!-- Category -->
-        <div class="category_container">
-          <label for="category_search">Category: </label>
-          <input
-            id="category_search"
-            type="search"
-            list="category_list"
-            v-model="article_data.category"/>
-
-          <datalist id="category_list">
-            <option
-              v-for="(category, i) in $store.state.categories"
-              v-bind:value="category"
-              v-bind:key="i"/>
-          </datalist>
-        </div>
-
-        <!-- Tags -->
-        <div class="tags_wrapper">
-
-          <label for="tag_search">Tags: </label>
-
-          <Tag
-            v-for="(tag, index) in article_data.tags"
-            v-bind:key="index"
-            v-bind:label="tag"
-            removable
-            v-on:remove="delete_tag(index)"/>
-
-          <input
-            id="tag_search"
-            type="search"
-            ref="tag_input"
-            list="existing_tag_list"
-            v-on:keyup.enter="add_tag()"
-            v-on:keyup.delete="delete_last_Tag()">
-
-          <datalist id="existing_tag_list">
-            <option
-              v-for="(existing_tag, i) in existing_tags"
-              v-bind:value="existing_tag"
-              v-bind:key="i"/>
-          </datalist>
 
 
-        </div>
+      <!-- Tags -->
+      <div class="tags_wrapper">
+
+        <label for="tag_search">Tags: </label>
+
+        <Tag
+          v-for="(tag, index) in tags"
+          v-bind:key="tag.identity.low"
+          v-bind:tag="tag"
+          removable
+          v-on:remove="delete_tag(index)"/>
+
+        <input
+          id="tag_search"
+          type="search"
+          ref="tag_input"
+          list="existing_tag_list"
+          v-on:keyup.enter="add_tag()"
+          v-on:keyup.delete="delete_last_Tag()">
+
+        <datalist id="existing_tag_list">
+          <option
+            v-for="existing_tag in existing_tags"
+            v-bind:value="existing_tag.properties.name"
+            v-bind:key="existing_tag.identity.low"/>
+        </datalist>
 
       </div>
+
 
 
       <!-- editor for the content of the article -->
@@ -236,8 +223,8 @@
 
           <editor-content
             class="editor_content"
-            :editor="editor"/>
-            
+            v-bind:editor="editor"/>
+
         </div>
 
       </div>
@@ -249,7 +236,7 @@
       Articles cannot be edited by unauthenticated user
     </div>
 
-    <!-- Todo: Add case for article not found -->
+    <!-- TODO: Add case for article not found -->
 
   </div>
 
@@ -260,6 +247,8 @@
 
 
 import {formatDate} from '@/mixins/formatDate.js'
+//import {parseArticleRecord} from '@/mixins/parseArticleRecord.js'
+
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import Toolbar from '@/components/Toolbar.vue'
 import Loader from '@/components/vue_loader/Loader.vue'
@@ -300,8 +289,6 @@ import shell from 'highlight.js/lib/languages/shell'
 import dockerfile from 'highlight.js/lib/languages/dockerfile'
 import cpp from 'highlight.js/lib/languages/cpp'
 import xml from 'highlight.js/lib/languages/xml'
-
-
 
 
 // Icons
@@ -370,7 +357,10 @@ export default {
 
 
   },
-  mixins: [formatDate],
+  mixins: [
+    formatDate,
+    //parseArticleRecord,
+  ],
   data () {
     return {
 
@@ -426,7 +416,7 @@ export default {
 
         onUpdate: ({ getHTML }) => {
 
-          this.article_data.content = getHTML()
+          this.article.properties.content = getHTML()
 
           // Parse the article to find metadata
           this.set_article_title();
@@ -440,25 +430,30 @@ export default {
 
       // Default values for an article, overwritten if loaded with axios
       // This gets sent to the DB
-      article_data: {
-        // default set to undefined for MongoDB
-        _id: undefined,
+      article: {
 
-        published: false,
+        properties: {
+          // default set to undefined for MongoDB
 
-        creation_date: new Date(),
-        edit_date: new Date(),
+          content: null,
 
-        content: null,
+          published: false,
 
-        // Article metadata (generated when inputing data)
-        category: '',
-        tags: [],
-        title: '',
-        summary: '',
-        thumbnail_src: '',
+          // Article metadata (generated when inputing data)
+          title: '',
+          summary: '',
+          thumbnail_src: '',
+
+          // Those might be better set in Neo4j
+          creation_date: new Date(),
+          edit_date: new Date(),
+        }
+
 
       },
+
+      // probably the right place for tags
+      tags: [],
 
       // stuff for links
       linkUrl: null,
@@ -483,7 +478,6 @@ export default {
   mounted(){
     this.get_article_if_exists();
     this.get_existing_tags();
-
   },
   beforeDestroy() {
     // Always destroy your editor instance when it's no longer needed
@@ -493,20 +487,33 @@ export default {
   methods: {
     get_article_if_exists(){
       // If ID is present in query, get the article corresponding to that ID
-      if('_id' in this.$route.query){
+      if('id' in this.$route.query){
         // this gets titptap to throw errors
         this.article_loading = true;
 
-        this.axios.post('https://cms.maximemoreillon.com/get_article', {_id: this.$route.query._id})
+
+        this.axios.post('http://192.168.1.2:8050/get_article_neo4j', {id: this.$route.query.id})
         .then(response => {
 
-          this.article_data = response.data;
-          this.editor.setContent(this.article_data.content);
+          // parsing neo4j record for article
+          this.article = response.data[0]._fields[response.data[0]._fieldLookup['article']]
 
-          // Unflag as loading
+          // Applying to content of editor
+          this.editor.setContent(this.article.properties.content);
+
+          // dealing with tags
+          response.data.forEach( record => {
+            let tag = record._fields[record._fieldLookup['tag']]
+            if(tag) this.tags.push(tag)
+          });
+
+
+          // unflag loading
           this.article_loading = false;
+
         })
         .catch(error => alert(error))
+
       }
       else {
 
@@ -514,7 +521,7 @@ export default {
       }
     },
     toggle_published(){
-      this.article_data.published = !this.article_data.published;
+      this.article.published = !this.article.published;
     },
     submit_article(){
 
@@ -522,84 +529,124 @@ export default {
       this.article_loading = true;
 
       // Add the date of edition
-      this.article_data.edit_date = new Date();
+      this.article.properties.edit_date = new Date();
 
-      this.axios.post('https://cms.maximemoreillon.com/edit_article', this.article_data)
-      .then(response => {
-        this.article_loading = false;
-        this.$store.commit('update_categories')
-        this.$router.push({ path: '/article', query: { _id: response.data._id } })
-      })
-      .catch(error => alert(error))
+
+      if(this.$route.query.id){
+        // if the article has an ID, update
+        this.axios.post('http://192.168.1.2:8050/update_article_neo4j', {
+          // WARNING: Getting ID from query is not very robust
+          article: this.article,
+          tags: this.tags,
+        })
+        .then(response => {
+          this.article_loading = false;
+
+          // redirect to article
+          let identity = response.data[0]._fields[response.data[0]._fieldLookup['article']].identity.low
+          this.$router.push({ name: 'article', query: { id: identity } })
+        })
+        .catch(error => console.log(error.response.data))
+
+      }
+      else {
+        // The article does not have an ID => create
+        this.axios.post('http://192.168.1.2:8050/create_article_neo4j', {
+          article: this.article,
+          tags: this.tags,
+        })
+        .then(response => {
+          this.article_loading = false;
+
+          // redirect to article
+          let identity = response.data[0]._fields[response.data[0]._fieldLookup['article']].identity.low
+          this.$router.push({ name: 'article', query: { id: identity } })
+        })
+        .catch(error => console.log(error.response.data))
+      }
+
     },
     delete_article(){
       if(confirm('Delete article?')){
         this.article_loading = true;
-        this.axios.post('https://cms.maximemoreillon.com/delete_article', {_id: this.article_data._id})
+
+        // WARNING: using the query to get the ID is not very robust...
+        this.axios.post('http://192.168.1.2:8050/delete_article_neo4j', {id: this.$route.query.id})
         .then( () => {
           this.article_loading = false;
-          this.$store.commit('update_categories')
-          this.$router.push({ path: '/article_list' })
+          this.$router.push({ name: 'article_list' })
         })
         .catch(error => alert(error))
+
+
       }
 
     },
 
-    view_article(){
-      this.$router.push({ path: 'article', query: { _id: this.$route.query._id } })
-    },
 
     add_tag(){
-      if(!('tags' in this.article_data)) this.$set(this.article_data,'tags',[])
-      this.article_data.tags.push(this.$refs.tag_input.value);
+
+      this.axios.post('http://192.168.1.2:8050/create_tag_neo4j', {
+        tag_name: this.$refs.tag_input.value
+      })
+      .then(response => {
+        let tag = response.data[0]._fields[response.data[0]._fieldLookup['tag']]
+        this.tags.push(tag)
+
+      })
+      .catch(error => console.log(error.response.data))
+
+
       this.$refs.tag_input.value = ""
     },
     delete_tag(index){
-      this.article_data.tags.splice(index,1)
+      this.tags.splice(index,1)
     },
     delete_last_Tag(){
-      this.article_data.tags.pop();
+      this.tags.pop();
     },
     get_existing_tags(){
-      this.axios.post('https://cms.maximemoreillon.com/get_tags')
+
+
+      this.axios.post('http://192.168.1.2:8050/get_tag_list_neo4j', {})
       .then(response => {
+
+        // Recreate list of tags
         this.existing_tags.splice(0,this.existing_tags.length)
-        for (let tag of response.data) {
+
+        response.data.forEach( record => {
+          let tag = record._fields[record._fieldLookup['tag']]
           this.existing_tags.push(tag)
-        }
+
+        })
 
       })
       .catch(error => alert(error))
+
+
+
     },
-    parse_file(event){
-      // Load text files and turn them into article content
-      let file = event.srcElement.files[0]
-      const reader = new FileReader()
-      reader.onload = event => this.article_data.content = event.target.result
-      reader.onerror = error => console.log(error)
-      reader.readAsText(file) // you could also read images and other binaries
-    },
+
     set_article_title(){
       // get article title from content (first h1 tag of the content)
       var virtual_container = document.createElement('div');
-      virtual_container.innerHTML = this.article_data.content
+      virtual_container.innerHTML = this.article.properties.content
       var first_h1 = virtual_container.getElementsByTagName('h1')[0]
-      if(first_h1) this.article_data.title = first_h1.innerHTML
+      if(first_h1) this.article.properties.title = first_h1.innerHTML
     },
     set_article_summary(){
       // get article summary from content (first p tag of the content)
       var virtual_container = document.createElement('div');
-      virtual_container.innerHTML = this.article_data.content
+      virtual_container.innerHTML = this.article.properties.content
       var first_p = virtual_container.getElementsByTagName('p')[0]
-      if(first_p) this.article_data.summary = first_p.innerHTML
+      if(first_p) this.article.properties.summary = first_p.innerHTML
     },
     set_article_thumbnail_src(){
       // get article thumbnail from content (first img tag of the content)
       var virtual_container = document.createElement('div');
-      virtual_container.innerHTML = this.article_data.content
+      virtual_container.innerHTML = this.article.properties.content
       var first_img = virtual_container.getElementsByTagName('img')[0]
-      if(first_img) this.article_data.thumbnail_src = first_img.src
+      if(first_img) this.article.properties.thumbnail_src = first_img.src
     },
 
     // used by tiptap for links
@@ -624,6 +671,15 @@ export default {
       if (src !== null) {
         command({ src })
       }
+    },
+
+    parse_file(event){
+      // Load text files and turn them into article content
+      let file = event.srcElement.files[0]
+      const reader = new FileReader()
+      reader.onload = event => this.article.content = event.target.result
+      reader.onerror = error => console.log(error)
+      reader.readAsText(file) // you could also read images and other binaries
     },
 
   },

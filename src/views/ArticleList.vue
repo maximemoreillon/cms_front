@@ -21,8 +21,8 @@
 
 
       <ArticlePreview
-        v-for="article in articles"
-        v-bind:key="article._id"
+        v-for="(article, i) in articles"
+        v-bind:key="i"
         v-bind:article="article"/>
 
 
@@ -38,6 +38,7 @@
 </template>
 
 <script>
+
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import ArticlePreview from '@/components/ArticlePreview.vue'
 import Toolbar from '@/components/Toolbar.vue'
@@ -76,19 +77,38 @@ export default {
       // Delete all articles
       this.articles.splice(0,this.articles.length)
 
-      this.axios.post('https://cms.maximemoreillon.com/get_article_list', query)
+      this.axios.post('http://192.168.1.2:8050/get_article_list_neo4j', query)
       .then(response => {
-        this.articles.splice(0,this.articles.length);
 
-        for (var article of response.data) {
-          this.articles.push(article)
-        }
+
+        response.data.forEach( record => {
+
+
+          let article_node = record._fields[record._fieldLookup['article']]
+          let tag_node = record._fields[record._fieldLookup['tag']]
+
+          let found_article = this.articles.find( article => {
+            return article.identity.low === article_node.identity.low
+          })
+
+          if(!found_article){
+            this.articles.push(article_node)
+            this.articles[this.articles.length-1].tags = []
+          }
+
+          if(tag_node){
+            this.articles[this.articles.length-1].tags.push(tag_node)
+          }
+
+        });
+
 
         this.articles_loading = false;
       })
       .catch(error => {
-        alert(error.response.data)
+        console.log(error)
       })
+
     },
   },
 

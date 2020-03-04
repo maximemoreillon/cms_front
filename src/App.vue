@@ -10,9 +10,11 @@
       <router-link to="/">All articles</router-link>
 
       <router-link
-        v-for="(category, i) in $store.state.categories" v-bind:key="i"
-        v-bind:to="{ name: 'article_list', query: { category: category }}">
-        {{category}}</router-link>
+        v-for="nav_item in $store.state.navigation_items"
+        v-bind:key="nav_item.identity.low"
+        v-bind:to="{ name: 'article_list', query: { tag: nav_item.properties.name }}">
+        {{nav_item.properties.name}}
+      </router-link>
     </nav>
 
     <main>

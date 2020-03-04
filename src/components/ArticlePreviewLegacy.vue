@@ -1,37 +1,46 @@
 <template>
   <div
     class="article_preview"
-    v-on:click="$router.push({ path: 'article', query: { id: article.identity.low } })">
+    v-on:click="view_article(article._id)">
 
     <!-- indictor for published -->
-    <earth-icon class="publishing_status" v-if="article.properties.published && $store.state.logged_in"/>
+    <earth-icon class="publishing_status" v-if="article.published && $store.state.logged_in"/>
 
     <!-- Article title, consists of first h1 of the content -->
-    <div class="article_title">{{article.properties.title}}</div>
+    <div class="article_title">{{article.title}}</div>
 
-    <!-- date -->
-    <div class="article_metadata" v-if="article.properties.creation_date">
-      <span class="article_date">{{format_date(article.properties.creation_date)}}</span>
+    <!-- date and category -->
+    <div class="article_metadata" v-if="article.creation_date">
+
+      <span class="article_date">{{format_date(article.creation_date)}}</span>
+
+      <span class="article_category" v-if="! ('category' in $route.query) && article.category">
+        {{article.category}}
+      </span>
+
+      <span class="article_category" v-else-if="! ('category' in $route.query)">Uncategorized</span>
+
     </div>
 
     <!-- alt set to empty string to display nothing if no thumbnail -->
     <img
       class="article_thumbnail"
-      v-if="article.properties.thumbnail_src"
-      v-bind:src="article.properties.thumbnail_src"
+      v-if="article.thumbnail_src"
+      v-bind:src="article.thumbnail_src"
       alt="">
 
     <!-- Summary -->
     <div class="article_summary"
-      v-if="article.properties.summary"
-      v-html="article.properties.summary"/>
+      v-if="article.summary"
+      v-html="article.summary"/>
 
     <div class="tags_container" v-if="article.tags">
 
       <Tag
-        v-for="tag in article.tags"
-        v-bind:key="tag.identity.low"
-        v-bind:tag="tag"/>
+        v-for="(tag, tag_index) in article.tags"
+        v-bind:key="tag_index"
+        v-bind:label="tag"
+        searchable/>
 
     </div>
 
@@ -41,8 +50,6 @@
 
 <script>
 import {formatDate} from '@/mixins/formatDate.js'
-//import {parseArticleRecord} from '@/mixins/parseArticleRecord.js'
-
 import Tag from '@/components/Tag.vue'
 import EarthIcon from 'vue-material-design-icons/Earth.vue';
 
@@ -52,10 +59,7 @@ export default {
   props: {
     article: Object
   },
-  mixins: [
-    formatDate,
-    //parseArticleRecord
-  ],
+  mixins: [formatDate],
   components: {
     Tag,
 
@@ -63,10 +67,9 @@ export default {
     EarthIcon
   },
   methods: {
-
-  },
-  computed: {
-
+    view_article(_id){
+      this.$router.push({ path: 'article', query: { _id: _id } })
+    },
   },
 }
 </script>

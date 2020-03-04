@@ -1,13 +1,17 @@
 <template>
   <span
     class="tag"
-    v-bind:class="{searchable: searchable}"
     v-on:click.stop="tag_clicked()">
-    <span>{{label}}</span>
+
+    <span v-if="tag">{{tag.properties.name}}</span>
+    <span v-else>Invalid tag</span>
+
+    <!-- button to remove tag -->
     <span
       v-if="removable"
       class="remove_button"
-      v-on:click="$emit('remove')">&times;</span>
+      v-on:click.stop="$emit('remove')">&times;</span>
+
   </span>
 </template>
 
@@ -17,24 +21,24 @@
 export default {
   name: 'Tag',
   props: {
-    label: {
-      type: String,
-      default() { return "Unlabeled"}
+    tag: {
+      type: Object
     },
     removable: {
       type: Boolean,
       default() { return false }
     },
-    searchable: {
+    cickable: {
       type: Boolean,
       default() { return false}
     },
   },
   methods: {
     tag_clicked(){
-      if(this.searchable){
-        this.$router.push({ name: 'article_list', query: { tags: [this.label] } })
+      if(this.$route.name !== 'tag'){
+        this.$router.push({ name: 'tag', query: { id: this.tag.identity.low } })
       }
+
     }
   },
 }
@@ -48,6 +52,8 @@ export default {
   border-radius: 5px;
   padding: 5px;
   margin: 5px;
+  cursor: pointer;
+  transition: color 0.25s, border-color 0.25s;
 }
 
 .tag:first-child {
@@ -65,12 +71,7 @@ export default {
 }
 
 
-.searchable {
-  cursor: pointer;
-  transition: color 0.25s, border-color 0.25s;
-}
-
-.searchable:hover {
+.tag:hover {
   color:  #c00000;
   border-color:  #c00000;
 }

@@ -4,79 +4,64 @@
     <!-- Toolbar, currently just for edit button -->
     <Toolbar v-if="article">
 
-      <div class="dates_container" v-if="article">
-        <div class="" v-if="article.creation_date">Created: {{format_date(article.creation_date)}}</div>
-        <div class="" v-if="article.edit_date">Last edited: {{format_date(article.edit_date)}}</div>
+      <div class="dates_container">
+        <div class="" v-if="article.properties.creation_date">Created: {{format_date(article.properties.creation_date)}}</div>
+        <div class="" v-if="article.properties.edit_date">Last edited: {{format_date(article.properties.edit_date)}}</div>
       </div>
 
       <!-- publish indicator -->
       <div
         class="published_indicator"
-        v-if="article.published && $store.state.logged_in">
+        v-if="article.properties.published && $store.state.logged_in">
         <earth-icon class="publishing_status"/>
         <span>Published</span>
       </div>
 
-      <div class="category_wrapper">
-        <span class="article_category" v-if="! ('category' in $route.query) && article.category">
-          Category: {{article.category}}
-        </span>
-
-        <span class="article_category" v-else-if="! ('category' in $route.query)">Uncategorized</span>
-      </div>
-
-
-
-
       <!-- Tags -->
+      <!-- TODO: pass the complete record/node as prop -->
       <div class="tags_wrapper">
         <span>Tags: </span>
         <Tag
-          v-for="(tag, tag_index) in article.tags"
-          v-bind:key="tag_index"
-          v-bind:label="tag"
-          searchable/>
+          v-for="tag in tags"
+          v-bind:key="tag.identity.low"
+          v-bind:tag="tag"/>
       </div>
 
 
       <div class="growing_spacer"/>
 
       <IconButton
-        v-if="$route.query._id"
-        v-on:buttonClicked="$router.push({ name: 'article_list' })">
+        v-on:click="$router.push({ name: 'article_list' })">
         <arrow-left-icon />
       </IconButton>
 
       <IconButton
-        v-on:buttonClicked="download_as_html_file()"
+        v-on:click="download_as_html_file()"
         v-if="$store.state.logged_in">
         <download-icon />
       </IconButton>
 
       <IconButton
-        v-on:buttonClicked="edit_article(article._id)"
-        v-if="$store.state.logged_in">
+        v-on:click="$router.push({ path: 'article_editor', query: { id: article.identity.low } })"
+        v-if="$store.state.logged_in && $route.query.id">
         <pencil-icon />
       </IconButton>
 
     </Toolbar>
 
 
-
-
-
-
     <!-- the article content -->
     <article
       v-if="article"
       ref="article_content"
-      v-html="article.content"/>
+      v-html="article.properties.content"/>
 
     <!-- messages when no content -->
-    <Loader v-else-if="article_loading"/>
-    <div class="" v-else>Article not found</div>
+    <Loader v-else-if="loading"/>
+    <div v-else>Article not found</div>
 
     <!-- modal for images -->
+    <!-- TODO: use the npm package -->
     <Modal
       v-bind:open="modal.open"
       v-on:close="modal.open = false">
@@ -103,6 +88,7 @@ import Loader from '@/components/vue_loader/Loader.vue'
 import Tag from '@/components/Tag.vue'
 
 import {formatDate} from '@/mixins/formatDate.js'
+//import {parseArticleRecord} from '@/mixins/parseArticleRecord.js'
 
 import highlight from 'highlight.js'
 
@@ -128,11 +114,15 @@ export default {
     PencilIcon,
     DownloadIcon
   },
-  mixins: [formatDate],
+  mixins: [
+    formatDate,
+    //parseArticleRecord,
+  ],
   data () {
     return {
       article: null,
-      article_loading: false,
+      tags: [],
+      loading: false,
 
       modal: {
         open: false,
@@ -147,11 +137,44 @@ export default {
   },
   methods: {
     get_content(){
-      if('_id' in this.$route.query){
-        this.article_loading = true;
+      if('id' in this.$route.query){
+        this.loading = true;
+
+
+        this.axios.post('http://192.168.1.2:8050/get_article_neo4j', {id: this.$route.query.id})
+        .then(response => {
+
+          this.loading = false;
+
+          // parsing the article
+          this.article = response.data[0]._fields[response.data[0]._fieldLookup['article']]
+
+          setTimeout(this.add_event_listeners_for_image_modals,100);
+
+          // Code highlight
+          setTimeout(() => {
+            document.querySelectorAll('pre code').forEach((block) => {
+              highlight.highlightBlock(block);
+            })
+          },10);
+
+
+          // parsing the tags
+          response.data.forEach( record => {
+            let tag = record._fields[record._fieldLookup['tag']]
+            if(tag) this.tags.push(tag)
+
+          });
+
+
+        })
+        .catch(error => alert(error))
+
+        /*
+        // MongoDB version
         this.axios.post('https://cms.maximemoreillon.com/get_article', {_id: this.$route.query._id})
         .then(response => {
-          this.article_loading = false;
+          this.loading = false;
           this.article = response.data
 
           setTimeout(this.add_event_listeners_for_image_modals,100);
@@ -168,6 +191,9 @@ export default {
 
         })
         .catch(error => alert(error))
+
+        */
+
       }
     },
     add_event_listeners_for_image_modals(){
@@ -178,11 +204,7 @@ export default {
         }, false)
       })
     },
-    edit_article(_id){
-      if('_id' in this.$route.query){
-        this.$router.push({ path: 'article_editor', query: { _id: _id } })
-      }
-    },
+
     download_as_html_file(){
       var a = window.document.createElement('a');
       a.href = window.URL.createObjectURL(new Blob([this.article.content], {type: 'text/html'}));
@@ -206,6 +228,7 @@ export default {
 
 
 article {
+
 }
 
 article iframe {
