@@ -2,22 +2,77 @@
 
   <div class="article_list_view">
 
+    <!-- TODO: Use something else than a toolbar -->
+    <Toolbar v-if="tag && !tag_loading">
+
+
+        <Tag v-bind:tag="tag"/>
+
+        <IconButton
+          v-if="$store.state.logged_in"
+          v-on:click="prompt_for_rename()">
+          <pencil-icon/>
+        </IconButton>
+
+        <IconButton
+          v-if="$store.state.logged_in"
+          v-on:click="delete_tag()">
+          <delete-icon />
+        </IconButton>
+
+        <IconButton
+          v-if="$store.state.logged_in"
+          v-bind:active="tag.properties.navigation_item"
+          v-on:click="toggle_navigation_item()">
+          <pin-icon />
+        </IconButton>
+
+
+    </Toolbar >
+
+    <Loader v-else-if="tag_loading"/>
 
     <Toolbar >
+
+      <file-document-outline-icon class="article_counter"/>x{{articles.length}}
+
+      <IconButton
+        v-bind:active="sort.by === 'article.edition_date'"
+        v-on:buttonClicked="sort_by_date()">
+        <calendar-icon/>
+      </IconButton>
+
+      <IconButton
+        v-bind:active="sort.by === 'article.title'"
+        v-on:buttonClicked="sort_by_title()">
+        <alphabetical-icon/>
+      </IconButton>
+
+      <IconButton
+        v-bind:active="sort.order === 'DESC'"
+        v-on:buttonClicked="sort_order_descending()">
+        <sort-descending-icon/>
+      </IconButton>
+
+      <IconButton
+        v-bind:active="sort.order === 'ASC'"
+        v-on:buttonClicked="sort_order_ascending()">
+        <sort-ascending-icon/>
+      </IconButton>
 
 
       <div class="growing_spacer"/>
 
       <IconButton
         v-if="$store.state.logged_in"
-        v-on:buttonClicked="new_article()">
+        v-on:buttonClicked="$router.push({ path: 'article_editor' })">
         <plus-icon/>
       </IconButton>
 
     </Toolbar>
 
 
-    <div class="articles_container" v-if="!articles_loading">
+    <div class="articles_container" v-if="articles.length > 0 && !articles_loading">
 
 
       <ArticlePreview
@@ -25,12 +80,13 @@
         v-bind:key="i"
         v-bind:article="article"/>
 
-
-
     </div>
 
     <!-- loader -->
-    <Loader v-else/>
+    <Loader v-else-if="articles_loading"/>
+    <div class="" v-else>
+      No articles
+    </div>
 
   </div>
 
@@ -43,10 +99,18 @@ import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import ArticlePreview from '@/components/ArticlePreview.vue'
 import Toolbar from '@/components/Toolbar.vue'
 import Loader from '@/components/vue_loader/Loader.vue'
+import Tag from '@/components/Tag.vue'
 
 // icons
 import PlusIcon from 'vue-material-design-icons/Plus.vue';
-
+import CalendarIcon from 'vue-material-design-icons/Calendar.vue';
+import AlphabeticalIcon from 'vue-material-design-icons/Alphabetical.vue';
+import SortDescendingIcon from 'vue-material-design-icons/SortDescending.vue';
+import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue';
+import PencilIcon from 'vue-material-design-icons/Pencil.vue';
+import PinIcon from 'vue-material-design-icons/Pin.vue';
+import FileDocumentOutlineIcon from 'vue-material-design-icons/FileDocumentOutline.vue';
+import DeleteIcon from 'vue-material-design-icons/Delete.vue';
 
 
 export default {
@@ -55,21 +119,36 @@ export default {
     ArticlePreview,
     Toolbar,
     Loader,
+    Tag,
 
     // icons
+    PencilIcon,
+    PinIcon,
+    FileDocumentOutlineIcon,
     PlusIcon,
+    DeleteIcon,
+    CalendarIcon,
+    AlphabeticalIcon,
+    SortDescendingIcon,
+    SortAscendingIcon,
   },
   data () {
     return {
       articles: [],
-
       articles_loading: false,
+
+      tag: null,
+      tag_loading: false,
+
+      sort: {
+        by: 'article.edition_date',
+        //by: 'article.title',
+        order: 'DESC',
+      }
     }
   },
   methods: {
-    new_article(){
-      this.$router.push({ path: 'article_editor' })
-    },
+
     get_articles(){
 
       this.articles_loading = true
@@ -77,15 +156,16 @@ export default {
       // Delete all articles
       this.articles.splice(0,this.articles.length)
 
-      this.axios.post(process.env.VUE_APP_API_URL + '/get_article_list_neo4j', {})
+      this.axios.post(process.env.VUE_APP_API_URL + '/get_articles', {
+        sort: this.sort,
+        tag: this.tag
+      })
       .then(response => {
-
 
         response.data.forEach( record => {
           let article = record._fields[record._fieldLookup['article']]
           this.articles.push(article)
         });
-
 
         this.articles_loading = false;
       })
@@ -94,10 +174,112 @@ export default {
       })
 
     },
+
+    get_tag(tag_id){
+      this.tag = null
+
+      if(tag_id){
+        this.tag_loading = true;
+
+        // Delete the list of related articles
+        this.articles.splice(0,this.articles.length)
+
+        this.axios.post(process.env.VUE_APP_API_URL + '/get_tag', {id: tag_id})
+        .then(response => {
+
+          this.tag_loading = false;
+
+          if(response.data.length > 0){
+            let record = response.data[0]
+            this.tag = record._fields[record._fieldLookup['tag']]
+          }
+
+          this.get_articles()
+
+
+        })
+        .catch(error => console.log(error.response.data))
+      }
+      else {
+        this.get_articles()
+      }
+    },
+
+    sort_by_date(){
+      this.sort.by = 'article.edition_date'
+      this.get_articles()
+    },
+    sort_by_title(){
+      this.sort.by = 'article.title'
+      this.get_articles()
+    },
+    sort_order_ascending(){
+      this.sort.order = 'ASC'
+      this.get_articles()
+    },
+    sort_order_descending(){
+      this.sort.order = 'DESC'
+      this.get_articles()
+    },
+
+    update_tag(){
+
+      this.tag_loading = true;
+
+      this.axios.post(process.env.VUE_APP_API_URL + '/update_tag', {
+        tag: this.tag
+      })
+      .then( response => {
+
+        if(response.data.length > 0){
+          let record = response.data[0]
+          this.tag = record._fields[record._fieldLookup['tag']]
+        }
+
+        // Proably doesn't need to re-get articles because tag itself did not change
+
+        this.$store.commit('update_categories');
+
+        this.tag_loading = false;
+      })
+      .catch(error => alert(error))
+
+    },
+
+    prompt_for_rename(){
+      let new_name = prompt("New tag name", this.tag.properties.name)
+      if(new_name){
+        this.tag.properties.name = new_name
+        this.update_tag()
+      }
+
+    },
+
+    toggle_navigation_item(){
+      this.tag.properties.navigation_item = !this.tag.properties.navigation_item
+      this.update_tag()
+    },
+
+    delete_tag(){
+      if(confirm('Delete tag?')){
+        this.article_loading = true;
+
+        this.axios.post(process.env.VUE_APP_API_URL + '/delete_tag', {id: this.tag.identity.low})
+        .then( () => {
+          this.$router.push({ name: 'article_list' })
+        })
+        .catch(error => alert(error))
+      }
+    },
   },
 
   mounted() {
-    this.get_articles();
+    //this.get_articles()
+    this.get_tag(this.$route.query.tag_id)
+  },
+  beforeRouteUpdate (to, from, next) {
+    this.get_tag(to.query.tag_id)
+    next();
   },
 }
 </script>

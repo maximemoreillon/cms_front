@@ -15,8 +15,39 @@
         </div>
 
         <!-- Allow loading of HTML file -->
-        <div class="" v-if="false">
+        <!--
+        <div class="">
           <input type="file" ref="html_file_input" v-on:change="parse_file($event)">
+        </div>
+        -->
+
+        <!-- Tags -->
+        <div class="tags_wrapper">
+
+          <label for="tag_search">Tags: </label>
+
+          <Tag
+            v-for="(tag, index) in tags"
+            v-bind:key="tag.identity.low"
+            v-bind:tag="tag"
+            removable
+            v-on:remove="delete_tag(index)"/>
+
+          <input
+            id="tag_search"
+            type="search"
+            ref="tag_input"
+            list="existing_tag_list"
+            v-on:keyup.enter="add_tag()"
+            v-on:keyup.delete="delete_last_Tag()">
+
+          <datalist id="existing_tag_list">
+            <option
+              v-for="existing_tag in existing_tags"
+              v-bind:value="existing_tag.properties.name"
+              v-bind:key="existing_tag.identity.low"/>
+          </datalist>
+
         </div>
 
 
@@ -63,34 +94,7 @@
 
 
 
-      <!-- Tags -->
-      <div class="tags_wrapper">
 
-        <label for="tag_search">Tags: </label>
-
-        <Tag
-          v-for="(tag, index) in tags"
-          v-bind:key="tag.identity.low"
-          v-bind:tag="tag"
-          removable
-          v-on:remove="delete_tag(index)"/>
-
-        <input
-          id="tag_search"
-          type="search"
-          ref="tag_input"
-          list="existing_tag_list"
-          v-on:keyup.enter="add_tag()"
-          v-on:keyup.delete="delete_last_Tag()">
-
-        <datalist id="existing_tag_list">
-          <option
-            v-for="existing_tag in existing_tags"
-            v-bind:value="existing_tag.properties.name"
-            v-bind:key="existing_tag.identity.low"/>
-        </datalist>
-
-      </div>
 
 
 
@@ -189,29 +193,14 @@
             </IconButton>
 
             <IconButton
-              @click="showImagePrompt(commands.image)">
+              v-on:click="showImagePrompt(commands.image)">
               <image-icon />
             </IconButton>
 
-
-            <!-- Input form for the links -->
-            <form
-              v-if="linkMenuIsActive"
-              v-on:submit.prevent="setLinkUrl(commands.link, linkUrl)">
-              <input
-                type="text" v-model="linkUrl"
-                placeholder="https://"
-                ref="linkInput"
-                v-on:keydown.esc="hideLinkMenu"/>
-              <IconButton class="menubar_button" v-on:click="setLinkUrl(commands.link, null)" type="button">
-                <delete-icon />
-              </IconButton>
-            </form>
-
-            <IconButton v-else
+            <IconButton
               class="menubar_button"
               v-bind:class="{ 'is-active': isActive.link() }"
-              v-on:click="showLinkMenu(getMarkAttrs('link'))">
+              v-on:click="prompt_for_url(commands.link)">
               <link-icon />
             </IconButton>
 
@@ -435,11 +424,9 @@ export default {
         identity: {
           low: undefined
         },
+
         properties: {
-          // default set to undefined for MongoDB
-
           content: null,
-
           published: false,
 
           // Article metadata (generated when inputing data)
@@ -447,20 +434,15 @@ export default {
           summary: '',
           thumbnail_src: '',
         }
-
-
       },
 
-      // probably the right place for tags
       tags: [],
-
-      // stuff for links
-      linkUrl: null,
-      linkMenuIsActive: false,
 
       editable: true,
 
       article_loading: true,
+
+      // The list of all tags used by any article
       existing_tags: [],
 
 
@@ -490,7 +472,7 @@ export default {
         // this gets titptap to throw errors
         this.article_loading = true;
 
-        this.axios.post(process.env.VUE_APP_API_URL + '/get_article_neo4j', {id: this.$route.query.id})
+        this.axios.post(process.env.VUE_APP_API_URL + '/get_article', {id: this.$route.query.id})
         .then(response => {
 
           // parsing neo4j record for article
@@ -525,7 +507,7 @@ export default {
 
       if(this.article.identity.low){
         // if the article has an ID, UPDATE
-        this.axios.post(process.env.VUE_APP_API_URL + '/update_article_neo4j', {
+        this.axios.post(process.env.VUE_APP_API_URL + '/update_article', {
           article: this.article,
           tags: this.tags,
         })
@@ -541,7 +523,7 @@ export default {
       }
       else {
         // If the article does not have an ID, CREATE
-        this.axios.post(process.env.VUE_APP_API_URL + '/create_article_neo4j', {
+        this.axios.post(process.env.VUE_APP_API_URL + '/create_article', {
           article: this.article,
           tags: this.tags,
         })
@@ -559,7 +541,7 @@ export default {
     delete_article(){
       if(confirm('Delete article?')){
         this.article_loading = true;
-        this.axios.post(process.env.VUE_APP_API_URL + '/delete_article_neo4j', {
+        this.axios.post(process.env.VUE_APP_API_URL + '/delete_article', {
           id: this.article.identity.low
         })
         .then( () => {
@@ -574,7 +556,7 @@ export default {
 
     add_tag(){
 
-      this.axios.post(process.env.VUE_APP_API_URL + '/create_tag_neo4j', {
+      this.axios.post(process.env.VUE_APP_API_URL + '/create_tag', {
         tag_name: this.$refs.tag_input.value
       })
       .then(response => {
@@ -597,7 +579,7 @@ export default {
     get_existing_tags(){
 
 
-      this.axios.post(process.env.VUE_APP_API_URL + '/get_tag_list_neo4j', {})
+      this.axios.post(process.env.VUE_APP_API_URL + '/get_tag_list', {})
       .then(response => {
 
         // Recreate list of tags
@@ -638,28 +620,17 @@ export default {
       if(first_img) this.article.properties.thumbnail_src = first_img.src
     },
 
-    // used by tiptap for links
-    showLinkMenu(attrs) {
-      this.linkUrl = attrs.href
-      this.linkMenuIsActive = true
-      this.$nextTick(() => {
-        this.$refs.linkInput.focus()
-      })
+
+    prompt_for_url(command){
+      let url = prompt('URL:')
+      if(url) command({ href: url })
+
     },
-    hideLinkMenu() {
-      this.linkUrl = null
-      this.linkMenuIsActive = false
-    },
-    setLinkUrl(command, url) {
-      command({ href: url })
-      this.hideLinkMenu()
-    },
+
 
     showImagePrompt(command) {
       const src = prompt('Enter the url of your image here')
-      if (src !== null) {
-        command({ src })
-      }
+      if (src) command({ src })
     },
 
     parse_file(event){

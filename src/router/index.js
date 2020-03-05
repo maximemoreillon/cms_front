@@ -6,7 +6,6 @@ import Article from '../views/Article.vue'
 import ArticleEditor from '../views/ArticleEditor.vue'
 import ArticleList from '../views/ArticleList.vue'
 
-import Tag from '../views/Tag.vue'
 
 
 Vue.use(VueRouter)
@@ -42,11 +41,7 @@ const routes = [
     component: ArticleEditor,
     props: true,
   },
-  {
-    path: '/tag',
-    name: 'tag',
-    component: Tag,
-  },
+
 
 ]
 

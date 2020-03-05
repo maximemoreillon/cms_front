@@ -86,7 +86,7 @@ export default {
     get_tags(){
       this.tags_loading = true
       this.axios.post(process.env.VUE_APP_API_URL + '/get_tags_of_article', {
-        id: this.article.identity.low
+        article: this.article
       })
       .then(response => {
 

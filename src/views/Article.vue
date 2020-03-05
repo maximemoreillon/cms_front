@@ -47,6 +47,12 @@
         <pencil-icon />
       </IconButton>
 
+      <IconButton
+        v-if="$store.state.logged_in"
+        v-on:buttonClicked="$router.push({ path: 'article_editor' })">
+        <plus-icon/>
+      </IconButton>
+
     </Toolbar>
 
 
@@ -97,6 +103,7 @@ import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue';
 import EarthIcon from 'vue-material-design-icons/Earth.vue';
 import PencilIcon from 'vue-material-design-icons/Pencil.vue';
 import DownloadIcon from 'vue-material-design-icons/Download.vue';
+import PlusIcon from 'vue-material-design-icons/Plus.vue';
 
 
 
@@ -112,7 +119,8 @@ export default {
     EarthIcon,
     ArrowLeftIcon,
     PencilIcon,
-    DownloadIcon
+    DownloadIcon,
+    PlusIcon
   },
   mixins: [
     formatDate,
@@ -141,7 +149,7 @@ export default {
         this.loading = true;
 
 
-        this.axios.post(process.env.VUE_APP_API_URL + '/get_article_neo4j', {id: this.$route.query.id})
+        this.axios.post(process.env.VUE_APP_API_URL + '/get_article', {id: this.$route.query.id})
         .then(response => {
 
           this.loading = false;

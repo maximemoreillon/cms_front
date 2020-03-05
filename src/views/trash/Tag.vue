@@ -2,13 +2,13 @@
   <div class="tag_view">
 
     <!-- Wrapper to show loading -->
-    <div class="wrapper" v-if="tag && !loading">
+    <Toolbar v-if="tag && !loading">
 
-      <!-- basically a toolbar -->
-      <div class="tag_wrapper" >
+
         <Tag v-bind:tag="tag"/>
 
-        <!-- Option to show on navigation -->
+        <file-document-outline-icon class="article_counter"/>x{{articles.length}}
+
 
 
         <IconButton
@@ -30,14 +30,50 @@
           <pin-icon />
         </IconButton>
 
-      </div>
+
+
+        <div class="growing_spacer"/>
+
+
+        <IconButton
+          v-bind:active="sort.by === 'article.edition_date'"
+          v-on:buttonClicked="sort_by_date()">
+          <calendar-icon/>
+        </IconButton>
+
+        <IconButton
+          v-bind:active="sort.by === 'article.title'"
+          v-on:buttonClicked="sort_by_title()">
+          <alphabetical-icon/>
+        </IconButton>
+
+        <IconButton
+          v-bind:active="sort.order === 'DESC'"
+          v-on:buttonClicked="sort_order_descending()">
+          <sort-descending-icon/>
+        </IconButton>
+
+        <IconButton
+          v-bind:active="sort.order === 'ASC'"
+          v-on:buttonClicked="sort_order_ascending()">
+          <sort-ascending-icon/>
+        </IconButton>
+
+        <div class="growing_spacer"/>
+
+        <IconButton
+          v-if="$store.state.logged_in"
+          v-on:buttonClicked="$router.push({ path: 'article_editor' })">
+          <plus-icon/>
+        </IconButton>
 
 
 
 
 
 
-    </div>
+
+    </Toolbar>
 
 
     <Loader v-else-if="loading"/>
@@ -47,20 +83,13 @@
     </div>
 
 
-    <!-- Articles are retrived separately -->
-    <div class="articles_wrapper" v-if="articles.length > 0 && !articles_loading">
-      <div class="">
-        Articles with this tag ({{articles.length}}):
-      </div>
+    <!-- Articles are retrieved separately -->
+    <div class="articles_container" v-if="articles.length > 0 && !articles_loading">
 
-      <div class="articles_container" >
-
-        <ArticlePreview
-          v-for="article in articles"
-          v-bind:key="article.identity.low"
-          v-bind:article="article"/>
-      </div>
-
+      <ArticlePreview
+        v-for="article in articles"
+        v-bind:key="article.identity.low"
+        v-bind:article="article"/>
     </div>
 
 
@@ -77,6 +106,7 @@
 <script>
 
 
+import Toolbar from '@/components/Toolbar.vue'
 
 import Loader from '@/components/vue_loader/Loader.vue'
 import Tag from '@/components/Tag.vue'
@@ -86,11 +116,19 @@ import ArticlePreview from '@/components/ArticlePreview.vue'
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import PencilIcon from 'vue-material-design-icons/Pencil.vue';
 import PinIcon from 'vue-material-design-icons/Pin.vue';
+import FileDocumentOutlineIcon from 'vue-material-design-icons/FileDocumentOutline.vue';
 
 import DeleteIcon from 'vue-material-design-icons/Delete.vue';
+import PlusIcon from 'vue-material-design-icons/Plus.vue';
+
+import CalendarIcon from 'vue-material-design-icons/Calendar.vue';
+import AlphabeticalIcon from 'vue-material-design-icons/Alphabetical.vue';
+import SortDescendingIcon from 'vue-material-design-icons/SortDescending.vue';
+import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue';
 
 export default {
   components: {
+    Toolbar,
     Loader,
     Tag,
     ArticlePreview,
@@ -100,6 +138,14 @@ export default {
     DeleteIcon,
     PencilIcon,
     PinIcon,
+    PlusIcon,
+    FileDocumentOutlineIcon,
+
+    CalendarIcon,
+    AlphabeticalIcon,
+    SortDescendingIcon,
+    SortAscendingIcon,
+
   },
   data () {
     return {
@@ -108,6 +154,12 @@ export default {
 
       articles: [],
       articles_loading: false,
+
+      sort: {
+        by: 'article.edition_date',
+        //by: 'article.title',
+        order: 'DESC',
+      }
     }
   },
 
@@ -127,7 +179,7 @@ export default {
         // Delete the list of related articles
         this.articles.splice(0,this.articles.length)
 
-        this.axios.post(process.env.VUE_APP_API_URL + '/get_tag_neo4j', {id: tag_id})
+        this.axios.post(process.env.VUE_APP_API_URL + '/get_tag', {id: tag_id})
         .then(response => {
 
           this.loading = false;
@@ -135,7 +187,7 @@ export default {
           if(response.data.length > 0){
             let record = response.data[0]
             this.tag = record._fields[record._fieldLookup['tag']]
-            this.get_articles_of_tag(this.tag.identity.low);
+            this.get_articles_of_tag();
           }
 
 
@@ -144,11 +196,13 @@ export default {
       }
     },
 
-    get_articles_of_tag(article_id){
+    get_articles_of_tag(){
       // Get the articles of this tag
 
       this.articles_loading = true
-      this.axios.post(process.env.VUE_APP_API_URL + '/get_articles_of_tag', {id: article_id})
+      this.axios.post(process.env.VUE_APP_API_URL + '/get_articles', {
+        tag: this.tag
+      })
       .then(response => {
 
         this.articles.splice(0,this.articles.length)
@@ -166,7 +220,7 @@ export default {
       if('id' in this.$route.query){
         this.loading = true;
 
-        this.axios.post(process.env.VUE_APP_API_URL + '/update_tag_neo4j', {
+        this.axios.post(process.env.VUE_APP_API_URL + '/update_tag', {
           tag: this.tag
         })
         .then( () => {
@@ -197,7 +251,7 @@ export default {
         this.article_loading = true;
 
         // WARNING: using the query to get the ID is not very robust...
-        this.axios.post(process.env.VUE_APP_API_URL + '/delete_tag_neo4j', {id: this.tag.identity.low})
+        this.axios.post(process.env.VUE_APP_API_URL + '/delete_tag', {id: this.tag.identity.low})
         .then( () => {
           this.$router.push({ name: 'article_list' })
         })
@@ -219,6 +273,11 @@ export default {
   border-bottom: 1px solid #dddddd;
 }
 
+.article_counter{
+  color: #444444;
+}
+
+/* same as in article list */
 .articles_container {
 
   /* IE fallback behavior */
