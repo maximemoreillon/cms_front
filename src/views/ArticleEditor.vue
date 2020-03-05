@@ -11,7 +11,7 @@
 
         <div class="dates_container">
           <div class="" v-if="article.properties.creation_date">Created on {{format_date(article.properties.creation_date)}}</div>
-          <div class="" v-if="article.properties.edit_date">Last edited on {{format_date(article.properties.edit_date)}}</div>
+          <div class="" v-if="article.properties.edition_date">Last edited on {{format_date(article.properties.edition_date)}}</div>
         </div>
 
         <!-- Allow loading of HTML file -->
@@ -432,6 +432,9 @@ export default {
       // This gets sent to the DB
       article: {
 
+        identity: {
+          low: undefined
+        },
         properties: {
           // default set to undefined for MongoDB
 
@@ -443,10 +446,6 @@ export default {
           title: '',
           summary: '',
           thumbnail_src: '',
-
-          // Those might be better set in Neo4j
-          creation_date: new Date(),
-          edit_date: new Date(),
         }
 
 
@@ -491,7 +490,6 @@ export default {
         // this gets titptap to throw errors
         this.article_loading = true;
 
-
         this.axios.post(process.env.VUE_APP_API_URL + '/get_article_neo4j', {id: this.$route.query.id})
         .then(response => {
 
@@ -504,7 +502,7 @@ export default {
           // dealing with tags
           response.data.forEach( record => {
             let tag = record._fields[record._fieldLookup['tag']]
-            if(tag) this.tags.push(tag)
+            if(tag) this.tags.push(tag) // "if" necessary?
           });
 
 
@@ -515,13 +513,9 @@ export default {
         .catch(error => alert(error))
 
       }
-      else {
-
-        this.article_loading = false;
-      }
+      else this.article_loading = false;
     },
     toggle_published(){
-
       this.article.properties.published = !this.article.properties.published;
     },
     submit_article(){
@@ -529,14 +523,9 @@ export default {
       // Show loader to prevent user from re-submitting
       this.article_loading = true;
 
-      // Add the date of edition
-      this.article.properties.edit_date = new Date();
-
-
-      if(this.$route.query.id){
-        // if the article has an ID, update
+      if(this.article.identity.low){
+        // if the article has an ID, UPDATE
         this.axios.post(process.env.VUE_APP_API_URL + '/update_article_neo4j', {
-          // WARNING: Getting ID from query is not very robust
           article: this.article,
           tags: this.tags,
         })
@@ -551,7 +540,7 @@ export default {
 
       }
       else {
-        // The article does not have an ID => create
+        // If the article does not have an ID, CREATE
         this.axios.post(process.env.VUE_APP_API_URL + '/create_article_neo4j', {
           article: this.article,
           tags: this.tags,
@@ -570,16 +559,14 @@ export default {
     delete_article(){
       if(confirm('Delete article?')){
         this.article_loading = true;
-
-        // WARNING: using the query to get the ID is not very robust...
-        this.axios.post(process.env.VUE_APP_API_URL + '/delete_article_neo4j', {id: this.$route.query.id})
+        this.axios.post(process.env.VUE_APP_API_URL + '/delete_article_neo4j', {
+          id: this.article.identity.low
+        })
         .then( () => {
           this.article_loading = false;
           this.$router.push({ name: 'article_list' })
         })
         .catch(error => alert(error))
-
-
       }
 
     },
@@ -604,7 +591,8 @@ export default {
       this.tags.splice(index,1)
     },
     delete_last_Tag(){
-      this.tags.pop();
+      // NOT WORKING YET
+      //if(this.$refs.tag_input.value === "") this.tags.pop();
     },
     get_existing_tags(){
 

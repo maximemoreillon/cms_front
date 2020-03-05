@@ -20,12 +20,10 @@ router.beforeEach((to, from, next) => {
   store.commit('check_authentication')
 
   // deal with authentication header
-  if(Vue.$cookies.get("jwt")) {
-    axios.defaults.headers.common['Authorization'] = `Bearer ${Vue.$cookies.get('jwt')}`
-  }
-  else {
-    delete axios.defaults.headers.common['Authorization']
-  }
+  if(Vue.$cookies.get("jwt")) axios.defaults.headers.common['Authorization'] = `Bearer ${Vue.$cookies.get('jwt')}`
+  else delete axios.defaults.headers.common['Authorization']
+
+  store.commit('update_categories');
 
   next();
 

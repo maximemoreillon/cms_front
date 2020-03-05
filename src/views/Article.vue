@@ -6,7 +6,7 @@
 
       <div class="dates_container">
         <div class="" v-if="article.properties.creation_date">Created: {{format_date(article.properties.creation_date)}}</div>
-        <div class="" v-if="article.properties.edit_date">Last edited: {{format_date(article.properties.edit_date)}}</div>
+        <div class="" v-if="article.properties.edition_date">Edited: {{format_date(article.properties.edition_date)}}</div>
       </div>
 
       <!-- publish indicator -->

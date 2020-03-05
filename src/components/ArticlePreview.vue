@@ -26,7 +26,7 @@
       v-if="article.properties.summary"
       v-html="article.properties.summary"/>
 
-    <div class="tags_container" v-if="tags">
+    <div class="tags_container" v-if="tags && !tags_loading">
 
       <Tag
         v-for="tag in tags"
@@ -36,13 +36,20 @@
     </div>
 
     <!-- TODO: replace with loader -->
-    <div class="tags_container" v-else-if="tags_loading">Loading</div>
+    <Loader v-else-if="tags_loading"/>
+
+    <div class="" v-else>
+      No tags
+    </div>
 
 
   </div>
 </template>
 
 <script>
+
+import Loader from '@/components/vue_loader/Loader.vue'
+
 import {formatDate} from '@/mixins/formatDate.js'
 //import {parseArticleRecord} from '@/mixins/parseArticleRecord.js'
 
@@ -67,6 +74,7 @@ export default {
   ],
   components: {
     Tag,
+    Loader,
 
     // Icons
     EarthIcon
