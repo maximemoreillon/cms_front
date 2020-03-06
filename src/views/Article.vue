@@ -113,12 +113,13 @@
           v-bind:key="comment.identity.low"/>
 
       </div>
+      <Loader v-else-if="comments_loading"/>
+      <div v-else>No comments yet</div>
     </div>
 
 
 
-    <Loader v-else-if="comments_loading"/>
-    <div v-else>No comments yet</div>
+
 
 
 
