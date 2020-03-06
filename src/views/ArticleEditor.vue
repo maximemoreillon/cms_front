@@ -437,6 +437,7 @@ export default {
       },
 
       tags: [],
+      tags_loading: false,
 
       editable: true,
 
@@ -472,7 +473,9 @@ export default {
         // this gets titptap to throw errors
         this.article_loading = true;
 
-        this.axios.post(process.env.VUE_APP_API_URL + '/get_article', {id: this.$route.query.id})
+        this.axios.post(process.env.VUE_APP_API_URL + '/get_article', {
+          article_id: this.$route.query.id
+        })
         .then(response => {
 
           // parsing neo4j record for article
@@ -481,21 +484,37 @@ export default {
           // Applying to content of editor
           this.editor.setContent(this.article.properties.content);
 
-          // dealing with tags
-          response.data.forEach( record => {
-            let tag = record._fields[record._fieldLookup['tag']]
-            if(tag) this.tags.push(tag) // "if" necessary?
-          });
-
-
           // unflag loading
           this.article_loading = false;
 
+          // dealing with tags
+          this.get_tags_of_article();
+
         })
-        .catch(error => alert(error))
+        .catch(error => alert(error.response.data))
 
       }
       else this.article_loading = false;
+    },
+    get_tags_of_article(){
+
+      this.tags_loading = true
+      this.axios.post(process.env.VUE_APP_API_URL + '/get_tags_of_article', {
+        article_id: this.article.identity.low
+      })
+      .then(response => {
+
+        this.tags_loading = false
+
+        // parsing the tags
+        response.data.forEach( record => {
+          let tag = record._fields[record._fieldLookup['tag']]
+          if(tag) this.tags.push(tag)
+
+        });
+      })
+      .catch(error => alert(error.response.data))
+
     },
     toggle_published(){
       this.article.properties.published = !this.article.properties.published;
@@ -509,7 +528,7 @@ export default {
         // if the article has an ID, UPDATE
         this.axios.post(process.env.VUE_APP_API_URL + '/update_article', {
           article: this.article,
-          tags: this.tags,
+          tag_ids: this.tags.map(tag => tag.identity.low),
         })
         .then(response => {
           this.article_loading = false;
@@ -518,14 +537,17 @@ export default {
           let identity = response.data[0]._fields[response.data[0]._fieldLookup['article']].identity.low
           this.$router.push({ name: 'article', query: { id: identity } })
         })
-        .catch(error => console.log(error.response.data))
+        .catch(error => {
+          this.article_loading = false;
+          alert(error.response.data)
+        })
 
       }
       else {
         // If the article does not have an ID, CREATE
         this.axios.post(process.env.VUE_APP_API_URL + '/create_article', {
           article: this.article,
-          tags: this.tags,
+          tag_ids: this.tags.map(tag => tag.identity.low),
         })
         .then(response => {
           this.article_loading = false;
@@ -534,7 +556,10 @@ export default {
           let identity = response.data[0]._fields[response.data[0]._fieldLookup['article']].identity.low
           this.$router.push({ name: 'article', query: { id: identity } })
         })
-        .catch(error => console.log(error.response.data))
+        .catch(error => {
+          this.article_loading = false;
+          alert(error.response.data)
+        })
       }
 
     },
@@ -542,13 +567,15 @@ export default {
       if(confirm('Delete article?')){
         this.article_loading = true;
         this.axios.post(process.env.VUE_APP_API_URL + '/delete_article', {
-          id: this.article.identity.low
+          article_id: this.article.identity.low
         })
         .then( () => {
           this.article_loading = false;
           this.$router.push({ name: 'article_list' })
         })
-        .catch(error => alert(error))
+        .catch(error => {
+          alert(error.response.data)
+        })
       }
 
     },
@@ -564,7 +591,9 @@ export default {
         this.tags.push(tag)
 
       })
-      .catch(error => console.log(error.response.data))
+      .catch(error => {
+        alert(error.response.data)
+      })
 
 
       this.$refs.tag_input.value = ""
@@ -638,7 +667,7 @@ export default {
       let file = event.srcElement.files[0]
       const reader = new FileReader()
       reader.onload = event => this.article.content = event.target.result
-      reader.onerror = error => console.log(error)
+      reader.onerror = error => alert(error)
       reader.readAsText(file) // you could also read images and other binaries
     },
 

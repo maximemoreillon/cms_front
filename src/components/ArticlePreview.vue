@@ -10,8 +10,12 @@
     <div class="article_title">{{article.properties.title}}</div>
 
     <!-- date -->
-    <div class="article_metadata" v-if="article.properties.creation_date">
-      <span class="article_date">{{format_date(article.properties.creation_date)}}</span>
+    <div
+      class="article_metadata"
+      v-if="article.properties.creation_date">
+      <span class="article_date">
+        {{format_date(article.properties.creation_date)}}
+      </span>
     </div>
 
     <!-- alt set to empty string to display nothing if no thumbnail -->
@@ -26,7 +30,9 @@
       v-if="article.properties.summary"
       v-html="article.properties.summary"/>
 
-    <div class="tags_container" v-if="tags && !tags_loading">
+    <div
+      class="tags_container"
+      v-if="tags && !tags_loading">
 
       <Tag
         v-for="tag in tags"
@@ -86,7 +92,7 @@ export default {
     get_tags(){
       this.tags_loading = true
       this.axios.post(process.env.VUE_APP_API_URL + '/get_tags_of_article', {
-        article: this.article
+        article_id: this.article.identity.low
       })
       .then(response => {
 
@@ -97,9 +103,7 @@ export default {
         })
         this.tags_loading = false
       })
-      .catch(error => {
-        console.log(error.response.data)
-      })
+      .catch(error =>  alert(error.response.data) )
     }
   }
 }

@@ -10,22 +10,23 @@
       </div>
 
       <!-- publish indicator -->
-      <div
-        class="published_indicator"
-        v-if="article.properties.published && $store.state.logged_in">
-        <earth-icon class="publishing_status"/>
-        <span>Published</span>
-      </div>
+      <earth-icon
+          v-if="article.properties.published && $store.state.logged_in"/>
+
+      <!-- Author -->
+      <div class="" v-if="author">Author: {{author.properties.username}}</div>
+
 
       <!-- Tags -->
-      <!-- TODO: pass the complete record/node as prop -->
-      <div class="tags_wrapper">
-        <span>Tags: </span>
+      <div class="tags_wrapper" v-if="tags.length > 0 && !tags_loading">
         <Tag
           v-for="tag in tags"
           v-bind:key="tag.identity.low"
           v-bind:tag="tag"/>
       </div>
+      <Loader class="" v-else-if="tags_loading"/>
+
+
 
 
       <div class="growing_spacer"/>
@@ -41,9 +42,10 @@
         <download-icon />
       </IconButton>
 
+      <!-- edit button -->
       <IconButton
         v-on:click="$router.push({ path: 'article_editor', query: { id: article.identity.low } })"
-        v-if="$store.state.logged_in && $route.query.id">
+        v-if="editable">
         <pencil-icon />
       </IconButton>
 
@@ -58,13 +60,72 @@
 
     <!-- the article content -->
     <article
-      v-if="article"
+      v-if="article && !article_loading"
       ref="article_content"
       v-html="article.properties.content"/>
 
     <!-- messages when no content -->
-    <Loader v-else-if="loading"/>
+    <Loader v-else-if="article_loading"/>
     <div v-else>Article not found</div>
+
+    <!-- Comments, not implemented yet -->
+
+    <div
+      class="new_comment_wrapper"
+      v-if="article && !article_loading">
+      <div class="">
+        Write a comment:
+      </div>
+      <div class="">
+        <input
+          type="text"
+          v-model="comment.properties.author"
+          placeholder="Name">
+      </div>
+      <div class="">
+        <textarea
+          v-model="comment.properties.content"
+          placeholder="Comment"/>
+      </div>
+      <div class="">
+        <button type="button" v-on:click="create_comment()">SEND</button>
+      </div>
+
+
+
+    </div>
+
+    <div
+      class="comments_wrapper"
+      v-if="comments.length > 0 && !comments_loading">
+
+      <div
+        class="comment"
+        v-for="comment in comments"
+        v-bind:key="comment.identity.low">
+        <div class="author">
+          {{comment.properties.author}}
+        </div>
+        <div class="content">
+          {{comment.properties.content}}
+        </div>
+        <div class="">
+          <IconButton
+            v-if="editable"
+            v-on:buttonClicked="delete_comment(comment)">
+            <delete-icon/>
+          </IconButton>
+        </div>
+      </div>
+
+    </div>
+
+    <Loader v-else-if="comments_loading"/>
+    <div v-else>No comments yet</div>
+
+
+
+
 
     <!-- modal for images -->
     <!-- TODO: use the npm package -->
@@ -104,6 +165,7 @@ import EarthIcon from 'vue-material-design-icons/Earth.vue';
 import PencilIcon from 'vue-material-design-icons/Pencil.vue';
 import DownloadIcon from 'vue-material-design-icons/Download.vue';
 import PlusIcon from 'vue-material-design-icons/Plus.vue';
+import DeleteIcon from 'vue-material-design-icons/Delete.vue';
 
 
 
@@ -120,7 +182,8 @@ export default {
     ArrowLeftIcon,
     PencilIcon,
     DownloadIcon,
-    PlusIcon
+    PlusIcon,
+    DeleteIcon
   },
   mixins: [
     formatDate,
@@ -129,8 +192,24 @@ export default {
   data () {
     return {
       article: null,
+
+      article_loading: false,
+
       tags: [],
-      loading: false,
+      tags_loading: false,
+
+      comments: [],
+      comments_loading: false,
+
+      comment: {
+        properties: {
+          author: '',
+          content: '',
+        },
+      },
+
+      author: null,
+
 
       modal: {
         open: false,
@@ -146,17 +225,20 @@ export default {
   methods: {
     get_content(){
       if('id' in this.$route.query){
-        this.loading = true;
+        this.article_loading = true;
 
 
-        this.axios.post(process.env.VUE_APP_API_URL + '/get_article', {id: this.$route.query.id})
+        this.axios.post(process.env.VUE_APP_API_URL + '/get_article', {
+          article_id: this.$route.query.id
+        })
         .then(response => {
 
-          this.loading = false;
+          this.article_loading = false;
 
           // parsing the article
           this.article = response.data[0]._fields[response.data[0]._fieldLookup['article']]
 
+          // Make the images clickable to expand
           setTimeout(this.add_event_listeners_for_image_modals,100);
 
           // Code highlight
@@ -167,18 +249,111 @@ export default {
           },10);
 
 
-          // parsing the tags
-          response.data.forEach( record => {
-            let tag = record._fields[record._fieldLookup['tag']]
-            if(tag) this.tags.push(tag)
-
-          });
+          this.get_tags_of_article()
+          this.get_comments_of_article()
+          this.get_author_of_article()
 
 
         })
-        .catch(error => alert(error))
+        .catch(error => {
+          this.article_loading = false;
+          alert(error.response.data)
+        })
       }
     },
+    get_tags_of_article(){
+
+      this.tags_loading = true
+      this.tags.splice(0,this.tags.length)
+      this.axios.post(process.env.VUE_APP_API_URL + '/get_tags_of_article', {
+        article_id: this.article.identity.low
+      })
+      .then(response => {
+
+        this.tags_loading = false
+
+        // parsing the tags
+        response.data.forEach( record => {
+          let tag = record._fields[record._fieldLookup['tag']]
+          if(tag) this.tags.push(tag)
+
+        });
+      })
+      .catch(error => {
+        this.tags_loading = false
+        alert(error.response.data)
+      } )
+
+    },
+
+    get_comments_of_article(){
+
+      this.comments_loading = true
+      this.comments.splice(0,this.comments.length)
+
+      this.axios.post(process.env.VUE_APP_API_URL + '/get_comments_of_article', {
+        article_id: this.article.identity.low
+      })
+      .then(response => {
+
+        this.comments_loading = false
+
+        // parsing the tags
+        response.data.forEach( record => {
+          let comment = record._fields[record._fieldLookup['comment']]
+          if(comment) this.comments.push(comment)
+
+        });
+      })
+      .catch(error => {
+        this.comments_loading = false
+        alert(error.response.data)
+      } )
+
+    },
+
+    get_author_of_article(){
+
+      this.axios.post(process.env.VUE_APP_API_URL + '/get_author_of_article', {
+        article_id: this.article.identity.low
+      })
+      .then(response => {
+        this.author = response.data[0]._fields[response.data[0]._fieldLookup['author']]
+      })
+      .catch(error => alert(error.response.data))
+
+    },
+
+    create_comment(){
+      this.axios.post(process.env.VUE_APP_API_URL + '/create_comment', {
+        article_id: this.article.identity.low,
+        comment: this.comment,
+      })
+      .then( () => {
+        this.comment.author = ''
+        this.comment.content = ''
+
+        this.get_comments_of_article()
+
+      })
+      .catch(error => alert(error.response.data))
+
+    },
+
+    delete_comment(comment){
+      if(confirm('Delete comment?')){
+        this.axios.post(process.env.VUE_APP_API_URL + '/delete_comment', {
+          comment_id: comment.identity.low,
+        })
+        .then( () => {
+          this.get_comments_of_article()
+        })
+        .catch(error => alert(error.response.data))
+      }
+
+
+    },
+
     add_event_listeners_for_image_modals(){
       this.$refs.article_content.querySelectorAll('img').forEach(img => {
         img.addEventListener("click", event => {
@@ -199,6 +374,13 @@ export default {
 
       // Remove anchor from body
       document.body.removeChild(a);
+    }
+  },
+  computed: {
+    editable(){
+      let user_is_author = false
+      if(this.author) user_is_author = (this.author.properties.username === this.$store.state.username)
+      return this.$store.state.logged_in && this.$route.query.id && user_is_author
     }
   }
 
@@ -236,7 +418,6 @@ article img {
 }
 
 
-
 .modal_image {
   width: 60vw;
   height: 60vh;
@@ -266,6 +447,22 @@ article img {
     margin-left: auto;
     margin-right: auto;
   }
+}
+
+.comment {
+  margin: 10px 0;
+  padding: 5px;
+  border: 1px solid #dddddd;
+
+  display: flex;
+}
+
+.comment .content {
+  flex-grow: 1;
+}
+
+.comment .author {
+  flex-basis: 200px;
 }
 
 </style>

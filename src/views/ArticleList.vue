@@ -140,9 +140,9 @@ export default {
       tag: null,
       tag_loading: false,
 
+      // Default sorting
       sort: {
         by: 'article.edition_date',
-        //by: 'article.title',
         order: 'DESC',
       }
     }
@@ -156,10 +156,13 @@ export default {
       // Delete all articles
       this.articles.splice(0,this.articles.length)
 
-      this.axios.post(process.env.VUE_APP_API_URL + '/get_articles', {
-        sort: this.sort,
-        tag: this.tag
-      })
+      let body = {
+        sort: this.sort
+      }
+
+      if(this.tag) body.tag_id = this.tag.identity.low
+
+      this.axios.post(process.env.VUE_APP_API_URL + '/get_articles', body)
       .then(response => {
 
         response.data.forEach( record => {
@@ -169,9 +172,7 @@ export default {
 
         this.articles_loading = false;
       })
-      .catch(error => {
-        console.log(error.response.data)
-      })
+      .catch(error => alert(error.response.data) )
 
     },
 
@@ -184,7 +185,9 @@ export default {
         // Delete the list of related articles
         this.articles.splice(0,this.articles.length)
 
-        this.axios.post(process.env.VUE_APP_API_URL + '/get_tag', {id: tag_id})
+        this.axios.post(process.env.VUE_APP_API_URL + '/get_tag', {
+          tag_id: tag_id,
+        })
         .then(response => {
 
           this.tag_loading = false;
@@ -198,7 +201,7 @@ export default {
 
 
         })
-        .catch(error => console.log(error.response.data))
+        .catch(error => alert(error.response.data))
       }
       else {
         this.get_articles()
@@ -252,7 +255,6 @@ export default {
         this.tag.properties.name = new_name
         this.update_tag()
       }
-
     },
 
     toggle_navigation_item(){
@@ -264,7 +266,9 @@ export default {
       if(confirm('Delete tag?')){
         this.article_loading = true;
 
-        this.axios.post(process.env.VUE_APP_API_URL + '/delete_tag', {id: this.tag.identity.low})
+        this.axios.post(process.env.VUE_APP_API_URL + '/delete_tag', {
+          tag_id: this.tag.identity.low
+        })
         .then( () => {
           this.$router.push({ name: 'article_list' })
         })

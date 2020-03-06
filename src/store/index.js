@@ -7,13 +7,23 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     logged_in: false,
+    username: null,
     navigation_items: [
       {route: '/', icon: '', label: 'All articles'},
     ],
   },
   mutations: {
     check_authentication(state){
-      if(Vue.$cookies.get('jwt')) state.logged_in = true
+      if(Vue.$cookies.get('jwt')) {
+        state.logged_in = true
+
+        // Retrieve username
+        axios.post("https://authentication.maximemoreillon.com/whoami",
+        {}, { headers: { Authorization: "Bearer " + Vue.$cookies.get('jwt') } })
+        .then(response => { state.username = response.data.username})
+        .catch(error => { console.log(error.response.data) })
+
+      }
       else state.logged_in = false
     },
     update_categories(state){
