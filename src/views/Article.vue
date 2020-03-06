@@ -71,54 +71,51 @@
     <!-- Comments, not implemented yet -->
 
     <div
-      class="new_comment_wrapper"
+      class="comment_area_wrapper"
       v-if="article && !article_loading">
-      <div class="">
-        Write a comment:
-      </div>
-      <div class="">
-        <input
-          type="text"
-          v-model="comment.properties.author"
-          placeholder="Name">
-      </div>
-      <div class="">
+
+      <div class="new_comment_wrapper" >
+
+        <div class="">
+          Leave a comment
+        </div>
+        <div class="">
+          <input
+            type="text"
+            v-model="comment.properties.author"
+            placeholder="Name">
+        </div>
         <textarea
           v-model="comment.properties.content"
           placeholder="Comment"/>
-      </div>
-      <div class="">
-        <button type="button" v-on:click="create_comment()">SEND</button>
-      </div>
-
-
-
-    </div>
-
-    <div
-      class="comments_wrapper"
-      v-if="comments.length > 0 && !comments_loading">
-
-      <div
-        class="comment"
-        v-for="comment in comments"
-        v-bind:key="comment.identity.low">
-        <div class="author">
-          {{comment.properties.author}}
-        </div>
-        <div class="content">
-          {{comment.properties.content}}
-        </div>
-        <div class="">
+        <div class="create_comment_button_wrapper">
           <IconButton
             v-if="editable"
-            v-on:buttonClicked="delete_comment(comment)">
-            <delete-icon/>
+            v-on:buttonClicked="create_comment()">
+            <send-icon/>
           </IconButton>
         </div>
+
+
+
       </div>
 
+      <div
+        class="comments_wrapper"
+        v-if="comments.length > 0 && !comments_loading">
+
+        <Comment
+          class="comment"
+          v-for="comment in comments"
+          v-bind:comment="comment"
+          v-bind:deletable="editable"
+          v-on:deleted="get_comments_of_article()"
+          v-bind:key="comment.identity.low"/>
+
+      </div>
     </div>
+
+
 
     <Loader v-else-if="comments_loading"/>
     <div v-else>No comments yet</div>
@@ -153,6 +150,7 @@ import Toolbar from '@/components/Toolbar.vue'
 import Loader from '@/components/vue_loader/Loader.vue'
 
 import Tag from '@/components/Tag.vue'
+import Comment from '@/components/Comment.vue'
 
 import {formatDate} from '@/mixins/formatDate.js'
 //import {parseArticleRecord} from '@/mixins/parseArticleRecord.js'
@@ -165,7 +163,7 @@ import EarthIcon from 'vue-material-design-icons/Earth.vue';
 import PencilIcon from 'vue-material-design-icons/Pencil.vue';
 import DownloadIcon from 'vue-material-design-icons/Download.vue';
 import PlusIcon from 'vue-material-design-icons/Plus.vue';
-import DeleteIcon from 'vue-material-design-icons/Delete.vue';
+import SendIcon from 'vue-material-design-icons/Send.vue';
 
 
 
@@ -176,6 +174,7 @@ export default {
     Toolbar,
     Loader,
     Tag,
+    Comment,
 
     // Icons
     EarthIcon,
@@ -183,7 +182,7 @@ export default {
     PencilIcon,
     DownloadIcon,
     PlusIcon,
-    DeleteIcon
+    SendIcon
   },
   mixins: [
     formatDate,
@@ -340,19 +339,7 @@ export default {
 
     },
 
-    delete_comment(comment){
-      if(confirm('Delete comment?')){
-        this.axios.post(process.env.VUE_APP_API_URL + '/delete_comment', {
-          comment_id: comment.identity.low,
-        })
-        .then( () => {
-          this.get_comments_of_article()
-        })
-        .catch(error => alert(error.response.data))
-      }
 
-
-    },
 
     add_event_listeners_for_image_modals(){
       this.$refs.article_content.querySelectorAll('img').forEach(img => {
@@ -388,7 +375,7 @@ export default {
 </script>
 
 
-<style>
+<style scoped>
 
 
 
@@ -449,20 +436,27 @@ article img {
   }
 }
 
-.comment {
-  margin: 10px 0;
-  padding: 5px;
+.comment_area_wrapper {
+  border-top: 1px solid #dddddd;
+  padding-top: 10px;
+}
+
+.new_comment_wrapper {
   border: 1px solid #dddddd;
-
-  display: flex;
+  padding: 5px;
+}
+.new_comment_wrapper > * {
+  margin: 5px 0;
 }
 
-.comment .content {
-  flex-grow: 1;
+.create_comment_button_wrapper {
+  text-align: right;
 }
 
-.comment .author {
-  flex-basis: 200px;
+textarea {
+  width: 100%;
+  resize:vertical;
 }
+
 
 </style>
