@@ -237,13 +237,13 @@ export default {
         if(response.data.length > 0){
           let record = response.data[0]
           this.tag = record._fields[record._fieldLookup['tag']]
-        }
+        }    
 
-        // Proably doesn't need to re-get articles because tag itself did not change
+        this.$store.commit('update_categories')
 
-        this.$store.commit('update_categories');
+        this.get_articles()
 
-        this.tag_loading = false;
+        this.tag_loading = false
       })
       .catch(error => alert(error))
 

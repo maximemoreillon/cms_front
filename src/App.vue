@@ -35,11 +35,35 @@ export default {
 
 <style>
 
+/* Styles shared by all views */
+
 main a {
   font-weight: bold;
   text-decoration: none;
   color: #c00000;
 }
+
+article img {
+  /* test CSS for images */
+
+
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  cursor: pointer;
+
+  width: 60%;
+  max-height: 40vh;
+  object-fit: contain;
+
+}
+
+article iframe {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 
 
 </style>

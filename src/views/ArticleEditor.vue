@@ -208,13 +208,13 @@
         </editor-menu-bar>
 
         <!-- The content of the editor -->
-        <div class="editor">
+        <article class="editor">
 
           <editor-content
             class="editor_content"
             v-bind:editor="editor"/>
 
-        </div>
+        </article>
 
       </div>
     </div>
@@ -679,7 +679,8 @@ export default {
 
 
 <!-- not scoped so as to affect embedded components -->
-<style >
+<style>
+
 .article_editor_view{
   height: 100%;
 }
@@ -706,7 +707,7 @@ export default {
 
 
 
-
+/* Dangerous because unscoped */
 input[type="search"]{
   border: none;
   border-bottom: 1px solid #444444;

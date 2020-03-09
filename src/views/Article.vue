@@ -68,8 +68,7 @@
     <Loader v-else-if="article_loading"/>
     <div v-else>Article not found</div>
 
-    <!-- Comments, not implemented yet -->
-
+    <!-- Comments -->
     <div
       class="comment_area_wrapper"
       v-if="article && !article_loading">
@@ -90,7 +89,6 @@
           placeholder="Comment"/>
         <div class="create_comment_button_wrapper">
           <IconButton
-            v-if="editable"
             v-on:buttonClicked="create_comment()">
             <send-icon/>
           </IconButton>
@@ -378,34 +376,6 @@ export default {
 
 <style scoped>
 
-
-
-article {
-
-}
-
-article iframe {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-article img {
-  /* test CSS for images */
-
-
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-
-  /*
-  float: right;
-  width: 200px;
-  margin: 0 10px;
-  */
-}
-
-
 .modal_image {
   width: 60vw;
   height: 60vh;
@@ -425,17 +395,6 @@ article img {
   margin: 0 5px;
 }
 
-
-@media only screen and (max-width: 600px) {
-  article img {
-    /* test CSS for images */
-
-    float: none;
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-  }
-}
 
 .comment_area_wrapper {
   border-top: 1px solid #dddddd;
