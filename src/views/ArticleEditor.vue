@@ -582,18 +582,20 @@ export default {
 
 
     add_tag(){
+      if(this.$refs.tag_input.value.length > 0){
+        this.axios.post(process.env.VUE_APP_API_URL + '/create_tag', {
+          tag_name: this.$refs.tag_input.value
+        })
+        .then(response => {
+          let tag = response.data[0]._fields[response.data[0]._fieldLookup['tag']]
+          this.tags.push(tag)
 
-      this.axios.post(process.env.VUE_APP_API_URL + '/create_tag', {
-        tag_name: this.$refs.tag_input.value
-      })
-      .then(response => {
-        let tag = response.data[0]._fields[response.data[0]._fieldLookup['tag']]
-        this.tags.push(tag)
+        })
+        .catch(error => {
+          alert(error.response.data)
+        })
+      }
 
-      })
-      .catch(error => {
-        alert(error.response.data)
-      })
 
 
       this.$refs.tag_input.value = ""

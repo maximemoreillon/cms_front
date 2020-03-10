@@ -328,8 +328,8 @@ export default {
         comment: this.comment,
       })
       .then( () => {
-        this.comment.author = ''
-        this.comment.content = ''
+        this.comment.properties.author = ''
+        this.comment.properties.content = ''
 
         this.get_comments_of_article()
 
