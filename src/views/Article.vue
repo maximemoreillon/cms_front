@@ -189,6 +189,8 @@ export default {
   ],
   data () {
     return {
+      sending: false,
+
       article: null,
 
       article_loading: false,
@@ -221,6 +223,7 @@ export default {
 
   },
   methods: {
+
     get_content(){
       if('id' in this.$route.query){
         this.article_loading = true;

@@ -1,6 +1,6 @@
 <template>
 
-  <div class="article_list_view">
+  <div class="article_list_view" ref="view">
 
     <!-- TODO: Use something else than a toolbar -->
     <Toolbar v-if="tag && !tag_loading">
@@ -34,7 +34,8 @@
 
     <Toolbar >
 
-      <file-document-outline-icon class="article_counter"/>x{{articles.length}}
+
+      <!--<file-document-outline-icon class="article_counter"/>x{{articles.length}}-->
 
       <IconButton
         v-bind:active="sort.by === 'article.edition_date'"
@@ -72,7 +73,7 @@
     </Toolbar>
 
 
-    <div class="articles_container" v-if="articles.length > 0 && !articles_loading">
+    <div class="articles_container" v-if="articles.length > 0">
 
 
       <ArticlePreview
@@ -80,17 +81,25 @@
         v-bind:key="i"
         v-bind:article="article"/>
 
+
+
     </div>
 
     <!-- loader -->
-    <Loader v-else-if="articles_loading"/>
-    <div class="" v-else>
-      No articles
+    <Loader v-if="articles_loading"/>
+    <!-- No articles indicator -->
+    <div class="" v-if="articles.length === 0 && !articles_loading">No articles</div>
+
+    <div class="load_more_button_container" v-if="!articles_loading && !articles_all_loaded">
+      <IconButton
+        v-on:buttonClicked="get_articles()">
+        <dots-horizontal-icon/>
+      </IconButton>
     </div>
 
+
+
   </div>
-
-
 </template>
 
 <script>
@@ -109,9 +118,10 @@ import SortDescendingIcon from 'vue-material-design-icons/SortDescending.vue';
 import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue';
 import PencilIcon from 'vue-material-design-icons/Pencil.vue';
 import PinIcon from 'vue-material-design-icons/Pin.vue';
-import FileDocumentOutlineIcon from 'vue-material-design-icons/FileDocumentOutline.vue';
+//import FileDocumentOutlineIcon from 'vue-material-design-icons/FileDocumentOutline.vue';
 import DeleteIcon from 'vue-material-design-icons/Delete.vue';
 
+import DotsHorizontalIcon from 'vue-material-design-icons/DotsHorizontal.vue';
 
 export default {
   components: {
@@ -124,18 +134,20 @@ export default {
     // icons
     PencilIcon,
     PinIcon,
-    FileDocumentOutlineIcon,
+    //FileDocumentOutlineIcon,
     PlusIcon,
     DeleteIcon,
     CalendarIcon,
     AlphabeticalIcon,
     SortDescendingIcon,
     SortAscendingIcon,
+    DotsHorizontalIcon,
   },
   data () {
     return {
       articles: [],
       articles_loading: false,
+      articles_all_loaded: false,
 
       tag: null,
       tag_loading: false,
@@ -148,16 +160,19 @@ export default {
     }
   },
   methods: {
+    delete_all_articles(){
+      this.articles.splice(0,this.articles.length)
+      this.articles_all_loaded = false
+    },
+
 
     get_articles(){
 
       this.articles_loading = true
 
-      // Delete all articles
-      this.articles.splice(0,this.articles.length)
-
       let body = {
-        sort: this.sort
+        sort: this.sort,
+        start_index: this.articles.length,
       }
 
       if(this.tag) body.tag_id = this.tag.identity.low
@@ -169,6 +184,10 @@ export default {
           let article = record._fields[record._fieldLookup['article']]
           this.articles.push(article)
         });
+
+        // Check if all articles loaded (less than 10)
+        // TODO: Do not hardcode 10
+        if(response.data.length < 10) this.articles_all_loaded = true;
 
         this.articles_loading = false;
       })
@@ -197,6 +216,7 @@ export default {
             this.tag = record._fields[record._fieldLookup['tag']]
           }
 
+          this.delete_all_articles()
           this.get_articles()
 
 
@@ -204,24 +224,29 @@ export default {
         .catch(error => alert(error.response.data))
       }
       else {
+        this.delete_all_articles()
         this.get_articles()
       }
     },
 
     sort_by_date(){
       this.sort.by = 'article.edition_date'
+      this.delete_all_articles()
       this.get_articles()
     },
     sort_by_title(){
       this.sort.by = 'article.title'
+      this.delete_all_articles()
       this.get_articles()
     },
     sort_order_ascending(){
       this.sort.order = 'ASC'
+      this.delete_all_articles()
       this.get_articles()
     },
     sort_order_descending(){
       this.sort.order = 'DESC'
+      this.delete_all_articles()
       this.get_articles()
     },
 
@@ -237,10 +262,11 @@ export default {
         if(response.data.length > 0){
           let record = response.data[0]
           this.tag = record._fields[record._fieldLookup['tag']]
-        }    
+        }
 
         this.$store.commit('update_categories')
 
+        this.delete_all_articles()
         this.get_articles()
 
         this.tag_loading = false
@@ -275,11 +301,33 @@ export default {
         .catch(error => alert(error))
       }
     },
+    load_more_when_scroll_to_bottom(){
+      this.$refs.view.parentNode.onscroll = () => {
+
+        // THIS IS HIGHLY TEMPLATE DEPENDANT!
+        let router_view = this.$refs.view
+        let main = router_view.parentNode
+        let footer = main.getElementsByTagName('footer')[0]
+
+        if(router_view.offsetHeight + footer.offsetHeight === main.scrollTop + main.offsetHeight){
+          if(!this.articles_loading && this.articles.length > 0 && !this.articles_all_loaded) {
+            this.get_articles();
+          }
+        }
+      }
+    },
+
   },
+
 
   mounted() {
     //this.get_articles()
     this.get_tag(this.$route.query.tag_id)
+    this.load_more_when_scroll_to_bottom()
+
+
+
+
   },
   beforeRouteUpdate (to, from, next) {
     this.get_tag(to.query.tag_id)
@@ -301,6 +349,11 @@ export default {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
   grid-gap: 10px;
+}
+
+.load_more_button_container {
+  margin: 25px 0;
+  text-align: center;
 }
 
 
