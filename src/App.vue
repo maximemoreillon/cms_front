@@ -65,6 +65,8 @@ article iframe {
   display: block;
   margin-left: auto;
   margin-right: auto;
+  width: 50vw;
+  height: 30vw;
 }
 
 

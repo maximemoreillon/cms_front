@@ -204,6 +204,11 @@
             </IconButton>
 
             <IconButton
+              v-on:click="showVideoPromt(commands.iframe)">
+              <youtube-icon />
+            </IconButton>
+
+            <IconButton
               class="menubar_button"
               v-bind:class="{ 'is-active': isActive.link() }"
               v-on:click="prompt_for_url(commands.link)">
@@ -312,6 +317,7 @@ import PencilIcon from 'vue-material-design-icons/Pencil.vue';
 //import PencilOffIcon from 'vue-material-design-icons/PencilOff.vue';
 import ImageIcon from 'vue-material-design-icons/Image.vue';
 import TagIcon from 'vue-material-design-icons/Tag.vue';
+import YoutubeIcon from 'vue-material-design-icons/Youtube.vue';
 
 export default {
   components: {
@@ -351,6 +357,7 @@ export default {
     //PencilOffIcon,
     ImageIcon,
     TagIcon,
+    YoutubeIcon,
 
 
   },
@@ -405,7 +412,7 @@ export default {
             },
           }),
 
-          new Iframe(),
+          new Iframe(), // For Youtube videos
         ],
 
         editable: true,
@@ -667,6 +674,11 @@ export default {
       let url = prompt('URL:')
       if(url) command({ href: url })
 
+    },
+
+    showVideoPromt(command){
+      const src = prompt('Enter the ID of your video here')
+      if (src) command({ src })
     },
 
 
