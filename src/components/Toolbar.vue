@@ -23,8 +23,8 @@ export default {
   margin-bottom: 25px;
 }
 
-.toolbar > *:not(:first-child){
-  margin-left: 10px;
+.toolbar > *:not(:last-child){
+  margin-right: 10px;
 }
 
 .growing_spacer{

@@ -35,6 +35,9 @@ export default {
 
 <style>
 
+* {
+  box-sizing: border-box;
+}
 /* Styles shared by all views */
 
 main a {

@@ -5,8 +5,12 @@
     <Toolbar v-if="article">
 
       <div class="dates_container">
-        <div class="" v-if="article.properties.creation_date">Created: {{format_date(article.properties.creation_date)}}</div>
-        <div class="" v-if="article.properties.edition_date">Edited: {{format_date(article.properties.edition_date)}}</div>
+        <div class="" v-if="article.properties.creation_date">
+          Created: {{format_date(article.properties.creation_date)}}
+        </div>
+        <div class="" v-if="article.properties.edition_date">
+          Edited: {{format_date(article.properties.edition_date)}}
+        </div>
       </div>
 
       <!-- publish indicator -->
@@ -18,42 +22,50 @@
 
 
       <!-- Tags -->
-      <div class="tags_wrapper" v-if="tags.length > 0 && !tags_loading">
+      <div
+        class="tags_wrapper"
+        v-if="tags.length > 0 && !tags_loading">
         <Tag
           v-for="tag in tags"
           v-bind:key="tag.identity.low"
           v-bind:tag="tag"/>
       </div>
-      <Loader class="" v-else-if="tags_loading"/>
+      <Loader
+        v-else-if="tags_loading"
+        size="25"/>
 
 
 
 
       <div class="growing_spacer"/>
 
-      <IconButton
-        v-on:click="$router.push({ name: 'article_list' })">
-        <arrow-left-icon />
-      </IconButton>
+      <div class="tool_cluster">
+        <IconButton
+          v-on:click="$router.push({ name: 'article_list' })">
+          <arrow-left-icon />
+        </IconButton>
 
-      <IconButton
-        v-on:click="download_as_html_file()"
-        v-if="$store.state.logged_in">
-        <download-icon />
-      </IconButton>
+        <IconButton
+          v-on:click="download_as_html_file()"
+          v-if="$store.state.logged_in">
+          <download-icon />
+        </IconButton>
 
-      <!-- edit button -->
-      <IconButton
-        v-on:click="$router.push({ path: 'article_editor', query: { id: article.identity.low } })"
-        v-if="editable">
-        <pencil-icon />
-      </IconButton>
+        <!-- edit button -->
+        <IconButton
+          v-on:click="$router.push({ path: 'article_editor', query: { id: article.identity.low } })"
+          v-if="editable">
+          <pencil-icon />
+        </IconButton>
 
-      <IconButton
-        v-if="$store.state.logged_in"
-        v-on:buttonClicked="$router.push({ path: 'article_editor' })">
-        <plus-icon/>
-      </IconButton>
+        <IconButton
+          v-if="$store.state.logged_in"
+          v-on:buttonClicked="$router.push({ path: 'article_editor' })">
+          <plus-icon/>
+        </IconButton>
+      </div>
+
+
 
     </Toolbar>
 
@@ -98,21 +110,23 @@
 
       </div>
 
-      <div
-        class="comments_wrapper"
-        v-if="comments.length > 0 && !comments_loading">
+      <div class="comments_wrapper">
 
-        <Comment
-          class="comment"
-          v-for="comment in comments"
-          v-bind:comment="comment"
-          v-bind:deletable="editable"
-          v-on:deleted="get_comments_of_article()"
-          v-bind:key="comment.identity.low"/>
+        <template v-if="comments.length > 0 && !comments_loading">
+          <Comment
+            class="comment"
+            v-for="comment in comments"
+            v-bind:comment="comment"
+            v-bind:deletable="editable"
+            v-on:deleted="get_comments_of_article()"
+            v-bind:key="comment.identity.low"/>
+        </template>
+        <Loader v-else-if="comments_loading"/>
+        <div v-else>No comments yet</div>
+
 
       </div>
-      <Loader v-else-if="comments_loading"/>
-      <div v-else>No comments yet</div>
+
     </div>
 
 
@@ -144,7 +158,8 @@
 <script>
 
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
-import Modal from '@/components/vue_modal/Modal.vue'
+//import Modal from '@/components/vue_modal/Modal.vue'
+import Modal from '@moreillon/vue_modal'
 import Toolbar from '@/components/Toolbar.vue'
 import Loader from '@/components/vue_loader/Loader.vue'
 
@@ -380,8 +395,8 @@ export default {
 <style scoped>
 
 .modal_image {
-  width: 60vw;
-  height: 60vh;
+  width: 80vw;
+  height: 80vh;
   margin: 10px;
   object-fit: contain;
 }
@@ -396,6 +411,15 @@ export default {
 
 .published_indicator > * {
   margin: 0 5px;
+}
+
+.tags_wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tags_wrapper > * {
+
 }
 
 
@@ -415,6 +439,16 @@ export default {
 .create_comment_button_wrapper {
   text-align: right;
 }
+
+.comments_wrapper {
+  padding: 5px;
+}
+
+.tool_cluster {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 
 textarea {
   width: 100%;

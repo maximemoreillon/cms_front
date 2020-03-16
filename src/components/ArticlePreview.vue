@@ -41,12 +41,11 @@
 
     </div>
 
-    <!-- TODO: replace with loader -->
-    <Loader v-else-if="tags_loading"/>
+    <Loader
+      v-else-if="tags_loading"
+      size="25"/>
 
-    <div class="" v-else>
-      No tags
-    </div>
+    <div class="" v-else>No tags</div>
 
 
   </div>
@@ -180,6 +179,12 @@ export default {
 .tags_container {
   display: flex;
   flex-wrap: wrap;
+  margin: 5px 0;
+}
+
+.tags_container > *:not(:last-child) {
+  margin-right: 5px;
+
 }
 
 

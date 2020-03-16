@@ -30,7 +30,9 @@
 
     </Toolbar >
 
-    <Loader v-else-if="tag_loading"/>
+    <Loader
+      v-else-if="tag_loading"
+      size="25"/>
 
     <Toolbar >
 
@@ -39,25 +41,25 @@
 
       <IconButton
         v-bind:active="sort.by === 'article.edition_date'"
-        v-on:buttonClicked="sort_by_date()">
+        v-on:click="sort_by_date()">
         <calendar-icon/>
       </IconButton>
 
       <IconButton
         v-bind:active="sort.by === 'article.title'"
-        v-on:buttonClicked="sort_by_title()">
+        v-on:click="sort_by_title()">
         <alphabetical-icon/>
       </IconButton>
 
       <IconButton
         v-bind:active="sort.order === 'DESC'"
-        v-on:buttonClicked="sort_order_descending()">
+        v-on:click="sort_order_descending()">
         <sort-descending-icon/>
       </IconButton>
 
       <IconButton
         v-bind:active="sort.order === 'ASC'"
-        v-on:buttonClicked="sort_order_ascending()">
+        v-on:click="sort_order_ascending()">
         <sort-ascending-icon/>
       </IconButton>
 
@@ -90,12 +92,13 @@
     <!-- No articles indicator -->
     <div class="" v-if="articles.length === 0 && !articles_loading">No articles</div>
 
-    <div class="load_more_button_container" v-if="!articles_loading && !articles_all_loaded">
-      <IconButton
-        v-on:buttonClicked="get_articles()">
-        <dots-horizontal-icon/>
-      </IconButton>
-    </div>
+    <button
+      v-if="!articles_loading && !articles_all_loaded"
+      class="load_more_button"
+      type="button"
+      v-on:click="get_articles()">
+      <span>Load more</span>
+    </button>
 
 
 
@@ -121,7 +124,7 @@ import PinIcon from 'vue-material-design-icons/Pin.vue';
 //import FileDocumentOutlineIcon from 'vue-material-design-icons/FileDocumentOutline.vue';
 import DeleteIcon from 'vue-material-design-icons/Delete.vue';
 
-import DotsHorizontalIcon from 'vue-material-design-icons/DotsHorizontal.vue';
+//import DotsHorizontalIcon from 'vue-material-design-icons/DotsHorizontal.vue';
 
 export default {
   components: {
@@ -141,7 +144,7 @@ export default {
     AlphabeticalIcon,
     SortDescendingIcon,
     SortAscendingIcon,
-    DotsHorizontalIcon,
+    //DotsHorizontalIcon,
   },
   data () {
     return {
@@ -191,7 +194,11 @@ export default {
 
         this.articles_loading = false;
       })
-      .catch(error => alert(error.response.data) )
+      .catch(error => {
+        this.articles_loading = false;
+        if(error.response) alert(error.response.data)
+        else alert(error)
+      })
 
     },
 
@@ -221,7 +228,11 @@ export default {
 
 
         })
-        .catch(error => alert(error.response.data))
+        .catch(error => {
+          this.articles_loading = false;
+          if(error.response) alert(error.response.data)
+          else alert(error)
+        })
       }
       else {
         this.delete_all_articles()
@@ -304,16 +315,25 @@ export default {
     load_more_when_scroll_to_bottom(){
       this.$refs.view.parentNode.onscroll = () => {
 
-        // THIS IS HIGHLY TEMPLATE DEPENDANT!
-        let router_view = this.$refs.view
-        let main = router_view.parentNode
-        let footer = main.getElementsByTagName('footer')[0]
+        if(this.$route.name === 'article_list'){
+          // THIS IS HIGHLY TEMPLATE DEPENDANT!
+          let router_view = this.$refs.view
+          let main = router_view.parentNode
+          let footer = main.getElementsByTagName('footer')[0]
 
-        if(router_view.offsetHeight + footer.offsetHeight === main.scrollTop + main.offsetHeight){
-          if(!this.articles_loading && this.articles.length > 0 && !this.articles_all_loaded) {
-            this.get_articles();
+          let content_height = router_view.offsetHeight + footer.offsetHeight
+          let content_view_bottom = main.scrollTop + main.offsetHeight
+
+          let delta = Math.abs(content_height - content_view_bottom)
+
+          if( delta < 5){
+            if(!this.articles_loading && this.articles.length > 0 && !this.articles_all_loaded) {
+              this.get_articles();
+            }
           }
         }
+
+
       }
     },
 
@@ -351,11 +371,24 @@ export default {
   grid-gap: 15px;
 }
 
-.load_more_button_container {
-  margin: 25px 0;
-  text-align: center;
+
+.load_more_button {
+  display: flex;
+  align-items: center;
+  margin: 25px auto;
+  padding: 10px;
+  outline: none;
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  background-color: transparent;
+  cursor: pointer;
+
+  transition: color 0.25s, border-color 0.25s;
 }
 
-
+.load_more_button:hover {
+  border-color: #c00000;
+  color: #c00000;
+}
 
 </style>

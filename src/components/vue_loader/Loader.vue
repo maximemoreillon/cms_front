@@ -1,14 +1,19 @@
 <template>
   <div class="loader">
-    <div class="spinner">
-
-    </div>
+    <div
+      v-bind:style="{width: size +'px', height: size+'px', margin: 0.5*size+'px', borderWidth: 0.02*size+'px'}"
+      class="spinner"></div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'Loader',
+  props: {
+    size: {
+      default(){return 75},
+    },
+  },
 }
 </script>
 
@@ -19,12 +24,8 @@ export default {
 }
 
 .spinner {
-  margin: 5vmin;
-  width: 10vmin;
-  height: 10vmin;
 
   border-radius: 100%;
-  border-width: 3px;
   border-style: solid;
   border-color: #444444 transparent #444444 transparent;
 

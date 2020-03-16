@@ -24,7 +24,7 @@
         <!-- Tags -->
         <div class="tags_wrapper">
 
-          <label for="tag_search">Tags: </label>
+          <tag-icon class="tag_icon"/>
 
           <Tag
             v-for="(tag, index) in tags"
@@ -53,42 +53,48 @@
 
         <div class="growing_spacer"/>
 
-        <IconButton
-          v-if="$route.query.id"
-          v-on:click="$router.push({ name: 'article', query: { id: $route.query.id } })">
-          <arrow-left-icon />
-        </IconButton>
+        <div class="tool_cluster">
+          <IconButton
+            v-if="$route.query.id"
+            v-on:click="$router.push({ name: 'article', query: { id: $route.query.id } })">
+            <arrow-left-icon />
+          </IconButton>
 
-        <IconButton
-          v-else
-          v-on:click="$router.push({ name: 'article_list' })">
-          <arrow-left-icon />
-        </IconButton>
+          <IconButton
+            v-else
+            v-on:click="$router.push({ name: 'article_list' })">
+            <arrow-left-icon />
+          </IconButton>
 
-        <IconButton
-          v-bind:active="editable"
-          v-on:click="editable = !editable">
-          <pencil-icon/>
-        </IconButton>
-
-
-
-        <IconButton
-          v-on:click="submit_article()">
-          <content-save-icon />
-        </IconButton>
-
-        <IconButton
-          v-on:click="delete_article()">
-          <delete-icon />
-        </IconButton>
+          <IconButton
+            v-if="false"
+            v-bind:active="editable"
+            v-on:click="editable = !editable">
+            <pencil-icon/>
+          </IconButton>
 
 
-        <IconButton
-          v-on:click="toggle_published()"
-          v-bind:active="article.properties.published">
-          <earth-icon/>
-        </IconButton>
+
+          <IconButton
+            v-on:click="submit_article()">
+            <content-save-icon />
+          </IconButton>
+
+          <IconButton
+            v-if="article.identity.low"
+            v-on:click="delete_article()">
+            <delete-icon />
+          </IconButton>
+
+
+          <IconButton
+            v-on:click="toggle_published()"
+            v-bind:active="article.properties.published">
+            <earth-icon/>
+          </IconButton>
+        </div>
+
+
 
       </Toolbar>
 
@@ -305,6 +311,7 @@ import LinkIcon from 'vue-material-design-icons/Link.vue';
 import PencilIcon from 'vue-material-design-icons/Pencil.vue';
 //import PencilOffIcon from 'vue-material-design-icons/PencilOff.vue';
 import ImageIcon from 'vue-material-design-icons/Image.vue';
+import TagIcon from 'vue-material-design-icons/Tag.vue';
 
 export default {
   components: {
@@ -343,6 +350,7 @@ export default {
     PencilIcon,
     //PencilOffIcon,
     ImageIcon,
+    TagIcon,
 
 
   },
@@ -635,6 +643,7 @@ export default {
       virtual_container.innerHTML = this.article.properties.content
       var first_h1 = virtual_container.getElementsByTagName('h1')[0]
       if(first_h1) this.article.properties.title = first_h1.innerHTML
+      else this.article.properties.title = null
     },
     set_article_summary(){
       // get article summary from content (first p tag of the content)
@@ -642,6 +651,7 @@ export default {
       virtual_container.innerHTML = this.article.properties.content
       var first_p = virtual_container.getElementsByTagName('p')[0]
       if(first_p) this.article.properties.summary = first_p.innerHTML
+      else this.article.properties.summary = null
     },
     set_article_thumbnail_src(){
       // get article thumbnail from content (first img tag of the content)
@@ -649,6 +659,7 @@ export default {
       virtual_container.innerHTML = this.article.properties.content
       var first_img = virtual_container.getElementsByTagName('img')[0]
       if(first_img) this.article.properties.thumbnail_src = first_img.src
+      else this.article.properties.thumbnail_src = null
     },
 
 
@@ -778,6 +789,24 @@ pre code {
   color: #e0e2e4;
 }
 
+.tags_wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.tags_wrapper > * {
+  margin: 5px;
+
+}
+
+.tag_icon {
+  color: #444444;
+}
+
+.tool_cluster {
+  display: flex;
+  flex-wrap: wrap;
+}
 
 
 

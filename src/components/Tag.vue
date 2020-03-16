@@ -52,7 +52,6 @@ export default {
   border: 1px solid #dddddd;
   border-radius: 5px;
   padding: 5px;
-  margin: 5px;
   cursor: pointer;
   transition: color 0.25s, border-color 0.25s;
 }
