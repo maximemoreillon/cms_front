@@ -39,6 +39,16 @@
 
       <!--<file-document-outline-icon class="article_counter"/>x{{articles.length}}-->
 
+
+      <input
+        type="search"
+        v-model="search_string"
+        v-on:keyup.enter="search()">
+      <IconButton
+        v-on:click="search()">
+        <magnify-icon/>
+      </IconButton>
+
       <IconButton
         v-bind:active="sort.by === 'article.edition_date'"
         v-on:click="sort_by_date()">
@@ -123,6 +133,7 @@ import PencilIcon from 'vue-material-design-icons/Pencil.vue';
 import PinIcon from 'vue-material-design-icons/Pin.vue';
 //import FileDocumentOutlineIcon from 'vue-material-design-icons/FileDocumentOutline.vue';
 import DeleteIcon from 'vue-material-design-icons/Delete.vue';
+import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
 
 //import DotsHorizontalIcon from 'vue-material-design-icons/DotsHorizontal.vue';
 
@@ -145,6 +156,7 @@ export default {
     SortDescendingIcon,
     SortAscendingIcon,
     //DotsHorizontalIcon,
+    MagnifyIcon,
   },
   data () {
     return {
@@ -159,7 +171,10 @@ export default {
       sort: {
         by: 'article.edition_date',
         order: 'DESC',
-      }
+      },
+
+      search_string: '',
+
     }
   },
   methods: {
@@ -178,7 +193,12 @@ export default {
         start_index: this.articles.length,
       }
 
+
+
       if(this.tag) body.tag_id = this.tag.identity.low
+
+      // search is flimsy
+      body.search = this.search_string
 
       this.axios.post(process.env.VUE_APP_API_URL + '/get_articles', body)
       .then(response => {
@@ -332,10 +352,13 @@ export default {
             }
           }
         }
-
-
       }
     },
+
+    search(){
+      this.delete_all_articles()
+      this.get_articles()
+    }
 
   },
 
@@ -344,9 +367,6 @@ export default {
     //this.get_articles()
     this.get_tag(this.$route.query.tag_id)
     this.load_more_when_scroll_to_bottom()
-
-
-
 
   },
   beforeRouteUpdate (to, from, next) {

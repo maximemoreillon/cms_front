@@ -179,7 +179,11 @@ export default {
 .tags_container {
   display: flex;
   flex-wrap: wrap;
+}
+
+.tags_container > *{
   margin: 5px 0;
+
 }
 
 .tags_container > *:not(:last-child) {
