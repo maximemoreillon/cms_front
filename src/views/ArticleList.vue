@@ -42,7 +42,8 @@
     <Toolbar >
 
 
-      <!--<file-document-outline-icon class="article_counter"/>x{{articles.length}}-->
+
+
 
 
       <input
@@ -54,30 +55,38 @@
         <magnify-icon/>
       </IconButton>
 
-      <IconButton
-        v-bind:active="sort === 'article.edition_date'"
-        v-on:click="sort_by_date()">
-        <calendar-icon/>
-      </IconButton>
+      <!-- Sorting and ordering -->
+      <div class="tool_cluster">
+        <IconButton
+          v-bind:active="sort === 'article.edition_date'"
+          v-on:click="sort_by_date()">
+          <calendar-icon/>
+        </IconButton>
+
+        <IconButton
+          v-bind:active="sort === 'article.title'"
+          v-on:click="sort_by_title()">
+          <alphabetical-icon/>
+        </IconButton>
+
+        <IconButton
+          v-bind:active="order === 'DESC'"
+          v-on:click="sort_order_descending()">
+          <sort-descending-icon/>
+        </IconButton>
+
+        <IconButton
+          v-bind:active="order === 'ASC'"
+          v-on:click="sort_order_ascending()">
+          <sort-ascending-icon/>
+        </IconButton>
+      </div>
 
 
-      <IconButton
-        v-bind:active="sort === 'article.title'"
-        v-on:click="sort_by_title()">
-        <alphabetical-icon/>
-      </IconButton>
 
-      <IconButton
-        v-bind:active="order === 'DESC'"
-        v-on:click="sort_order_descending()">
-        <sort-descending-icon/>
-      </IconButton>
-
-      <IconButton
-        v-bind:active="order === 'ASC'"
-        v-on:click="sort_order_ascending()">
-        <sort-ascending-icon/>
-      </IconButton>
+      <span class="article_counter">
+        <file-document-outline-icon />x{{article_count}}
+      </span>
 
       <div class="growing_spacer"/>
 
@@ -136,7 +145,7 @@ import SortDescendingIcon from 'vue-material-design-icons/SortDescending.vue';
 import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue';
 import PencilIcon from 'vue-material-design-icons/Pencil.vue';
 import PinIcon from 'vue-material-design-icons/Pin.vue';
-//import FileDocumentOutlineIcon from 'vue-material-design-icons/FileDocumentOutline.vue';
+import FileDocumentOutlineIcon from 'vue-material-design-icons/FileDocumentOutline.vue';
 import DeleteIcon from 'vue-material-design-icons/Delete.vue';
 import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
 import CloseIcon from 'vue-material-design-icons/Close.vue';
@@ -155,7 +164,7 @@ export default {
     // icons
     PencilIcon,
     PinIcon,
-    //FileDocumentOutlineIcon,
+    FileDocumentOutlineIcon,
     PlusIcon,
     DeleteIcon,
     CalendarIcon,
@@ -169,6 +178,7 @@ export default {
   data () {
     return {
       articles: [],
+      article_count: 0,
       articles_loading: false,
       articles_all_loaded: false,
 
@@ -195,6 +205,8 @@ export default {
     get_articles(){
 
       this.articles_loading = true
+
+      this.article_count = 0
 
       let body = {}
 
@@ -223,6 +235,18 @@ export default {
       })
       .catch(error => {
         this.articles_loading = false;
+        if(error.response) alert(error.response.data)
+        else alert(error)
+      })
+
+      // get article count
+      this.axios.post(process.env.VUE_APP_API_URL + '/get_article_count', body)
+      .then(response => {
+
+        this.article_count = response.data[0]._fields[0].low
+
+      })
+      .catch(error => {
         if(error.response) alert(error.response.data)
         else alert(error)
       })
@@ -416,6 +440,16 @@ export default {
 .load_more_button:hover {
   border-color: #c00000;
   color: #c00000;
+}
+
+.article_counter{
+  display: flex;
+  align-items: center;
+}
+
+.tool_cluster {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 </style>
