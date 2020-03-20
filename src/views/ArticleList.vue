@@ -9,6 +9,11 @@
         <Tag v-bind:tag="tag"/>
 
         <IconButton
+          v-on:click="$router.push({ name: 'article_list' })">
+          <close-icon/>
+        </IconButton>
+
+        <IconButton
           v-if="$store.state.logged_in"
           v-on:click="prompt_for_rename()">
           <pencil-icon/>
@@ -50,29 +55,29 @@
       </IconButton>
 
       <IconButton
-        v-bind:active="sort.by === 'article.edition_date'"
+        v-bind:active="sort === 'article.edition_date'"
         v-on:click="sort_by_date()">
         <calendar-icon/>
       </IconButton>
 
+
       <IconButton
-        v-bind:active="sort.by === 'article.title'"
+        v-bind:active="sort === 'article.title'"
         v-on:click="sort_by_title()">
         <alphabetical-icon/>
       </IconButton>
 
       <IconButton
-        v-bind:active="sort.order === 'DESC'"
+        v-bind:active="order === 'DESC'"
         v-on:click="sort_order_descending()">
         <sort-descending-icon/>
       </IconButton>
 
       <IconButton
-        v-bind:active="sort.order === 'ASC'"
+        v-bind:active="order === 'ASC'"
         v-on:click="sort_order_ascending()">
         <sort-ascending-icon/>
       </IconButton>
-
 
       <div class="growing_spacer"/>
 
@@ -134,6 +139,8 @@ import PinIcon from 'vue-material-design-icons/Pin.vue';
 //import FileDocumentOutlineIcon from 'vue-material-design-icons/FileDocumentOutline.vue';
 import DeleteIcon from 'vue-material-design-icons/Delete.vue';
 import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
+import CloseIcon from 'vue-material-design-icons/Close.vue';
+
 
 //import DotsHorizontalIcon from 'vue-material-design-icons/DotsHorizontal.vue';
 
@@ -157,6 +164,7 @@ export default {
     SortAscendingIcon,
     //DotsHorizontalIcon,
     MagnifyIcon,
+    CloseIcon,
   },
   data () {
     return {
@@ -167,13 +175,13 @@ export default {
       tag: null,
       tag_loading: false,
 
-      // Default sorting
-      sort: {
-        by: 'article.edition_date',
-        order: 'DESC',
-      },
+      // Default sorting and ordering
+      sort: 'article.edition_date',
+      order: 'DESC',
+
 
       search_string: '',
+      batch_size: 10,
 
     }
   },
@@ -188,17 +196,17 @@ export default {
 
       this.articles_loading = true
 
-      let body = {
-        sort: this.sort,
-        start_index: this.articles.length,
-      }
+      let body = {}
 
+      body.sort = this.sort
+      body.order = this.order
+      body.start_index = this.articles.length
+      body.search = this.search_string
+      body.batch_size = this.batch_size
 
-
+      // That's a bit flimy
       if(this.tag) body.tag_id = this.tag.identity.low
 
-      // search is flimsy
-      body.search = this.search_string
 
       this.axios.post(process.env.VUE_APP_API_URL + '/get_articles', body)
       .then(response => {
@@ -209,8 +217,7 @@ export default {
         });
 
         // Check if all articles loaded (less than 10)
-        // TODO: Do not hardcode 10
-        if(response.data.length < 10) this.articles_all_loaded = true;
+        if(response.data.length < this.batch_size) this.articles_all_loaded = true;
 
         this.articles_loading = false;
       })
@@ -261,22 +268,22 @@ export default {
     },
 
     sort_by_date(){
-      this.sort.by = 'article.edition_date'
+      this.sort = 'article.edition_date'
       this.delete_all_articles()
       this.get_articles()
     },
     sort_by_title(){
-      this.sort.by = 'article.title'
+      this.sort = 'article.title'
       this.delete_all_articles()
       this.get_articles()
     },
     sort_order_ascending(){
-      this.sort.order = 'ASC'
+      this.order = 'ASC'
       this.delete_all_articles()
       this.get_articles()
     },
     sort_order_descending(){
-      this.sort.order = 'DESC'
+      this.order = 'DESC'
       this.delete_all_articles()
       this.get_articles()
     },
