@@ -2,6 +2,7 @@
 
   <div class="article_list_view" ref="view">
 
+    <!-- Selected tag -->
     <!-- TODO: Use something else than a toolbar -->
     <Toolbar v-if="tag && !tag_loading">
 
@@ -45,16 +46,6 @@
 
 
 
-
-      <input
-        type="search"
-        v-model="search_string"
-        v-on:keyup.enter="search()">
-      <IconButton
-        v-on:click="search()">
-        <magnify-icon/>
-      </IconButton>
-
       <!-- Sorting and ordering -->
       <div class="tool_cluster">
         <IconButton
@@ -84,9 +75,24 @@
 
 
 
+      <!-- article counter -->
       <span class="article_counter">
         <file-document-outline-icon />x{{article_count}}
       </span>
+
+      <!-- search -->
+      <div class="search_wrapper">
+        <input
+          type="search"
+          class="search_bar"
+          v-bind:class="{search_bar_open: search_bar_open}"
+          v-model="search_string"
+          v-on:keyup.enter="search()">
+        <IconButton
+          v-on:click="search()">
+          <magnify-icon/>
+        </IconButton>
+      </div>
 
       <div class="growing_spacer"/>
 
@@ -191,6 +197,7 @@ export default {
 
 
       search_string: '',
+      search_bar_open: false,
       batch_size: 10,
 
     }
@@ -387,8 +394,15 @@ export default {
     },
 
     search(){
-      this.delete_all_articles()
-      this.get_articles()
+      if(this.search_bar_open){
+        this.delete_all_articles()
+        this.get_articles()
+        if(this.search_string === '') this.search_bar_open = false;
+      }
+      else this.search_bar_open = true;
+
+
+
     }
 
   },
@@ -445,11 +459,28 @@ export default {
 .article_counter{
   display: flex;
   align-items: center;
+  color: #444444;
 }
 
 .tool_cluster {
   display: flex;
   flex-wrap: wrap;
+}
+
+.search_bar {
+  transition: 0.25s;
+  width: 0;
+  visibility: hidden;
+}
+
+.search_bar.search_bar_open {
+  width: 20vw;
+  visibility: visible;
+}
+
+.search_wrapper {
+  display: flex;
+  align-items: stretch;
 }
 
 </style>
