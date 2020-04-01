@@ -20,7 +20,7 @@ export default new Vuex.Store({
         // Retrieve username
         axios.post("https://authentication.maximemoreillon.com/whoami",
         {}, { headers: { Authorization: "Bearer " + Vue.$cookies.get('jwt') } })
-        .then(response => { state.username = response.data.username})
+        .then(response => { state.username = response.data.properties.username })
         .catch(error => { console.log(error.response.data) })
 
       }
