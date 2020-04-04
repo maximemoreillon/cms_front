@@ -11,23 +11,21 @@
 </template>
 
 <script>
-//import AppTemplate from '@moreillon/vue_application_template'
+
+import AppTemplate from '@moreillon/vue_application_template'
 
 // That is the correct way to do import styles:
 import 'highlight.js/styles/obsidian.css'
-import AppTemplate from '@moreillon/vue_application_template'
 
 export default {
   name: 'App',
   components: {
     AppTemplate
   },
-
   mounted() {
     this.$store.commit('check_authentication');
     this.$store.commit('update_categories');
   }
-
 
 }
 </script>

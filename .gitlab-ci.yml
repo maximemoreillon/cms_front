@@ -16,6 +16,6 @@ deployment:
   stage: deployment
   script:
     - kubectl apply -f deployment.yml
-    - kubectl rollout restart deployment/${APPLICATION_NAME}-deployment
+    - kubectl rollout restart deployment/${APPLICATION_NAME}
   environment:
     name: staging
