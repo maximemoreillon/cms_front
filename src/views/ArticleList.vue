@@ -225,6 +225,7 @@ export default {
 
       // That's a bit flimy
       if(this.tag) body.tag_id = this.tag.identity.low
+      if(this.author) body.author_id = this.author.identity.low
 
 
       this.axios.post(process.env.VUE_APP_API_URL + '/get_articles', body)
