@@ -18,7 +18,8 @@ export default new Vuex.Store({
         state.logged_in = true
 
         // Retrieve username
-        axios.post("https://authentication.maximemoreillon.com/whoami",
+        // Todo: Use dotenv for this
+        axios.post("https://api.authentication.maximemoreillon.com/whoami",
         {}, { headers: { Authorization: "Bearer " + Vue.$cookies.get('jwt') } })
         .then(response => { state.username = response.data.properties.username })
         .catch(error => { console.log(error.response.data) })
