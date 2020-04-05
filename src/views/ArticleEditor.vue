@@ -488,9 +488,7 @@ export default {
         // this gets titptap to throw errors
         this.article_loading = true;
 
-        this.axios.post(process.env.VUE_APP_API_URL + '/get_article', {
-          article_id: this.$route.query.id
-        })
+        this.axios.get(`${process.env.VUE_APP_API_URL}/article?id=${this.$route.query.id}`)
         .then(response => {
 
           // parsing neo4j record for article
@@ -514,9 +512,7 @@ export default {
     get_tags_of_article(){
 
       this.tags_loading = true
-      this.axios.post(process.env.VUE_APP_API_URL + '/get_tags_of_article', {
-        article_id: this.article.identity.low
-      })
+      this.axios.get(`${process.env.VUE_APP_API_URL}/tags_of_article?id=${this.article.identity.low}`)
       .then(response => {
 
         this.tags_loading = false

@@ -2,11 +2,26 @@
 
   <div class="article_list_view" ref="view">
 
+    <!-- Selected author -->
+    <!-- TODO: Use something else than a toolbar -->
+    <Toolbar v-if="author.properties">
+        <Author v-bind:author="author"/>
+
+        <!-- remove author filter -->
+        <IconButton
+          v-on:click="$router.push({ name: 'article_list' })">
+          <close-icon/>
+        </IconButton>
+    </Toolbar >
+
+    <Loader
+      v-else-if="author.loading"
+      size="25"/>
+
+
     <!-- Selected tag -->
     <!-- TODO: Use something else than a toolbar -->
     <Toolbar v-if="tag && !tag_loading">
-
-
         <Tag v-bind:tag="tag"/>
 
         <IconButton
@@ -29,22 +44,15 @@
         <IconButton
           v-if="$store.state.logged_in"
           v-bind:active="tag.properties.navigation_item"
-          v-on:click="toggle_navigation_item()">
+          v-on:click="pin_to_navbar()">
           <pin-icon />
         </IconButton>
-
-
     </Toolbar >
 
     <Loader
       v-else-if="tag_loading"
       size="25"/>
-
     <Toolbar >
-
-
-
-
 
       <!-- Sorting and ordering -->
       <div class="tool_cluster">
@@ -142,6 +150,7 @@ import ArticlePreview from '@/components/ArticlePreview.vue'
 import Toolbar from '@/components/Toolbar.vue'
 import Loader from '@/components/vue_loader/Loader.vue'
 import Tag from '@/components/Tag.vue'
+import Author from '@/components/Author.vue'
 
 // icons
 import PlusIcon from 'vue-material-design-icons/Plus.vue';
@@ -166,6 +175,7 @@ export default {
     Toolbar,
     Loader,
     Tag,
+    Author,
 
     // icons
     PencilIcon,
@@ -191,6 +201,8 @@ export default {
       tag: null,
       tag_loading: false,
 
+      author: {},
+
       // Default sorting and ordering
       sort: 'article.edition_date',
       order: 'DESC',
@@ -202,8 +214,36 @@ export default {
 
     }
   },
+
+  mounted() {
+    // Does not get called when staying in the same route!
+    this.load_more_when_scroll_to_bottom()
+
+    this.get_tag(this.$route.query.tag_id)
+    this.get_author(this.$route.query.author_id)
+
+    this.delete_all_articles()
+    this.get_articles()
+
+  },
+  beforeRouteUpdate (to, from, next) {
+
+    this.get_tag(to.query.tag_id)
+    this.get_author(to.query.author_id)
+
+    // Dirty but no idea how to solve
+    setTimeout(() => {
+      this.delete_all_articles()
+      this.get_articles()
+    },100)
+
+    next();
+
+  },
+
   methods: {
     delete_all_articles(){
+      // Usuallz, articles are not deleted because of the "load more" system
       this.articles.splice(0,this.articles.length)
       this.articles_all_loaded = false
     },
@@ -215,21 +255,23 @@ export default {
 
       this.article_count = 0
 
-      let body = {}
-
-      body.sort = this.sort
-      body.order = this.order
-      body.start_index = this.articles.length
-      body.search = this.search_string
-      body.batch_size = this.batch_size
-
-      // That's a bit flimy
-      if(this.tag) body.tag_id = this.tag.identity.low
-      if(this.author) body.author_id = this.author.identity.low
+      // declaring body here because two api calls
+      let body = {
+        sort : this.sort,
+        order : this.order,
+        start_index : this.articles.length,
+        search : this.search_string,
+        batch_size : this.batch_size,
+        tag_id: this.$route.query.tag_id,
+        author_id: this.$route.query.author_id
+      }
 
 
       this.axios.post(process.env.VUE_APP_API_URL + '/get_articles', body)
       .then(response => {
+
+        let first_record = response.data[0]
+        this.article_count = first_record._fields[first_record._fieldLookup['article_count']].low
 
         response.data.forEach( record => {
           let article = record._fields[record._fieldLookup['article']]
@@ -247,18 +289,6 @@ export default {
         else alert(error)
       })
 
-      // get article count
-      this.axios.post(process.env.VUE_APP_API_URL + '/get_article_count', body)
-      .then(response => {
-
-        this.article_count = response.data[0]._fields[0].low
-
-      })
-      .catch(error => {
-        if(error.response) alert(error.response.data)
-        else alert(error)
-      })
-
     },
 
     get_tag(tag_id){
@@ -266,37 +296,34 @@ export default {
 
       if(tag_id){
         this.tag_loading = true;
-
-        // Delete the list of related articles
-        this.articles.splice(0,this.articles.length)
-
         this.axios.post(process.env.VUE_APP_API_URL + '/get_tag', {
           tag_id: tag_id,
         })
-        .then(response => {
-
-          this.tag_loading = false;
-
-          if(response.data.length > 0){
-            let record = response.data[0]
-            this.tag = record._fields[record._fieldLookup['tag']]
-          }
-
-          this.delete_all_articles()
-          this.get_articles()
-
-
-        })
+        .then(response => { this.tag = response.data })
         .catch(error => {
-          this.articles_loading = false;
+          if(error.response) alert(error.response.data)
+          else alert(error)
+        })
+        .finally( () => {this.tag_loading = false;})
+      }
+    },
+
+    get_author(author_id){
+      this.author = {}
+
+      if(author_id){
+        this.$set(this.author,'loading',true)
+        this.axios.post(process.env.VUE_APP_API_URL + '/get_author', {
+          author_id: author_id,
+        })
+        .then(response => { this.author = response.data })
+        .catch(error => {
+          this.$set(this.author,'error', 'Error getting author')
           if(error.response) alert(error.response.data)
           else alert(error)
         })
       }
-      else {
-        this.delete_all_articles()
-        this.get_articles()
-      }
+
     },
 
     sort_by_date(){
@@ -353,7 +380,7 @@ export default {
       }
     },
 
-    toggle_navigation_item(){
+    pin_to_navbar(){
       this.tag.properties.navigation_item = !this.tag.properties.navigation_item
       this.update_tag()
     },
@@ -398,27 +425,17 @@ export default {
       if(this.search_bar_open){
         this.delete_all_articles()
         this.get_articles()
+        // Todo: this would be done inside the search bar component
         if(this.search_string === '') this.search_bar_open = false;
       }
       else this.search_bar_open = true;
-
-
 
     }
 
   },
 
 
-  mounted() {
-    //this.get_articles()
-    this.get_tag(this.$route.query.tag_id)
-    this.load_more_when_scroll_to_bottom()
 
-  },
-  beforeRouteUpdate (to, from, next) {
-    this.get_tag(to.query.tag_id)
-    next();
-  },
 }
 </script>
 

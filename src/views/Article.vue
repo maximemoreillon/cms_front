@@ -18,7 +18,7 @@
           v-if="article.properties.published && $store.state.logged_in"/>
 
       <!-- Author -->
-      <div class="" v-if="author">Author: {{author.properties.username}}</div>
+      Author: <Author v-bind:author="author"/>
 
 
       <!-- Tags -->
@@ -164,6 +164,8 @@ import Toolbar from '@/components/Toolbar.vue'
 import Loader from '@/components/vue_loader/Loader.vue'
 
 import Tag from '@/components/Tag.vue'
+import Author from '@/components/Author.vue'
+
 import Comment from '@/components/Comment.vue'
 
 import {formatDate} from '@/mixins/formatDate.js'
@@ -188,6 +190,7 @@ export default {
     Toolbar,
     Loader,
     Tag,
+    Author,
     Comment,
 
     // Icons
@@ -244,9 +247,7 @@ export default {
         this.article_loading = true;
 
 
-        this.axios.post(process.env.VUE_APP_API_URL + '/get_article', {
-          article_id: this.$route.query.id
-        })
+        this.axios.get(`${process.env.VUE_APP_API_URL}/article?id=${this.$route.query.id}`)
         .then(response => {
 
           this.article_loading = false;
@@ -281,9 +282,7 @@ export default {
 
       this.tags_loading = true
       this.tags.splice(0,this.tags.length)
-      this.axios.post(process.env.VUE_APP_API_URL + '/get_tags_of_article', {
-        article_id: this.article.identity.low
-      })
+      this.axios.get(`${process.env.VUE_APP_API_URL}/tags_of_article?id=${this.$route.query.id}`)
       .then(response => {
 
         this.tags_loading = false
@@ -307,9 +306,7 @@ export default {
       this.comments_loading = true
       this.comments.splice(0,this.comments.length)
 
-      this.axios.post(process.env.VUE_APP_API_URL + '/get_comments_of_article', {
-        article_id: this.article.identity.low
-      })
+      this.axios.get(`${process.env.VUE_APP_API_URL}/comments_of_article?id=${this.$route.query.id}`)
       .then(response => {
 
         this.comments_loading = false
@@ -330,9 +327,7 @@ export default {
 
     get_author_of_article(){
 
-      this.axios.post(process.env.VUE_APP_API_URL + '/get_author_of_article', {
-        article_id: this.article.identity.low
-      })
+      this.axios.get(`${process.env.VUE_APP_API_URL}/author_of_article?id=${this.$route.query.id}`)
       .then(response => {
         this.author = response.data[0]._fields[response.data[0]._fieldLookup['author']]
       })

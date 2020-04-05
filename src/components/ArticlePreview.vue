@@ -90,9 +90,7 @@ export default {
   methods: {
     get_tags(){
       this.tags_loading = true
-      this.axios.post(process.env.VUE_APP_API_URL + '/get_tags_of_article', {
-        article_id: this.article.identity.low
-      })
+      this.axios.get(`${process.env.VUE_APP_API_URL}/tags_of_article?id=${this.article.identity.low}`)
       .then(response => {
 
         this.tags.splice(0,this.tags.length)
