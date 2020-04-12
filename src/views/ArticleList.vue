@@ -253,21 +253,17 @@ export default {
 
       this.articles_loading = true
 
-      this.article_count = 0
-
-      // declaring body here because two api calls
-      let body = {
-        sort : this.sort,
-        order : this.order,
-        start_index : this.articles.length,
-        search : this.search_string,
-        batch_size : this.batch_size,
-        tag_id: this.$route.query.tag_id,
-        author_id: this.$route.query.author_id
-      }
-
-
-      this.axios.post(process.env.VUE_APP_API_URL + '/get_articles', body)
+      this.axios.get(process.env.VUE_APP_API_URL + '/articles', {
+        params: {
+          sort : this.sort,
+          order : this.order,
+          start_index : this.articles.length,
+          search : this.search_string,
+          batch_size : this.batch_size,
+          tag_id: this.$route.query.tag_id,
+          author_id: this.$route.query.author_id
+        }
+      })
       .then(response => {
 
         let first_record = response.data[0]
@@ -281,12 +277,14 @@ export default {
         // Check if all articles loaded (less than 10)
         if(response.data.length < this.batch_size) this.articles_all_loaded = true;
 
-        this.articles_loading = false;
+
       })
       .catch(error => {
-        this.articles_loading = false;
         if(error.response) alert(error.response.data)
         else alert(error)
+      })
+      .finally(() => {
+        this.articles_loading = false;
       })
 
     },
@@ -296,8 +294,8 @@ export default {
 
       if(tag_id){
         this.tag_loading = true;
-        this.axios.post(process.env.VUE_APP_API_URL + '/get_tag', {
-          tag_id: tag_id,
+        this.axios.get(process.env.VUE_APP_API_URL + '/tag', {
+          params: {tag_id: tag_id},
         })
         .then(response => { this.tag = response.data })
         .catch(error => {
@@ -313,8 +311,8 @@ export default {
 
       if(author_id){
         this.$set(this.author,'loading',true)
-        this.axios.post(process.env.VUE_APP_API_URL + '/get_author', {
-          author_id: author_id,
+        this.axios.post(process.env.VUE_APP_API_URL + '/author', {
+          params: {author_id: author_id},
         })
         .then(response => { this.author = response.data })
         .catch(error => {

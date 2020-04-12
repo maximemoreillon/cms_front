@@ -15,6 +15,7 @@
     "@fortawesome/vue-fontawesome": "^0.1.9",
     "@mdi/font": "^4.9.95",
     "@moreillon/vue_application_template": "^0.1.4",
+    "@moreillon/vue_loader": "^0.1.1",
     "@moreillon/vue_modal": "0.0.4",
     "axios": "^0.19.2",
     "core-js": "^3.6.4",

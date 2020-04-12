@@ -18,8 +18,7 @@ export default new Vuex.Store({
         state.logged_in = true
 
         // Retrieve username
-        // Todo: Use dotenv for this
-        axios.post("https://api.authentication.maximemoreillon.com/whoami",
+        axios.post(`${process.env.VUE_APP_AUTHENTICATION_API_URL}/whoami`,
         {}, { headers: { Authorization: "Bearer " + Vue.$cookies.get('jwt') } })
         .then(response => { state.username = response.data.properties.username })
         .catch(error => { console.log(error.response.data) })
@@ -36,7 +35,7 @@ export default new Vuex.Store({
 
         response.data.forEach( record => {
           let tag = record._fields[record._fieldLookup['tag']]
-          let navigation_item = {route: '/?tag_id='+tag.identity.low, icon: '', label: tag.properties.name}
+          let navigation_item = {route: `/?tag_id=${tag.identity.low}`, icon: '', label: tag.properties.name}
           state.navigation_items.push(navigation_item)
         });
 

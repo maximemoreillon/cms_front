@@ -512,7 +512,9 @@ export default {
     get_tags_of_article(){
 
       this.tags_loading = true
-      this.axios.get(`${process.env.VUE_APP_API_URL}/tags_of_article?id=${this.article.identity.low}`)
+      this.axios.get(`${process.env.VUE_APP_API_URL}/tags_of_article`,{
+        params: {id: this.article.identity.low}
+      })
       .then(response => {
 
         this.tags_loading = false
@@ -537,7 +539,7 @@ export default {
 
       if(this.article.identity.low){
         // if the article has an ID, UPDATE
-        this.axios.post(process.env.VUE_APP_API_URL + '/update_article', {
+        this.axios.post(`${process.env.VUE_APP_API_URL}/update_article`, {
           article: this.article,
           tag_ids: this.tags.map(tag => tag.identity.low),
         })
@@ -621,7 +623,7 @@ export default {
     get_existing_tags(){
 
 
-      this.axios.post(process.env.VUE_APP_API_URL + '/get_tag_list', {})
+      this.axios.get(`${process.env.VUE_APP_API_URL}/tag_list`)
       .then(response => {
 
         // Recreate list of tags
