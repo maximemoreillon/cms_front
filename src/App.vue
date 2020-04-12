@@ -22,10 +22,7 @@ export default {
   components: {
     AppTemplate
   },
-  mounted() {
-    this.$store.commit('check_authentication');
-    this.$store.commit('update_categories');
-  }
+
 
 }
 </script>

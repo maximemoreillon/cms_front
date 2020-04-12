@@ -18,12 +18,12 @@ router.beforeEach((to, from, next) => {
 
   // Save authentication state in Vuex
   store.commit('check_authentication')
+  //store.commit('update_categories');
 
   // deal with authentication header
   if(Vue.$cookies.get("jwt")) axios.defaults.headers.common['Authorization'] = `Bearer ${Vue.$cookies.get('jwt')}`
   else delete axios.defaults.headers.common['Authorization']
 
-  store.commit('update_categories');
 
   next();
 

@@ -8,37 +8,70 @@ export default new Vuex.Store({
   state: {
     logged_in: false,
     username: null,
-    navigation_items: [
-      {route: '/', icon: '', label: 'All articles'},
-    ],
+    current_user: null,
+    navigation_items: [],
   },
   mutations: {
     check_authentication(state){
+
       if(Vue.$cookies.get('jwt')) {
         state.logged_in = true
 
         // Retrieve username
         axios.post(`${process.env.VUE_APP_AUTHENTICATION_API_URL}/whoami`,
         {}, { headers: { Authorization: "Bearer " + Vue.$cookies.get('jwt') } })
-        .then(response => { state.username = response.data.properties.username })
-        .catch(error => { console.log(error.response.data) })
+        .then(response => {
+          state.user = response.data
+
+          // Get rid of this
+          state.username = response.data.properties.username
+
+          this.commit('update_categories',state)
+        })
+        .catch(error => {
+          if(error.response) console.log(error.response.data)
+          else console.log(error)
+        })
 
       }
-      else state.logged_in = false
+      else {
+        state.logged_in = false
+        this.commit('update_categories',state)
+      }
     },
     update_categories(state){
-      axios.post(process.env.VUE_APP_API_URL + '/get_navigation_items')
-      .then(response => {
 
-        // delete all navigation items (except the first one)
-        state.navigation_items.splice(1,state.navigation_items.length)
+      // delete all navigation items
+      //state.navigation_items.splice(0,state.navigation_items.length)
+
+      state.navigation_items = [{route: '/', icon: '', label: 'All articles'}]
+
+
+      if(state.user) {
+
+        state.navigation_items.push({
+          route: `/?author_id=${state.user.identity.low}`,
+          icon: '',
+          label: 'My articles'
+        })
+
+      }
+
+
+
+
+      // Get pinned tags
+      axios.get(`${process.env.VUE_APP_API_URL}/navigation_items`)
+      .then(response => {
 
         response.data.forEach( record => {
           let tag = record._fields[record._fieldLookup['tag']]
-          let navigation_item = {route: `/?tag_id=${tag.identity.low}`, icon: '', label: tag.properties.name}
-          state.navigation_items.push(navigation_item)
+          state.navigation_items.push({
+            route: `/?tag_id=${tag.identity.low}`,
+            icon: '',
+            label: tag.properties.name,
+          })
         });
-
 
       })
       .catch(error => console.log(error))

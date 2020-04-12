@@ -5,7 +5,7 @@
     <!-- Selected author -->
     <!-- TODO: Use something else than a toolbar -->
     <Toolbar v-if="author.properties">
-        <Author v-bind:author="author"/>
+        Showing articles written by <Author v-bind:author="author"/>
 
         <!-- remove author filter -->
         <IconButton
@@ -311,7 +311,7 @@ export default {
 
       if(author_id){
         this.$set(this.author,'loading',true)
-        this.axios.post(process.env.VUE_APP_API_URL + '/author', {
+        this.axios.get(`${process.env.VUE_APP_API_URL}/author`, {
           params: {author_id: author_id},
         })
         .then(response => { this.author = response.data })
