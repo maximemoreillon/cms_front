@@ -4,7 +4,6 @@ stages:
 
 variables:
   APPLICATION_NAME: cms-front
-  CONTAINER_REGISTRY: 192.168.1.2:5000
 
 containerization:
   stage: containerization
@@ -15,7 +14,7 @@ containerization:
 deployment:
   stage: deployment
   script:
-    - kubectl apply -f deployment.yml
+    - envsubst < deployment.yml | kubectl apply -f -
     - kubectl rollout restart deployment/${APPLICATION_NAME}
   environment:
     name: staging
