@@ -31,8 +31,6 @@ export default {
   flex-grow: 1;
 }
 
-
-
 .dates_container {
   font-size: 80%;
   color: #666666;
