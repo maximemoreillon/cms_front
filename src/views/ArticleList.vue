@@ -266,6 +266,9 @@ export default {
       })
       .then(response => {
 
+        if(response.data < 1) return
+
+
         let first_record = response.data[0]
         this.article_count = first_record._fields[first_record._fieldLookup['article_count']].low
 
