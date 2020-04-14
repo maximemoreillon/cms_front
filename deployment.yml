@@ -15,7 +15,7 @@ spec:
 
       containers:
       - name: cms-front
-        image: 192.168.1.2:5000/cms-front
+        image: ${CONTAINER_REGISTRY}/cms-front
         imagePullPolicy: Always
         ports:
         - containerPort: 80
@@ -30,7 +30,7 @@ metadata:
 spec:
   ports:
   - port: 80
-    nodePort: 30102
+    nodePort: ${SERVICE_PORT}
   selector:
     app: cms-front
   type: LoadBalancer
