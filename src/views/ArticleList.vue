@@ -253,7 +253,7 @@ export default {
 
       this.articles_loading = true
 
-      this.axios.get(process.env.VUE_APP_API_URL + '/articles', {
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles`, {
         params: {
           sort : this.sort,
           order : this.order,
@@ -294,7 +294,7 @@ export default {
 
       if(tag_id){
         this.tag_loading = true;
-        this.axios.get(process.env.VUE_APP_API_URL + '/tag', {
+        this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/tag`, {
           params: {tag_id: tag_id},
         })
         .then(response => { this.tag = response.data })
@@ -311,7 +311,7 @@ export default {
 
       if(author_id){
         this.$set(this.author,'loading',true)
-        this.axios.get(`${process.env.VUE_APP_API_URL}/author`, {
+        this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/author`, {
           params: {author_id: author_id},
         })
         .then(response => { this.author = response.data })
@@ -349,7 +349,7 @@ export default {
 
       this.tag_loading = true;
 
-      this.axios.post(process.env.VUE_APP_API_URL + '/update_tag', {
+      this.axios.post(process.env.VUE_APP_CMS_API_URL + '/update_tag', {
         tag: this.tag
       })
       .then( response => {
@@ -387,7 +387,7 @@ export default {
       if(confirm('Delete tag?')){
         this.article_loading = true;
 
-        this.axios.post(process.env.VUE_APP_API_URL + '/delete_tag', {
+        this.axios.post(process.env.VUE_APP_CMS_API_URL + '/delete_tag', {
           tag_id: this.tag.identity.low
         })
         .then( () => {

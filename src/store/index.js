@@ -61,7 +61,7 @@ export default new Vuex.Store({
 
 
       // Get pinned tags
-      axios.get(`${process.env.VUE_APP_API_URL}/navigation_items`)
+      axios.get(`${process.env.VUE_APP_CMS_API_URL}/navigation_items`)
       .then(response => {
 
         response.data.forEach( record => {

@@ -247,7 +247,7 @@ export default {
         this.article_loading = true;
 
 
-        this.axios.get(`${process.env.VUE_APP_API_URL}/article?id=${this.$route.query.id}`)
+        this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/article?id=${this.$route.query.id}`)
         .then(response => {
 
           this.article_loading = false;
@@ -282,7 +282,7 @@ export default {
 
       this.tags_loading = true
       this.tags.splice(0,this.tags.length)
-      this.axios.get(`${process.env.VUE_APP_API_URL}/tags_of_article?id=${this.$route.query.id}`)
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/tags_of_article?id=${this.$route.query.id}`)
       .then(response => {
 
         this.tags_loading = false
@@ -306,7 +306,7 @@ export default {
       this.comments_loading = true
       this.comments.splice(0,this.comments.length)
 
-      this.axios.get(`${process.env.VUE_APP_API_URL}/comments_of_article?id=${this.$route.query.id}`)
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/comments_of_article?id=${this.$route.query.id}`)
       .then(response => {
 
         this.comments_loading = false
@@ -327,7 +327,7 @@ export default {
 
     get_author_of_article(){
 
-      this.axios.get(`${process.env.VUE_APP_API_URL}/author_of_article?id=${this.$route.query.id}`)
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/author_of_article?id=${this.$route.query.id}`)
       .then(response => {
         this.author = response.data[0]._fields[response.data[0]._fieldLookup['author']]
       })
@@ -336,7 +336,7 @@ export default {
     },
 
     create_comment(){
-      this.axios.post(process.env.VUE_APP_API_URL + '/create_comment', {
+      this.axios.post(process.env.VUE_APP_CMS_API_URL + '/create_comment', {
         article_id: this.article.identity.low,
         comment: this.comment,
       })
@@ -454,3 +454,4 @@ textarea {
 
 
 </style>
+VUE_APP_CMS_API_URL

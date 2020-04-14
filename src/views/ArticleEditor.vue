@@ -488,7 +488,7 @@ export default {
         // this gets titptap to throw errors
         this.article_loading = true;
 
-        this.axios.get(`${process.env.VUE_APP_API_URL}/article?id=${this.$route.query.id}`)
+        this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/article?id=${this.$route.query.id}`)
         .then(response => {
 
           // parsing neo4j record for article
@@ -512,7 +512,7 @@ export default {
     get_tags_of_article(){
 
       this.tags_loading = true
-      this.axios.get(`${process.env.VUE_APP_API_URL}/tags_of_article`,{
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/tags_of_article`,{
         params: {id: this.article.identity.low}
       })
       .then(response => {
@@ -539,7 +539,7 @@ export default {
 
       if(this.article.identity.low){
         // if the article has an ID, UPDATE
-        this.axios.post(`${process.env.VUE_APP_API_URL}/update_article`, {
+        this.axios.post(`${process.env.VUE_APP_CMS_API_URL}/update_article`, {
           article: this.article,
           tag_ids: this.tags.map(tag => tag.identity.low),
         })
@@ -558,7 +558,7 @@ export default {
       }
       else {
         // If the article does not have an ID, CREATE
-        this.axios.post(process.env.VUE_APP_API_URL + '/create_article', {
+        this.axios.post(process.env.VUE_APP_CMS_API_URL + '/create_article', {
           article: this.article,
           tag_ids: this.tags.map(tag => tag.identity.low),
         })
@@ -579,7 +579,7 @@ export default {
     delete_article(){
       if(confirm('Delete article?')){
         this.article_loading = true;
-        this.axios.post(process.env.VUE_APP_API_URL + '/delete_article', {
+        this.axios.post(process.env.VUE_APP_CMS_API_URL + '/delete_article', {
           article_id: this.article.identity.low
         })
         .then( () => {
@@ -596,7 +596,7 @@ export default {
 
     add_tag(){
       if(this.$refs.tag_input.value.length > 0){
-        this.axios.post(process.env.VUE_APP_API_URL + '/create_tag', {
+        this.axios.post(process.env.VUE_APP_CMS_API_URL + '/create_tag', {
           tag_name: this.$refs.tag_input.value
         })
         .then(response => {
@@ -623,7 +623,7 @@ export default {
     get_existing_tags(){
 
 
-      this.axios.get(`${process.env.VUE_APP_API_URL}/tag_list`)
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/tag_list`)
       .then(response => {
 
         // Recreate list of tags
