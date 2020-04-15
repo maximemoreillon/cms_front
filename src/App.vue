@@ -66,7 +66,4 @@ article iframe {
 
 
 
-
-
-
 </style>

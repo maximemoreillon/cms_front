@@ -7,28 +7,32 @@
     <earth-icon class="publishing_status" v-if="article.properties.published && $store.state.logged_in"/>
 
     <!-- Article title, consists of first h1 of the content -->
-    <div class="article_title">{{article.properties.title}}</div>
+    <div class="preview_header">
+      <div class="article_title">{{article.properties.title}}</div>
 
-    <!-- date -->
-    <div
-      class="article_metadata"
-      v-if="article.properties.creation_date">
-      <span class="article_date">
+      <!-- date -->
+      <div
+        class="article_date"
+        v-if="article.properties.creation_date">
         {{format_date(article.properties.creation_date)}}
-      </span>
+      </div>
     </div>
 
-    <!-- alt set to empty string to display nothing if no thumbnail -->
-    <img
-      class="article_thumbnail"
-      v-if="article.properties.thumbnail_src"
-      v-bind:src="article.properties.thumbnail_src"
-      alt="">
 
-    <!-- Summary -->
-    <div class="article_summary"
-      v-if="article.properties.summary"
-      v-html="article.properties.summary"/>
+    <!-- alt set to empty string to display nothing if no thumbnail -->
+    <div class="article_preview_body">
+      <img
+        class="article_thumbnail"
+        v-if="article.properties.thumbnail_src"
+        v-bind:src="article.properties.thumbnail_src"
+        alt="">
+
+      <!-- Summary -->
+      <div class="article_summary"
+        v-if="article.properties.summary"
+        v-html="article.properties.summary"/>
+    </div>
+
 
     <div
       class="tags_container"
@@ -41,11 +45,7 @@
 
     </div>
 
-    <Loader
-      v-else-if="tags_loading"
-      size="25"/>
-
-    <div class="" v-else>No tags</div>
+    <Loader v-else-if="tags_loading"/>
 
 
   </div>
@@ -53,7 +53,7 @@
 
 <script>
 
-import Loader from '@/components/vue_loader/Loader.vue'
+import Loader from '@moreillon/vue_loader'
 
 import {formatDate} from '@/mixins/formatDate.js'
 //import {parseArticleRecord} from '@/mixins/parseArticleRecord.js'
@@ -110,8 +110,8 @@ export default {
 
 .article_preview {
   position: relative;
-  padding: 10px;
-  flex-basis: 400px;
+  padding: 0.75em;
+  //flex-basis: 400px;
 
   cursor: pointer;
 
@@ -124,13 +124,13 @@ export default {
   border-color: #c00000;
 }
 
+.article_preview > *:not(:last-child) {
+  margin: 0.75em 0;
+}
+
 
 
 .article_title {
-
-  /* DIRTY */
-  margin-top: 10px;
-
   font-weight: bold;
   font-size: 120%;
   white-space: nowrap;
@@ -140,36 +140,34 @@ export default {
 
 
 
-.article_metadata {
+.article_date {
   font-size: 75%;
   display: flex;
   color: #666666;
 }
 
-.article_metadata > * {
-  margin-right: 5px;
-}
-
-.article_date {
-
-}
-
 .publishing_status {
+  /* not too happy with float */
   float: right;
 }
 
+.article_preview_body {
+  display: flex;
+  align-items: flex-start;
+}
+
+
 .article_summary {
-  margin-top: 5px;
   line-height: 120%;
   max-height: 100px;
   overflow-y: hidden;
 }
 
+
 .article_thumbnail {
   width: 80px;
   height: 80px;
   object-fit: contain;
-  float: left;
   margin-right: 10px;
 }
 

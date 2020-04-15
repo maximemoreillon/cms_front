@@ -267,9 +267,11 @@ export default {
       })
       .then(response => {
 
+        // Do not do anything if there is no article
         if(response.data < 1) return
 
-
+        // Every record contains the total article count
+        // Take the total article count from the first record
         let first_record = response.data[0]
         this.article_count = first_record._fields[first_record._fieldLookup['article_count']].low
 
@@ -451,10 +453,6 @@ export default {
 <style scoped>
 
 .articles_container {
-
-  /* IE fallback behavior */
-  display: flex;
-  flex-wrap: wrap;
 
   /* Normal behavior */
   display: grid;
