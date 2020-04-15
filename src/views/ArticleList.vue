@@ -22,31 +22,32 @@
     <!-- Selected tag -->
     <!-- TODO: Use something else than a toolbar -->
     <Toolbar v-if="tag && !tag_loading">
-        <Tag v-bind:tag="tag"/>
+      <Tag v-bind:tag="tag"/>
+
+      <IconButton
+        v-on:click="$router.push({ name: 'article_list' })">
+        <close-icon/>
+      </IconButton>
+
+      <template v-if="user_is_admin">
 
         <IconButton
-          v-on:click="$router.push({ name: 'article_list' })">
-          <close-icon/>
-        </IconButton>
-
-        <IconButton
-          v-if="$store.state.logged_in"
           v-on:click="prompt_for_rename()">
           <pencil-icon/>
         </IconButton>
 
         <IconButton
-          v-if="$store.state.logged_in"
           v-on:click="delete_tag()">
           <delete-icon />
         </IconButton>
 
         <IconButton
-          v-if="$store.state.logged_in"
           v-bind:active="tag.properties.navigation_item"
           v-on:click="pin_to_navbar()">
           <pin-icon />
         </IconButton>
+
+      </template>
     </Toolbar >
 
     <Loader
@@ -434,6 +435,12 @@ export default {
     }
 
   },
+  computed: {
+    user_is_admin(){
+      if(!this.$store.state.user) return false
+      return this.$store.state.user.properties.isAdmin
+    }
+  }
 
 
 
