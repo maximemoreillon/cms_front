@@ -4,6 +4,7 @@ stages:
 
 variables:
   APPLICATION_NAME: cms-front
+  SERVICE_PORT: 30102
 
 containerization:
   stage: containerization
@@ -25,3 +26,5 @@ deployment:
     - kubectl rollout restart deployment/${APPLICATION_NAME}
   environment:
     name: staging
+    kubernetes:
+      namespace: ${KUBERNETES_NAMESPACE}
