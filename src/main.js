@@ -24,7 +24,6 @@ router.beforeEach((to, from, next) => {
   if(Vue.$cookies.get("jwt")) axios.defaults.headers.common['Authorization'] = `Bearer ${Vue.$cookies.get('jwt')}`
   else delete axios.defaults.headers.common['Authorization']
 
-
   next();
 
 });
