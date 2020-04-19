@@ -4,7 +4,7 @@ stages:
 
 variables:
   APPLICATION_NAME: cms-front
-  SERVICE_PORT: 30102
+  CERTIFICATE_DOMAIN: cms.maximemoreillon.com
 
 containerization:
   stage: containerization

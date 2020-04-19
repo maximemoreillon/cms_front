@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cms-front
+  name: ${APPLICATION_NAME}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cms-front
+      app: ${APPLICATION_NAME}
   template:
     metadata:
       labels:
-        app: cms-front
+        app: ${APPLICATION_NAME}
     spec:
       containers:
-      - name: cms-front
-        image: ${CONTAINER_REGISTRY}/cms-front
+      - name: ${APPLICATION_NAME}
+        image: ${CONTAINER_REGISTRY}/${APPLICATION_NAME}
         imagePullPolicy: Always
         ports:
         - containerPort: 80
@@ -22,13 +22,31 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  labels:
-    run: cms-front
-  name: cms-front
+  name: ${APPLICATION_NAME}
 spec:
   ports:
   - port: 80
-    nodePort: ${SERVICE_PORT}
   selector:
-    app: cms-front
-  type: LoadBalancer
+    app: ${APPLICATION_NAME}
+  type: ClusterIP
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ${APPLICATION_NAME} # Name of the ingress, named after the application
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod" # This is necessary, no idea why
+spec:
+  tls:
+  - hosts:
+    - ${CERTIFICATE_DOMAIN}
+    secretName: ${APPLICATION_NAME} # Name of the secret, i.e. the certificates
+  rules:
+  - host: ${CERTIFICATE_DOMAIN}
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: ${APPLICATION_NAME} # Name of the service, named after the app
+          servicePort: 80
