@@ -4,27 +4,50 @@ stages:
 
 variables:
   APPLICATION_NAME: cms-front
-  CERTIFICATE_DOMAIN: cms.maximemoreillon.com
 
 containerization:
   stage: containerization
   script:
+    # If docker registry password provided, attempt login
+    - >
+      if [ -z ${CONTAINER_REGISTRY_PASSWORD} ];
+      then echo "CONTAINER_REGISTRY_PASSWORD not set, skipping login";
+      else echo "${CONTAINER_REGISTRY_PASSWORD}" | docker login ${CONTAINER_REGISTRY} --username ${CONTAINER_REGISTRY_USERNAME} --password-stdin;
+      fi
+    # Copy environment variables from gitlab
     - cp ${ENV} ./.env.production
+    # Building the container image
     - >
       docker build
       --build-arg HTTP_PROXY=$HTTP_PROXY
       --build-arg HTTPS_PROXY=$HTTPS_PROXY
       -t ${CONTAINER_REGISTRY}/${APPLICATION_NAME}
       .
+    # Pushing the image to the registry
     - docker push ${CONTAINER_REGISTRY}/${APPLICATION_NAME}
+    # Cleanup
     - docker image rm ${CONTAINER_REGISTRY}/${APPLICATION_NAME}
 
 deployment:
   stage: deployment
   script:
+    # create/update the deployment
     - envsubst < deployment.yml | kubectl apply -f -
+    # Pull latest image of deployment
     - kubectl rollout restart deployment/${APPLICATION_NAME}
+    # If a nodeport is specified, serve app through a nodeport service
+    - >
+      if [ -z ${SERVICE_PORT} ];
+      then echo "SERVICE_PORT not set, skipping creation of NodePort service";
+      else envsubst < nodeport_service.yml | kubectl apply -f -;
+      fi
+    # if a domain name is specified, serve app through an ingress
+    - >
+      if [ -z ${CERTIFICATE_DOMAIN} ];
+      then echo "CERTIFICATE_DOMAIN not set, skipping creation of ingress";
+      else envsubst < ingress.yml | kubectl apply -f -;
+      fi
   environment:
-    name: staging
+    name: production
     kubernetes:
-      namespace: ${KUBERNETES_NAMESPACE}
+      namespace: ${KUBERNETES_NAMESPACE} # Obtained from GitLab
