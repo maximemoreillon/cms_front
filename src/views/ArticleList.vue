@@ -13,10 +13,12 @@
           <close-icon/>
         </IconButton>
     </Toolbar >
+    <Toolbar v-else-if="author.loading">
+      <Loader />
+    </Toolbar >
 
-    <Loader
-      v-else-if="author.loading"
-      size="25"/>
+
+
 
 
     <!-- Selected tag -->
@@ -50,10 +52,12 @@
       </template>
     </Toolbar >
 
-    <Loader
-      v-else-if="tag_loading"
-      size="25"/>
+    <Toolbar v-else-if="tag_loading">
+      <Loader />
+    </Toolbar >
+
     <Toolbar >
+
 
       <!-- Sorting and ordering -->
       <div class="tool_cluster">
@@ -127,7 +131,10 @@
     </div>
 
     <!-- loader -->
-    <Loader v-if="articles_loading"/>
+    <div class="loader_container" v-if="articles_loading">
+      <Loader />
+    </div>
+
     <!-- No articles indicator -->
     <div class="" v-if="articles.length === 0 && !articles_loading">No articles</div>
 
@@ -146,10 +153,11 @@
 
 <script>
 
+import Loader from '@moreillon/vue_loader'
+
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import ArticlePreview from '@/components/ArticlePreview.vue'
 import Toolbar from '@/components/Toolbar.vue'
-import Loader from '@/components/vue_loader/Loader.vue'
 import Tag from '@/components/Tag.vue'
 import Author from '@/components/Author.vue'
 
@@ -268,7 +276,7 @@ export default {
       .then(response => {
 
         // Do not do anything if there is no article
-        if(response.data < 1) return
+        if(response.data < 1) return this.articles_all_loaded = true
 
         // Every record contains the total article count
         // Take the total article count from the first record
@@ -280,8 +288,10 @@ export default {
           this.articles.push(article)
         });
 
-        // Check if all articles loaded (less than 10)
-        if(response.data.length < this.batch_size) this.articles_all_loaded = true;
+        // Check if all articles loaded (less than batch size)
+        if(response.data.length < this.batch_size) {
+          this.articles_all_loaded = true
+        }
 
 
       })
@@ -289,9 +299,7 @@ export default {
         if(error.response) alert(error.response.data)
         else alert(error)
       })
-      .finally(() => {
-        this.articles_loading = false;
-      })
+      .finally(() => { this.articles_loading = false })
 
     },
 
@@ -514,6 +522,12 @@ export default {
 .search_wrapper {
   display: flex;
   align-items: stretch;
+}
+
+.loader_container {
+  margin: 1em;
+  text-align: center;
+  font-size: 300%;
 }
 
 </style>
