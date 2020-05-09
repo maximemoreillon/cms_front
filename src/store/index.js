@@ -44,21 +44,15 @@ export default new Vuex.Store({
       // delete all navigation items
       //state.navigation_items.splice(0,state.navigation_items.length)
 
-      state.navigation_items = [{route: '/', icon: '', label: 'All articles'}]
-
+      state.navigation_items = [{route: '/', label: 'All articles'}]
 
       if(state.user) {
 
         state.navigation_items.push({
           route: `/?author_id=${state.user.identity.low}`,
-          icon: '',
           label: 'My articles'
         })
-
       }
-
-
-
 
       // Get pinned tags
       axios.get(`${process.env.VUE_APP_CMS_API_URL}/navigation_items`)
@@ -68,7 +62,6 @@ export default new Vuex.Store({
           let tag = record._fields[record._fieldLookup['tag']]
           state.navigation_items.push({
             route: `/?tag_id=${tag.identity.low}`,
-            icon: '',
             label: tag.properties.name,
           })
         });

@@ -99,11 +99,6 @@
       </Toolbar>
 
 
-
-
-
-
-
       <!-- editor for the content of the article -->
       <div class="editor_wrapper">
         <editor-menu-bar :editor="editor" v-slot="{ commands, isActive, getMarkAttrs }">

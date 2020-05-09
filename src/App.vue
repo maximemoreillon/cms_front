@@ -3,8 +3,21 @@
   <div id="app">
 
     <AppTemplate
-      v-bind:navigation="$store.state.navigation_items"
-      applicationName="CMS"/>
+      applicationName="CMS">
+
+      <!-- proper way to embed navigation -->
+      <template v-slot:navigation>
+        <router-link
+          v-for="(item, index) in $store.state.navigation_items"
+          v-bind:key="`nav_${index}`"
+          :to="item.route">
+          {{item.label}}
+        </router-link>
+      </template>
+
+      <router-view />
+
+    </AppTemplate>
 
   </div>
 
@@ -34,6 +47,9 @@ export default {
 }
 /* Styles shared by all views */
 
+main {
+  padding: 1em 2vw;
+}
 main a {
   font-weight: bold;
   text-decoration: none;

@@ -83,14 +83,15 @@
     <!-- Comments -->
     <div
       class="comment_area_wrapper"
-      v-if="article && !article_loading">
+      v-if="article && !article_loading && false">
 
       <div class="new_comment_wrapper" >
 
-        <div class="">
+        <h2 class="">
           Leave a comment
-        </div>
+        </h2>
         <div class="">
+          <label>Name: </label>
           <input
             type="text"
             v-model="comment.properties.author"
