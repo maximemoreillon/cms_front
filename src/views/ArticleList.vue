@@ -403,24 +403,33 @@ export default {
       }
     },
     load_more_when_scroll_to_bottom(){
-      this.$refs.view.parentNode.onscroll = () => {
+      // THIS IS HIGHLY TEMPLATE DEPENDANT!
 
+      let current_view = this.$refs.view
+      let main_and_footer_wrapper = current_view.parentNode.parentNode
+
+
+      main_and_footer_wrapper.onscroll = () => {
+
+        // only apply to article_list route
         if(this.$route.name === 'article_list'){
-          // THIS IS HIGHLY TEMPLATE DEPENDANT!
-          let router_view = this.$refs.view
-          let main = router_view.parentNode
-          let footer = main.getElementsByTagName('footer')[0]
 
-          let content_height = router_view.offsetHeight + footer.offsetHeight
-          let content_view_bottom = main.scrollTop + main.offsetHeight
+          let main = current_view.parentNode
+          let footer = main_and_footer_wrapper.getElementsByTagName('footer')[0]
+
+          let content_height = main.offsetHeight + footer.offsetHeight
+
+          let content_view_bottom = main_and_footer_wrapper.offsetHeight + main_and_footer_wrapper.scrollTop
 
           let delta = Math.abs(content_height - content_view_bottom)
+
 
           if( delta < 5){
             if(!this.articles_loading && this.articles.length > 0 && !this.articles_all_loaded) {
               this.get_articles();
             }
           }
+
         }
       }
     },
