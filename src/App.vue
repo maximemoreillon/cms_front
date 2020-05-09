@@ -7,6 +7,8 @@
 
       <!-- proper way to embed navigation -->
       <template v-slot:navigation>
+        <router-link to="/">All articles</router-link>
+
         <router-link
           v-for="(item, index) in $store.state.navigation_items"
           v-bind:key="`nav_${index}`"

@@ -30,9 +30,8 @@
           v-bind:key="tag.identity.low"
           v-bind:tag="tag"/>
       </div>
-      <Loader
-        v-else-if="tags_loading"
-        size="25"/>
+      
+      <Loader v-else-if="tags_loading"/>
 
 
 
@@ -158,11 +157,12 @@
 
 <script>
 
+import Loader from '@moreillon/vue_loader'
+import Modal from '@moreillon/vue_modal'
+
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
 //import Modal from '@/components/vue_modal/Modal.vue'
-import Modal from '@moreillon/vue_modal'
 import Toolbar from '@/components/Toolbar.vue'
-import Loader from '@/components/vue_loader/Loader.vue'
 
 import Tag from '@/components/Tag.vue'
 import Author from '@/components/Author.vue'

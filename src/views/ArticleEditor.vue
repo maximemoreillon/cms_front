@@ -240,13 +240,13 @@
 
 <script>
 
+import Loader from '@moreillon/vue_loader'
 
 import {formatDate} from '@/mixins/formatDate.js'
 //import {parseArticleRecord} from '@/mixins/parseArticleRecord.js'
 
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import Toolbar from '@/components/Toolbar.vue'
-import Loader from '@/components/vue_loader/Loader.vue'
 import Tag from '@/components/Tag.vue'
 
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap'

@@ -44,7 +44,7 @@ export default new Vuex.Store({
       // delete all navigation items
       //state.navigation_items.splice(0,state.navigation_items.length)
 
-      state.navigation_items = [{route: '/', label: 'All articles'}]
+      state.navigation_items = []
 
       if(state.user) {
 
