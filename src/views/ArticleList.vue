@@ -283,8 +283,13 @@ export default {
         let first_record = response.data[0]
         this.article_count = first_record._fields[first_record._fieldLookup['article_count']].low
 
+
         response.data.forEach( record => {
           let article = record._fields[record._fieldLookup['article']]
+          let author = record._fields[record._fieldLookup['author']]
+          let relationship = record._fields[record._fieldLookup['relationship']]
+          this.$set(article,'author',author)
+          this.$set(article,'relationship',relationship)
           this.articles.push(article)
         });
 

@@ -5,11 +5,11 @@
     <Toolbar v-if="article">
 
       <div class="dates_container">
-        <div class="" v-if="article.properties.creation_date">
-          Created: {{format_date(article.properties.creation_date)}}
+        <div class="" v-if="relationship.properties.creation_date">
+          Created: {{format_date(relationship.properties.creation_date)}}
         </div>
-        <div class="" v-if="article.properties.edition_date">
-          Edited: {{format_date(article.properties.edition_date)}}
+        <div class="" v-if="relationship.properties.edition_date">
+          Edited: {{format_date(relationship.properties.edition_date)}}
         </div>
       </div>
 
@@ -30,7 +30,7 @@
           v-bind:key="tag.identity.low"
           v-bind:tag="tag"/>
       </div>
-      
+
       <Loader v-else-if="tags_loading"/>
 
 
@@ -228,6 +228,7 @@ export default {
       },
 
       author: null,
+      relationship: null,
 
 
       modal: {
@@ -238,12 +239,12 @@ export default {
   },
 
   mounted() {
-    this.get_content();
+    this.get_article();
 
   },
   methods: {
 
-    get_content(){
+    get_article(){
       if('id' in this.$route.query){
         this.article_loading = true;
 
@@ -253,8 +254,12 @@ export default {
 
           this.article_loading = false;
 
+          let record = response.data[0]
+
           // parsing the article
-          this.article = response.data[0]._fields[response.data[0]._fieldLookup['article']]
+          this.article = record._fields[record._fieldLookup['article']]
+          this.author = record._fields[record._fieldLookup['author']]
+          this.relationship = record._fields[record._fieldLookup['relationship']]
 
           // Make the images clickable to expand
           setTimeout(this.add_event_listeners_for_image_modals,100);
@@ -269,7 +274,6 @@ export default {
 
           this.get_tags_of_article()
           this.get_comments_of_article()
-          this.get_author_of_article()
 
 
         })
@@ -326,15 +330,7 @@ export default {
 
     },
 
-    get_author_of_article(){
 
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/author_of_article?id=${this.$route.query.id}`)
-      .then(response => {
-        this.author = response.data[0]._fields[response.data[0]._fieldLookup['author']]
-      })
-      .catch(error => alert(error.response.data))
-
-    },
 
     create_comment(){
       this.axios.post(process.env.VUE_APP_CMS_API_URL + '/create_comment', {

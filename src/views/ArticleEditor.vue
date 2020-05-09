@@ -10,8 +10,8 @@
       <Toolbar>
 
         <div class="dates_container">
-          <div class="" v-if="article.properties.creation_date">Created on {{format_date(article.properties.creation_date)}}</div>
-          <div class="" v-if="article.properties.edition_date">Last edited on {{format_date(article.properties.edition_date)}}</div>
+          <div class="" v-if="relationship.properties.creation_date">Created on {{format_date(relationship.properties.creation_date)}}</div>
+          <div class="" v-if="relationship.properties.edition_date">Last edited on {{format_date(relationship.properties.edition_date)}}</div>
         </div>
 
         <!-- Allow loading of HTML file -->
@@ -446,6 +446,8 @@ export default {
         }
       },
 
+      relationship: null,
+
       tags: [],
       tags_loading: false,
 
@@ -486,8 +488,11 @@ export default {
         this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/article?id=${this.$route.query.id}`)
         .then(response => {
 
+          let record = response.data[0]
+
           // parsing neo4j record for article
-          this.article = response.data[0]._fields[response.data[0]._fieldLookup['article']]
+          this.article = record._fields[record._fieldLookup['article']]
+          this.relationship = record._fields[record._fieldLookup['relationship']]
 
           // Applying to content of editor
           this.editor.setContent(this.article.properties.content);

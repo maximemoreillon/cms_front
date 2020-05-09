@@ -13,8 +13,8 @@
       <!-- date -->
       <div
         class="article_date"
-        v-if="article.properties.creation_date">
-        {{format_date(article.properties.creation_date)}}
+        v-if="article.relationship.properties.creation_date">
+        {{format_date(article.relationship.properties.creation_date)}}
       </div>
     </div>
 
@@ -102,7 +102,8 @@ export default {
       })
       .catch(error =>  alert(error.response.data) )
     }
-  }
+  },
+
 }
 </script>
 
