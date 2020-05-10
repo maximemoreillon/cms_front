@@ -33,9 +33,6 @@
 
       <Loader v-else-if="tags_loading"/>
 
-
-
-
       <div class="growing_spacer"/>
 
       <div class="tool_cluster">

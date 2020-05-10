@@ -50,6 +50,7 @@
         </IconButton>
 
       </template>
+
     </Toolbar >
 
     <Toolbar v-else-if="tag_loading">
@@ -89,6 +90,7 @@
 
 
       <!-- article counter -->
+      <!-- Maybe not necessary -->
       <span class="article_counter">
         <file-document-outline-icon />x{{article_count}}
       </span>
@@ -98,6 +100,7 @@
         <input
           type="search"
           class="search_bar"
+          ref="search"
           v-bind:class="{search_bar_open: search_bar_open}"
           v-model="search_string"
           v-on:keyup.enter="search()">
@@ -452,9 +455,12 @@ export default {
         this.delete_all_articles()
         this.get_articles()
         // Todo: this would be done inside the search bar component
-        if(this.search_string === '') this.search_bar_open = false;
+        if(this.search_string === '') this.search_bar_open = false
       }
-      else this.search_bar_open = true;
+      else {
+        this.search_bar_open = true
+        setTimeout(() => this.$refs.search.focus(),50)
+      }
 
     }
 

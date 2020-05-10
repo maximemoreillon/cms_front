@@ -10,12 +10,24 @@
     <div class="preview_header">
       <div class="article_title">{{article.properties.title}}</div>
 
-      <!-- date -->
-      <div
-        class="article_date"
-        v-if="article.relationship.properties.creation_date">
-        {{format_date(article.relationship.properties.creation_date)}}
+      <div class="article_metadata">
+
+        <!-- date -->
+        <div
+          class="article_date"
+          v-if="article.relationship.properties.creation_date">
+          {{format_date(article.relationship.properties.creation_date)}}
+        </div>
+
+        <!-- Author -->
+        <div
+          class="article_author"
+          v-if="article.author.properties.username && false">
+          {{article.author.properties.username}}
+        </div>
       </div>
+
+
     </div>
 
 
@@ -28,9 +40,12 @@
         alt="">
 
       <!-- Summary -->
-      <div class="article_summary"
+      <dot
+        class="article_summary"
         v-if="article.properties.summary"
-        v-html="article.properties.summary"/>
+        :msg="article.properties.summary"
+        :line="4"/>
+
     </div>
 
 
@@ -56,7 +71,7 @@
 import Loader from '@moreillon/vue_loader'
 
 import {formatDate} from '@/mixins/formatDate.js'
-//import {parseArticleRecord} from '@/mixins/parseArticleRecord.js'
+import dot from 'vue-text-dot'
 
 import Tag from '@/components/Tag.vue'
 import EarthIcon from 'vue-material-design-icons/Earth.vue';
@@ -80,6 +95,7 @@ export default {
   components: {
     Tag,
     Loader,
+    dot,
 
     // Icons
     EarthIcon
@@ -112,7 +128,6 @@ export default {
 .article_preview {
   position: relative;
   padding: 0.75em;
-  //flex-basis: 400px;
 
   cursor: pointer;
 
@@ -123,10 +138,6 @@ export default {
 
 .article_preview:hover {
   border-color: #c00000;
-}
-
-.article_preview > *:not(:last-child) {
-  margin: 0.75em 0;
 }
 
 
@@ -140,11 +151,15 @@ export default {
 }
 
 
-
-.article_date {
-  font-size: 75%;
+.article_metadata {
+  margin-top: 0.25em;
   display: flex;
+  font-size: 75%;
   color: #666666;
+}
+
+.article_metadata > *:not(:last-child) {
+  margin-right: 0.25em;
 }
 
 .publishing_status {
@@ -154,22 +169,25 @@ export default {
 
 .article_preview_body {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
 }
 
 
 .article_summary {
-  line-height: 120%;
-  max-height: 100px;
-  overflow-y: hidden;
+  overflow-x: hidden;
+  line-height: 1em;
+}
+
+p {
+  outline: 1px solid blue;
 }
 
 
 .article_thumbnail {
-  width: 80px;
-  height: 80px;
+  max-width: 5em;
+  max-height: 5em;
   object-fit: contain;
-  margin-right: 10px;
+  margin-right: 1em;
 }
 
 
