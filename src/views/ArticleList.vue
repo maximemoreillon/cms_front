@@ -535,10 +535,6 @@ export default {
   align-items: stretch;
 }
 
-.loader_container {
-  margin: 1em;
-  text-align: center;
-  font-size: 300%;
-}
+
 
 </style>

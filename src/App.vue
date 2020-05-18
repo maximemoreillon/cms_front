@@ -79,7 +79,11 @@ article iframe {
   height: 30vw;
 }
 
-
+.loader_container {
+  margin: 1em;
+  text-align: center;
+  font-size: 300%;
+}
 
 
 </style>

@@ -9,10 +9,14 @@
 
       <Toolbar>
 
-        <div class="dates_container">
+
+        <div
+          class="dates_container"
+          v-if="relationship">
           <div class="" v-if="relationship.properties.creation_date">Created on {{format_date(relationship.properties.creation_date)}}</div>
           <div class="" v-if="relationship.properties.edition_date">Last edited on {{format_date(relationship.properties.edition_date)}}</div>
         </div>
+
 
         <!-- Allow loading of HTML file -->
         <!--
@@ -73,8 +77,6 @@
             <pencil-icon/>
           </IconButton>
 
-
-
           <IconButton
             v-on:click="submit_article()">
             <content-save-icon />
@@ -86,15 +88,12 @@
             <delete-icon />
           </IconButton>
 
-
           <IconButton
             v-on:click="toggle_published()"
             v-bind:active="article.properties.published">
             <earth-icon/>
           </IconButton>
         </div>
-
-
 
       </Toolbar>
 
@@ -225,7 +224,10 @@
       </div>
     </div>
 
-    <Loader v-if="$store.state.logged_in && article_loading"/>
+    <!-- loader -->
+    <div class="loader_container" v-if="$store.state.logged_in && article_loading">
+      <Loader />
+    </div>
 
     <div class="" v-if="!$store.state.logged_in">
       Articles cannot be edited by unauthenticated user
