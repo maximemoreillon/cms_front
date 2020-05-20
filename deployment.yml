@@ -15,7 +15,7 @@ spec:
       containers:
       - name: ${APPLICATION_NAME}
         image: ${CONTAINER_REGISTRY}/${APPLICATION_NAME}
-        imagePullPolicy: Always
+        imagePullPolicy: Always # Pull new image on restart
         ports:
         - containerPort: 80
       imagePullSecrets:
