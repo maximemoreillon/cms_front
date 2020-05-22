@@ -73,7 +73,7 @@ article img {
   margin-right: auto;
   cursor: pointer;
 
-  width: 60%;
+  max-width: 60%;
   max-height: 40vh;
   object-fit: contain;
 
