@@ -3,7 +3,9 @@
   <div id="app">
 
     <AppTemplate
-      applicationName="CMS">
+      applicationName="CMS"
+      authenticationApiUrl="http://172.16.98.151:30091"
+      authenticationFrontUrl="http://172.16.98.151:31091">
 
       <!-- proper way to embed navigation -->
       <template v-slot:navigation>
@@ -37,6 +39,12 @@ export default {
   components: {
     AppTemplate
   },
+  data(){
+    return{
+      authenticationApiUrl : process.env.VUE_APP_AUTHENTICATION_API_URL,
+      authenticationFrontUrl : process.env.VUE_APP_AUTHENTICATION_FRONT_URL,
+    }
+  }
 }
 </script>
 
