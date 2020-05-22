@@ -69,8 +69,7 @@ article img {
 
 
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 3em auto;
   cursor: pointer;
 
   max-width: 60%;
