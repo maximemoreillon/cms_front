@@ -4,8 +4,8 @@
 
     <AppTemplate
       applicationName="CMS"
-      authenticationApiUrl="http://172.16.98.151:30091"
-      authenticationFrontUrl="http://172.16.98.151:31091">
+      :authenticationApiUrl="authenticationApiUrl"
+      :authenticationFrontUrl="authenticationFrontUrl">
 
       <!-- proper way to embed navigation -->
       <template v-slot:navigation>
