@@ -278,6 +278,8 @@ export default {
       })
       .then(response => {
 
+        console.log(response.data)
+
         // Do not do anything if there is no article
         if(response.data < 1) return this.articles_all_loaded = true
 
@@ -287,19 +289,23 @@ export default {
         this.article_count = first_record._fields[first_record._fieldLookup['article_count']].low
 
 
-        response.data.forEach( record => {
+        response.data.forEach( (record, index) => {
           let article = record._fields[record._fieldLookup['article']]
           let author = record._fields[record._fieldLookup['author']]
           let relationship = record._fields[record._fieldLookup['relationship']]
           this.$set(article,'author',author)
           this.$set(article,'relationship',relationship)
-          this.articles.push(article)
+          // prevent pushing all articles at once, because it crashes the system
+          setTimeout(() => this.articles.push(article), index*10)
+
         });
+
 
         // Check if all articles loaded (less than batch size)
         if(response.data.length < this.batch_size) {
           this.articles_all_loaded = true
         }
+
 
 
       })
