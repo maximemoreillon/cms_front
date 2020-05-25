@@ -278,8 +278,6 @@ export default {
       })
       .then(response => {
 
-        console.log(response.data)
-
         // Do not do anything if there is no article
         if(response.data < 1) return this.articles_all_loaded = true
 

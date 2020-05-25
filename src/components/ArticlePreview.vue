@@ -22,7 +22,7 @@
         <!-- Author -->
         <div
           class="article_author"
-          v-if="article.author.properties.username && false">
+          v-if="article.author.properties.username">
           {{article.author.properties.username}}
         </div>
       </div>
@@ -40,11 +40,10 @@
         alt="">
 
       <!-- Summary -->
-      <dot
+      <div
         class="article_summary"
         v-if="article.properties.summary"
-        :msg="article.properties.summary"
-        :line="4"/>
+        v-html="article.properties.summary"/>
 
     </div>
 
@@ -71,7 +70,7 @@
 import Loader from '@moreillon/vue_loader'
 
 import {formatDate} from '@/mixins/formatDate.js'
-import dot from 'vue-text-dot'
+//import dot from 'vue-text-dot' // not working well
 
 import Tag from '@/components/Tag.vue'
 import EarthIcon from 'vue-material-design-icons/Earth.vue';
@@ -95,7 +94,7 @@ export default {
   components: {
     Tag,
     Loader,
-    dot,
+    //dot, // not working well
 
     // Icons
     EarthIcon
@@ -127,13 +126,15 @@ export default {
 
 .article_preview {
   position: relative;
-  padding: 0.75em;
 
   cursor: pointer;
 
   /*box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);*/
   border: 1px solid #dddddd;
   transition: border-color 0.25s;
+}
+.article_preview > * {
+  margin: 1em
 }
 
 .article_preview:hover {
@@ -174,8 +175,9 @@ export default {
 
 
 .article_summary {
-  overflow-x: hidden;
+  overflow-y: hidden;
   line-height: 1em;
+  max-height: 5em;
 }
 
 p {
@@ -197,7 +199,7 @@ p {
 }
 
 .tags_container > *{
-  margin: 5px 0;
+  //margin: 0.25em 0;
 
 }
 
