@@ -177,7 +177,7 @@ export default {
 .article_summary {
   overflow-y: hidden;
   line-height: 1em;
-  max-height: 5em;
+  max-height: 5.5em;
 }
 
 p {
