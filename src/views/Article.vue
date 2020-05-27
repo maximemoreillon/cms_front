@@ -2,136 +2,140 @@
   <div class="container" >
 
     <!-- Toolbar, currently just for edit button -->
-    <Toolbar v-if="article">
 
-      <div class="dates_container">
-        <div class="" v-if="relationship.properties.creation_date">
-          Created: {{format_date(relationship.properties.creation_date)}}
+    <template v-if="article">
+      <Toolbar>
+
+        <!-- publish indicator -->
+        <earth-icon
+          v-if="article.properties.published"/>
+        <lock-icon v-else />
+
+        <!-- Dates -->
+        <div class="dates_wrapper toolbar_wrapper">
+          <calendar-icon />:
+          <div class="dates_container">
+            <div class="" v-if="relationship.properties.creation_date">
+              Created: {{format_date(relationship.properties.creation_date)}}
+            </div>
+            <div class="" v-if="relationship.properties.edition_date">
+              Edited: {{format_date(relationship.properties.edition_date)}}
+            </div>
+          </div>
         </div>
-        <div class="" v-if="relationship.properties.edition_date">
-          Edited: {{format_date(relationship.properties.edition_date)}}
+
+        <!-- Author -->
+        <div class="author_wrapper toolbar_wrapper">
+          <account-icon />:
+          <Author v-bind:author="author"/>
         </div>
-      </div>
-
-      <!-- publish indicator -->
-      <earth-icon
-          v-if="article.properties.published && $store.state.logged_in"/>
-
-      <!-- Author -->
-      Author: <Author v-bind:author="author"/>
 
 
-      <!-- Tags -->
-      <div
-        class="tags_wrapper"
-        v-if="tags.length > 0 && !tags_loading">
-        <Tag
-          v-for="tag in tags"
-          v-bind:key="tag.identity.low"
-          v-bind:tag="tag"/>
-      </div>
+        <!-- Tags -->
+        <template v-if="tags.length > 0 && !tags_loading">
+          <div class="tags_wrapper toolbar_wrapper">
+            <tag-icon />:
+            <Tag
+              v-for="tag in tags"
+              v-bind:key="tag.identity.low"
+              v-bind:tag="tag"/>
+          </div>
+        </template>
+        <Loader v-else-if="tags_loading"/>
 
-      <Loader v-else-if="tags_loading"/>
+        <div class="growing_spacer"/>
 
-      <div class="growing_spacer"/>
-
-      <div class="tool_cluster">
-        <IconButton
-          v-on:click="$router.push({ name: 'article_list' })">
-          <arrow-left-icon />
-        </IconButton>
-
-        <IconButton
-          v-on:click="download_as_html_file()"
-          v-if="$store.state.logged_in">
-          <download-icon />
-        </IconButton>
-
-        <!-- edit button -->
-        <IconButton
-          v-on:click="$router.push({ path: 'article_editor', query: { id: article.identity.low } })"
-          v-if="editable">
-          <pencil-icon />
-        </IconButton>
-
-        <IconButton
-          v-if="$store.state.logged_in"
-          v-on:buttonClicked="$router.push({ path: 'article_editor' })">
-          <plus-icon/>
-        </IconButton>
-      </div>
-
-
-
-    </Toolbar>
-
-
-    <!-- the article content -->
-    <article
-      v-if="article && !article_loading"
-      ref="article_content"
-      v-html="article.properties.content"/>
-
-    <!-- messages when no content -->
-    <Loader v-else-if="article_loading"/>
-    <div v-else>Article not found</div>
-
-    <!-- Comments -->
-    <div
-      class="comment_area_wrapper"
-      v-if="article && !article_loading && false">
-
-      <div class="new_comment_wrapper" >
-
-        <h2 class="">
-          Leave a comment
-        </h2>
-        <div class="">
-          <label>Name: </label>
-          <input
-            type="text"
-            v-model="comment.properties.author"
-            placeholder="Name">
-        </div>
-        <textarea
-          v-model="comment.properties.content"
-          placeholder="Comment"/>
-        <div class="create_comment_button_wrapper">
+        <div class="tool_cluster">
           <IconButton
-            v-on:buttonClicked="create_comment()">
-            <send-icon/>
+            v-on:click="$router.push({ name: 'article_list' })">
+            <arrow-left-icon />
+          </IconButton>
+
+          <IconButton
+            v-on:click="download_as_html_file()"
+            v-if="$store.state.logged_in">
+            <download-icon />
+          </IconButton>
+
+          <!-- edit button -->
+          <IconButton
+            v-on:click="$router.push({ path: 'article_editor', query: { id: article.identity.low } })"
+            v-if="editable">
+            <pencil-icon />
+          </IconButton>
+
+          <IconButton
+            v-if="$store.state.logged_in"
+            v-on:buttonClicked="$router.push({ path: 'article_editor' })">
+            <plus-icon/>
           </IconButton>
         </div>
 
 
 
-      </div>
+      </Toolbar>
 
-      <div class="comments_wrapper">
+      <!-- the article content -->
+      <article
+        v-if="article && !article_loading"
+        ref="article_content"
+        v-html="article.properties.content"/>
 
-        <template v-if="comments.length > 0 && !comments_loading">
-          <Comment
-            class="comment"
-            v-for="comment in comments"
-            v-bind:comment="comment"
-            v-bind:deletable="editable"
-            v-on:deleted="get_comments_of_article()"
-            v-bind:key="comment.identity.low"/>
-        </template>
-        <Loader v-else-if="comments_loading"/>
-        <div v-else>No comments yet</div>
+        <!-- Comments -->
+        <div
+          class="comment_area_wrapper"
+          v-if="false">
+
+          <div class="new_comment_wrapper" >
+
+            <h2 class="">
+              Leave a comment
+            </h2>
+            <div class="">
+              <label>Name: </label>
+              <input
+                type="text"
+                v-model="comment.properties.author"
+                placeholder="Name">
+            </div>
+            <textarea
+              v-model="comment.properties.content"
+              placeholder="Comment"/>
+            <div class="create_comment_button_wrapper">
+              <IconButton
+                v-on:buttonClicked="create_comment()">
+                <send-icon/>
+              </IconButton>
+            </div>
+
+          </div>
+
+          <div class="comments_wrapper">
+
+            <template v-if="comments.length > 0 && !comments_loading">
+              <Comment
+                class="comment"
+                v-for="comment in comments"
+                v-bind:comment="comment"
+                v-bind:deletable="editable"
+                v-on:deleted="get_comments_of_article()"
+                v-bind:key="comment.identity.low"/>
+            </template>
+            <Loader v-else-if="comments_loading"/>
+            <div v-else>No comments yet</div>
 
 
-      </div>
+          </div>
 
+        </div>
+
+    </template>
+
+    <!-- messages when no content -->
+    <div class="loader_container" v-else-if="article_loading">
+      <Loader />
     </div>
-
-
-
-
-
-
-
+    <div v-else>Article not found</div>
 
 
     <!-- modal for images -->
@@ -169,15 +173,20 @@ import Comment from '@/components/Comment.vue'
 import {formatDate} from '@/mixins/formatDate.js'
 //import {parseArticleRecord} from '@/mixins/parseArticleRecord.js'
 
-import highlight from 'highlight.js'
+// Not using Highlight JS anymore due to poor consistency
+//import highlight from 'highlight.js'
 
-
+// Icons
 import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue';
 import EarthIcon from 'vue-material-design-icons/Earth.vue';
 import PencilIcon from 'vue-material-design-icons/Pencil.vue';
 import DownloadIcon from 'vue-material-design-icons/Download.vue';
 import PlusIcon from 'vue-material-design-icons/Plus.vue';
 import SendIcon from 'vue-material-design-icons/Send.vue';
+import TagIcon from 'vue-material-design-icons/Tag.vue';
+import CalendarIcon from 'vue-material-design-icons/Calendar.vue';
+import AccountIcon from 'vue-material-design-icons/Account.vue';
+import LockIcon from 'vue-material-design-icons/Lock.vue';
 
 
 
@@ -197,7 +206,11 @@ export default {
     PencilIcon,
     DownloadIcon,
     PlusIcon,
-    SendIcon
+    SendIcon,
+    TagIcon,
+    CalendarIcon,
+    AccountIcon,
+    LockIcon,
   },
   mixins: [
     formatDate,
@@ -208,7 +221,6 @@ export default {
       sending: false,
 
       article: null,
-
       article_loading: false,
 
       tags: [],
@@ -251,32 +263,38 @@ export default {
 
           this.article_loading = false;
 
-          let record = response.data[0]
+          if(response.data.length > 0){
+            let record = response.data[0]
 
-          // parsing the article
-          this.article = record._fields[record._fieldLookup['article']]
-          this.author = record._fields[record._fieldLookup['author']]
-          this.relationship = record._fields[record._fieldLookup['relationship']]
+            // parsing the article
+            this.article = record._fields[record._fieldLookup['article']]
+            this.author = record._fields[record._fieldLookup['author']]
+            this.relationship = record._fields[record._fieldLookup['relationship']]
 
-          // Make the images clickable to expand
-          setTimeout(this.add_event_listeners_for_image_modals,100);
+            // Make the images clickable to expand
+            setTimeout(this.add_event_listeners_for_image_modals,100);
 
-          // Code highlight
-          setTimeout(() => {
-            document.querySelectorAll('pre code').forEach((block) => {
-              highlight.highlightBlock(block);
-            })
-          },10);
+            // Code highlight
+            /*
+            setTimeout(() => {
+              document.querySelectorAll('pre code').forEach((block) => {
+                highlight.highlightBlock(block);
+              })
+            },10);
+            */
 
-
-          this.get_tags_of_article()
-          this.get_comments_of_article()
+            // TODO: Change API so as to get this with the article
+            this.get_tags_of_article()
+            this.get_comments_of_article()
+          }
 
 
         })
         .catch(error => {
           this.article_loading = false;
-          alert(error.response.data)
+          if(error.response) console.log(error.response.data)
+          else console.log(error)
+
         })
       }
     },
@@ -390,28 +408,13 @@ export default {
   object-fit: contain;
 }
 
-.published_indicator{
-  border: 1px solid #dddddd;
-  border-radius: 5px;
-  padding: 2px;
+.toolbar_wrapper {
   display: flex;
   align-items: center;
 }
-
-.published_indicator > * {
-  margin: 0 5px;
+.toolbar_wrapper > *:not(:first-child){
+  margin-left: 0.25em;
 }
-
-.tags_wrapper {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.tags_wrapper > * {
-
-}
-
-
 .comment_area_wrapper {
   border-top: 1px solid #dddddd;
   padding-top: 10px;

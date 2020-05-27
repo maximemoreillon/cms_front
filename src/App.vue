@@ -32,7 +32,7 @@
 import AppTemplate from '@moreillon/vue_application_template'
 
 // That is the correct way to do import styles:
-import 'highlight.js/styles/obsidian.css'
+//import 'highlight.js/styles/obsidian.css'
 
 export default {
   name: 'App',

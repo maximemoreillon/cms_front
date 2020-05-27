@@ -35,28 +35,10 @@ export default {
 
 
 .author {
-  //border: 1px solid #dddddd;
-  //border-radius: 5px;
   font-weight: bold;
-  padding: 5px;
   cursor: pointer;
   transition: color 0.25s, border-color 0.25s;
 }
-
-.author:first-child {
-  margin-left: 0;
-}
-
-.remove_button {
-  margin-left: 5px;
-  cursor: pointer;
-  transition: color 0.25s;
-}
-
-.remove_button:hover {
-  color: #c00000;
-}
-
 
 .author:hover {
   color:  #c00000;

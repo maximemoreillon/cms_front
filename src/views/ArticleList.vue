@@ -178,8 +178,6 @@ import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
 import CloseIcon from 'vue-material-design-icons/Close.vue';
 
 
-//import DotsHorizontalIcon from 'vue-material-design-icons/DotsHorizontal.vue';
-
 export default {
   components: {
     IconButton,

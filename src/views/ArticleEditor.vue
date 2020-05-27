@@ -253,7 +253,7 @@ import Tag from '@/components/Tag.vue'
 
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
 import {
-  CodeBlockHighlight,
+  //CodeBlockHighlight,
   Blockquote,
   CodeBlock,
   HardBreak,
@@ -278,6 +278,7 @@ import {
 import Iframe from '@/components/Iframe.js'
 
 // HLJS languages
+/*
 import javascript from 'highlight.js/lib/languages/javascript'
 import css from 'highlight.js/lib/languages/css'
 import bash from 'highlight.js/lib/languages/bash'
@@ -286,13 +287,12 @@ import shell from 'highlight.js/lib/languages/shell'
 import dockerfile from 'highlight.js/lib/languages/dockerfile'
 import cpp from 'highlight.js/lib/languages/cpp'
 import xml from 'highlight.js/lib/languages/xml'
-
+*/
 
 // Icons
 import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue';
 import DeleteIcon from 'vue-material-design-icons/Delete.vue';
 import ContentSaveIcon from 'vue-material-design-icons/ContentSave.vue';
-//import LockIcon from 'vue-material-design-icons/Lock.vue';
 import EarthIcon from 'vue-material-design-icons/Earth.vue';
 import CodeTagsIcon from 'vue-material-design-icons/CodeTags.vue';
 import FormatHeader1Icon from 'vue-material-design-icons/FormatHeader1.vue';
@@ -309,9 +309,7 @@ import FormatQuoteCloseIcon from 'vue-material-design-icons/FormatQuoteClose.vue
 import UndoIcon from 'vue-material-design-icons/Undo.vue';
 import RedoIcon from 'vue-material-design-icons/Redo.vue';
 import LinkIcon from 'vue-material-design-icons/Link.vue';
-//import PlusIcon from 'vue-material-design-icons/Plus.vue';
 import PencilIcon from 'vue-material-design-icons/Pencil.vue';
-//import PencilOffIcon from 'vue-material-design-icons/PencilOff.vue';
 import ImageIcon from 'vue-material-design-icons/Image.vue';
 import TagIcon from 'vue-material-design-icons/Tag.vue';
 import YoutubeIcon from 'vue-material-design-icons/Youtube.vue';
@@ -396,6 +394,7 @@ export default {
             showOnlyCurrent: true,
           }),
 
+          /*
           new CodeBlockHighlight({
             languages: {
               javascript,
@@ -408,6 +407,7 @@ export default {
               xml,
             },
           }),
+          */
 
           new Iframe(), // For Youtube videos
         ],
