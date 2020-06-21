@@ -15,14 +15,9 @@ containerization:
       else echo "${CONTAINER_REGISTRY_PASSWORD}" | docker login ${CONTAINER_REGISTRY} --username ${CONTAINER_REGISTRY_USERNAME} --password-stdin;
       fi
     # Copy environment variables from gitlab
-    - cp ${ENV} ./.env.production
+    - cp ${VUE_ENV} ./.env.production
     # Building the container image
-    - >
-      docker build
-      --build-arg HTTP_PROXY=$HTTP_PROXY
-      --build-arg HTTPS_PROXY=$HTTPS_PROXY
-      -t ${CONTAINER_REGISTRY}/${APPLICATION_NAME}
-      .
+    - docker build -t ${CONTAINER_REGISTRY}/${APPLICATION_NAME} .
     # Pushing the image to the registry
     - docker push ${CONTAINER_REGISTRY}/${APPLICATION_NAME}
     # Cleanup

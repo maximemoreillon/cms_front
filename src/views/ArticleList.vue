@@ -5,7 +5,8 @@
     <!-- Selected author -->
     <!-- TODO: Use something else than a toolbar -->
     <Toolbar v-if="author.properties">
-        Showing articles written by <Author v-bind:author="author"/>
+      
+      <span>Showing articles written by <Author v-bind:author="author"/></span>
 
         <!-- remove author filter -->
         <IconButton
