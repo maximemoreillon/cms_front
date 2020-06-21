@@ -54,6 +54,13 @@ export default {
   padding: 5px;
   cursor: pointer;
   transition: color 0.25s, border-color 0.25s;
+
+  white-space: nowrap;
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+
 }
 
 .tag:first-child {

@@ -13,18 +13,18 @@
       <div class="article_metadata">
 
         <!-- date -->
-        <div
+        <span
           class="article_date"
           v-if="article.relationship.properties.creation_date">
           {{format_date(article.relationship.properties.creation_date)}}
-        </div>
+        </span>
 
         <!-- Author -->
-        <div
+        <span
           class="article_author"
           v-if="article.author.properties.username">
           {{article.author.properties.username}}
-        </div>
+        </span>
       </div>
 
 
@@ -133,6 +133,7 @@ export default {
   border: 1px solid #dddddd;
   transition: border-color 0.25s;
 }
+
 .article_preview > * {
   margin: 1em
 }
@@ -155,6 +156,7 @@ export default {
 .article_metadata {
   margin-top: 0.25em;
   display: flex;
+  align-items: center;
   font-size: 75%;
   color: #666666;
 }
@@ -199,6 +201,7 @@ p {
 }
 
 .tags_container > *{
+  margin-top: 0.25em;
   //margin: 0.25em 0;
 
 }
