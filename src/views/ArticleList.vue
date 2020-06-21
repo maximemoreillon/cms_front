@@ -5,7 +5,7 @@
     <!-- Selected author -->
     <!-- TODO: Use something else than a toolbar -->
     <Toolbar v-if="author.properties">
-      
+
       <span>Showing articles written by <Author v-bind:author="author"/></span>
 
         <!-- remove author filter -->
@@ -264,7 +264,7 @@ export default {
 
       this.articles_loading = true
 
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles`, {
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/article/list`, {
         params: {
           sort : this.sort,
           order : this.order,
@@ -374,7 +374,7 @@ export default {
 
       this.tag_loading = true;
 
-      this.axios.post(process.env.VUE_APP_CMS_API_URL + '/update_tag', {
+      this.axios.put(`${process.env.VUE_APP_CMS_API_URL}/tag`, {
         tag: this.tag
       })
       .then( response => {
@@ -412,8 +412,8 @@ export default {
       if(confirm('Delete tag?')){
         this.article_loading = true;
 
-        this.axios.post(process.env.VUE_APP_CMS_API_URL + '/delete_tag', {
-          tag_id: this.tag.identity.low
+        this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/tag`, {
+          params: {tag_id: this.tag.identity.low}
         })
         .then( () => {
           this.$router.push({ name: 'article_list' })
@@ -488,7 +488,7 @@ export default {
   /* Normal behavior */
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
-  grid-gap: 2em;
+  grid-gap: 1em;
 }
 
 

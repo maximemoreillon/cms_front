@@ -105,7 +105,7 @@ export default {
   methods: {
     get_tags(){
       this.tags_loading = true
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/tags_of_article?id=${this.article.identity.low}`)
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/article/tags?id=${this.article.identity.low}`)
       .then(response => {
 
         this.tags.splice(0,this.tags.length)

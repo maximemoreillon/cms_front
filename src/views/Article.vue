@@ -285,7 +285,7 @@ export default {
 
             // TODO: Change API so as to get this with the article
             this.get_tags_of_article()
-            this.get_comments_of_article()
+            //this.get_comments_of_article()
           }
 
 
@@ -302,7 +302,7 @@ export default {
 
       this.tags_loading = true
       this.tags.splice(0,this.tags.length)
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/tags_of_article?id=${this.$route.query.id}`)
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/article/tags?id=${this.$route.query.id}`)
       .then(response => {
 
         this.tags_loading = false
@@ -326,7 +326,7 @@ export default {
       this.comments_loading = true
       this.comments.splice(0,this.comments.length)
 
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/comments_of_article?id=${this.$route.query.id}`)
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/article/comments?id=${this.$route.query.id}`)
       .then(response => {
 
         this.comments_loading = false
