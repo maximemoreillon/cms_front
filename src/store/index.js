@@ -42,7 +42,7 @@ export default new Vuex.Store({
     update_categories(state){
 
       // Get pinned tags
-      axios.get(`${process.env.VUE_APP_CMS_API_URL}/tag/pinned`)
+      axios.get(`${process.env.VUE_APP_CMS_API_URL}/tags/pinned`)
       .then(response => {
         // delete all navigation items
 

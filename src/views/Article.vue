@@ -258,7 +258,7 @@ export default {
         this.article_loading = true;
 
 
-        this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/article?id=${this.$route.query.id}`)
+        this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.$route.query.id}/`)
         .then(response => {
 
           this.article_loading = false;
@@ -302,7 +302,7 @@ export default {
 
       this.tags_loading = true
       this.tags.splice(0,this.tags.length)
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/article/tags?id=${this.$route.query.id}`)
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.$route.query.id}/tags`)
       .then(response => {
 
         this.tags_loading = false
@@ -326,7 +326,7 @@ export default {
       this.comments_loading = true
       this.comments.splice(0,this.comments.length)
 
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/article/comments?id=${this.$route.query.id}`)
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.$route.query.id}/comments`)
       .then(response => {
 
         this.comments_loading = false
@@ -348,11 +348,13 @@ export default {
 
 
     create_comment(){
-      this.axios.post(process.env.VUE_APP_CMS_API_URL + '/create_comment', {
+      this.axios.post(`${process.env.VUE_APP_CMS_API_URL}/comments`, {
         article_id: this.article.identity.low,
         comment: this.comment,
       })
       .then( () => {
+
+        // clear inputs
         this.comment.properties.author = ''
         this.comment.properties.content = ''
 

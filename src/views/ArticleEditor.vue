@@ -42,7 +42,7 @@
             type="search"
             ref="tag_input"
             list="existing_tag_list"
-            v-on:keyup.enter="add_tag()"
+            v-on:keyup.enter="create_tag()"
             v-on:keyup.delete="delete_last_Tag()">
 
           <datalist id="existing_tag_list">
@@ -487,7 +487,7 @@ export default {
         // this gets titptap to throw errors
         this.article_loading = true;
 
-        this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/article?id=${this.$route.query.id}`)
+        this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.$route.query.id}/`)
         .then(response => {
 
           let record = response.data[0]
@@ -514,9 +514,7 @@ export default {
     get_tags_of_article(){
 
       this.tags_loading = true
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/article/tags`,{
-        params: {id: this.article.identity.low}
-      })
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.$route.query.id}/tags/`)
       .then(response => {
 
         this.tags_loading = false
@@ -541,8 +539,8 @@ export default {
 
       if(this.article.identity.low){
         // if the article has an ID, UPDATE
-        this.axios.put(`${process.env.VUE_APP_CMS_API_URL}/article`, {
-          article: this.article,
+        this.axios.put(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.article.identity.low}`, {
+          properties: this.article.properties,
           tag_ids: this.tags.map(tag => tag.identity.low),
         })
         .then(response => {
@@ -560,7 +558,7 @@ export default {
       }
       else {
         // If the article does not have an ID, CREATE
-        this.axios.post(`${process.env.VUE_APP_CMS_API_URL}/article`, {
+        this.axios.post(`${process.env.VUE_APP_CMS_API_URL}/articles`, {
           article: this.article,
           tag_ids: this.tags.map(tag => tag.identity.low),
         })
@@ -581,7 +579,7 @@ export default {
     delete_article(){
       if(confirm('Delete article?')){
         this.article_loading = true;
-        this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/article`, {
+        this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.article.identity.low}`, {
           params: {article_id: this.article.identity.low}
         })
         .then( () => {
@@ -596,9 +594,9 @@ export default {
     },
 
 
-    add_tag(){
+    create_tag(){
       if(this.$refs.tag_input.value.length > 0){
-        this.axios.post(`${process.env.VUE_APP_CMS_API_URL}/tag`, {
+        this.axios.post(`${process.env.VUE_APP_CMS_API_URL}/tags`, {
           tag_name: this.$refs.tag_input.value
         })
         .then(response => {
@@ -625,7 +623,7 @@ export default {
     get_existing_tags(){
 
 
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/tag/list`)
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/tags/`)
       .then(response => {
 
         // Recreate list of tags

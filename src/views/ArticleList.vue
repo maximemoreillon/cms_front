@@ -264,7 +264,7 @@ export default {
 
       this.articles_loading = true
 
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/article/list`, {
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles`, {
         params: {
           sort : this.sort,
           order : this.order,
@@ -319,9 +319,7 @@ export default {
 
       if(tag_id){
         this.tag_loading = true;
-        this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/tag`, {
-          params: {tag_id: tag_id},
-        })
+        this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/tags/${tag_id}`)
         .then(response => { this.tag = response.data })
         .catch(error => {
           if(error.response) alert(error.response.data)
@@ -336,9 +334,7 @@ export default {
 
       if(author_id){
         this.$set(this.author,'loading',true)
-        this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/author`, {
-          params: {author_id: author_id},
-        })
+        this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/authors/${author_id}`)
         .then(response => { this.author = response.data })
         .catch(error => {
           this.$set(this.author,'error', 'Error getting author')

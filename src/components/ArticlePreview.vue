@@ -100,12 +100,13 @@ export default {
     EarthIcon
   },
   mounted() {
-    this.get_tags()
+    this.get_tags_of_article()
   },
   methods: {
-    get_tags(){
+    get_tags_of_article(){
       this.tags_loading = true
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/article/tags?id=${this.article.identity.low}`)
+      let url = `${process.env.VUE_APP_CMS_API_URL}/articles/${this.article.identity.low}/tags`
+      this.axios.get(url)
       .then(response => {
 
         this.tags.splice(0,this.tags.length)
