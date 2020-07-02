@@ -230,31 +230,29 @@ export default {
     // Does not get called when staying in the same route!
     this.load_more_when_scroll_to_bottom()
 
-    this.get_tag(this.$route.query.tag_id)
-    this.get_author(this.$route.query.author_id)
-
+    this.get_tag()
+    this.get_author()
     this.delete_all_articles()
     this.get_articles()
 
   },
   beforeRouteUpdate (to, from, next) {
 
-    this.get_tag(to.query.tag_id)
-    this.get_author(to.query.author_id)
 
-    // Dirty but no idea how to solve
-    setTimeout(() => {
+    next()
+
+    this.$nextTick().then( () => {
+      this.get_tag()
+      this.get_author()
       this.delete_all_articles()
       this.get_articles()
-    },100)
-
-    next();
+    })
 
   },
 
   methods: {
     delete_all_articles(){
-      // Usuallz, articles are not deleted because of the "load more" system
+      // Turned into its own method to work with the "load more" feature
       this.articles.splice(0,this.articles.length)
       this.articles_all_loaded = false
     },
@@ -314,8 +312,10 @@ export default {
 
     },
 
-    get_tag(tag_id){
+    get_tag(){
       this.tag = null
+
+      let tag_id = this.$route.query.tag_id
 
       if(tag_id){
         this.tag_loading = true;
@@ -329,8 +329,10 @@ export default {
       }
     },
 
-    get_author(author_id){
+    get_author(){
       this.author = {}
+
+      let author_id = this.$route.query.author_id
 
       if(author_id){
         this.$set(this.author,'loading',true)
