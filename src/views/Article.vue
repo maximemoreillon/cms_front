@@ -51,12 +51,6 @@
             <arrow-left-icon />
           </IconButton>
 
-          <IconButton
-            v-on:click="download_as_html_file()"
-            v-if="$store.state.logged_in">
-            <download-icon />
-          </IconButton>
-
           <!-- edit button -->
           <IconButton
             v-on:click="$router.push({ path: 'article_editor', query: { id: article.identity.low } })"
@@ -180,7 +174,6 @@ import {formatDate} from '@/mixins/formatDate.js'
 import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue';
 import EarthIcon from 'vue-material-design-icons/Earth.vue';
 import PencilIcon from 'vue-material-design-icons/Pencil.vue';
-import DownloadIcon from 'vue-material-design-icons/Download.vue';
 import PlusIcon from 'vue-material-design-icons/Plus.vue';
 import SendIcon from 'vue-material-design-icons/Send.vue';
 import TagIcon from 'vue-material-design-icons/Tag.vue';
@@ -204,7 +197,6 @@ export default {
     EarthIcon,
     ArrowLeftIcon,
     PencilIcon,
-    DownloadIcon,
     PlusIcon,
     SendIcon,
     TagIcon,
