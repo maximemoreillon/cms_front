@@ -4,24 +4,19 @@ stages:
 
 variables:
   APPLICATION_NAME: cms-front
+  DOCKER_IMAGE: ${DOCKER_HUB_USERNAME}/${APPLICATION_NAME}
 
 containerization:
   stage: containerization
   script:
-    # If docker registry password provided, attempt login
-    - >
-      if [ -z ${CONTAINER_REGISTRY_PASSWORD} ];
-      then echo "CONTAINER_REGISTRY_PASSWORD not set, skipping login";
-      else echo "${CONTAINER_REGISTRY_PASSWORD}" | docker login ${CONTAINER_REGISTRY} --username ${CONTAINER_REGISTRY_USERNAME} --password-stdin;
-      fi
-    # Copy environment variables from gitlab
-    - cp ${VUE_ENV} ./.env.production
+    # Docker hub login
+    - echo "${DOCKER_HUB_PASSWORD}" | docker login --username ${DOCKER_HUB_USERNAME} --password-stdin
     # Building the container image
-    - docker build -t ${CONTAINER_REGISTRY}/${APPLICATION_NAME} .
+    - docker build -t ${DOCKER_IMAGE} .
     # Pushing the image to the registry
-    - docker push ${CONTAINER_REGISTRY}/${APPLICATION_NAME}
+    - docker push ${DOCKER_IMAGE}
     # Cleanup
-    - docker image rm ${CONTAINER_REGISTRY}/${APPLICATION_NAME}
+    - docker image rm ${DOCKER_IMAGE}
 
 deployment:
   stage: deployment

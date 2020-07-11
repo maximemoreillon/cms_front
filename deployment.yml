@@ -14,9 +14,15 @@ spec:
     spec:
       containers:
       - name: ${APPLICATION_NAME}
-        image: ${CONTAINER_REGISTRY}/${APPLICATION_NAME}
-        imagePullPolicy: Always # Pull new image on restart
+        image: ${DOCKER_IMAGE}
+        # Pull new image on restart
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
+        # Get environment variables from secret
+        envFrom:
+        - secretRef:
+           name: environment-variables
+      # Credentials to pull image from registry
       imagePullSecrets:
-      - name: registry-credentials # Credentials to pull image from registry
+      - name: registry-credentials
