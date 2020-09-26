@@ -122,7 +122,9 @@
     </Toolbar>
 
 
-    <div class="articles_container" v-if="article_records.length > 0">
+    <div
+      class="articles_container"
+      v-if="!articles_loading && !loading_error && article_records.length > 0">
 
 
       <ArticlePreview
@@ -135,15 +137,27 @@
     </div>
 
     <!-- loader -->
-    <div class="loader_container" v-if="articles_loading">
+    <div
+      class="loader_container"
+      v-if="articles_loading">
       <Loader />
     </div>
 
     <!-- No articles indicator -->
-    <div class="" v-if="article_records.length === 0 && !articles_loading">No articles</div>
+    <div
+      class=""
+      v-if="article_records.length === 0 && !articles_loading && !loading_error">
+      No articles
+    </div>
 
+    <!-- Error loading -->
+    <div class="error" v-if="loading_error">
+      Error loading articles
+    </div>
+
+    <!-- Load more -->
     <button
-      v-if="!articles_loading && !articles_all_loaded"
+      v-if="!articles_loading && !articles_all_loaded && !loading_error"
       class="load_more_button"
       type="button"
       v-on:click="get_articles()">
@@ -208,6 +222,7 @@ export default {
       article_count: 0,
       articles_loading: false,
       articles_all_loaded: false,
+      loading_error: null,
 
       tag: null,
       tag_loading: false,
@@ -298,8 +313,9 @@ export default {
 
       })
       .catch(error => {
-        if(error.response) alert(error.response.data)
-        else alert(error)
+        this.loading_error = true
+        if(error.response) console.error(error.response.data)
+        else console.error(error)
       })
       .finally(() => { this.articles_loading = false })
 
