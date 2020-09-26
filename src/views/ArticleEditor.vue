@@ -491,31 +491,38 @@ export default {
   methods: {
     get_article_if_exists(){
       // If ID is present in query, get the article corresponding to that ID
-      if('id' in this.$route.query){
-        // this gets titptap to throw errors
-        this.article_loading = true;
+      let article_id = this.$route.query.id
+        || this.$route.query.article_id
+        || this.$route.params.id
+        || this.$route.params.article_id
 
-        this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.$route.query.id}/`)
-        .then(response => {
+      if(!article_id) return
 
-          let record = response.data[0]
+      // this gets titptap to throw errors
+      this.article_loading = true;
 
-          // parsing neo4j record for article
-          this.article = record._fields[record._fieldLookup['article']]
-          this.relationship = record._fields[record._fieldLookup['relationship']]
-          this.tags = record._fields[record._fieldLookup['tags']]
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles/${article_id}/`)
+      .then(response => {
 
-          // Applying to content of editor
-          this.editor.setContent(this.article.properties.content);
+        let record = response.data[0]
 
-          // unflag loading
-          this.article_loading = false;
+        // parsing neo4j record for article
+        this.article = record._fields[record._fieldLookup['article']]
+        this.relationship = record._fields[record._fieldLookup['relationship']]
+        this.tags = record._fields[record._fieldLookup['tags']]
 
-        })
-        .catch(error => alert(error.response.data))
+        // Applying to content of editor
+        this.editor.setContent(this.article.properties.content);
 
-      }
-      else this.article_loading = false;
+      })
+      .catch(error => {
+        alert(error.response.data)
+      })
+      .finally( () => {
+        // unflag loading
+        this.article_loading = false
+      })
+
     },
 
     toggle_published(){
@@ -528,49 +535,56 @@ export default {
 
       if(this.article.identity.low){
         // if the article has an ID, UPDATE
-        this.axios.put(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.article.identity.low}`, {
-          properties: {
-            // DIRTY
-            content: this.article.properties.content,
-            published: this.article.properties.published,
-            title: this.article.properties.title,
-            summmary: this.article.properties.summmary,
-            thumbnail_src: this.article.properties.thumbnail_src,
-          },
-          tag_ids: this.tags.map(tag => tag.identity.low),
-        })
-        .then(response => {
-          this.article_loading = false;
-
-          // redirect to article
-          let identity = response.data[0]._fields[response.data[0]._fieldLookup['article']].identity.low
-          this.$router.push({ name: 'article', query: { id: identity } })
-        })
-        .catch(error => {
-          this.article_loading = false;
-          alert(error.response.data)
-        })
+        this.update_article()
 
       }
       else {
         // If the article does not have an ID, CREATE
-        this.axios.post(`${process.env.VUE_APP_CMS_API_URL}/articles`, {
-          article: this.article,
-          tag_ids: this.tags.map(tag => tag.identity.low),
-        })
-        .then(response => {
-          this.article_loading = false;
+        this.create_article()
 
-          // redirect to article
-          let identity = response.data[0]._fields[response.data[0]._fieldLookup['article']].identity.low
-          this.$router.push({ name: 'article', query: { id: identity } })
-        })
-        .catch(error => {
-          this.article_loading = false;
-          alert(error.response.data)
-        })
       }
 
+    },
+    create_article(){
+      this.axios.post(`${process.env.VUE_APP_CMS_API_URL}/articles`, {
+        article: this.article,
+        tag_ids: this.tags.map(tag => tag.identity.low),
+      })
+      .then(response => {
+        this.article_loading = false;
+
+        // redirect to article
+        let identity = response.data[0]._fields[response.data[0]._fieldLookup['article']].identity.low
+        this.$router.push({ name: 'article', query: { id: identity } })
+      })
+      .catch(error => {
+        this.article_loading = false;
+        alert(error.response.data)
+      })
+    },
+    update_article(){
+      this.axios.put(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.article.identity.low}`, {
+        properties: {
+          // DIRTY
+          content: this.article.properties.content,
+          published: this.article.properties.published,
+          title: this.article.properties.title,
+          summmary: this.article.properties.summmary,
+          thumbnail_src: this.article.properties.thumbnail_src,
+        },
+        tag_ids: this.tags.map(tag => tag.identity.low),
+      })
+      .then(response => {
+        this.article_loading = false;
+
+        // redirect to article
+        let identity = response.data[0]._fields[response.data[0]._fieldLookup['article']].identity.low
+        this.$router.push({ name: 'article', query: { id: identity } })
+      })
+      .catch(error => {
+        this.article_loading = false;
+        alert(error.response.data)
+      })
     },
     delete_article(){
       if(confirm('Delete article?')){

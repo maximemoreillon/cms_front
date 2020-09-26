@@ -1,8 +1,6 @@
 <template>
   <div class="container" >
 
-    <!-- Toolbar, currently just for edit button -->
-
     <template v-if="article">
       <Toolbar>
 
@@ -30,6 +28,14 @@
           <Author v-bind:author="author"/>
         </div>
 
+        <!-- views -->
+        <div
+          v-if="article.properties.views"
+          class="toolbar_wrapper">
+          <EyeIcon />:
+          {{article.properties.views.low}}
+        </div>
+
 
         <!-- Tags -->
         <template v-if="tags.length > 0">
@@ -46,18 +52,22 @@
 
         <div class="tool_cluster">
           <!-- Return to article list -->
+          <!-- TODO: SHould be a link -->
           <IconButton
             v-on:click="$router.push({ name: 'article_list' })">
             <arrow-left-icon />
           </IconButton>
 
           <!-- edit button -->
+          <!-- TODO: Should be a link -->
           <IconButton
             v-on:click="$router.push({ name: 'article_editor', query: { id: article.identity.low } })"
             v-if="editable">
             <pencil-icon />
           </IconButton>
 
+          <!-- New article button -->
+          <!-- TODO: SHould be a link -->
           <IconButton
             v-if="$store.state.logged_in"
             v-on:buttonClicked="$router.push({ name: 'article_editor' })">
@@ -143,7 +153,6 @@
 
 
     <!-- modal for images -->
-    <!-- TODO: use the npm package -->
     <Modal
       v-bind:open="modal.open"
       v-on:close="modal.open = false">
@@ -166,7 +175,6 @@ import Loader from '@moreillon/vue_loader'
 import Modal from '@moreillon/vue_modal'
 
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
-//import Modal from '@/components/vue_modal/Modal.vue'
 import Toolbar from '@/components/Toolbar.vue'
 
 import Tag from '@/components/Tag.vue'
@@ -175,7 +183,6 @@ import Author from '@/components/Author.vue'
 import Comment from '@/components/Comment.vue'
 
 import {formatDate} from '@/mixins/formatDate.js'
-//import {parseArticleRecord} from '@/mixins/parseArticleRecord.js'
 
 // Not using Highlight JS anymore due to poor consistency
 //import highlight from 'highlight.js'
@@ -190,6 +197,7 @@ import TagIcon from 'vue-material-design-icons/Tag.vue';
 import CalendarIcon from 'vue-material-design-icons/Calendar.vue';
 import AccountIcon from 'vue-material-design-icons/Account.vue';
 import LockIcon from 'vue-material-design-icons/Lock.vue';
+import EyeIcon from 'vue-material-design-icons/Eye.vue';
 
 
 
@@ -213,6 +221,7 @@ export default {
     CalendarIcon,
     AccountIcon,
     LockIcon,
+    EyeIcon,
   },
   mixins: [
     formatDate,
@@ -269,34 +278,29 @@ export default {
       this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles/${article_id}`)
       .then(response => {
 
-        this.article_loading = false;
+        if(response.data.length === 0) return
 
-        if(response.data.length > 0){
-          let record = response.data[0]
+        let record = response.data[0]
 
-          // parsing the article
-          this.article = record._fields[record._fieldLookup['article']]
-          this.author = record._fields[record._fieldLookup['author']]
-          this.relationship = record._fields[record._fieldLookup['relationship']]
+        // parsing the article
+        this.article = record._fields[record._fieldLookup['article']]
+        this.author = record._fields[record._fieldLookup['author']]
+        this.relationship = record._fields[record._fieldLookup['relationship']]
 
-          this.tags = record._fields[record._fieldLookup['tags']]
+        this.tags = record._fields[record._fieldLookup['tags']]
 
-
-
-          // Make the images clickable to expand
-          setTimeout(this.add_event_listeners_for_image_modals,100);
-
-        }
-
+        // Make the images clickable to expand
+        setTimeout(this.add_event_listeners_for_image_modals,100)
 
       })
       .catch(error => {
-        this.article_loading = false
+
         this.error = true
         if(error.response) console.error(error.response.data)
         else console.error(error)
 
       })
+      .finally( () => { this.article_loading = false })
     },
 
 
@@ -329,19 +333,6 @@ export default {
         }, false)
       })
     },
-
-    download_as_html_file(){
-      var a = window.document.createElement('a');
-      a.href = window.URL.createObjectURL(new Blob([this.article.content], {type: 'text/html'}));
-      a.download = 'test.html';
-
-      // Append anchor to body.
-      document.body.appendChild(a);
-      a.click();
-
-      // Remove anchor from body
-      document.body.removeChild(a);
-    }
   },
   computed: {
     editable(){
