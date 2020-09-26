@@ -9,7 +9,7 @@
 
       <!-- proper way to embed navigation -->
       <template v-slot:navigation>
-        <router-link to="/">All articles</router-link>
+        <router-link :to="{ name: 'article_list'}">All articles</router-link>
 
         <router-link
           v-for="(item, index) in $store.state.navigation_items"
@@ -17,6 +17,9 @@
           :to="item.route">
           {{item.label}}
         </router-link>
+
+        <router-link :to="{ name: 'about', params: {} }">About</router-link>
+
       </template>
 
       <router-view />
@@ -92,5 +95,8 @@ article iframe {
   font-size: 300%;
 }
 
+.error {
+  color: #c00000;
+}
 
 </style>

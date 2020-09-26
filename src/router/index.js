@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 //import Home from '../views/Home.vue'
-//import About from '../views/About.vue'
+import About from '../views/About.vue'
 import Article from '../views/Article.vue'
 import ArticleEditor from '../views/ArticleEditor.vue'
 import ArticleList from '../views/ArticleList.vue'
@@ -12,35 +12,27 @@ Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/articles',
     name: 'article_list',
     component: ArticleList,
   },
-  /*
   {
     path: '/about',
     name: 'about',
-    component: About
+    component: About,
   },
-
   {
-    path: '/article_list',
-    name: 'article_list',
-    component: ArticleList
-  },
-  */
-  {
-    path: '/article',
+    path: '/articles/:article_id',
     name: 'article',
     component: Article,
-    props: true,
   },
   {
     path: '/article_editor',
     name: 'article_editor',
     component: ArticleEditor,
-    props: true,
   },
+
+  { path: '/*', redirect: { name: 'article_list' }}
 
 
 ]

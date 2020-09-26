@@ -64,7 +64,7 @@
         <div class="tool_cluster">
           <IconButton
             v-if="$route.query.id"
-            v-on:click="$router.push({ name: 'article', query: { id: $route.query.id } })">
+            v-on:click="$router.push({ name: 'article', params: { article_id: $route.query.id } })">
             <arrow-left-icon />
           </IconButton>
 
@@ -104,7 +104,10 @@
 
       <!-- editor for the content of the article -->
       <div class="editor_wrapper">
-        <editor-menu-bar :editor="editor" v-slot="{ commands, isActive, getMarkAttrs }">
+        <editor-menu-bar
+          :editor="editor"
+          v-slot="{ commands, isActive, getMarkAttrs }">
+
           <div class="menubar">
 
             <IconButton

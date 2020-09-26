@@ -1,7 +1,7 @@
 <template>
-  <div
+  <router-link
     class="article_preview"
-    v-on:click="$router.push({ path: 'article', query: { id: article.identity.low } })">
+    :to="{ name: 'article', params: {article_id: article.identity.low} }">
 
     <!-- indictor for published -->
     <earth-icon
@@ -62,8 +62,14 @@
     </div>
 
 
+  </router-link>
 
-  </div>
+
+
+
+
+
+
 </template>
 
 <script>
@@ -123,6 +129,9 @@ export default {
 
 .article_preview {
   position: relative;
+
+  color: currentColor;
+  font-weight: normal;
 
   cursor: pointer;
 

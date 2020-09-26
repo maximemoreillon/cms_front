@@ -45,6 +45,7 @@
         <div class="growing_spacer"/>
 
         <div class="tool_cluster">
+          <!-- Return to article list -->
           <IconButton
             v-on:click="$router.push({ name: 'article_list' })">
             <arrow-left-icon />
@@ -52,14 +53,14 @@
 
           <!-- edit button -->
           <IconButton
-            v-on:click="$router.push({ path: 'article_editor', query: { id: article.identity.low } })"
+            v-on:click="$router.push({ name: 'article_editor', query: { id: article.identity.low } })"
             v-if="editable">
             <pencil-icon />
           </IconButton>
 
           <IconButton
             v-if="$store.state.logged_in"
-            v-on:buttonClicked="$router.push({ path: 'article_editor' })">
+            v-on:buttonClicked="$router.push({ name: 'article_editor' })">
             <plus-icon/>
           </IconButton>
         </div>
@@ -128,7 +129,17 @@
     <div class="loader_container" v-else-if="article_loading">
       <Loader />
     </div>
-    <div v-else>Article not found</div>
+
+    <div class="error" v-if="error">
+      Error loading article
+    </div>
+
+
+    <div
+      class="error"
+      v-if="!article_loading && !error && !article">
+      Article not found
+    </div>
 
 
     <!-- modal for images -->
@@ -213,6 +224,7 @@ export default {
 
       article: null,
       article_loading: false,
+      error: null,
 
       tags: [],
 
@@ -238,47 +250,55 @@ export default {
   },
 
   mounted() {
-    this.get_article();
+    this.get_article()
 
   },
   methods: {
 
     get_article(){
-      if('id' in this.$route.query){
-        this.article_loading = true;
+      let article_id = this.$route.params.article_id
+        || this.$route.params.id
+        || this.$route.query.article_id
+        || this.$route.query.id
+
+      if(!article_id) return
+
+      this.article_loading = true;
 
 
-        this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.$route.query.id}/`)
-        .then(response => {
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles/${article_id}`)
+      .then(response => {
 
-          this.article_loading = false;
+        this.article_loading = false;
 
-          if(response.data.length > 0){
-            let record = response.data[0]
+        if(response.data.length > 0){
+          let record = response.data[0]
 
-            // parsing the article
-            this.article = record._fields[record._fieldLookup['article']]
-            this.author = record._fields[record._fieldLookup['author']]
-            this.relationship = record._fields[record._fieldLookup['relationship']]
+          // parsing the article
+          this.article = record._fields[record._fieldLookup['article']]
+          this.author = record._fields[record._fieldLookup['author']]
+          this.relationship = record._fields[record._fieldLookup['relationship']]
 
-            this.tags = record._fields[record._fieldLookup['tags']]
+          this.tags = record._fields[record._fieldLookup['tags']]
 
-
-
-            // Make the images clickable to expand
-            setTimeout(this.add_event_listeners_for_image_modals,100);
-
-          }
+          console.log(this.article)
 
 
-        })
-        .catch(error => {
-          this.article_loading = false;
-          if(error.response) console.log(error.response.data)
-          else console.log(error)
 
-        })
-      }
+          // Make the images clickable to expand
+          setTimeout(this.add_event_listeners_for_image_modals,100);
+
+        }
+
+
+      })
+      .catch(error => {
+        this.article_loading = false
+        this.error = true
+        if(error.response) console.error(error.response.data)
+        else console.error(error)
+
+      })
     },
 
 
@@ -327,9 +347,14 @@ export default {
   },
   computed: {
     editable(){
+      let article_id = this.$route.params.article_id
+        || this.$route.params.id
+        || this.$route.query.article_id
+        || this.$route.query.id
+
       let user_is_author = false
       if(this.author) user_is_author = (this.author.properties.username === this.$store.state.username)
-      return this.$store.state.logged_in && this.$route.query.id && user_is_author
+      return this.$store.state.logged_in && article_id && user_is_author
     }
   }
 
@@ -389,4 +414,3 @@ textarea {
 
 
 </style>
-VUE_APP_CMS_API_URL
