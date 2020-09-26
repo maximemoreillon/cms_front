@@ -122,13 +122,13 @@
     </Toolbar>
 
 
-    <div class="articles_container" v-if="articles.length > 0">
+    <div class="articles_container" v-if="article_records.length > 0">
 
 
       <ArticlePreview
-        v-for="(article, i) in articles"
-        v-bind:key="i"
-        v-bind:article="article"/>
+        v-for="(record, i) in article_records"
+        v-bind:key="`article_${i}`"
+        v-bind:article_record="record"/>
 
 
 
@@ -140,7 +140,7 @@
     </div>
 
     <!-- No articles indicator -->
-    <div class="" v-if="articles.length === 0 && !articles_loading">No articles</div>
+    <div class="" v-if="article_records.length === 0 && !articles_loading">No articles</div>
 
     <button
       v-if="!articles_loading && !articles_all_loaded"
@@ -204,7 +204,7 @@ export default {
   },
   data () {
     return {
-      articles: [],
+      article_records: [],
       article_count: 0,
       articles_loading: false,
       articles_all_loaded: false,
@@ -253,7 +253,7 @@ export default {
   methods: {
     delete_all_articles(){
       // Turned into its own method to work with the "load more" feature
-      this.articles.splice(0,this.articles.length)
+      this.article_records.splice(0,this.article_records.length)
       this.articles_all_loaded = false
     },
 
@@ -266,7 +266,7 @@ export default {
         params: {
           sort : this.sort,
           order : this.order,
-          start_index : this.articles.length,
+          start_index : this.article_records.length,
           search : this.search_string,
           batch_size : this.batch_size,
           tag_id: this.$route.query.tag_id,
@@ -284,14 +284,21 @@ export default {
         this.article_count = first_record._fields[first_record._fieldLookup['article_count']].low
 
 
-        response.data.forEach( (record, index) => {
+        response.data.forEach( (record) => {
+
+          this.article_records.push(record)
+
+          /*
           let article = record._fields[record._fieldLookup['article']]
           let author = record._fields[record._fieldLookup['author']]
           let relationship = record._fields[record._fieldLookup['relationship']]
+          let tags = record._fields[record._fieldLookup['tags']]
+
           this.$set(article,'author',author)
           this.$set(article,'relationship',relationship)
           // prevent pushing all articles at once, because it crashes the system
-          setTimeout(() => this.articles.push(article), index*10)
+          //setTimeout(() => this.articles.push(article), index*10)
+          */
 
         });
 
@@ -442,7 +449,7 @@ export default {
 
 
           if( delta < 5){
-            if(!this.articles_loading && this.articles.length > 0 && !this.articles_all_loaded) {
+            if(!this.articles_loading && this.article_records.length > 0 && !this.articles_all_loaded) {
               this.get_articles();
             }
           }

@@ -35,9 +35,8 @@ export default {
   },
   methods: {
     tag_clicked(){
-      let target_route_name = 'article_list'
-      if(!(this.$route.name === target_route_name && this.$route.query.id === this.tag.identity.low)){
-        this.$router.push({ name: target_route_name, query: { tag_id: this.tag.identity.low } })
+      if(!(this.$route.name === 'article_list' && this.$route.query.id === this.tag.identity.low)){
+        this.$router.push({ name: 'article_list', query: { tag_id: this.tag.identity.low } })
       }
 
     }
@@ -49,6 +48,7 @@ export default {
 
 
 .tag {
+  flex-shrink: 0;
   border: 1px solid #dddddd;
   border-radius: 5px;
   padding: 5px;
@@ -59,8 +59,6 @@ export default {
   max-width: 150px;
   overflow: hidden;
   text-overflow: ellipsis;
-
-
 }
 
 .tag:first-child {

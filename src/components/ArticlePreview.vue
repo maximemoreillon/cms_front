@@ -4,7 +4,9 @@
     v-on:click="$router.push({ path: 'article', query: { id: article.identity.low } })">
 
     <!-- indictor for published -->
-    <earth-icon class="publishing_status" v-if="article.properties.published && $store.state.logged_in"/>
+    <earth-icon
+      class="publishing_status"
+      v-if="article.properties.published && $store.state.logged_in"/>
 
     <!-- Article title, consists of first h1 of the content -->
     <div class="preview_header">
@@ -15,15 +17,15 @@
         <!-- date -->
         <span
           class="article_date"
-          v-if="article.relationship.properties.creation_date">
-          {{format_date(article.relationship.properties.creation_date)}}
+          v-if="relationship.properties.creation_date">
+          {{format_date(relationship.properties.creation_date)}}
         </span>
 
         <!-- Author -->
         <span
           class="article_author"
-          v-if="article.author.properties.username">
-          {{article.author.properties.username}}
+          v-if="author.properties.username">
+          {{author.properties.username}}
         </span>
       </div>
 
@@ -50,7 +52,7 @@
 
     <div
       class="tags_container"
-      v-if="tags && !tags_loading">
+      v-if="tags">
 
       <Tag
         v-for="tag in tags"
@@ -59,15 +61,12 @@
 
     </div>
 
-    <Loader v-else-if="tags_loading"/>
 
 
   </div>
 </template>
 
 <script>
-
-import Loader from '@moreillon/vue_loader'
 
 import {formatDate} from '@/mixins/formatDate.js'
 //import dot from 'vue-text-dot' // not working well
@@ -79,12 +78,11 @@ import EarthIcon from 'vue-material-design-icons/Earth.vue';
 export default {
   name: 'ArticlePreview',
   props: {
-    article: Object
+    article_record: Object
   },
   data() {
     return {
-      tags: [],
-      tags_loading: false,
+
     }
   },
   mixins: [
@@ -93,32 +91,30 @@ export default {
   ],
   components: {
     Tag,
-    Loader,
-    //dot, // not working well
 
     // Icons
     EarthIcon
   },
   mounted() {
-    this.get_tags_of_article()
+
   },
   methods: {
-    get_tags_of_article(){
-      this.tags_loading = true
-      let url = `${process.env.VUE_APP_CMS_API_URL}/articles/${this.article.identity.low}/tags`
-      this.axios.get(url)
-      .then(response => {
 
-        this.tags.splice(0,this.tags.length)
-        response.data.forEach(record => {
-          let tag = record._fields[record._fieldLookup['tag']]
-          this.tags.push(tag)
-        })
-        this.tags_loading = false
-      })
-      .catch(error =>  alert(error.response.data) )
-    }
   },
+  computed: {
+    article(){
+      return this.article_record._fields[this.article_record._fieldLookup['article']]
+    },
+    author(){
+      return this.article_record._fields[this.article_record._fieldLookup['author']]
+    },
+    tags(){
+      return this.article_record._fields[this.article_record._fieldLookup['tags']]
+    },
+    relationship(){
+      return this.article_record._fields[this.article_record._fieldLookup['relationship']]
+    },
+  }
 
 }
 </script>
@@ -178,9 +174,24 @@ export default {
 
 
 .article_summary {
-  overflow-y: hidden;
+  overflow: hidden;
   line-height: 1em;
   max-height: 5.5em;
+  position: relative;
+}
+
+.article_summary::before {
+  content: '';
+  position: absolute;
+  top: 4em;
+  left: 0;
+  right: 0;
+  height: 1.5em;
+  z-index: 10;
+
+  background-image: linear-gradient(to top, white, transparent);
+  background-position: 100% 0;
+  background-size: 100% 100%;
 }
 
 p {
@@ -197,8 +208,9 @@ p {
 
 
 .tags_container {
+  position: relative;
   display: flex;
-  flex-wrap: wrap;
+  overflow-x: hidden;
 }
 
 .tags_container > *{
@@ -212,6 +224,20 @@ p {
 
 }
 
+
+.tags_container::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  top: 0;
+  width: 50px;
+  z-index: 10;
+
+  background-image: linear-gradient(to left, white, transparent);
+  background-position: 0 100%;
+  background-size: 100% 100%;
+}
 
 
 

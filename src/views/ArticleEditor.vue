@@ -13,8 +13,12 @@
         <div
           class="dates_container"
           v-if="relationship">
-          <div class="" v-if="relationship.properties.creation_date">Created on {{format_date(relationship.properties.creation_date)}}</div>
-          <div class="" v-if="relationship.properties.edition_date">Last edited on {{format_date(relationship.properties.edition_date)}}</div>
+          <div class="" v-if="relationship.properties.creation_date">
+            Created on {{format_date(relationship.properties.creation_date)}}
+          </div>
+          <div class="" v-if="relationship.properties.edition_date">
+            Last edited on {{format_date(relationship.properties.edition_date)}}
+          </div>
         </div>
 
 
@@ -225,7 +229,9 @@
     </div>
 
     <!-- loader -->
-    <div class="loader_container" v-if="$store.state.logged_in && article_loading">
+    <div
+      class="loader_container"
+      v-if="$store.state.logged_in && article_loading">
       <Loader />
     </div>
 
@@ -451,7 +457,6 @@ export default {
       relationship: null,
 
       tags: [],
-      tags_loading: false,
 
       editable: true,
 
@@ -495,6 +500,7 @@ export default {
           // parsing neo4j record for article
           this.article = record._fields[record._fieldLookup['article']]
           this.relationship = record._fields[record._fieldLookup['relationship']]
+          this.tags = record._fields[record._fieldLookup['tags']]
 
           // Applying to content of editor
           this.editor.setContent(this.article.properties.content);
@@ -502,33 +508,13 @@ export default {
           // unflag loading
           this.article_loading = false;
 
-          // dealing with tags
-          this.get_tags_of_article();
-
         })
         .catch(error => alert(error.response.data))
 
       }
       else this.article_loading = false;
     },
-    get_tags_of_article(){
 
-      this.tags_loading = true
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.$route.query.id}/tags/`)
-      .then(response => {
-
-        this.tags_loading = false
-
-        // parsing the tags
-        response.data.forEach( record => {
-          let tag = record._fields[record._fieldLookup['tag']]
-          if(tag) this.tags.push(tag)
-
-        });
-      })
-      .catch(error => alert(error.response.data))
-
-    },
     toggle_published(){
       this.article.properties.published = !this.article.properties.published;
     },

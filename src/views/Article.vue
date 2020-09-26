@@ -32,7 +32,7 @@
 
 
         <!-- Tags -->
-        <template v-if="tags.length > 0 && !tags_loading">
+        <template v-if="tags.length > 0">
           <div class="tags_wrapper toolbar_wrapper">
             <tag-icon />:
             <Tag
@@ -41,7 +41,6 @@
               v-bind:tag="tag"/>
           </div>
         </template>
-        <Loader v-else-if="tags_loading"/>
 
         <div class="growing_spacer"/>
 
@@ -216,7 +215,6 @@ export default {
       article_loading: false,
 
       tags: [],
-      tags_loading: false,
 
       comments: [],
       comments_loading: false,
@@ -263,21 +261,13 @@ export default {
             this.author = record._fields[record._fieldLookup['author']]
             this.relationship = record._fields[record._fieldLookup['relationship']]
 
+            this.tags = record._fields[record._fieldLookup['tags']]
+
+
+
             // Make the images clickable to expand
             setTimeout(this.add_event_listeners_for_image_modals,100);
 
-            // Code highlight
-            /*
-            setTimeout(() => {
-              document.querySelectorAll('pre code').forEach((block) => {
-                highlight.highlightBlock(block);
-              })
-            },10);
-            */
-
-            // TODO: Change API so as to get this with the article
-            this.get_tags_of_article()
-            //this.get_comments_of_article()
           }
 
 
@@ -289,52 +279,6 @@ export default {
 
         })
       }
-    },
-    get_tags_of_article(){
-
-      this.tags_loading = true
-      this.tags.splice(0,this.tags.length)
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.$route.query.id}/tags`)
-      .then(response => {
-
-        this.tags_loading = false
-
-        // parsing the tags
-        response.data.forEach( record => {
-          let tag = record._fields[record._fieldLookup['tag']]
-          if(tag) this.tags.push(tag)
-
-        });
-      })
-      .catch(error => {
-        this.tags_loading = false
-        alert(error.response.data)
-      } )
-
-    },
-
-    get_comments_of_article(){
-
-      this.comments_loading = true
-      this.comments.splice(0,this.comments.length)
-
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.$route.query.id}/comments`)
-      .then(response => {
-
-        this.comments_loading = false
-
-        // parsing the tags
-        response.data.forEach( record => {
-          let comment = record._fields[record._fieldLookup['comment']]
-          if(comment) this.comments.push(comment)
-
-        });
-      })
-      .catch(error => {
-        this.comments_loading = false
-        alert(error.response.data)
-      } )
-
     },
 
 
