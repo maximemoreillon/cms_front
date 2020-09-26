@@ -281,8 +281,6 @@ export default {
 
           this.tags = record._fields[record._fieldLookup['tags']]
 
-          console.log(this.article)
-
 
 
           // Make the images clickable to expand
