@@ -529,7 +529,14 @@ export default {
       if(this.article.identity.low){
         // if the article has an ID, UPDATE
         this.axios.put(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.article.identity.low}`, {
-          properties: this.article.properties,
+          properties: {
+            // DIRTY
+            content: this.article.properties.content,
+            published: this.article.properties.published,
+            title: this.article.properties.title,
+            summmary: this.article.properties.summmary,
+            thumbnail_src: this.article.properties.thumbnail_src,
+          },
           tag_ids: this.tags.map(tag => tag.identity.low),
         })
         .then(response => {

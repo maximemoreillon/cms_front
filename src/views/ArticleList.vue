@@ -285,22 +285,8 @@ export default {
 
 
         response.data.forEach( (record) => {
-
           this.article_records.push(record)
-
-          /*
-          let article = record._fields[record._fieldLookup['article']]
-          let author = record._fields[record._fieldLookup['author']]
-          let relationship = record._fields[record._fieldLookup['relationship']]
-          let tags = record._fields[record._fieldLookup['tags']]
-
-          this.$set(article,'author',author)
-          this.$set(article,'relationship',relationship)
-          // prevent pushing all articles at once, because it crashes the system
-          //setTimeout(() => this.articles.push(article), index*10)
-          */
-
-        });
+        })
 
 
         // Check if all articles loaded (less than batch size)
