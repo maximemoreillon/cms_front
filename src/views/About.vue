@@ -25,6 +25,8 @@ export default {
     }
   },
   mounted(){
+    document.title = `CMS - Maxime MOREILLON`;
+    
     this.get_back_end_version()
   },
   methods: {

@@ -4,53 +4,54 @@
     <template v-if="article">
       <Toolbar>
 
-        <!-- publish indicator -->
-        <earth-icon
-          v-if="article.properties.published"/>
-        <lock-icon v-else />
+        <div class="metadata_wrapper">
+          <!-- publish indicator -->
+          <earth-icon v-if="article.properties.published"/>
+          <lock-icon v-else />
 
-        <!-- Dates -->
-        <div class="dates_wrapper toolbar_wrapper">
-          <calendar-icon />:
-          <div class="dates_container">
-            <div class="" v-if="relationship.properties.creation_date">
-              Created: {{format_date(relationship.properties.creation_date)}}
-            </div>
-            <div class="" v-if="relationship.properties.edition_date">
-              Edited: {{format_date(relationship.properties.edition_date)}}
+          <!-- Dates -->
+          <div class="dates_wrapper toolbar_wrapper">
+            <div class="dates_container">
+              <div class="" v-if="relationship.properties.creation_date">
+                Created: {{format_date(relationship.properties.creation_date)}}
+              </div>
+              <div class="" v-if="relationship.properties.edition_date">
+                Edited: {{format_date(relationship.properties.edition_date)}}
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Author -->
-        <div class="author_wrapper toolbar_wrapper">
-          <account-icon />:
-          <Author v-bind:author="author"/>
-        </div>
-
-        <!-- views -->
-        <div
-          v-if="article.properties.views"
-          class="toolbar_wrapper">
-          <EyeIcon />:
-          {{article.properties.views.low}}
-        </div>
-
-
-        <!-- Tags -->
-        <template v-if="tags.length > 0">
-          <div class="tags_wrapper toolbar_wrapper">
-            <tag-icon />:
-            <Tag
-              v-for="tag in tags"
-              v-bind:key="tag.identity.low"
-              v-bind:tag="tag"/>
+          <!-- Author -->
+          <div class="author_wrapper toolbar_wrapper">
+            <span>By</span>
+            <Author v-bind:author="author"/>
           </div>
-        </template>
+
+          <!-- views -->
+          <div
+            v-if="article.properties.views"
+            class="toolbar_wrapper">
+            {{article.properties.views.low}} views
+          </div>
+
+
+          <!-- Tags -->
+          <template v-if="tags.length > 0">
+            <div class="tags_wrapper toolbar_wrapper">
+              <span>Tags:</span>
+              <Tag
+                v-for="tag in tags"
+                v-bind:key="tag.identity.low"
+                v-bind:tag="tag"/>
+            </div>
+          </template>
+        </div>
+
+
 
         <div class="growing_spacer"/>
 
-        <div class="tool_cluster">
+        <div class="tool_cluster tools">
           <!-- Return to article list -->
           <!-- TODO: SHould be a link -->
           <IconButton
@@ -187,20 +188,6 @@ import {formatDate} from '@/mixins/formatDate.js'
 // Not using Highlight JS anymore due to poor consistency
 //import highlight from 'highlight.js'
 
-// Icons
-import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue';
-import EarthIcon from 'vue-material-design-icons/Earth.vue';
-import PencilIcon from 'vue-material-design-icons/Pencil.vue';
-import PlusIcon from 'vue-material-design-icons/Plus.vue';
-import SendIcon from 'vue-material-design-icons/Send.vue';
-import TagIcon from 'vue-material-design-icons/Tag.vue';
-import CalendarIcon from 'vue-material-design-icons/Calendar.vue';
-import AccountIcon from 'vue-material-design-icons/Account.vue';
-import LockIcon from 'vue-material-design-icons/Lock.vue';
-import EyeIcon from 'vue-material-design-icons/Eye.vue';
-
-
-
 export default {
   components: {
     IconButton,
@@ -211,17 +198,6 @@ export default {
     Author,
     Comment,
 
-    // Icons
-    EarthIcon,
-    ArrowLeftIcon,
-    PencilIcon,
-    PlusIcon,
-    SendIcon,
-    TagIcon,
-    CalendarIcon,
-    AccountIcon,
-    LockIcon,
-    EyeIcon,
   },
   mixins: [
     formatDate,
@@ -291,6 +267,9 @@ export default {
 
         // Make the images clickable to expand
         setTimeout(this.add_event_listeners_for_image_modals,100)
+
+        // setting the document title
+        document.title = `${this.article.properties.title} - Maxime MOREILLON`;
 
       })
       .catch(error => {
@@ -400,6 +379,14 @@ textarea {
 }
 
 
+.metadata_wrapper{
+  display: flex;
+}
 
+.metadata_wrapper > div:not(:first-child) {
+  margin-left: 0.5em;
+  display: flex;
+  flex-wrap: wrap;
+}
 
 </style>

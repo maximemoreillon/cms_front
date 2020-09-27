@@ -16,16 +16,29 @@ export default {
 
 .toolbar{
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  flex-wrap: nowrap;
+  align-items: flex-start;
   border-bottom: 1px solid #dddddd;
   padding: 5px 0;
   margin-bottom: 25px;
 }
 
+.toolbar .tools {
+  flex-shrink: 0;
+}
+
+.toolbar > * {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.toolbar > * > *:not(:last-child) {
+  //margin-right: 1em;
+}
+
 
 .toolbar > *:not(:last-child){
-  margin-right: 10px;
+  //margin-right: 1em;
 }
 
 .growing_spacer{

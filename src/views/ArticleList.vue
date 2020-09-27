@@ -243,6 +243,9 @@ export default {
   },
 
   mounted() {
+
+    // setting the document title
+    document.title = `CMS - Maxime MOREILLON`;
     // Does not get called when staying in the same route!
     this.load_more_when_scroll_to_bottom()
 

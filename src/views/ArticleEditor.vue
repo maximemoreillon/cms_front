@@ -2,66 +2,60 @@
 
   <div class="article_editor_view">
 
-    <!-- wrapper for authentication detection -->
-    <div
-      class="authentication_wrapper"
-      v-if="$store.state.logged_in && !article_loading">
+    <template v-if="$store.state.logged_in && !article_loading">
 
       <Toolbar>
 
-
-        <div
-          class="dates_container"
-          v-if="relationship">
-          <div class="" v-if="relationship.properties.creation_date">
-            Created on {{format_date(relationship.properties.creation_date)}}
+        <div class="metadata_wrapper">
+          <div
+            class="dates_container"
+            v-if="relationship">
+            <div class="" v-if="relationship.properties.creation_date">
+              Created on {{format_date(relationship.properties.creation_date)}}
+            </div>
+            <div class="" v-if="relationship.properties.edition_date">
+              Last edited on {{format_date(relationship.properties.edition_date)}}
+            </div>
           </div>
-          <div class="" v-if="relationship.properties.edition_date">
-            Last edited on {{format_date(relationship.properties.edition_date)}}
+
+          <!-- Tags -->
+          <div class="tags_wrapper">
+
+            <tag-icon class="tag_icon"/>
+
+            <Tag
+              v-for="(tag, index) in tags"
+              v-bind:key="tag.identity.low"
+              v-bind:tag="tag"
+              removable
+              v-on:remove="delete_tag(index)"/>
+
+            <input
+              id="tag_search"
+              type="search"
+              ref="tag_input"
+              list="existing_tag_list"
+              v-on:keyup.enter="create_tag()">
+
+            <datalist id="existing_tag_list">
+              <option
+                v-for="existing_tag in existing_tags"
+                v-bind:value="existing_tag.properties.name"
+                v-bind:key="existing_tag.identity.low"/>
+            </datalist>
+
           </div>
         </div>
 
 
-        <!-- Allow loading of HTML file -->
-        <!--
-        <div class="">
-          <input type="file" ref="html_file_input" v-on:change="parse_file($event)">
-        </div>
-        -->
 
-        <!-- Tags -->
-        <div class="tags_wrapper">
 
-          <tag-icon class="tag_icon"/>
 
-          <Tag
-            v-for="(tag, index) in tags"
-            v-bind:key="tag.identity.low"
-            v-bind:tag="tag"
-            removable
-            v-on:remove="delete_tag(index)"/>
-
-          <input
-            id="tag_search"
-            type="search"
-            ref="tag_input"
-            list="existing_tag_list"
-            v-on:keyup.enter="create_tag()"
-            v-on:keyup.delete="delete_last_Tag()">
-
-          <datalist id="existing_tag_list">
-            <option
-              v-for="existing_tag in existing_tags"
-              v-bind:value="existing_tag.properties.name"
-              v-bind:key="existing_tag.identity.low"/>
-          </datalist>
-
-        </div>
 
 
         <div class="growing_spacer"/>
 
-        <div class="tool_cluster">
+        <div class="tool_cluster tools">
           <IconButton
             v-if="$route.query.id"
             v-on:click="$router.push({ name: 'article', params: { article_id: $route.query.id } })">
@@ -229,7 +223,7 @@
         </article>
 
       </div>
-    </div>
+    </template>
 
     <!-- loader -->
     <div
@@ -254,7 +248,6 @@
 import Loader from '@moreillon/vue_loader'
 
 import {formatDate} from '@/mixins/formatDate.js'
-//import {parseArticleRecord} from '@/mixins/parseArticleRecord.js'
 
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import Toolbar from '@/components/Toolbar.vue'
@@ -262,7 +255,6 @@ import Tag from '@/components/Tag.vue'
 
 import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
 import {
-  //CodeBlockHighlight,
   Blockquote,
   CodeBlock,
   HardBreak,
@@ -286,17 +278,6 @@ import {
 
 import Iframe from '@/components/Iframe.js'
 
-// HLJS languages
-/*
-import javascript from 'highlight.js/lib/languages/javascript'
-import css from 'highlight.js/lib/languages/css'
-import bash from 'highlight.js/lib/languages/bash'
-import python from 'highlight.js/lib/languages/python'
-import shell from 'highlight.js/lib/languages/shell'
-import dockerfile from 'highlight.js/lib/languages/dockerfile'
-import cpp from 'highlight.js/lib/languages/cpp'
-import xml from 'highlight.js/lib/languages/xml'
-*/
 
 // Icons
 import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue';
@@ -367,13 +348,10 @@ export default {
   },
   mixins: [
     formatDate,
-    //parseArticleRecord,
   ],
   data () {
     return {
 
-      // The tiptap editor, is actually created in mounted
-      //editor: null,
       editor: new Editor({
         extensions: [
           new Blockquote(),
@@ -402,21 +380,6 @@ export default {
             showOnlyWhenEditable: true,
             showOnlyCurrent: true,
           }),
-
-          /*
-          new CodeBlockHighlight({
-            languages: {
-              javascript,
-              css,
-              shell,
-              python,
-              bash,
-              dockerfile,
-              cpp,
-              xml,
-            },
-          }),
-          */
 
           new Iframe(), // For Youtube videos
         ],
@@ -512,7 +475,10 @@ export default {
         this.tags = record._fields[record._fieldLookup['tags']]
 
         // Applying to content of editor
-        this.editor.setContent(this.article.properties.content);
+        this.editor.setContent(this.article.properties.content)
+
+        // setting the document title
+        document.title = `${this.article.properties.title} - Maxime MOREILLON`;
 
       })
       .catch(error => {
@@ -619,16 +585,10 @@ export default {
         })
       }
 
-
-
       this.$refs.tag_input.value = ""
     },
     delete_tag(index){
       this.tags.splice(index,1)
-    },
-    delete_last_Tag(){
-      // NOT WORKING YET
-      //if(this.$refs.tag_input.value === "") this.tags.pop();
     },
     get_existing_tags(){
 
@@ -642,14 +602,9 @@ export default {
         response.data.forEach( record => {
           let tag = record._fields[record._fieldLookup['tag']]
           this.existing_tags.push(tag)
-
         })
-
       })
       .catch(error => alert(error))
-
-
-
     },
 
     set_article_title(){
@@ -695,14 +650,6 @@ export default {
       if (src) command({ src })
     },
 
-    parse_file(event){
-      // Load text files and turn them into article content
-      let file = event.srcElement.files[0]
-      const reader = new FileReader()
-      reader.onload = event => this.article.content = event.target.result
-      reader.onerror = error => alert(error)
-      reader.readAsText(file) // you could also read images and other binaries
-    },
 
   },
 
@@ -716,18 +663,12 @@ export default {
 
 .article_editor_view{
   height: 100%;
-}
-
-.authentication_wrapper{
-  height: 100%;
   display: flex;
   flex-direction: column;
 }
 
 
 .metadata_wrapper{
-  margin: 5px;
-
   display: flex;
 }
 

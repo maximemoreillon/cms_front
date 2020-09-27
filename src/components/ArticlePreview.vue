@@ -21,11 +21,20 @@
           {{format_date(relationship.properties.creation_date)}}
         </span>
 
+        <span>|</span>
+
         <!-- Author -->
         <span
           class="article_author"
           v-if="author.properties.username">
           {{author.properties.username}}
+        </span>
+
+        <span>|</span>
+
+        <span
+          v-if="article.properties.views">
+          {{article.properties.views.low}} views
         </span>
       </div>
 
