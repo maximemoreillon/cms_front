@@ -14,6 +14,7 @@
           <close-icon/>
         </IconButton>
     </Toolbar >
+
     <Toolbar v-else-if="author.loading">
       <Loader />
     </Toolbar >
@@ -124,7 +125,7 @@
 
     <div
       class="articles_container"
-      v-if="!articles_loading && !loading_error && article_records.length > 0">
+      v-if="!loading_error && article_records.length > 0">
 
 
       <ArticlePreview
