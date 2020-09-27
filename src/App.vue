@@ -9,6 +9,13 @@
 
       <!-- proper way to embed navigation -->
       <template v-slot:navigation>
+
+        <router-link
+          v-if="$store.state.current_user"
+          :to="{ name: 'article_editor'}">
+          New article
+        </router-link>
+
         <router-link :to="{ name: 'article_list'}">All articles</router-link>
 
         <router-link
@@ -34,10 +41,8 @@
 
 import AppTemplate from '@moreillon/vue_application_template'
 
-//import 'vue-material-design-icons/styles.css'
+import 'vue-material-design-icons/styles.css'
 
-// That is the correct way to do import styles:
-//import 'highlight.js/styles/obsidian.css'
 
 export default {
   name: 'App',
@@ -55,6 +60,10 @@ export default {
 
 <style>
 
+.material-design-icon__svg {
+  bottom: 0 !important;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -63,10 +72,20 @@ export default {
 main {
   padding: 1em 2vw;
 }
+
 main a {
+  text-decoration: none;
+}
+
+article a {
   font-weight: bold;
   text-decoration: none;
   color: #c00000;
+}
+
+article:not(.editor) h1 {
+  outline: 1px solid red;
+  display: none;
 }
 
 article img {

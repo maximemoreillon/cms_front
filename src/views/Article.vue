@@ -1,138 +1,129 @@
 <template>
   <div class="container" >
-
     <template v-if="article">
-      <Toolbar>
 
+      <router-link
+        class="edit_button"
+        v-if="editable"
+        :to="{ name: 'article_editor', query: { id: article.identity.low } }">
+        <pencil-icon />
+        <span>Edit</span>
+      </router-link>
+
+      <h1>{{article.properties.title || 'Untitled article'}}</h1>
+
+
+
+      <div class="article_metadata">
+
+        <!-- Author -->
         <div class="metadata_wrapper">
-          <!-- publish indicator -->
-          <earth-icon v-if="article.properties.published"/>
-          <lock-icon v-else />
+          <span>Written by</span>
+          <Author v-bind:author="author"/>
+        </div>
 
-          <!-- Dates -->
-          <div class="dates_wrapper toolbar_wrapper">
-            <div class="dates_container">
-              <div class="" v-if="relationship.properties.creation_date">
-                Created: {{format_date(relationship.properties.creation_date)}}
-              </div>
-              <div class="" v-if="relationship.properties.edition_date">
-                Edited: {{format_date(relationship.properties.edition_date)}}
-              </div>
-            </div>
-          </div>
+        <div
+          class="metadata_wrapper"
+          v-if="relationship.properties.creation_date">
+            Creation date: {{format_date(relationship.properties.creation_date)}}
+        </div>
 
-          <!-- Author -->
-          <div class="author_wrapper toolbar_wrapper">
-            <span>By</span>
-            <Author v-bind:author="author"/>
-          </div>
+        <div
+          class="metadata_wrapper"
+          v-if="relationship.properties.edition_date">
+            Last edited: {{format_date(relationship.properties.edition_date)}}
+        </div>
 
-          <!-- views -->
-          <div
-            v-if="article.properties.views"
-            class="toolbar_wrapper">
-            {{article.properties.views.low}} views
-          </div>
+        <div
+          class="metadata_wrapper"
+          v-if="article.properties.views">
+            {{article.properties.views.low}} Views
+        </div>
 
-
-          <!-- Tags -->
-          <template v-if="tags.length > 0">
-            <div class="tags_wrapper toolbar_wrapper">
-              <span>Tags:</span>
-              <Tag
-                v-for="tag in tags"
-                v-bind:key="tag.identity.low"
-                v-bind:tag="tag"/>
-            </div>
-          </template>
+        <div
+          class="metadata_wrapper"
+          v-if="article.properties.published">
+          <earth-icon />
+          <span>published</span>
+        </div>
+        <div
+          class="metadata_wrapper"
+          v-if="!article.properties.published">
+          <lock-icon />
+          <span>private</span>
         </div>
 
 
 
-        <div class="growing_spacer"/>
-
-        <div class="tool_cluster tools">
-          <!-- Return to article list -->
-          <!-- TODO: SHould be a link -->
-          <IconButton
-            v-on:click="$router.push({ name: 'article_list' })">
-            <arrow-left-icon />
-          </IconButton>
-
-          <!-- edit button -->
-          <!-- TODO: Should be a link -->
-          <IconButton
-            v-on:click="$router.push({ name: 'article_editor', query: { id: article.identity.low } })"
-            v-if="editable">
-            <pencil-icon />
-          </IconButton>
-
-          <!-- New article button -->
-          <!-- TODO: SHould be a link -->
-          <IconButton
-            v-if="$store.state.logged_in"
-            v-on:buttonClicked="$router.push({ name: 'article_editor' })">
-            <plus-icon/>
-          </IconButton>
-        </div>
 
 
+      </div>
 
-      </Toolbar>
+      <!-- Tags -->
+      <div class="tags_container">
+        <label>Tags:</label>
+        <template v-if="tags.length > 0">
+          <Tag
+            v-for="(tag) in tags"
+            v-bind:key="tag.identity.low"
+            v-bind:tag="tag"/>
+        </template>
+        <span v-else>None</span>
+      </div>
 
-      <!-- the article content -->
+      <!-- the article itself -->
       <article
         v-if="article && !article_loading"
         ref="article_content"
         v-html="article.properties.content"/>
 
-        <!-- Comments -->
-        <div
-          class="comment_area_wrapper"
-          v-if="false">
+      <!-- Comments -->
+      <div
+        class="comment_area_wrapper"
+        v-if="false">
 
-          <div class="new_comment_wrapper" >
+        <div class="new_comment_wrapper" >
 
-            <h2 class="">
-              Leave a comment
-            </h2>
-            <div class="">
-              <label>Name: </label>
-              <input
-                type="text"
-                v-model="comment.properties.author"
-                placeholder="Name">
-            </div>
-            <textarea
-              v-model="comment.properties.content"
-              placeholder="Comment"/>
-            <div class="create_comment_button_wrapper">
-              <IconButton
-                v-on:buttonClicked="create_comment()">
-                <send-icon/>
-              </IconButton>
-            </div>
-
+          <h2 class="">
+            Leave a comment
+          </h2>
+          <div class="">
+            <label>Name: </label>
+            <input
+              type="text"
+              v-model="comment.properties.author"
+              placeholder="Name">
           </div>
-
-          <div class="comments_wrapper">
-
-            <template v-if="comments.length > 0 && !comments_loading">
-              <Comment
-                class="comment"
-                v-for="comment in comments"
-                v-bind:comment="comment"
-                v-bind:deletable="editable"
-                v-on:deleted="get_comments_of_article()"
-                v-bind:key="comment.identity.low"/>
-            </template>
-            <Loader v-else-if="comments_loading"/>
-            <div v-else>No comments yet</div>
-
-
+          <textarea
+            v-model="comment.properties.content"
+            placeholder="Comment"/>
+          <div class="create_comment_button_wrapper">
+            <IconButton
+              v-on:buttonClicked="create_comment()">
+              <send-icon/>
+            </IconButton>
           </div>
 
         </div>
+
+        <div class="comments_wrapper">
+
+          <template v-if="comments.length > 0 && !comments_loading">
+            <Comment
+              class="comment"
+              v-for="comment in comments"
+              v-bind:comment="comment"
+              v-bind:deletable="editable"
+              v-on:deleted="get_comments_of_article()"
+              v-bind:key="comment.identity.low"/>
+          </template>
+          <Loader v-else-if="comments_loading"/>
+          <div v-else>No comments yet</div>
+
+
+        </div>
+
+      </div>
 
     </template>
 
@@ -176,7 +167,6 @@ import Loader from '@moreillon/vue_loader'
 import Modal from '@moreillon/vue_modal'
 
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
-import Toolbar from '@/components/Toolbar.vue'
 
 import Tag from '@/components/Tag.vue'
 import Author from '@/components/Author.vue'
@@ -192,7 +182,6 @@ export default {
   components: {
     IconButton,
     Modal,
-    Toolbar,
     Loader,
     Tag,
     Author,
@@ -320,9 +309,16 @@ export default {
         || this.$route.query.article_id
         || this.$route.query.id
 
-      let user_is_author = false
-      if(this.author) user_is_author = (this.author.properties.username === this.$store.state.username)
-      return this.$store.state.logged_in && article_id && user_is_author
+      // If there is no article ID, then nothing to edit
+      if(!article_id) return false
+
+      // If the user is not logged in, then unable to edit
+      if(!this.$store.state.current_user) return false
+
+      // If article does not have an author, then nothing to edit
+      if(!this.author) return false
+
+      return (this.author.identity.low === this.$store.state.current_user.identity.low)
     }
   }
 
@@ -332,6 +328,55 @@ export default {
 
 <style scoped>
 
+.edit_button {
+  float: right;
+  margin-top: 0.25em;
+  border: 1px solid #666666;
+  padding: 0.25em 0.5em;
+  border-radius: 0.25em;
+  color: currentColor;
+  transition: 0.25s;
+}
+
+.edit_button:hover {
+  color: #c00000;
+  border-color: #c00000;
+}
+
+.edit_button > *:not(:last-child) {
+  margin-right: 0.25em;
+}
+
+.article_metadata {
+  margin-top: -0.5em;
+}
+.article_metadata, .tags_container {
+  font-size: 85%;
+  color: #666666;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.metadata_wrapper:not(:last-child) {
+  margin-right: 1em;
+}
+
+.metadata_wrapper > *:not(:last-child) {
+  margin-right: 0.5em;
+}
+
+
+.tags_container > * {
+  margin-top: 0.5em;
+}
+
+.tags_container label {
+  margin-right: 0.5em;
+}
+
+
+
 .modal_image {
   width: 80vw;
   height: 80vh;
@@ -339,13 +384,7 @@ export default {
   object-fit: contain;
 }
 
-.toolbar_wrapper {
-  display: flex;
-  align-items: center;
-}
-.toolbar_wrapper > *:not(:first-child){
-  margin-left: 0.25em;
-}
+/* COMMENTS */
 .comment_area_wrapper {
   border-top: 1px solid #dddddd;
   padding-top: 10px;
@@ -367,26 +406,9 @@ export default {
   padding: 5px;
 }
 
-.tool_cluster {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-
 textarea {
   width: 100%;
   resize:vertical;
-}
-
-
-.metadata_wrapper{
-  display: flex;
-}
-
-.metadata_wrapper > div:not(:first-child) {
-  margin-left: 0.5em;
-  display: flex;
-  flex-wrap: wrap;
 }
 
 </style>

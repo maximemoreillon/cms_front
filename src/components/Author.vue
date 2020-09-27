@@ -3,7 +3,17 @@
     class="author"
     v-on:click.stop="author_clicked()">
 
-    <span v-if="author">{{author.properties.username}}</span>
+    <template v-if="author">
+      <img
+        class="avatar"
+        :src="author.properties.avatar_src"
+        v-if="author.properties.avatar_src">
+      <span>
+        {{author.properties.username}}
+      </span>
+    </template>
+
+
     <span v-else>Invalid author</span>
 
   </span>
@@ -38,6 +48,8 @@ export default {
   font-weight: bold;
   cursor: pointer;
   transition: color 0.25s, border-color 0.25s;
+  display: inline-flex;
+  align-items: center;
 }
 
 .author:hover {
@@ -45,6 +57,11 @@ export default {
   border-color:  #c00000;
 }
 
+img {
+  height: 1em;
+  width: 1em;
+  margin-right: 0.25em;
+}
 
 
 

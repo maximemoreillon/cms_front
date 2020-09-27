@@ -6,38 +6,34 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    logged_in: false,
-    username: null, // Get rid of this
     current_user: null,
     navigation_items: [],
   },
   mutations: {
     check_authentication(state){
 
-      if(Vue.$cookies.get('jwt')) {
-        state.logged_in = true
+      this.commit('update_categories',state)
 
-        // Retrieve username
-        axios.post(`${process.env.VUE_APP_AUTHENTICATION_API_URL}/whoami`,
-        {}, { headers: { Authorization: "Bearer " + Vue.$cookies.get('jwt') } })
-        .then(response => {
-          state.user = response.data
-
-          // Get rid of this
-          state.username = response.data.properties.username
-
-          this.commit('update_categories',state)
-        })
-        .catch(error => {
-          if(error.response) console.log(error.response.data)
-          else console.log(error)
-        })
-
+      if(!Vue.$cookies.get('jwt')) {
+        state.current_user = null
+        return
       }
-      else {
-        state.logged_in = false
-        this.commit('update_categories',state)
-      }
+
+      // Retrieve current user
+      axios.post(`${process.env.VUE_APP_AUTHENTICATION_API_URL}/whoami`,
+      {}, { headers: { Authorization: "Bearer " + Vue.$cookies.get('jwt') } })
+      .then(response => {
+
+        state.current_user = response.data
+
+      })
+      .catch(error => {
+        if(error.response) console.log(error.response.data)
+        else console.log(error)
+      })
+
+
+
     },
     update_categories(state){
 

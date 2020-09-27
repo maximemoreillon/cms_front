@@ -6,11 +6,13 @@
     <!-- indictor for published -->
     <earth-icon
       class="publishing_status"
-      v-if="article.properties.published && $store.state.logged_in"/>
+      v-if="article.properties.published && $store.state.current_user"/>
 
     <!-- Article title, consists of first h1 of the content -->
     <div class="preview_header">
-      <div class="article_title">{{article.properties.title}}</div>
+      <div class="article_title">
+        {{article.properties.title || 'Untitled article'}}
+      </div>
 
       <div class="article_metadata">
 
@@ -30,12 +32,12 @@
           {{author.properties.username}}
         </span>
 
-        <span>|</span>
-
-        <span
-          v-if="article.properties.views">
-          {{article.properties.views.low}} views
-        </span>
+        <template v-if="article.properties.views">
+          <span>|</span>
+          <span>
+            {{article.properties.views.low}} views
+          </span>
+        </template>
       </div>
 
 
@@ -55,6 +57,10 @@
         class="article_summary"
         v-if="article.properties.summary"
         v-html="article.properties.summary"/>
+
+      <div class="article_summary" v-else>
+        No summary available
+      </div>
 
     </div>
 
@@ -194,17 +200,17 @@ export default {
 .article_summary {
   overflow: hidden;
   line-height: 1em;
-  max-height: 5.5em;
+  height: 5.5em;
   position: relative;
 }
 
 .article_summary::before {
   content: '';
   position: absolute;
-  top: 4em;
+  bottom: 0;
   left: 0;
   right: 0;
-  height: 1.5em;
+  height: 25%;
   z-index: 10;
 
   background-image: linear-gradient(to top, white, transparent);

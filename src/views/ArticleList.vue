@@ -2,6 +2,63 @@
 
   <div class="article_list_view" ref="view">
 
+    <!-- Toolbar for sorting and new article -->
+    <Toolbar >
+
+      <div class="">
+
+        <!-- article counter -->
+        <!-- Maybe not necessary -->
+        <span class="article_counter">
+          {{article_count}} Articles
+        </span>
+
+        <IconButton
+          v-bind:active="sort === 'article.edition_date'"
+          v-on:click="sort_by_date()">
+          <calendar-icon/>
+        </IconButton>
+
+        <IconButton
+          v-bind:active="sort === 'article.title'"
+          v-on:click="sort_by_title()">
+          <alphabetical-icon/>
+        </IconButton>
+
+        <IconButton
+          v-bind:active="order === 'DESC'"
+          v-on:click="sort_order_descending()">
+          <sort-descending-icon/>
+        </IconButton>
+
+        <IconButton
+          v-bind:active="order === 'ASC'"
+          v-on:click="sort_order_ascending()">
+          <sort-ascending-icon/>
+        </IconButton>
+
+
+
+        <!-- search -->
+        <div class="search_wrapper">
+          <input
+            type="search"
+            class="search_bar"
+            ref="search"
+            v-bind:class="{search_bar_open: search_bar_open}"
+            v-model="search_string"
+            v-on:keyup.enter="search()">
+
+          <IconButton
+            v-on:click="search()">
+            <magnify-icon/>
+          </IconButton>
+
+        </div>
+      </div>
+
+    </Toolbar>
+
     <!-- Selected author -->
     <!-- TODO: Use something else than a toolbar -->
     <Toolbar v-if="author.properties">
@@ -59,68 +116,7 @@
       <Loader />
     </Toolbar >
 
-    <Toolbar >
 
-
-      <!-- Sorting and ordering -->
-      <div class="tool_cluster">
-        <IconButton
-          v-bind:active="sort === 'article.edition_date'"
-          v-on:click="sort_by_date()">
-          <calendar-icon/>
-        </IconButton>
-
-        <IconButton
-          v-bind:active="sort === 'article.title'"
-          v-on:click="sort_by_title()">
-          <alphabetical-icon/>
-        </IconButton>
-
-        <IconButton
-          v-bind:active="order === 'DESC'"
-          v-on:click="sort_order_descending()">
-          <sort-descending-icon/>
-        </IconButton>
-
-        <IconButton
-          v-bind:active="order === 'ASC'"
-          v-on:click="sort_order_ascending()">
-          <sort-ascending-icon/>
-        </IconButton>
-      </div>
-
-
-
-      <!-- article counter -->
-      <!-- Maybe not necessary -->
-      <span class="article_counter">
-        <file-document-outline-icon />x{{article_count}}
-      </span>
-
-      <!-- search -->
-      <div class="search_wrapper">
-        <input
-          type="search"
-          class="search_bar"
-          ref="search"
-          v-bind:class="{search_bar_open: search_bar_open}"
-          v-model="search_string"
-          v-on:keyup.enter="search()">
-        <IconButton
-          v-on:click="search()">
-          <magnify-icon/>
-        </IconButton>
-      </div>
-
-      <div class="growing_spacer"/>
-
-      <IconButton
-        v-if="$store.state.logged_in"
-        v-on:buttonClicked="$router.push({ path: 'article_editor' })">
-        <plus-icon/>
-      </IconButton>
-
-    </Toolbar>
 
 
     <div
@@ -181,14 +177,13 @@ import Tag from '@/components/Tag.vue'
 import Author from '@/components/Author.vue'
 
 // icons
-import PlusIcon from 'vue-material-design-icons/Plus.vue';
 import CalendarIcon from 'vue-material-design-icons/Calendar.vue';
 import AlphabeticalIcon from 'vue-material-design-icons/Alphabetical.vue';
 import SortDescendingIcon from 'vue-material-design-icons/SortDescending.vue';
 import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue';
 import PencilIcon from 'vue-material-design-icons/Pencil.vue';
 import PinIcon from 'vue-material-design-icons/Pin.vue';
-import FileDocumentOutlineIcon from 'vue-material-design-icons/FileDocumentOutline.vue';
+//import FileDocumentOutlineIcon from 'vue-material-design-icons/FileDocumentOutline.vue';
 import DeleteIcon from 'vue-material-design-icons/Delete.vue';
 import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
 import CloseIcon from 'vue-material-design-icons/Close.vue';
@@ -206,8 +201,7 @@ export default {
     // icons
     PencilIcon,
     PinIcon,
-    FileDocumentOutlineIcon,
-    PlusIcon,
+    //FileDocumentOutlineIcon,
     DeleteIcon,
     CalendarIcon,
     AlphabeticalIcon,
@@ -466,10 +460,17 @@ export default {
 
     search(){
       if(this.search_bar_open){
-        this.delete_all_articles()
-        this.get_articles()
-        // Todo: this would be done inside the search bar component
+
+
+        // Todo: this would be done inside a search bar component
         if(this.search_string === '') this.search_bar_open = false
+        else {
+          this.delete_all_articles()
+          this.get_articles()
+        }
+
+
+
       }
       else {
         this.search_bar_open = true

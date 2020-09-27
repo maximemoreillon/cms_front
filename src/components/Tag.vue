@@ -48,6 +48,7 @@ export default {
 
 
 .tag {
+  font-size: 80%;
   flex-shrink: 0;
   border: 1px solid #dddddd;
   border-radius: 5px;
@@ -55,14 +56,14 @@ export default {
   cursor: pointer;
   transition: color 0.25s, border-color 0.25s;
 
-  white-space: nowrap;
   max-width: 150px;
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.tag:first-child {
-  margin-left: 0;
+.tag:not(:last-child) {
+  margin-left: 0.25em;
 }
 
 .remove_button {

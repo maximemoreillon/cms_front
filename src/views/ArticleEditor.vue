@@ -2,7 +2,7 @@
 
   <div class="article_editor_view">
 
-    <template v-if="$store.state.logged_in && !article_loading">
+    <template v-if="$store.state.current_user && !article_loading">
 
       <Toolbar>
 
@@ -35,6 +35,7 @@
               type="search"
               ref="tag_input"
               list="existing_tag_list"
+              placeholder="New tag"
               v-on:keyup.enter="create_tag()">
 
             <datalist id="existing_tag_list">
@@ -228,11 +229,11 @@
     <!-- loader -->
     <div
       class="loader_container"
-      v-if="$store.state.logged_in && article_loading">
+      v-if="$store.state.current_user && article_loading">
       <Loader />
     </div>
 
-    <div class="" v-if="!$store.state.logged_in">
+    <div class="" v-if="!$store.state.current_user">
       Articles cannot be edited by unauthenticated user
     </div>
 
@@ -280,31 +281,32 @@ import Iframe from '@/components/Iframe.js'
 
 
 // Icons
-import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue';
-import DeleteIcon from 'vue-material-design-icons/Delete.vue';
-import ContentSaveIcon from 'vue-material-design-icons/ContentSave.vue';
-import EarthIcon from 'vue-material-design-icons/Earth.vue';
-import CodeTagsIcon from 'vue-material-design-icons/CodeTags.vue';
-import FormatHeader1Icon from 'vue-material-design-icons/FormatHeader1.vue';
-import FormatHeader2Icon from 'vue-material-design-icons/FormatHeader2.vue';
-import FormatHeader3Icon from 'vue-material-design-icons/FormatHeader3.vue';
-import FormatParagraphIcon from 'vue-material-design-icons/FormatParagraph.vue';
-import FormatBoldIcon from 'vue-material-design-icons/FormatBold.vue';
-import FormatItalicIcon from 'vue-material-design-icons/FormatItalic.vue';
-import FormatStrikethroughIcon from 'vue-material-design-icons/FormatStrikethrough.vue';
-import FormatUnderlineIcon from 'vue-material-design-icons/FormatUnderline.vue';
-import FormatListBulletedIcon from 'vue-material-design-icons/FormatListBulleted.vue';
-import FormatListNumberedIcon from 'vue-material-design-icons/FormatListNumbered.vue';
-import FormatQuoteCloseIcon from 'vue-material-design-icons/FormatQuoteClose.vue';
-import UndoIcon from 'vue-material-design-icons/Undo.vue';
-import RedoIcon from 'vue-material-design-icons/Redo.vue';
-import LinkIcon from 'vue-material-design-icons/Link.vue';
-import PencilIcon from 'vue-material-design-icons/Pencil.vue';
-import ImageIcon from 'vue-material-design-icons/Image.vue';
-import TagIcon from 'vue-material-design-icons/Tag.vue';
-import YoutubeIcon from 'vue-material-design-icons/Youtube.vue';
+import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue'
+import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import ContentSaveIcon from 'vue-material-design-icons/ContentSave.vue'
+import EarthIcon from 'vue-material-design-icons/Earth.vue'
+import CodeTagsIcon from 'vue-material-design-icons/CodeTags.vue'
+import FormatHeader1Icon from 'vue-material-design-icons/FormatHeader1.vue'
+import FormatHeader2Icon from 'vue-material-design-icons/FormatHeader2.vue'
+import FormatHeader3Icon from 'vue-material-design-icons/FormatHeader3.vue'
+import FormatParagraphIcon from 'vue-material-design-icons/FormatParagraph.vue'
+import FormatBoldIcon from 'vue-material-design-icons/FormatBold.vue'
+import FormatItalicIcon from 'vue-material-design-icons/FormatItalic.vue'
+import FormatStrikethroughIcon from 'vue-material-design-icons/FormatStrikethrough.vue'
+import FormatUnderlineIcon from 'vue-material-design-icons/FormatUnderline.vue'
+import FormatListBulletedIcon from 'vue-material-design-icons/FormatListBulleted.vue'
+import FormatListNumberedIcon from 'vue-material-design-icons/FormatListNumbered.vue'
+import FormatQuoteCloseIcon from 'vue-material-design-icons/FormatQuoteClose.vue'
+import UndoIcon from 'vue-material-design-icons/Undo.vue'
+import RedoIcon from 'vue-material-design-icons/Redo.vue'
+import LinkIcon from 'vue-material-design-icons/Link.vue'
+import PencilIcon from 'vue-material-design-icons/Pencil.vue'
+import ImageIcon from 'vue-material-design-icons/Image.vue'
+import TagIcon from 'vue-material-design-icons/Tag.vue'
+import YoutubeIcon from 'vue-material-design-icons/Youtube.vue'
 
 export default {
+  name: 'ArticleEditor',
   components: {
 
     Toolbar,
@@ -392,9 +394,9 @@ export default {
           this.article.properties.content = getHTML()
 
           // Parse the article to find metadata
-          this.set_article_title();
-          this.set_article_summary();
-          this.set_article_thumbnail_src();
+          this.set_article_title()
+          this.set_article_summary()
+          this.set_article_thumbnail_src()
 
         },
       }), // end of new Editor ()
@@ -426,7 +428,8 @@ export default {
 
       editable: true,
 
-      article_loading: true,
+      article_loading: true, // set to true because otherwise tiptap errors
+      article_error: null,
 
       // The list of all tags used by any article
       existing_tags: [],
@@ -443,12 +446,12 @@ export default {
     },
   },
   mounted(){
-    this.get_article_if_exists();
-    this.get_existing_tags();
+    this.get_article_if_exists()
+    this.get_existing_tags()
   },
   beforeDestroy() {
     // Always destroy your editor instance when it's no longer needed
-    this.editor.destroy();
+    this.editor.destroy()
   },
 
   methods: {
@@ -459,10 +462,13 @@ export default {
         || this.$route.params.id
         || this.$route.params.article_id
 
-      if(!article_id) return
+      if(!article_id) {
+        this.article_loading = false
+        return
+      }
 
       // this gets titptap to throw errors
-      this.article_loading = true;
+      //this.article_loading = true
 
       this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles/${article_id}/`)
       .then(response => {
@@ -478,7 +484,7 @@ export default {
         this.editor.setContent(this.article.properties.content)
 
         // setting the document title
-        document.title = `${this.article.properties.title} - Maxime MOREILLON`;
+        document.title = `${this.article.properties.title} - Maxime MOREILLON`
 
       })
       .catch(error => {
@@ -502,12 +508,10 @@ export default {
       if(this.article.identity.low){
         // if the article has an ID, UPDATE
         this.update_article()
-
       }
       else {
         // If the article does not have an ID, CREATE
         this.create_article()
-
       }
 
     },
