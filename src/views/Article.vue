@@ -331,10 +331,10 @@ export default {
 .edit_button {
   float: right;
   margin-top: 0.25em;
-  border: 1px solid #666666;
+  border: 1px solid #aaaaaa;
   padding: 0.25em 0.5em;
   border-radius: 0.25em;
-  color: currentColor;
+  color: #444444;
   transition: 0.25s;
 }
 

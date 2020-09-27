@@ -6,54 +6,6 @@
 
       <Toolbar>
 
-        <div class="metadata_wrapper">
-          <div
-            class="dates_container"
-            v-if="relationship">
-            <div class="" v-if="relationship.properties.creation_date">
-              Created on {{format_date(relationship.properties.creation_date)}}
-            </div>
-            <div class="" v-if="relationship.properties.edition_date">
-              Last edited on {{format_date(relationship.properties.edition_date)}}
-            </div>
-          </div>
-
-          <!-- Tags -->
-          <div class="tags_wrapper">
-
-            <tag-icon class="tag_icon"/>
-
-            <Tag
-              v-for="(tag, index) in tags"
-              v-bind:key="tag.identity.low"
-              v-bind:tag="tag"
-              removable
-              v-on:remove="delete_tag(index)"/>
-
-            <input
-              id="tag_search"
-              type="search"
-              ref="tag_input"
-              list="existing_tag_list"
-              placeholder="New tag"
-              v-on:keyup.enter="create_tag()">
-
-            <datalist id="existing_tag_list">
-              <option
-                v-for="existing_tag in existing_tags"
-                v-bind:value="existing_tag.properties.name"
-                v-bind:key="existing_tag.identity.low"/>
-            </datalist>
-
-          </div>
-        </div>
-
-
-
-
-
-
-
         <div class="growing_spacer"/>
 
         <div class="tool_cluster tools">
@@ -96,134 +48,157 @@
 
       </Toolbar>
 
+      <!-- Tags -->
+      <div class="tags_wrapper">
 
-      <!-- editor for the content of the article -->
-      <div class="editor_wrapper">
-        <editor-menu-bar
-          :editor="editor"
-          v-slot="{ commands, isActive, getMarkAttrs }">
+        <label>Tags:</label>
 
-          <div class="menubar">
+        <Tag
+          v-for="(tag, index) in tags"
+          v-bind:key="tag.identity.low"
+          v-bind:tag="tag"
+          removable
+          v-on:remove="delete_tag(index)"/>
 
-            <IconButton
-              v-bind:active="isActive.bold()"
-              @click="commands.bold">
-              <format-bold-icon />
-            </IconButton>
+        <input
+          id="tag_search"
+          type="search"
+          ref="tag_input"
+          list="existing_tag_list"
+          placeholder="New tag"
+          v-on:keyup.enter="create_tag()">
 
-            <IconButton
-              v-bind:active="isActive.italic()"
-              @click="commands.italic">
-              <format-italic-icon />
-            </IconButton>
-
-            <IconButton
-              v-bind:active="isActive.strike()"
-              @click="commands.strike">
-              <format-strikethrough-icon />
-            </IconButton>
-
-            <IconButton
-              v-bind:active="isActive.underline()"
-              @click="commands.underline">
-              <format-underline-icon />
-            </IconButton>
-
-            <IconButton
-              v-bind:active="isActive.code()"
-              @click="commands.code">
-              <code-tags-icon />
-            </IconButton>
-
-            <IconButton
-              v-bind:active="isActive.paragraph()"
-              @click="commands.paragraph">
-              <format-paragraph-icon />
-            </IconButton>
-
-            <IconButton
-              v-bind:active="isActive.heading({ level: 1 })"
-              @click="commands.heading({ level: 1 })">
-              <format-header-1-icon />
-            </IconButton>
-
-            <IconButton
-              v-bind:active="isActive.heading({ level: 2 })"
-              @click="commands.heading({ level: 2 })">
-              <format-header-2-icon />
-            </IconButton>
-
-            <IconButton
-              v-bind:active="isActive.heading({ level: 3 })"
-              @click="commands.heading({ level: 3 })">
-              <format-header-3-icon />
-            </IconButton>
-
-            <IconButton
-              v-bind:active="isActive.bullet_list()"
-              @click="commands.bullet_list">
-              <format-list-bulleted-icon />
-            </IconButton>
-
-            <IconButton
-              v-bind:active="isActive.ordered_list()"
-              @click="commands.ordered_list">
-              <format-list-numbered-icon />
-            </IconButton>
-
-            <IconButton
-              v-bind:active="isActive.blockquote()"
-              @click="commands.blockquote">
-              <format-quote-close-icon />
-            </IconButton>
-
-            <IconButton
-              v-bind:active="isActive.code_block()"
-              @click="commands.code_block">
-              <code-tags-icon />
-            </IconButton>
-
-
-            <IconButton
-              @click="commands.undo">
-              <undo-icon />
-            </IconButton>
-
-            <IconButton
-              @click="commands.redo">
-              <redo-icon />
-            </IconButton>
-
-            <IconButton
-              v-on:click="showImagePrompt(commands.image)">
-              <image-icon />
-            </IconButton>
-
-            <IconButton
-              v-on:click="showVideoPromt(commands.iframe)">
-              <youtube-icon />
-            </IconButton>
-
-            <IconButton
-              class="menubar_button"
-              v-bind:class="{ 'is-active': isActive.link() }"
-              v-on:click="prompt_for_url(commands.link)">
-              <link-icon />
-            </IconButton>
-
-          </div>
-        </editor-menu-bar>
-
-        <!-- The content of the editor -->
-        <article class="editor">
-
-          <editor-content
-            class="editor_content"
-            v-bind:editor="editor"/>
-
-        </article>
+        <datalist id="existing_tag_list">
+          <option
+            v-for="existing_tag in existing_tags"
+            v-bind:value="existing_tag.properties.name"
+            v-bind:key="existing_tag.identity.low"/>
+        </datalist>
 
       </div>
+
+
+      <!-- editor for the content of the article -->
+      <editor-menu-bar
+        :editor="editor"
+        v-slot="{ commands, isActive, getMarkAttrs }">
+
+        <div class="menubar">
+
+          <IconButton
+            v-bind:active="isActive.bold()"
+            @click="commands.bold">
+            <format-bold-icon />
+          </IconButton>
+
+          <IconButton
+            v-bind:active="isActive.italic()"
+            @click="commands.italic">
+            <format-italic-icon />
+          </IconButton>
+
+          <IconButton
+            v-bind:active="isActive.strike()"
+            @click="commands.strike">
+            <format-strikethrough-icon />
+          </IconButton>
+
+          <IconButton
+            v-bind:active="isActive.underline()"
+            @click="commands.underline">
+            <format-underline-icon />
+          </IconButton>
+
+          <IconButton
+            v-bind:active="isActive.code()"
+            @click="commands.code">
+            <code-tags-icon />
+          </IconButton>
+
+          <IconButton
+            v-bind:active="isActive.paragraph()"
+            @click="commands.paragraph">
+            <format-paragraph-icon />
+          </IconButton>
+
+          <IconButton
+            v-bind:active="isActive.heading({ level: 1 })"
+            @click="commands.heading({ level: 1 })">
+            <format-header-1-icon />
+          </IconButton>
+
+          <IconButton
+            v-bind:active="isActive.heading({ level: 2 })"
+            @click="commands.heading({ level: 2 })">
+            <format-header-2-icon />
+          </IconButton>
+
+          <IconButton
+            v-bind:active="isActive.heading({ level: 3 })"
+            @click="commands.heading({ level: 3 })">
+            <format-header-3-icon />
+          </IconButton>
+
+          <IconButton
+            v-bind:active="isActive.bullet_list()"
+            @click="commands.bullet_list">
+            <format-list-bulleted-icon />
+          </IconButton>
+
+          <IconButton
+            v-bind:active="isActive.ordered_list()"
+            @click="commands.ordered_list">
+            <format-list-numbered-icon />
+          </IconButton>
+
+          <IconButton
+            v-bind:active="isActive.blockquote()"
+            @click="commands.blockquote">
+            <format-quote-close-icon />
+          </IconButton>
+
+          <IconButton
+            v-bind:active="isActive.code_block()"
+            @click="commands.code_block">
+            <code-tags-icon />
+          </IconButton>
+
+
+          <IconButton
+            @click="commands.undo">
+            <undo-icon />
+          </IconButton>
+
+          <IconButton
+            @click="commands.redo">
+            <redo-icon />
+          </IconButton>
+
+          <IconButton
+            v-on:click="showImagePrompt(commands.image)">
+            <image-icon />
+          </IconButton>
+
+          <IconButton
+            v-on:click="showVideoPromt(commands.iframe)">
+            <youtube-icon />
+          </IconButton>
+
+          <IconButton
+            v-bind:class="{ 'is-active': isActive.link() }"
+            v-on:click="prompt_for_url(commands.link)">
+            <link-icon />
+          </IconButton>
+
+        </div>
+      </editor-menu-bar>
+
+
+      <editor-content
+        class="editor_content"
+        v-bind:editor="editor"/>
+
+
     </template>
 
     <!-- loader -->
@@ -302,7 +277,6 @@ import RedoIcon from 'vue-material-design-icons/Redo.vue'
 import LinkIcon from 'vue-material-design-icons/Link.vue'
 import PencilIcon from 'vue-material-design-icons/Pencil.vue'
 import ImageIcon from 'vue-material-design-icons/Image.vue'
-import TagIcon from 'vue-material-design-icons/Tag.vue'
 import YoutubeIcon from 'vue-material-design-icons/Youtube.vue'
 
 export default {
@@ -343,7 +317,6 @@ export default {
     PencilIcon,
     //PencilOffIcon,
     ImageIcon,
-    TagIcon,
     YoutubeIcon,
 
 
@@ -665,78 +638,37 @@ export default {
 <!-- not scoped so as to affect embedded components -->
 <style>
 
-.article_editor_view{
-  height: 100%;
-  display: flex;
-  flex-direction: column;
+
+
+
+
+
+
+
+.menubar, .editor_content {
+  margin-top: 0.5em;
 }
-
-
-.metadata_wrapper{
-  display: flex;
-}
-
-.metadata_wrapper > div:not(:first-child) {
-  margin-left: 10px;
-  display: flex;
-  flex-wrap: wrap;
-}
-
-
-
-
-/* Dangerous because unscoped */
-input[type="search"]{
-  border: none;
-  border-bottom: 1px solid #444444;
-}
-
-.menubar_button{
-  cursor: pointer;
-  background-color: white;
-  border: none;
-  font-size: 150%;
-}
-
-.menubar_button.is-active{
-  color: #c00000;
-}
-
 .menubar{
-  border-bottom: 1px solid #dddddd;
+  position: sticky;
+  border: 1px solid #dddddd;
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-}
-
-.editor_wrapper {
-  margin-top: 10px;
-  border: 1px solid #dddddd;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-
-.editor {
-  flex-grow: 1;
-  position: relative;
+  font-size: 150%;
 }
 
 .editor_content{
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  border: 1px solid #dddddd;
+
+  /* 80vh should give confortable writing space and still keep the menubar visible */
+  max-height: 80vh;
 
   overflow-y: auto;
 }
 
+
 /* Used for the placeholder */
-.editor p.is-editor-empty:first-child::before {
+.editor_content p.is-editor-empty:first-child::before {
   content: attr(data-empty-text);
   float: left;
   color: #aaa;
@@ -754,23 +686,21 @@ pre code {
   color: #e0e2e4;
 }
 
+
+/* TAGS */
 .tags_wrapper {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
 }
+
 .tags_wrapper > * {
   margin: 5px;
-
 }
 
-.tag_icon {
-  color: #444444;
-}
-
-.tool_cluster {
-  display: flex;
-  flex-wrap: wrap;
+#tag_search{
+  border: none;
+  border-bottom: 1px solid #444444;
 }
 
 
