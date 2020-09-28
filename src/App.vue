@@ -78,8 +78,12 @@ main a {
 }
 
 article a {
-  font-weight: bold;
-  text-decoration: none;
+  text-decoration: underline;
+  color: currentColor;
+  transition: 0.25s;
+}
+
+article a:hover {
   color: #c00000;
 }
 

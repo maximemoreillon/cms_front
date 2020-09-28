@@ -17,7 +17,7 @@ export default {
 .toolbar{
   display: flex;
   flex-wrap: nowrap;
-  align-items: flex-start;
+  align-items: center;
   border-bottom: 1px solid #dddddd;
   padding: 5px 0;
   margin-bottom: 25px;
@@ -32,13 +32,14 @@ export default {
   align-items: center;
   flex-wrap: wrap;
 }
+
 .toolbar > * > *:not(:last-child) {
   //margin-right: 1em;
 }
 
 
 .toolbar > *:not(:last-child){
-  //margin-right: 1em;
+  margin-right: 0.25em;
 }
 
 .growing_spacer{

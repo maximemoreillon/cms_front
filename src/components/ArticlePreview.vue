@@ -53,7 +53,7 @@
         alt="">
 
       <!-- Summary -->
-      <div
+      <article
         class="article_summary"
         v-if="article.properties.summary"
         v-html="article.properties.summary"/>

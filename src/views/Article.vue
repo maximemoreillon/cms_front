@@ -18,8 +18,7 @@
 
         <!-- Author -->
         <div class="metadata_wrapper">
-          <span>Written by</span>
-          <Author v-bind:author="author"/>
+          Written by <Author v-bind:author="author"/>
         </div>
 
         <div

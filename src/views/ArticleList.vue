@@ -5,6 +5,55 @@
     <!-- Toolbar for sorting and new article -->
     <Toolbar >
 
+      <!-- Tag -->
+      <template v-if="tag">
+        <span>Articles tagged with</span>
+
+        <Tag v-bind:tag="tag"/>
+
+        <IconButton
+          v-on:click="$router.push({ name: 'article_list' })">
+          <close-icon/>
+        </IconButton>
+
+        <template v-if="user_is_admin">
+
+          <IconButton
+            v-on:click="prompt_for_rename()">
+            <pencil-icon/>
+          </IconButton>
+
+          <IconButton
+            v-on:click="delete_tag()">
+            <delete-icon />
+          </IconButton>
+
+          <IconButton
+            v-bind:active="tag.properties.navigation_item"
+            v-on:click="pin_to_navbar()">
+            <pin-icon />
+          </IconButton>
+      </template>
+
+
+      </template>
+
+      <!-- Author -->
+      <template v-if="author.properties">
+        <span>Articles written by</span>
+        <Author v-bind:author="author"/>
+
+        <!-- remove author filter -->
+        <IconButton
+          v-on:click="$router.push({ name: 'article_list' })">
+          <close-icon/>
+        </IconButton>
+
+      </template>
+
+
+      <div class="growing_spacer"/>
+
       <div class="">
 
         <!-- article counter -->
@@ -23,6 +72,12 @@
           v-bind:active="sort === 'article.title'"
           v-on:click="sort_by_title()">
           <alphabetical-icon/>
+        </IconButton>
+
+        <IconButton
+          v-bind:active="sort === 'article.views'"
+          v-on:click="sort_by_views()">
+          <eye-icon/>
         </IconButton>
 
         <IconButton
@@ -59,62 +114,11 @@
 
     </Toolbar>
 
-    <!-- Selected author -->
-    <!-- TODO: Use something else than a toolbar -->
-    <Toolbar v-if="author.properties">
-
-      <span>Showing articles written by <Author v-bind:author="author"/></span>
-
-        <!-- remove author filter -->
-        <IconButton
-          v-on:click="$router.push({ name: 'article_list' })">
-          <close-icon/>
-        </IconButton>
-    </Toolbar >
-
-    <Toolbar v-else-if="author.loading">
-      <Loader />
-    </Toolbar >
 
 
 
 
 
-    <!-- Selected tag -->
-    <!-- TODO: Use something else than a toolbar -->
-    <Toolbar v-if="tag && !tag_loading">
-      <Tag v-bind:tag="tag"/>
-
-      <IconButton
-        v-on:click="$router.push({ name: 'article_list' })">
-        <close-icon/>
-      </IconButton>
-
-      <template v-if="user_is_admin">
-
-        <IconButton
-          v-on:click="prompt_for_rename()">
-          <pencil-icon/>
-        </IconButton>
-
-        <IconButton
-          v-on:click="delete_tag()">
-          <delete-icon />
-        </IconButton>
-
-        <IconButton
-          v-bind:active="tag.properties.navigation_item"
-          v-on:click="pin_to_navbar()">
-          <pin-icon />
-        </IconButton>
-
-      </template>
-
-    </Toolbar >
-
-    <Toolbar v-else-if="tag_loading">
-      <Loader />
-    </Toolbar >
 
 
 
@@ -364,6 +368,11 @@ export default {
       this.delete_all_articles()
       this.get_articles()
     },
+    sort_by_views(){
+      this.sort = 'article.views'
+      this.delete_all_articles()
+      this.get_articles()
+    },
     sort_order_ascending(){
       this.order = 'ASC'
       this.delete_all_articles()
@@ -379,8 +388,8 @@ export default {
 
       this.tag_loading = true;
 
-      this.axios.put(`${process.env.VUE_APP_CMS_API_URL}/tag`, {
-        tag: this.tag
+      this.axios.put(`${process.env.VUE_APP_CMS_API_URL}/tags/${this.tag.identity.low}`, {
+        properties: this.tag.properties
       })
       .then( response => {
 
@@ -417,9 +426,7 @@ export default {
       if(confirm('Delete tag?')){
         this.article_loading = true;
 
-        this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/tag`, {
-          params: {tag_id: this.tag.identity.low}
-        })
+        this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/tags/${this.tag.identity.low}`)
         .then( () => {
           this.$router.push({ name: 'article_list' })
         })
@@ -460,19 +467,16 @@ export default {
 
     search(){
       if(this.search_bar_open){
-
-
-        // Todo: this would be done inside a search bar component
+        // if the search bar is open, search or close
         if(this.search_string === '') this.search_bar_open = false
         else {
           this.delete_all_articles()
           this.get_articles()
         }
 
-
-
       }
       else {
+        // If the search bar is closed, open it
         this.search_bar_open = true
         setTimeout(() => this.$refs.search.focus(),50)
       }
@@ -482,8 +486,8 @@ export default {
   },
   computed: {
     user_is_admin(){
-      if(!this.$store.state.user) return false
-      return this.$store.state.user.properties.isAdmin
+      if(!this.$store.state.current_user) return false
+      return this.$store.state.current_user.properties.isAdmin
     }
   }
 
