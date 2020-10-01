@@ -198,7 +198,6 @@
         class="editor_content"
         v-bind:editor="editor"/>
 
-
     </template>
 
     <!-- loader -->
@@ -362,16 +361,7 @@ export default {
         editable: true,
         content: "",
 
-        onUpdate: ({ getHTML }) => {
 
-          this.article.properties.content = getHTML()
-
-          // Parse the article to find metadata
-          this.set_article_title()
-          this.set_article_summary()
-          this.set_article_thumbnail_src()
-
-        },
       }), // end of new Editor ()
 
 
@@ -471,21 +461,24 @@ export default {
     },
 
     toggle_published(){
-      this.article.properties.published = !this.article.properties.published;
+      this.article.properties.published = !this.article.properties.published
     },
     submit_article(){
 
       // Show loader to prevent user from re-submitting
       this.article_loading = true;
 
-      if(this.article.identity.low){
-        // if the article has an ID, UPDATE
-        this.update_article()
-      }
-      else {
-        // If the article does not have an ID, CREATE
-        this.create_article()
-      }
+      // Parse the article to find metadata
+      this.article.properties.content = this.editor.getHTML()
+      this.set_article_title()
+      this.set_article_summary()
+      this.set_article_thumbnail_src()
+
+      // if the article has an ID, UPDATE
+      if(this.article.identity.low) this.update_article()
+
+      // If the article does not have an ID, CREATE
+      else this.create_article()
 
     },
     create_article(){
@@ -494,53 +487,56 @@ export default {
         tag_ids: this.tags.map(tag => tag.identity.low),
       })
       .then(response => {
-        this.article_loading = false;
-
         // redirect to article
         let identity = response.data[0]._fields[response.data[0]._fieldLookup['article']].identity.low
         this.$router.push({ name: 'article', query: { id: identity } })
       })
       .catch(error => {
-        this.article_loading = false;
-        alert(error.response.data)
+        this.article_loading = false
+        console.error(error)
+        alert(`Error while creating the article`)
+      })
+      .finally(() => {
+        this.article_loading = false
       })
     },
     update_article(){
       this.axios.put(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.article.identity.low}`, {
         properties: {
-          // DIRTY
           content: this.article.properties.content,
           published: this.article.properties.published,
           title: this.article.properties.title,
-          summmary: this.article.properties.summmary,
+          summary: this.article.properties.summary,
           thumbnail_src: this.article.properties.thumbnail_src,
         },
         tag_ids: this.tags.map(tag => tag.identity.low),
       })
       .then(response => {
-        this.article_loading = false;
-
         // redirect to article
         let identity = response.data[0]._fields[response.data[0]._fieldLookup['article']].identity.low
         this.$router.push({ name: 'article', query: { id: identity } })
       })
       .catch(error => {
-        this.article_loading = false;
-        alert(error.response.data)
+        console.error(error)
+        alert(`Error while updating the article`)
+      })
+      .finally(() => {
+        this.article_loading = false
       })
     },
     delete_article(){
       if(confirm('Delete article?')){
-        this.article_loading = true;
-        this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.article.identity.low}`, {
-          params: {article_id: this.article.identity.low}
-        })
+        this.article_loading = true
+        this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.article.identity.low}`)
         .then( () => {
-          this.article_loading = false;
           this.$router.push({ name: 'article_list' })
         })
         .catch(error => {
-          alert(error.response.data)
+          console.error(error)
+          alert(`Error while deleting the article`)
+        })
+        .finally(() => {
+          this.article_loading = false
         })
       }
 
@@ -586,7 +582,7 @@ export default {
 
     set_article_title(){
       // get article title from content (first h1 tag of the content)
-      var virtual_container = document.createElement('div');
+      let virtual_container = document.createElement('div')
       virtual_container.innerHTML = this.article.properties.content
       var first_h1 = virtual_container.getElementsByTagName('h1')[0]
       if(first_h1) this.article.properties.title = first_h1.innerHTML
@@ -594,15 +590,16 @@ export default {
     },
     set_article_summary(){
       // get article summary from content (first p tag of the content)
-      var virtual_container = document.createElement('div');
+      let virtual_container = document.createElement('div')
       virtual_container.innerHTML = this.article.properties.content
       var first_p = virtual_container.getElementsByTagName('p')[0]
       if(first_p) this.article.properties.summary = first_p.innerHTML
       else this.article.properties.summary = null
+      console.log()
     },
     set_article_thumbnail_src(){
       // get article thumbnail from content (first img tag of the content)
-      var virtual_container = document.createElement('div');
+      let virtual_container = document.createElement('div')
       virtual_container.innerHTML = this.article.properties.content
       var first_img = virtual_container.getElementsByTagName('img')[0]
       if(first_img) this.article.properties.thumbnail_src = first_img.src

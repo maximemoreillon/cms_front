@@ -87,8 +87,7 @@ article a:hover {
   color: #c00000;
 }
 
-article:not(.editor) h1 {
-  outline: 1px solid red;
+article:not(.editor) h1:first-child {
   display: none;
 }
 
