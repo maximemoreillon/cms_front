@@ -211,7 +211,7 @@ export default {
   left: 0;
   right: 0;
   height: 25%;
-  z-index: 10;
+  z-index: 5;
 
   background-image: linear-gradient(to top, white, transparent);
   background-position: 100% 0;
@@ -256,7 +256,7 @@ p {
   right: 0;
   top: 0;
   width: 50px;
-  z-index: 10;
+  z-index: 5;
 
   background-image: linear-gradient(to left, white, transparent);
   background-position: 0 100%;
