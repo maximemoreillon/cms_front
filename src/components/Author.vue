@@ -35,7 +35,6 @@ export default {
       if(!(this.$route.name === target_route_name && this.$route.query.id === this.author.identity.low)){
         this.$router.push({ name: target_route_name, query: { author_id: this.author.identity.low } })
       }
-
     }
   },
 }

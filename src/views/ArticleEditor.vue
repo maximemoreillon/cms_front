@@ -488,8 +488,8 @@ export default {
       })
       .then(response => {
         // redirect to article
-        let identity = response.data[0]._fields[response.data[0]._fieldLookup['article']].identity.low
-        this.$router.push({ name: 'article', query: { id: identity } })
+        const article_id = response.data[0]._fields[response.data[0]._fieldLookup['article']].identity.low
+        this.$router.push({ name: 'article', params: { article_id: article_id } })
       })
       .catch(error => {
         this.article_loading = false
@@ -513,8 +513,8 @@ export default {
       })
       .then(response => {
         // redirect to article
-        let identity = response.data[0]._fields[response.data[0]._fieldLookup['article']].identity.low
-        this.$router.push({ name: 'article', query: { id: identity } })
+        const article_id = response.data[0]._fields[response.data[0]._fieldLookup['article']].identity.low
+        this.$router.push({ name: 'article', params: { article_id: article_id } })
       })
       .catch(error => {
         console.error(error)
