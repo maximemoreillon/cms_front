@@ -16,7 +16,16 @@
           New article
         </router-link>
 
-        <router-link :to="{ name: 'article_list'}">All articles</router-link>
+        <router-link :to="{ name: 'article_list'}">
+          All articles
+        </router-link>
+
+        <router-link
+        v-if="$store.state.current_user"
+        :to="{ name: 'article_list', query: {author_id: $store.state.current_user.identity.low}}">
+          My articles
+        </router-link>
+
 
         <router-link
           v-for="(item, index) in $store.state.navigation_items"
@@ -25,7 +34,9 @@
           {{item.label}}
         </router-link>
 
-        <router-link :to="{ name: 'about', params: {} }">About</router-link>
+        <router-link :to="{ name: 'about', params: {} }">
+          About
+        </router-link>
 
       </template>
 
