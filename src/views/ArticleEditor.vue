@@ -385,7 +385,7 @@ export default {
         }
       },
 
-      relationship: null,
+      authorship: null,
 
       tags: [],
 
@@ -440,7 +440,7 @@ export default {
 
         // parsing neo4j record for article
         this.article = record._fields[record._fieldLookup['article']]
-        this.relationship = record._fields[record._fieldLookup['relationship']]
+        this.authorship = record._fields[record._fieldLookup['authorship']]
         this.tags = record._fields[record._fieldLookup['tags']]
 
         // Applying to content of editor

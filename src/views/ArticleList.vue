@@ -63,19 +63,19 @@
         </span>
 
         <IconButton
-          v-bind:active="sort === 'article.edition_date'"
+          v-bind:active="sort === 'date'"
           v-on:click="sort_by_date()">
           <calendar-icon/>
         </IconButton>
 
         <IconButton
-          v-bind:active="sort === 'article.title'"
+          v-bind:active="sort === 'title'"
           v-on:click="sort_by_title()">
           <alphabetical-icon/>
         </IconButton>
 
         <IconButton
-          v-bind:active="sort === 'article.views'"
+          v-bind:active="sort === 'views'"
           v-on:click="sort_by_views()">
           <eye-icon/>
         </IconButton>
@@ -229,7 +229,7 @@ export default {
       author: {},
 
       // Default sorting and ordering
-      sort: 'article.edition_date',
+      sort: 'date',
       order: 'DESC',
 
 
@@ -359,17 +359,17 @@ export default {
     },
 
     sort_by_date(){
-      this.sort = 'article.edition_date'
+      this.sort = 'date'
       this.delete_all_articles()
       this.get_articles()
     },
     sort_by_title(){
-      this.sort = 'article.title'
+      this.sort = 'title'
       this.delete_all_articles()
       this.get_articles()
     },
     sort_by_views(){
-      this.sort = 'article.views'
+      this.sort = 'views'
       this.delete_all_articles()
       this.get_articles()
     },
@@ -443,25 +443,25 @@ export default {
       main_and_footer_wrapper.onscroll = () => {
 
         // only apply to article_list route
-        if(this.$route.name === 'article_list'){
+        if(!this.$route.name === 'article_list') return
 
-          let main = current_view.parentNode
-          let footer = main_and_footer_wrapper.getElementsByTagName('footer')[0]
+        let main = current_view.parentNode
+        let footer = main_and_footer_wrapper.getElementsByTagName('footer')[0]
 
-          let content_height = main.offsetHeight + footer.offsetHeight
+        let content_height = main.offsetHeight + footer.offsetHeight
 
-          let content_view_bottom = main_and_footer_wrapper.offsetHeight + main_and_footer_wrapper.scrollTop
+        let content_view_bottom = main_and_footer_wrapper.offsetHeight + main_and_footer_wrapper.scrollTop
 
-          let delta = Math.abs(content_height - content_view_bottom)
+        let delta = Math.abs(content_height - content_view_bottom)
 
 
-          if( delta < 5){
-            if(!this.articles_loading && this.article_records.length > 0 && !this.articles_all_loaded) {
-              this.get_articles();
-            }
+        if( delta < 5){
+          if(!this.articles_loading && this.article_records.length > 0 && !this.articles_all_loaded) {
+            this.get_articles();
           }
-
         }
+
+
       }
     },
 

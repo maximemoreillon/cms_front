@@ -19,8 +19,8 @@
         <!-- date -->
         <span
           class="article_date"
-          v-if="relationship.properties.creation_date">
-          {{format_date(relationship.properties.creation_date)}}
+          v-if="authorship.properties.creation_date">
+          {{format_date(authorship.properties.creation_date)}}
         </span>
 
         <span>|</span>
@@ -90,7 +90,6 @@
 <script>
 
 import {formatDate} from '@/mixins/formatDate.js'
-//import dot from 'vue-text-dot' // not working well
 
 import Tag from '@/components/Tag.vue'
 import EarthIcon from 'vue-material-design-icons/Earth.vue';
@@ -124,16 +123,16 @@ export default {
   },
   computed: {
     article(){
-      return this.article_record._fields[this.article_record._fieldLookup['article']]
+      return this.article_record._fields[this.article_record._fieldLookup.article]
     },
     author(){
-      return this.article_record._fields[this.article_record._fieldLookup['author']]
+      return this.article_record._fields[this.article_record._fieldLookup.author]
     },
     tags(){
-      return this.article_record._fields[this.article_record._fieldLookup['tags']]
+      return this.article_record._fields[this.article_record._fieldLookup.tags]
     },
-    relationship(){
-      return this.article_record._fields[this.article_record._fieldLookup['relationship']]
+    authorship(){
+      return this.article_record._fields[this.article_record._fieldLookup.authorship]
     },
   }
 
@@ -216,10 +215,6 @@ export default {
   background-image: linear-gradient(to top, white, transparent);
   background-position: 100% 0;
   background-size: 100% 100%;
-}
-
-p {
-  outline: 1px solid blue;
 }
 
 

@@ -23,14 +23,14 @@
 
         <div
           class="metadata_wrapper"
-          v-if="relationship.properties.creation_date">
-            Creation date: {{format_date(relationship.properties.creation_date)}}
+          v-if="authorship.properties.creation_date">
+            Creation date: {{format_date(authorship.properties.creation_date)}}
         </div>
 
         <div
           class="metadata_wrapper"
-          v-if="relationship.properties.edition_date">
-            Last edited: {{format_date(relationship.properties.edition_date)}}
+          v-if="authorship.properties.edition_date">
+            Last edited: {{format_date(authorship.properties.edition_date)}}
         </div>
 
         <div
@@ -212,7 +212,7 @@ export default {
       },
 
       author: null,
-      relationship: null,
+      authorship: null,
 
 
       modal: {
@@ -244,13 +244,12 @@ export default {
 
         if(response.data.length === 0) return
 
-        let record = response.data[0]
+        const record = response.data[0]
 
         // parsing the article
         this.article = record._fields[record._fieldLookup['article']]
         this.author = record._fields[record._fieldLookup['author']]
-        this.relationship = record._fields[record._fieldLookup['relationship']]
-
+        this.authorship = record._fields[record._fieldLookup['authorship']]
         this.tags = record._fields[record._fieldLookup['tags']]
 
         // Make the images clickable to expand
