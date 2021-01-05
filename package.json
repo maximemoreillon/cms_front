@@ -17,7 +17,7 @@
     "@moreillon/vue_application_template": "^1.0.8",
     "@moreillon/vue_loader": "^0.1.1",
     "@moreillon/vue_modal": "0.0.4",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "dotenv": "^8.2.0",
     "dotenv-expand": "^5.1.0",
