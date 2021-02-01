@@ -385,6 +385,7 @@ export default {
     },
 
     update_tag(){
+      // Used for admins to edit tags
 
       this.tag_loading = true;
 
@@ -488,7 +489,8 @@ export default {
     user_is_admin(){
       if(!this.$store.state.current_user) return false
       return this.$store.state.current_user.properties.isAdmin
-    }
+    },
+
   }
 
 

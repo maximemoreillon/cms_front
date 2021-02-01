@@ -27,15 +27,17 @@ const routes = [
     name: 'article',
     component: Article,
   },
-  { path: '/article', redirect: to => {
-    return {
-      name: 'article',
-      params: {
-        article_id: to.query.id
-      },
-      query: {}
+  {
+    path: '/article', redirect: to => {
+      return {
+        name: 'article',
+        params: {
+          article_id: to.query.id
+        },
+        query: {}
+      }
     }
-  }},
+  },
   {
     path: '/article_editor',
     name: 'article_editor',
