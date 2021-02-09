@@ -3,7 +3,6 @@ import VueRouter from 'vue-router'
 //import Home from '../views/Home.vue'
 import About from '../views/About.vue'
 import Article from '../views/Article.vue'
-import ArticleEditor from '../views/ArticleEditor.vue'
 import ArticleList from '../views/ArticleList.vue'
 
 
@@ -21,12 +20,26 @@ const routes = [
     name: 'about',
     component: About,
   },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/Login.vue'),
+  },
 
   {
     path: '/articles/:article_id',
     name: 'article',
     component: Article,
   },
+
+  {
+    path: '/articles/:article_id/edit',
+    alias: '/article_editor',
+    name: 'article_editor',
+    component: () => import('@/views/ArticleEditor.vue'),
+  },
+
+  // Legacy
   {
     path: '/article', redirect: to => {
       return {
@@ -37,11 +50,6 @@ const routes = [
         query: {}
       }
     }
-  },
-  {
-    path: '/article_editor',
-    name: 'article_editor',
-    component: ArticleEditor,
   },
 
   { path: '/*', redirect: { name: 'article_list' }}

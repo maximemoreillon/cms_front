@@ -193,9 +193,9 @@
         </div>
       </editor-menu-bar>
 
-
+      <!-- the article being written comes here -->
       <editor-content
-        class="editor_content"
+        class="editor_content article"
         v-bind:editor="editor"/>
 
     </template>
@@ -357,7 +357,7 @@ export default {
 
           new Iframe(), // For Youtube videos
         ],
-
+        disablePasteRules:true,
         editable: true,
         content: "",
 
@@ -635,13 +635,6 @@ export default {
 <!-- not scoped so as to affect embedded components -->
 <style>
 
-
-
-
-
-
-
-
 .menubar, .editor_content {
   margin-top: 0.5em;
 }
@@ -674,14 +667,7 @@ export default {
   font-style: italic;
 }
 
-pre code {
-  /* manually applying style because tiptap doesn't apply the hljs class to code */
-  display: block;
-  overflow-x: auto;
-  padding: 0.5em;
-  background: #282b2e;
-  color: #e0e2e4;
-}
+
 
 
 /* TAGS */

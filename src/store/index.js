@@ -20,16 +20,15 @@ export default new Vuex.Store({
       }
 
       // Retrieve current user
-      axios.post(`${process.env.VUE_APP_AUTHENTICATION_API_URL}/whoami`,
-      {}, { headers: { Authorization: "Bearer " + Vue.$cookies.get('jwt') } })
+      const url = `${process.env.VUE_APP_AUTHENTICATION_API_URL}/whoami`
+      const options = { headers: { Authorization: "Bearer " + Vue.$cookies.get('jwt') } }
+      axios.get(url, options)
       .then(response => {
-
         state.current_user = response.data
-
       })
       .catch(error => {
-        if(error.response) console.log(error.response.data)
-        else console.log(error)
+        if(error.response) console.error(error.response.data)
+        else console.error(error)
       })
 
 

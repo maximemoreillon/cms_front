@@ -24,9 +24,7 @@ export default {
       back_end_version: null,
     }
   },
-  mounted(){
-    document.title = `CMS - Maxime MOREILLON`;
-    
+  mounted(){    
     this.get_back_end_version()
   },
   methods: {

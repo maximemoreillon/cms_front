@@ -3,9 +3,7 @@
   <div id="app">
 
     <AppTemplate
-      applicationName="CMS"
-      :authenticationApiUrl="authenticationApiUrl"
-      :authenticationFrontUrl="authenticationFrontUrl">
+      applicationName="Knowledge base">
 
       <!-- proper way to embed navigation -->
       <template v-slot:navigation>
@@ -88,26 +86,26 @@ main a {
   text-decoration: none;
 }
 
-article a {
+.article a {
   text-decoration: underline;
   color: currentColor;
   transition: 0.25s;
 }
 
-article a:hover {
+.article a:hover {
   color: #c00000;
 }
 
-article:not(.editor) h1:first-child {
+.article:not(.editor_content) h1:first-child {
   display: none;
 }
 
-article img {
+.article img {
   /* test CSS for images */
 
 
   display: block;
-  margin: 3em auto;
+  margin: 2em auto;
   cursor: pointer;
 
   max-width: 60%;
@@ -116,12 +114,21 @@ article img {
 
 }
 
-article iframe {
+.article iframe {
   display: block;
   margin-left: auto;
   margin-right: auto;
   width: 50vw;
   height: 30vw;
+}
+
+.article pre code {
+  /* manually applying style because tiptap doesn't apply the hljs class to code */
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #282b2e;
+  color: #e0e2e4;
 }
 
 .loader_container {

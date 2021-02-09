@@ -72,6 +72,7 @@
 
       <!-- the article itself -->
       <article
+        class="article"
         v-if="article && !article_loading"
         ref="article_content"
         v-html="article.properties.content"/>
@@ -405,6 +406,7 @@ export default {
 }
 
 textarea {
+
   width: 100%;
   resize:vertical;
 }

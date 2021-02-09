@@ -46,6 +46,8 @@ Vue.config.productionTip = false
 // Redirect to login screen if not logged in (i.e. does not have JWT in cookies)
 router.beforeEach((to, from, next) => {
 
+  document.title = `CMS - Maxime MOREILLON`
+
   // Save authentication state in Vuex
   store.commit('check_authentication')
 
