@@ -10,7 +10,7 @@
 
         <router-link
           v-if="$store.state.current_user"
-          :to="{ name: 'article_editor'}">
+          :to="{ name: 'article_editor', params: {article_id: 'new'}}">
           New article
         </router-link>
 
@@ -26,7 +26,7 @@
 
 
         <router-link
-          v-for="(item, index) in $store.state.navigation_items"
+          v-for="(item, index) in $store.state.pinned_tags"
           v-bind:key="`nav_${index}`"
           :to="item.route">
           {{item.label}}

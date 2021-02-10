@@ -5,7 +5,7 @@
       <router-link
         class="edit_button"
         v-if="editable"
-        :to="{ name: 'article_editor', query: { id: article.identity.low } }">
+        :to="{ name: 'article_editor', query: { id: article.identity } }">
         <pencil-icon />
         <span>Edit</span>
       </router-link>
@@ -36,7 +36,7 @@
         <div
           class="metadata_wrapper"
           v-if="article.properties.views">
-            {{article.properties.views.low}} Views
+            {{article.properties.views}} Views
         </div>
 
         <div
@@ -64,7 +64,7 @@
         <template v-if="tags.length > 0">
           <Tag
             v-for="(tag) in tags"
-            v-bind:key="tag.identity.low"
+            v-bind:key="tag.identity"
             v-bind:tag="tag"/>
         </template>
         <span v-else>None</span>
@@ -115,7 +115,7 @@
               v-bind:comment="comment"
               v-bind:deletable="editable"
               v-on:deleted="get_comments_of_article()"
-              v-bind:key="comment.identity.low"/>
+              v-bind:key="comment.identity"/>
           </template>
           <Loader v-else-if="comments_loading"/>
           <div v-else>No comments yet</div>
@@ -274,7 +274,7 @@ export default {
 
     create_comment(){
       this.axios.post(`${process.env.VUE_APP_CMS_API_URL}/comments`, {
-        article_id: this.article.identity.low,
+        article_id: this.article.identity,
         comment: this.comment,
       })
       .then( () => {
@@ -317,7 +317,7 @@ export default {
       // If article does not have an author, then nothing to edit
       if(!this.author) return false
 
-      return (this.author.identity.low === this.$store.state.current_user.identity.low)
+      return (this.author.identity === this.$store.state.current_user.identity.low)
     }
   }
 

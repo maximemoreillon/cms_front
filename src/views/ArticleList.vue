@@ -296,7 +296,7 @@ export default {
         // Every record contains the total article count
         // Take the total article count from the first record
         let first_record = response.data[0]
-        this.article_count = first_record._fields[first_record._fieldLookup['article_count']].low
+        this.article_count = first_record._fields[first_record._fieldLookup['article_count']]
 
 
         response.data.forEach( (record) => {
@@ -387,7 +387,7 @@ export default {
 
       this.tag_loading = true;
 
-      this.axios.put(`${process.env.VUE_APP_CMS_API_URL}/tags/${this.tag.identity.low}`, {
+      this.axios.put(`${process.env.VUE_APP_CMS_API_URL}/tags/${this.tag.identity}`, {
         properties: this.tag.properties
       })
       .then( response => {
@@ -425,7 +425,7 @@ export default {
       if(confirm('Delete tag?')){
         this.article_loading = true;
 
-        this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/tags/${this.tag.identity.low}`)
+        this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/tags/${this.tag.identity}`)
         .then( () => {
           this.$router.push({ name: 'article_list' })
         })

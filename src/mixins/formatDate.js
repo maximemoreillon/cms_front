@@ -4,10 +4,10 @@ export const formatDate = {
     format_date(date){
 
 
-      var mm = date.month.low; // getMonth() is zero-based
-      var dd = date.day.low;
+      var mm = date.month; // getMonth() is zero-based
+      var dd = date.day;
 
-      return [date.year.low, (mm>9 ? '' : '0') + mm, (dd>9 ? '' : '0') + dd ].join('/');
+      return [date.year, (mm>9 ? '' : '0') + mm, (dd>9 ? '' : '0') + dd ].join('/');
     }
   },
 

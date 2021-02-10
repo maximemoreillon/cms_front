@@ -7,7 +7,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     current_user: null,
-    navigation_items: [],
+    pinned_tags: [],
   },
   mutations: {
     check_authentication(state){
@@ -41,23 +41,13 @@ export default new Vuex.Store({
       .then(response => {
         // delete all navigation items
 
-        state.navigation_items = []
-
-        if(state.user) {
-
-          state.navigation_items.push({
-            route: `/?author_id=${state.user.identity.low}`,
-            label: 'My articles'
-          })
-        }
-
-        response.data.forEach( record => {
-          let tag = record._fields[record._fieldLookup['tag']]
-          state.navigation_items.push({
-            route: `/?tag_id=${tag.identity.low}`,
+        state.pinned_tags = response.data.map(record => {
+          const tag = record._fields[record._fieldLookup['tag']]
+          return {
+            route: `/?tag_id=${tag.identity}`,
             label: tag.properties.name,
-          })
-        });
+          }
+        })
 
       })
       .catch(error => console.log(error))

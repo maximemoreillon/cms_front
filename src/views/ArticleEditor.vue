@@ -34,7 +34,7 @@
           </IconButton>
 
           <IconButton
-            v-if="article.identity.low"
+            v-if="article.identity"
             v-on:click="delete_article()">
             <delete-icon />
           </IconButton>
@@ -55,7 +55,7 @@
 
         <Tag
           v-for="(tag, index) in tags"
-          v-bind:key="tag.identity.low"
+          v-bind:key="tag.identity"
           v-bind:tag="tag"
           removable
           v-on:remove="delete_tag(index)"/>
@@ -72,7 +72,7 @@
           <option
             v-for="existing_tag in existing_tags"
             v-bind:value="existing_tag.properties.name"
-            v-bind:key="existing_tag.identity.low"/>
+            v-bind:key="existing_tag.identity"/>
         </datalist>
 
       </div>
@@ -370,9 +370,7 @@ export default {
       // This gets sent to the DB
       article: {
 
-        identity: {
-          low: undefined
-        },
+        identity: undefined,
 
         properties: {
           content: null,
@@ -425,7 +423,7 @@ export default {
         || this.$route.params.id
         || this.$route.params.article_id
 
-      if(!article_id) {
+      if(!article_id || article_id === 'new') {
         this.article_loading = false
         return
       }
@@ -475,7 +473,7 @@ export default {
       this.set_article_thumbnail_src()
 
       // if the article has an ID, UPDATE
-      if(this.article.identity.low) this.update_article()
+      if(this.article.identity) this.update_article()
 
       // If the article does not have an ID, CREATE
       else this.create_article()
@@ -484,11 +482,12 @@ export default {
     create_article(){
       this.axios.post(`${process.env.VUE_APP_CMS_API_URL}/articles`, {
         article: this.article,
-        tag_ids: this.tags.map(tag => tag.identity.low),
+        tag_ids: this.tags.map(tag => tag.identity),
       })
       .then(response => {
         // redirect to article
-        const article_id = response.data[0]._fields[response.data[0]._fieldLookup['article']].identity.low
+        const article = response.data[0]._fields[response.data[0]._fieldLookup['article']]
+        const article_id = article.identity
         this.$router.push({ name: 'article', params: { article_id: article_id } })
       })
       .catch(error => {
@@ -501,7 +500,7 @@ export default {
       })
     },
     update_article(){
-      this.axios.put(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.article.identity.low}`, {
+      this.axios.put(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.article.identity}`, {
         properties: {
           content: this.article.properties.content,
           published: this.article.properties.published,
@@ -509,11 +508,11 @@ export default {
           summary: this.article.properties.summary,
           thumbnail_src: this.article.properties.thumbnail_src,
         },
-        tag_ids: this.tags.map(tag => tag.identity.low),
+        tag_ids: this.tags.map(tag => tag.identity),
       })
       .then(response => {
         // redirect to article
-        const article_id = response.data[0]._fields[response.data[0]._fieldLookup['article']].identity.low
+        const article_id = response.data[0]._fields[response.data[0]._fieldLookup['article']].identity
         this.$router.push({ name: 'article', params: { article_id: article_id } })
       })
       .catch(error => {
@@ -527,7 +526,7 @@ export default {
     delete_article(){
       if(confirm('Delete article?')){
         this.article_loading = true
-        this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.article.identity.low}`)
+        this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.article.identity}`)
         .then( () => {
           this.$router.push({ name: 'article_list' })
         })

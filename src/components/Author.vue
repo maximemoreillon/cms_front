@@ -32,8 +32,8 @@ export default {
   methods: {
     author_clicked(){
       let target_route_name = 'article_list'
-      if(!(this.$route.name === target_route_name && this.$route.query.id === this.author.identity.low)){
-        this.$router.push({ name: target_route_name, query: { author_id: this.author.identity.low } })
+      if(!(this.$route.name === target_route_name && this.$route.query.id === this.author.identity)){
+        this.$router.push({ name: target_route_name, query: { author_id: this.author.identity } })
       }
     }
   },

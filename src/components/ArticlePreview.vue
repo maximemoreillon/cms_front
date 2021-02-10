@@ -1,7 +1,7 @@
 <template>
   <router-link
     class="article_preview"
-    :to="{ name: 'article', params: {article_id: article.identity.low} }">
+    :to="{ name: 'article', params: {article_id: article.identity} }">
 
     <!-- indictor for published -->
     <earth-icon
@@ -35,7 +35,7 @@
         <template v-if="article.properties.views">
           <span>|</span>
           <span>
-            {{article.properties.views.low}} views
+            {{article.properties.views}} views
           </span>
         </template>
       </div>

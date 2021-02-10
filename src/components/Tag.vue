@@ -35,8 +35,8 @@ export default {
   },
   methods: {
     tag_clicked(){
-      if(!(this.$route.name === 'article_list' && this.$route.query.id === this.tag.identity.low)){
-        this.$router.push({ name: 'article_list', query: { tag_id: this.tag.identity.low } })
+      if(!(this.$route.name === 'article_list' && this.$route.query.id === this.tag.identity)){
+        this.$router.push({ name: 'article_list', query: { tag_id: this.tag.identity } })
       }
 
     }
