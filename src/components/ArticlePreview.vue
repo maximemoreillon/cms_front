@@ -71,7 +71,7 @@
 
       <Tag
         v-for="tag in tags"
-        v-bind:key="tag.identity.low"
+        v-bind:key="tag.identity"
         v-bind:tag="tag"/>
 
     </div>

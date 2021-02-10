@@ -51,9 +51,8 @@ export default {
   methods: {
     delete_comment(){
       if(confirm('Delete comment?')){
-        this.axios.post(process.env.VUE_APP_CMS_API_URL + '/delete_comment', {
-          comment_id: this.comment.identity.low,
-        })
+        const url = `${process.env.VUE_APP_CMS_API_URL}/comments/${this.comment.identity}`
+        this.axios.delete(url)
         .then( () => {
           this.$emit('deleted')
         })

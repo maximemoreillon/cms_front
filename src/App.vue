@@ -20,7 +20,7 @@
 
         <router-link
         v-if="$store.state.current_user"
-        :to="{ name: 'article_list', query: {author_id: $store.state.current_user.identity.low}}">
+        :to="{ name: 'article_list', query: {author_id: current_user_id}}">
           My articles
         </router-link>
 
@@ -62,6 +62,12 @@ export default {
     return{
       authenticationApiUrl : process.env.VUE_APP_AUTHENTICATION_API_URL,
       authenticationFrontUrl : process.env.VUE_APP_AUTHENTICATION_FRONT_URL,
+    }
+  },
+  computed: {
+    current_user_id(){
+      const current_user = this.$store.state.current_user
+      return current_user.identity.low || current_user.identity
     }
   }
 }

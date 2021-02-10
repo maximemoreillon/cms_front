@@ -317,7 +317,10 @@ export default {
       // If article does not have an author, then nothing to edit
       if(!this.author) return false
 
-      return (this.author.identity === this.$store.state.current_user.identity.low)
+      const current_user = this.$store.state.current_user
+      const current_user_id = current_user.identity.low || current_user.identity
+
+      return (this.author.identity === current_user_id)
     }
   }
 
