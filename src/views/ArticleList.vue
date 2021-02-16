@@ -2,59 +2,53 @@
 
   <div class="article_list_view" ref="view">
 
+    <template v-if="tag">
+      <h1>Articles tagged with "{{tag.properties.name}}"</h1>
+      <div class="tags_buttons_wrapper" v-if="user_is_admin">
+
+        <button
+          type="button"
+          class="button"
+          @click="prompt_for_rename()">
+          <pencil-icon/>
+          <span>Rename tag</span>
+        </button>
+
+        <button
+          type="button"
+          class="button"
+          @click="delete_tag()">
+          <delete-icon/>
+          <span>Delete tag</span>
+        </button>
+
+        <button
+          type="button"
+          class="button"
+          :class="{active:tag.properties.navigation_item}"
+          @click="pin_to_navbar()">
+          <pin-icon/>
+          <span>Pin to nav</span>
+        </button>
+
+      </div>
+    </template>
+
+    <template v-else-if="author.properties">
+      <h1>Articles written by {{author.properties.username}}</h1>
+    </template>
+
+    <template v-else>
+      <h1>All articles</h1>
+    </template>
+
+
     <!-- Toolbar for sorting and new article -->
     <Toolbar >
 
-      <!-- Tag -->
-      <template v-if="tag">
-        <span>Articles tagged with</span>
-
-        <Tag v-bind:tag="tag"/>
-
-        <IconButton
-          v-on:click="$router.push({ name: 'article_list' })">
-          <close-icon/>
-        </IconButton>
-
-        <template v-if="user_is_admin">
-
-          <IconButton
-            v-on:click="prompt_for_rename()">
-            <pencil-icon/>
-          </IconButton>
-
-          <IconButton
-            v-on:click="delete_tag()">
-            <delete-icon />
-          </IconButton>
-
-          <IconButton
-            v-bind:active="tag.properties.navigation_item"
-            v-on:click="pin_to_navbar()">
-            <pin-icon />
-          </IconButton>
-      </template>
 
 
-      </template>
 
-      <!-- Author -->
-      <template v-if="author.properties">
-        <span>Articles written by</span>
-        <Author v-bind:author="author"/>
-
-        <!-- remove author filter -->
-        <IconButton
-          v-on:click="$router.push({ name: 'article_list' })">
-          <close-icon/>
-        </IconButton>
-
-      </template>
-
-
-      <div class="growing_spacer"/>
-
-      <div class="">
 
         <!-- article counter -->
         <!-- Maybe not necessary -->
@@ -86,11 +80,14 @@
           <sort-descending-icon/>
         </IconButton>
 
+
         <IconButton
           v-bind:active="order === 'ASC'"
           v-on:click="sort_order_ascending()">
           <sort-ascending-icon/>
         </IconButton>
+
+        <div class="growing_spacer"/>
 
 
 
@@ -102,7 +99,7 @@
             ref="search"
             v-bind:class="{search_bar_open: search_bar_open}"
             v-model="search_string"
-            v-on:keyup.enter="search()">
+            @change="search()">
 
           <IconButton
             v-on:click="search()">
@@ -110,7 +107,6 @@
           </IconButton>
 
         </div>
-      </div>
 
     </Toolbar>
 
@@ -177,8 +173,8 @@ import Loader from '@moreillon/vue_loader'
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import ArticlePreview from '@/components/ArticlePreview.vue'
 import Toolbar from '@/components/Toolbar.vue'
-import Tag from '@/components/Tag.vue'
-import Author from '@/components/Author.vue'
+//import Tag from '@/components/Tag.vue'
+//import Author from '@/components/Author.vue'
 
 // icons
 import CalendarIcon from 'vue-material-design-icons/Calendar.vue';
@@ -190,7 +186,7 @@ import PinIcon from 'vue-material-design-icons/Pin.vue';
 //import FileDocumentOutlineIcon from 'vue-material-design-icons/FileDocumentOutline.vue';
 import DeleteIcon from 'vue-material-design-icons/Delete.vue';
 import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
-import CloseIcon from 'vue-material-design-icons/Close.vue';
+//import CloseIcon from 'vue-material-design-icons/Close.vue';
 
 
 export default {
@@ -199,8 +195,8 @@ export default {
     ArticlePreview,
     Toolbar,
     Loader,
-    Tag,
-    Author,
+    //Tag,
+    //Author,
 
     // icons
     PencilIcon,
@@ -213,7 +209,7 @@ export default {
     SortAscendingIcon,
     //DotsHorizontalIcon,
     MagnifyIcon,
-    CloseIcon,
+    //CloseIcon,
   },
   data () {
     return {
@@ -467,11 +463,12 @@ export default {
     search(){
       if(this.search_bar_open){
         // if the search bar is open, search or close
-        if(this.search_string === '') this.search_bar_open = false
-        else {
-          this.delete_all_articles()
-          this.get_articles()
+        if(this.search_string === '') {
+          this.search_bar_open = false
         }
+
+        this.delete_all_articles()
+        this.get_articles()
 
       }
       else {
@@ -507,7 +504,13 @@ export default {
   grid-gap: 1em;
 }
 
+.tags_buttons_wrapper > *:not(:last-child) {
+  margin-right: 1em;
+}
 
+.tags_buttons_wrapper {
+  margin: 1em 0;
+}
 .load_more_button {
   display: flex;
   align-items: center;

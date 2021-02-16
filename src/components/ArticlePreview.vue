@@ -143,6 +143,7 @@ export default {
 
 .article_preview {
   position: relative;
+  text-decoration: none;
 
   color: currentColor;
   font-weight: normal;

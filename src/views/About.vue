@@ -1,9 +1,10 @@
 <template>
   <div class="about" >
-    <h1>CMS</h1>
-    <p>A content management system developed by Maxime MOREILLON</p>
+    <h1>Article managemet system</h1>
     <p>Front-end version: {{version}}</p>
     <p v-if="back_end_version">Back-end version: {{back_end_version}}</p>
+    <p>Developed by <a href="https://maximemoreillon/com">Maxime MOREILLON</a></p>
+
   </div>
 </template>
 
@@ -24,7 +25,7 @@ export default {
       back_end_version: null,
     }
   },
-  mounted(){    
+  mounted(){
     this.get_back_end_version()
   },
   methods: {

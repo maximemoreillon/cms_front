@@ -3,7 +3,7 @@
     <template v-if="article">
 
       <router-link
-        class="edit_button"
+        class="button edit_button"
         v-if="editable"
         :to="{ name: 'article_editor', query: { id: article.identity } }">
         <pencil-icon />
@@ -18,19 +18,23 @@
 
         <!-- Author -->
         <div class="metadata_wrapper">
-          Written by <Author v-bind:author="author"/>
+          <span>Written by</span>
+          <Author v-bind:author="author"/>
         </div>
 
         <div
           class="metadata_wrapper"
           v-if="authorship.properties.creation_date">
-            Creation date: {{format_date(authorship.properties.creation_date)}}
+          <span>Creation date:</span>
+          <span>{{format_date(authorship.properties.creation_date)}}</span>
         </div>
 
         <div
           class="metadata_wrapper"
           v-if="authorship.properties.edition_date">
-            Last edited: {{format_date(authorship.properties.edition_date)}}
+          <span>Last edited:</span>
+          <span>{{format_date(authorship.properties.edition_date)}}</span>
+
         </div>
 
         <div
@@ -51,10 +55,6 @@
           <lock-icon />
           <span>private</span>
         </div>
-
-
-
-
 
       </div>
 
@@ -330,34 +330,38 @@ export default {
 
 <style scoped>
 
-.edit_button {
+.edit_button{
   float: right;
   margin-top: 0.25em;
-  border: 1px solid #aaaaaa;
-  padding: 0.25em 0.5em;
-  border-radius: 0.25em;
-  color: #444444;
-  transition: 0.25s;
 }
 
-.edit_button:hover {
-  color: #c00000;
-  border-color: #c00000;
-}
 
-.edit_button > *:not(:last-child) {
-  margin-right: 0.25em;
-}
 
-.article_metadata {
-  margin-top: -0.5em;
-}
+
+
 .article_metadata, .tags_container {
   font-size: 85%;
   color: #666666;
   display: flex;
   flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.article_metadata {
+  margin-top: -0.5em;
+}
+
+.article_metadata > *:not(:last-child) {
+  margin-right: 0.5em;
+}
+
+.metadata_wrapper {
+  display: flex;
   align-items: center;
+}
+
+.metadata_wrapper > *:not(:last-child) {
+  margin-right: 0.25em;
 }
 
 .metadata_wrapper:not(:last-child) {

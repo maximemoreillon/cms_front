@@ -11,17 +11,24 @@
         <router-link
           v-if="$store.state.current_user"
           :to="{ name: 'article_editor', params: {article_id: 'new'}}">
-          New article
+
+          <plus-icon />
+          <span>New article</span>
+
         </router-link>
 
         <router-link :to="{ name: 'article_list'}">
-          All articles
+          <account-icon />
+          <span>All articles</span>
+
         </router-link>
 
         <router-link
         v-if="$store.state.current_user"
         :to="{ name: 'article_list', query: {author_id: current_user_id}}">
-          My articles
+        <newspaper-variant-multiple-outline-icon />
+        <span>My articles</span>
+
         </router-link>
 
 
@@ -29,16 +36,30 @@
           v-for="(item, index) in $store.state.pinned_tags"
           v-bind:key="`nav_${index}`"
           :to="item.route">
-          {{item.label}}
+          <tag-icon />
+          <span>{{item.label}}</span>
+
         </router-link>
 
-        <router-link :to="{ name: 'about', params: {} }">
-          About
+        <router-link :to="{ name: 'login' }">
+          <login-icon />
+          <span>Login</span>
         </router-link>
+
+
+        <router-link :to="{ name: 'about' }">
+          <information-outline-icon />
+          <span>About</span>
+        </router-link>
+
+
 
       </template>
 
-      <router-view />
+      <main>
+        <router-view />
+      </main>
+
 
     </AppTemplate>
 
@@ -48,7 +69,8 @@
 
 <script>
 
-import AppTemplate from '@moreillon/vue_application_template'
+//import AppTemplate from '@moreillon/vue_application_template'
+import AppTemplate from '@/components/template/AppTemplate.vue'
 
 import 'vue-material-design-icons/styles.css'
 
@@ -60,8 +82,7 @@ export default {
   },
   data(){
     return{
-      authenticationApiUrl : process.env.VUE_APP_AUTHENTICATION_API_URL,
-      authenticationFrontUrl : process.env.VUE_APP_AUTHENTICATION_FRONT_URL,
+
     }
   },
   computed: {
@@ -75,6 +96,12 @@ export default {
 
 <style>
 
+/* FROM HERE */
+@font-face {
+  font-family: lexend;
+  src: url(./assets/LexendDeca-Regular.ttf);
+}
+
 .material-design-icon__svg {
   bottom: 0 !important;
 }
@@ -82,24 +109,38 @@ export default {
 * {
   box-sizing: border-box;
 }
-/* Styles shared by all views */
+
+body {
+  font-family: lexend, sans-serif;
+}
+
+nav {
+  grid-area: nav;
+}
 
 main {
-  padding: 1em 2vw;
+  grid-area: main;
+  padding: 0.25em 1em;
 }
+
 
 main a {
   text-decoration: none;
-}
 
-.article a {
-  text-decoration: underline;
-  color: currentColor;
+  color: #c00000;
+  font-weight: bold;
   transition: 0.25s;
 }
 
-.article a:hover {
+main a:hover {
   color: #c00000;
+  text-decoration: underline;
+}
+/* TO HERE: IS DUPLICATEDD IN LOCAL TEMPLATE */
+
+
+.article {
+
 }
 
 .article:not(.editor_content) h1:first-child {
@@ -124,15 +165,14 @@ main a {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 50vw;
+  width: 80%;
   height: 30vw;
 }
 
 .article pre code {
-  /* manually applying style because tiptap doesn't apply the hljs class to code */
   display: block;
   overflow-x: auto;
-  padding: 0.5em;
+  padding: 1em;
   background: #282b2e;
   color: #e0e2e4;
 }
@@ -141,6 +181,26 @@ main a {
   margin: 1em;
   text-align: center;
   font-size: 300%;
+}
+
+.button {
+  background-color: white;
+  cursor: pointer;
+  border: 1px solid #aaaaaa;
+  padding: 0.25em 0.5em;
+  border-radius: 0.25em;
+  color: #444444;
+  transition: 0.25s;
+  outline: none;
+}
+
+.button:hover, .button.active {
+  color: #c00000;
+  border-color: #c00000;
+}
+
+.button > *:not(:last-child) {
+  margin-right: 0.25em;
 }
 
 .error {

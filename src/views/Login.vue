@@ -1,11 +1,34 @@
 <template>
   <div class="about" >
     <h1>Login</h1>
-    <form v-if="true" class="" @submit.prevent="login">
-      <input type="text" v-model="username" placeholder="username">
-      <input type="password" v-model="password" placeholder="password">
+
+    <form v-if="!$store.state.current_user" class="" @submit.prevent="login">
+
+      <div class="">
+        <label for="">Username</label>
+        <input type="text" v-model="username" placeholder="username">
+      </div>
+      <div class="">
+        <label for="">Password</label>
+        <input type="password" v-model="password" placeholder="password">
+      </div>
+
       <input type="submit" value="Login">
     </form>
+
+    <form class="" v-else @submit.prevent="logout">
+      <div class="">
+        Logged in as {{$store.state.current_user.properties.display_name}}
+      </div>
+
+
+      <div class="">
+        <input type="submit" value="Logout">
+
+      </div>
+
+    </form>
+
   </div>
 </template>
 
@@ -38,6 +61,10 @@ export default {
         if(error.response) console.error(error.response.data)
         else console.error(error)
       })
+    },
+    logout(){
+      this.$cookies.remove('jwt')
+      this.$store.commit('check_authentication')
     }
 
   }
@@ -50,7 +77,12 @@ export default {
 
 <style scoped>
 
+form > * {
+  margin: 0.5em 0;
+}
 
-
+label {
+  margin-right: 0.25em; 
+}
 
 </style>
