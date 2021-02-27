@@ -19,10 +19,18 @@ metadata:
 spec:
   tls:
   - hosts:
-    - ${CERTIFICATE_DOMAIN}
+    - cms.maximemoreillon.com
+    - articles.maximemoreillon.com
     secretName: ${APPLICATION_NAME} # Name of the secret, i.e. the certificates
   rules:
-  - host: ${CERTIFICATE_DOMAIN}
+  - host: cms.maximemoreillon.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: ${APPLICATION_NAME} # Name of the service, named after the app
+          servicePort: 80
+  - host: articles.maximemoreillon.com
     http:
       paths:
       - path: /

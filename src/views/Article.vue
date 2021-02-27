@@ -311,14 +311,17 @@ export default {
       // If there is no article ID, then nothing to edit
       if(!article_id) return false
 
-      // If the user is not logged in, then unable to edit
-      if(!this.$store.state.current_user) return false
-
-      // If article does not have an author, then nothing to edit
-      if(!this.author) return false
-
       const current_user = this.$store.state.current_user
-      const current_user_id = current_user.identity.low || current_user.identity
+
+      // If the user is not logged in, then unable to edit
+      if(!current_user) return false
+
+      if(current_user.properties.isAdmin) return true
+
+      const current_user_id = current_user.identity.low || current_user.identity // new version has no .low
+
+      // If article does not have no author, then nothing to edit
+      if(!this.author) return false
 
       return (this.author.identity === current_user_id)
     }
