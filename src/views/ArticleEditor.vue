@@ -376,7 +376,8 @@ export default {
 
           new Iframe(), // For Youtube videos
         ],
-        disablePasteRules:true,
+        disablePasteRules:true, // disable Markdown when pasting
+        disableInputRules:true, // disable Markdown when typing
         editable: true,
         content: "",
 
