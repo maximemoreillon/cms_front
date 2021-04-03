@@ -1,8 +1,11 @@
 <template>
-  <div class="about" >
-    <h1>Login</h1>
+  <div class="login" >
 
-    <form v-if="!$store.state.current_user" class="" @submit.prevent="login">
+
+
+    <form 
+      v-if="!loading && !$store.state.current_user" 
+      @submit.prevent="login()">
 
       <div class="">
         <label for="">Username</label>
@@ -12,11 +15,25 @@
         <label for="">Password</label>
         <input type="password" v-model="password" placeholder="password">
       </div>
+      
 
-      <input type="submit" value="Login">
+      <div>
+        <input type="submit" value="Login">
+        <IconButton
+          @click="login()">
+          <login-icon/>
+          <span>Login</span>
+        </IconButton>
+      </div>
+
+      
     </form>
 
-    <form class="" v-else @submit.prevent="logout">
+    <form 
+      class="" 
+      v-if="!loading &&$store.state.current_user" 
+      @submit.prevent="logout()">
+
       <div class="">
         Logged in as {{$store.state.current_user.properties.display_name}}
       </div>
@@ -24,23 +41,39 @@
 
       <div class="">
         <input type="submit" value="Logout">
-
+        <IconButton
+          @click="logout()">
+          <logout-icon/>
+          <span>Logout</span>
+        </IconButton>
+        
       </div>
 
     </form>
+
+    <div 
+      v-if="loading"
+      class="loader_wrapper">
+      <Loader />
+    </div>
 
   </div>
 </template>
 
 <script>
+import IconButton from '@/components/vue_icon_button/IconButton.vue'
+import Loader from '@moreillon/vue_loader'
 
 export default {
+  name: 'Login',
   components: {
-
+    IconButton,
+    Loader
   },
 
   data () {
     return {
+      loading: false,
       username: '',
       password: '',
     }
@@ -50,6 +83,7 @@ export default {
   },
   methods: {
     login(){
+      this.loading = true
       const url = `${process.env.VUE_APP_AUTHENTICATION_API_URL}/login`
       const body = {username: this.username, password: this.password}
       this.axios.post(url, body)
@@ -61,6 +95,7 @@ export default {
         if(error.response) console.error(error.response.data)
         else console.error(error)
       })
+      .finally(() => {this.loading = false})
     },
     logout(){
       this.$cookies.remove('jwt')
@@ -77,12 +112,28 @@ export default {
 
 <style scoped>
 
+form {
+  margin-top: 15vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 form > * {
-  margin: 0.5em 0;
+  margin: 1em 0;
 }
 
 label {
-  margin-right: 0.25em; 
+  margin-right: 0.5em; 
+}
+
+input[type="submit"] {
+  display: none;
+}
+
+.loader_wrapper {
+  margin-top: 15vh;
+  text-align: center;
+  font-size: 200%;
 }
 
 </style>

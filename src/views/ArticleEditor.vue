@@ -6,192 +6,102 @@
 
       <Toolbar>
 
+        
+        <IconButton
+          v-if="$route.query.id"
+          v-on:click="$router.push({ name: 'article', params: { article_id: $route.query.id } })">
+          <arrow-left-icon />
+          <span>Return</span>
+        </IconButton>
+
+        <IconButton
+          v-else
+          v-on:click="$router.push({ name: 'article_list' })">
+          <arrow-left-icon />
+          <span>Return</span>
+        </IconButton>
+
         <div class="growing_spacer"/>
 
-        <div class="tool_cluster tools">
-          <IconButton
-            v-if="$route.query.id"
-            v-on:click="$router.push({ name: 'article', params: { article_id: $route.query.id } })">
-            <arrow-left-icon />
-          </IconButton>
+        <IconButton
+          v-if="false"
+          v-bind:active="editable"
+          v-on:click="editable = !editable">
+          <pencil-icon/>
+        </IconButton>
 
-          <IconButton
-            v-else
-            v-on:click="$router.push({ name: 'article_list' })">
-            <arrow-left-icon />
-          </IconButton>
+        <IconButton
+          v-on:click="submit_article()">
+          <content-save-icon />
+          <span>Save</span>
+        </IconButton>
 
-          <IconButton
-            v-if="false"
-            v-bind:active="editable"
-            v-on:click="editable = !editable">
-            <pencil-icon/>
-          </IconButton>
+        <IconButton
+          v-if="article.identity"
+          v-on:click="delete_article()">
+          <delete-icon />
+          <span>Delete</span>
+        </IconButton>
 
-          <IconButton
-            v-on:click="submit_article()">
-            <content-save-icon />
-          </IconButton>
-
-          <IconButton
-            v-if="article.identity"
-            v-on:click="delete_article()">
-            <delete-icon />
-          </IconButton>
-
-          <IconButton
-            v-on:click="toggle_published()"
-            v-bind:active="article.properties.published">
-            <earth-icon/>
-          </IconButton>
-        </div>
 
       </Toolbar>
 
-      <!-- Tags -->
-      <div class="tags_wrapper">
+      <div class="tags_and_visibility_wrapper">
+        <!-- Tags -->
+        <div class="tags_wrapper">
 
-        <label>Tags:</label>
+          <label>
+            <tag-icon />
+          </label>
 
-        <Tag
-          v-for="(tag, index) in tags"
-          v-bind:key="tag.identity"
-          v-bind:tag="tag"
-          removable
-          v-on:remove="delete_tag(index)"/>
+          <Tag
+            v-for="(tag, index) in tags"
+            v-bind:key="tag.identity"
+            v-bind:tag="tag"
+            removable
+            v-on:remove="delete_tag(index)"/>
 
-        <input
-          id="tag_search"
-          type="search"
-          ref="tag_input"
-          list="existing_tag_list"
-          placeholder="New tag"
-          v-on:keyup.enter="create_tag()">
+          <input
+            id="tag_search"
+            type="search"
+            ref="tag_input"
+            list="existing_tag_list"
+            placeholder="New tag"
+            v-on:keyup.enter="create_tag()">
 
-        <datalist id="existing_tag_list">
-          <option
-            v-for="existing_tag in existing_tags"
-            v-bind:value="existing_tag.properties.name"
-            v-bind:key="existing_tag.identity"/>
-        </datalist>
-
-      </div>
-
-
-      <!-- editor for the content of the article -->
-      <editor-menu-bar
-        :editor="editor"
-        v-slot="{ commands, isActive, getMarkAttrs }">
-
-        <div class="menubar">
-
-          <IconButton
-            v-bind:active="isActive.bold()"
-            @click="commands.bold">
-            <format-bold-icon />
-          </IconButton>
-
-          <IconButton
-            v-bind:active="isActive.italic()"
-            @click="commands.italic">
-            <format-italic-icon />
-          </IconButton>
-
-          <IconButton
-            v-bind:active="isActive.strike()"
-            @click="commands.strike">
-            <format-strikethrough-icon />
-          </IconButton>
-
-          <IconButton
-            v-bind:active="isActive.underline()"
-            @click="commands.underline">
-            <format-underline-icon />
-          </IconButton>
-
-          <IconButton
-            v-bind:active="isActive.code()"
-            @click="commands.code">
-            <code-tags-icon />
-          </IconButton>
-
-          <IconButton
-            v-bind:active="isActive.paragraph()"
-            @click="commands.paragraph">
-            <format-paragraph-icon />
-          </IconButton>
-
-          <IconButton
-            v-bind:active="isActive.heading({ level: 1 })"
-            @click="commands.heading({ level: 1 })">
-            <format-header-1-icon />
-          </IconButton>
-
-          <IconButton
-            v-bind:active="isActive.heading({ level: 2 })"
-            @click="commands.heading({ level: 2 })">
-            <format-header-2-icon />
-          </IconButton>
-
-          <IconButton
-            v-bind:active="isActive.heading({ level: 3 })"
-            @click="commands.heading({ level: 3 })">
-            <format-header-3-icon />
-          </IconButton>
-
-          <IconButton
-            v-bind:active="isActive.bullet_list()"
-            @click="commands.bullet_list">
-            <format-list-bulleted-icon />
-          </IconButton>
-
-          <IconButton
-            v-bind:active="isActive.ordered_list()"
-            @click="commands.ordered_list">
-            <format-list-numbered-icon />
-          </IconButton>
-
-          <IconButton
-            v-bind:active="isActive.blockquote()"
-            @click="commands.blockquote">
-            <format-quote-close-icon />
-          </IconButton>
-
-          <IconButton
-            v-bind:active="isActive.code_block()"
-            @click="commands.code_block">
-            <code-tags-icon />
-          </IconButton>
-
-
-          <IconButton
-            @click="commands.undo">
-            <undo-icon />
-          </IconButton>
-
-          <IconButton
-            @click="commands.redo">
-            <redo-icon />
-          </IconButton>
-
-          <IconButton
-            v-on:click="showImagePrompt(commands.image)">
-            <image-icon />
-          </IconButton>
-
-          <IconButton
-            v-on:click="showVideoPromt(commands.iframe)">
-            <youtube-icon />
-          </IconButton>
-
-          <IconButton
-            v-bind:class="{ 'is-active': isActive.link() }"
-            v-on:click="prompt_for_url(commands.link)">
-            <link-icon />
-          </IconButton>
+          <datalist id="existing_tag_list">
+            <option
+              v-for="existing_tag in existing_tags"
+              v-bind:value="existing_tag.properties.name"
+              v-bind:key="existing_tag.identity"/>
+          </datalist>
 
         </div>
-      </editor-menu-bar>
+
+        <!-- Visibility -->
+        <div class="visibility_wrapper">
+          <div>
+            <input type="radio" id="private" :value="false" v-model="article.properties.published">
+            <label for="private">
+              <lock-icon/>
+              <span>Private</span>
+            </label>
+          </div>
+          <div>
+            <input type="radio" id="public" :value="true" v-model="article.properties.published">
+            <label for="public">
+              <earth-icon/>
+              <span>Public</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      
+      
+
+      <!-- editor for the content of the article -->
+      <EditorToolBar :editor="editor" />
 
       <!-- the article being written comes here -->
       <editor-content
@@ -241,10 +151,11 @@ import Loader from '@moreillon/vue_loader'
 import {formatDate} from '@/mixins/formatDate.js'
 
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
+import EditorToolBar from '@/components/EditorToolBar.vue'
 import Toolbar from '@/components/Toolbar.vue'
 import Tag from '@/components/Tag.vue'
 
-import { Editor, EditorContent, EditorMenuBar } from 'tiptap'
+import { Editor, EditorContent } from 'tiptap'
 import {
   Blockquote,
   CodeBlock,
@@ -271,73 +182,16 @@ import Iframe from '@/components/Iframe.js'
 import Modal from '@moreillon/vue_modal'
 
 
-// Icons
-import ArrowLeftIcon from 'vue-material-design-icons/ArrowLeft.vue'
-import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-import ContentSaveIcon from 'vue-material-design-icons/ContentSave.vue'
-import EarthIcon from 'vue-material-design-icons/Earth.vue'
-import CodeTagsIcon from 'vue-material-design-icons/CodeTags.vue'
-import FormatHeader1Icon from 'vue-material-design-icons/FormatHeader1.vue'
-import FormatHeader2Icon from 'vue-material-design-icons/FormatHeader2.vue'
-import FormatHeader3Icon from 'vue-material-design-icons/FormatHeader3.vue'
-import FormatParagraphIcon from 'vue-material-design-icons/FormatParagraph.vue'
-import FormatBoldIcon from 'vue-material-design-icons/FormatBold.vue'
-import FormatItalicIcon from 'vue-material-design-icons/FormatItalic.vue'
-import FormatStrikethroughIcon from 'vue-material-design-icons/FormatStrikethrough.vue'
-import FormatUnderlineIcon from 'vue-material-design-icons/FormatUnderline.vue'
-import FormatListBulletedIcon from 'vue-material-design-icons/FormatListBulleted.vue'
-import FormatListNumberedIcon from 'vue-material-design-icons/FormatListNumbered.vue'
-import FormatQuoteCloseIcon from 'vue-material-design-icons/FormatQuoteClose.vue'
-import UndoIcon from 'vue-material-design-icons/Undo.vue'
-import RedoIcon from 'vue-material-design-icons/Redo.vue'
-import LinkIcon from 'vue-material-design-icons/Link.vue'
-import PencilIcon from 'vue-material-design-icons/Pencil.vue'
-import ImageIcon from 'vue-material-design-icons/Image.vue'
-import YoutubeIcon from 'vue-material-design-icons/Youtube.vue'
-
 export default {
   name: 'ArticleEditor',
   components: {
-
     Modal,
-
     Toolbar,
     Loader,
     Tag,
     IconButton,
-
-    // editor
+    EditorToolBar,
     EditorContent,
-    EditorMenuBar,
-
-    // Icons
-    ArrowLeftIcon,
-    DeleteIcon,
-    ContentSaveIcon,
-    //LockIcon,
-    EarthIcon,
-    CodeTagsIcon,
-    FormatHeader1Icon,
-    FormatHeader2Icon,
-    FormatHeader3Icon,
-    FormatBoldIcon,
-    FormatItalicIcon,
-    FormatStrikethroughIcon,
-    FormatUnderlineIcon,
-    FormatParagraphIcon,
-    FormatListBulletedIcon,
-    FormatListNumberedIcon,
-    FormatQuoteCloseIcon,
-    UndoIcon,
-    RedoIcon,
-    LinkIcon,
-    //PlusIcon,
-    PencilIcon,
-    //PencilOffIcon,
-    ImageIcon,
-    YoutubeIcon,
-
-
   },
   mixins: [
     formatDate,
@@ -365,7 +219,7 @@ export default {
           new Underline(),
           new History(),
           new Image(),
-
+          new Iframe(), // For Youtube videos
           new Placeholder({
             emptyEditorClass: 'is-editor-empty',
             emptyNodeClass: 'is-empty',
@@ -373,8 +227,6 @@ export default {
             showOnlyWhenEditable: true,
             showOnlyCurrent: true,
           }),
-
-          new Iframe(), // For Youtube videos
         ],
         disablePasteRules:true, // disable Markdown when pasting
         disableInputRules:true, // disable Markdown when typing
@@ -382,9 +234,7 @@ export default {
         content: "",
 
 
-      }), // end of new Editor ()
-
-
+      }),
 
       // Default values for an article, overwritten if loaded with axios
       // This gets sent to the DB
@@ -456,9 +306,9 @@ export default {
       //this.article_loading = true
 
       this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles/${article_id}/`)
-      .then(response => {
+      .then( ({data}) => {
 
-        let record = response.data[0]
+        const record = data[0]
 
         // parsing neo4j record for article
         this.article = record._fields[record._fieldLookup['article']]
@@ -710,6 +560,7 @@ export default {
   max-height: 80vh;
 
   overflow-y: auto;
+  padding: 0.5em;
 }
 
 
@@ -725,9 +576,13 @@ export default {
 
 
 
+.tags_and_visibility_wrapper {
+  display: flex;
+}
 
 /* TAGS */
 .tags_wrapper {
+  flex-grow: 1;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -742,6 +597,12 @@ export default {
   border-bottom: 1px solid #444444;
 }
 
+.visibility_wrapper > * {
+  display: flex;
+}
+.visibility_wrapper label{
+  white-space: nowrap;
+}
 
 
 

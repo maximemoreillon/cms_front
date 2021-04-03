@@ -67,4 +67,7 @@ export default {
   color: #c00000;
 }
 
+.icon_button > *:not(:last-child) {
+  margin-right: 0.5em;
+}
 </style>
