@@ -227,5 +227,11 @@ export default {
 </script>
 
 <style scoped>
-
+form {
+  display: flex;
+}
+input[type="text"], input[type="text"] {
+  flex-grow: 1;
+  margin-right: 1em;
+}
 </style>
