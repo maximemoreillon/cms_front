@@ -152,8 +152,8 @@ import {
   OrderedList,
   BulletList,
   ListItem,
-  TodoItem,
-  TodoList,
+  //TodoItem,
+  //TodoList,
   Bold,
   Code,
   Italic,
@@ -194,8 +194,8 @@ export default {
           new HorizontalRule(),
           new ListItem(),
           new OrderedList(),
-          new TodoItem(),
-          new TodoList(),
+          //new TodoItem(),
+          //new TodoList(),
           new Link(),
           new Bold(),
           new Code(),
@@ -213,10 +213,12 @@ export default {
             showOnlyCurrent: true,
           }),
         ],
+
         disablePasteRules:true, // disable Markdown when pasting
         disableInputRules:true, // disable Markdown when typing
         editable: true,
         content: "",
+
 
 
       }),
@@ -465,7 +467,7 @@ export default {
 
 
 
-    
+
 
 
 

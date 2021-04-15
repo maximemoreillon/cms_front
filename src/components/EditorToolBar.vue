@@ -1,140 +1,148 @@
 <template>
-  <editor-menu-bar
-    :editor="editor"
-    v-slot="{ commands, isActive }">
+  <div class="">
 
-    <div class="menubar">
+    <editor-menu-bar
+      :editor="editor"
+      v-slot="{ commands, isActive }">
 
-      <IconButton
-      v-bind:active="isActive.bold()"
-      @click="commands.bold">
-      <format-bold-icon />
-      </IconButton>
+      <div class="menubar">
 
-      <IconButton
-      v-bind:active="isActive.italic()"
-      @click="commands.italic">
-      <format-italic-icon />
-      </IconButton>
+        <IconButton
+        v-bind:active="isActive.bold()"
+        @click="commands.bold">
+        <format-bold-icon />
+        </IconButton>
 
-      <IconButton
-      v-bind:active="isActive.strike()"
-      @click="commands.strike">
-      <format-strikethrough-icon />
-      </IconButton>
+        <IconButton
+        v-bind:active="isActive.italic()"
+        @click="commands.italic">
+        <format-italic-icon />
+        </IconButton>
 
-      <IconButton
-      v-bind:active="isActive.underline()"
-      @click="commands.underline">
-      <format-underline-icon />
-      </IconButton>
+        <IconButton
+        v-bind:active="isActive.strike()"
+        @click="commands.strike">
+        <format-strikethrough-icon />
+        </IconButton>
 
-      <IconButton
-      v-bind:active="isActive.code()"
-      @click="commands.code">
-      <code-tags-icon />
-      </IconButton>
+        <IconButton
+        v-bind:active="isActive.underline()"
+        @click="commands.underline">
+        <format-underline-icon />
+        </IconButton>
 
-      <IconButton
-      v-bind:active="isActive.paragraph()"
-      @click="commands.paragraph">
-      <format-paragraph-icon />
-      </IconButton>
+        <IconButton
+        v-bind:active="isActive.code()"
+        @click="commands.code">
+        <code-tags-icon />
+        </IconButton>
 
-      <IconButton
-      v-bind:active="isActive.heading({ level: 1 })"
-      @click="commands.heading({ level: 1 })">
-      <format-header-1-icon />
-      </IconButton>
+        <IconButton
+        v-bind:active="isActive.paragraph()"
+        @click="commands.paragraph">
+        <format-paragraph-icon />
+        </IconButton>
 
-      <IconButton
-      v-bind:active="isActive.heading({ level: 2 })"
-      @click="commands.heading({ level: 2 })">
-      <format-header-2-icon />
-      </IconButton>
+        <IconButton
+        v-bind:active="isActive.heading({ level: 1 })"
+        @click="commands.heading({ level: 1 })">
+        <format-header-1-icon />
+        </IconButton>
 
-      <IconButton
-      v-bind:active="isActive.heading({ level: 3 })"
-      @click="commands.heading({ level: 3 })">
-      <format-header-3-icon />
-      </IconButton>
+        <IconButton
+        v-bind:active="isActive.heading({ level: 2 })"
+        @click="commands.heading({ level: 2 })">
+        <format-header-2-icon />
+        </IconButton>
 
-      <IconButton
-      v-bind:active="isActive.bullet_list()"
-      @click="commands.bullet_list">
-      <format-list-bulleted-icon />
-      </IconButton>
+        <IconButton
+        v-bind:active="isActive.heading({ level: 3 })"
+        @click="commands.heading({ level: 3 })">
+        <format-header-3-icon />
+        </IconButton>
 
-      <IconButton
-      v-bind:active="isActive.ordered_list()"
-      @click="commands.ordered_list">
-      <format-list-numbered-icon />
-      </IconButton>
+        <IconButton
+        v-bind:active="isActive.bullet_list()"
+        @click="commands.bullet_list">
+        <format-list-bulleted-icon />
+        </IconButton>
 
-      <IconButton
-      v-bind:active="isActive.blockquote()"
-      @click="commands.blockquote">
-      <format-quote-close-icon />
-      </IconButton>
+        <IconButton
+        v-bind:active="isActive.ordered_list()"
+        @click="commands.ordered_list">
+        <format-list-numbered-icon />
+        </IconButton>
 
-      <IconButton
-      v-bind:active="isActive.code_block()"
-      @click="commands.code_block">
-      <code-tags-icon />
-      </IconButton>
+        <IconButton
+        v-bind:active="isActive.blockquote()"
+        @click="commands.blockquote">
+        <format-quote-close-icon />
+        </IconButton>
 
-
-      <IconButton
-      @click="commands.undo">
-      <undo-icon />
-      </IconButton>
-
-      <IconButton
-      @click="commands.redo">
-      <redo-icon />
-      </IconButton>
-
-      <IconButton
-      v-on:click="showImagePrompt(commands.image)">
-      <image-icon />
-      </IconButton>
-
-      <IconButton
-      v-on:click="showVideoPromt(commands.iframe)">
-      <youtube-icon />
-      </IconButton>
-
-      <IconButton
-      v-bind:class="{ 'is-active': isActive.link() }"
-      v-on:click="prompt_for_url(commands.link)">
-      <link-icon />
-      </IconButton>
-
-      <Modal
-        v-bind:open="image_upload_modal.open"
-        v-on:close="image_upload_modal.open = false">
-
-        <h2>Image upload</h2>
-        <p>Using an URL</p>
-        <form
-          class=""
-          v-on:submit.prevent="submit_image_link()">
-          <input type="text" ref="image_url_input">
-          <input type="submit" name="">
-        </form>
-        <p>Or upload an image</p>
-        <form
-          class=""
-          v-on:submit.prevent="image_upload()">
-          <input type="file" ref="image_input" name="image">
-          <input type="submit" name="">
-        </form>
-
-      </Modal>
-    </div>
+        <IconButton
+        v-bind:active="isActive.code_block()"
+        @click="commands.code_block">
+        <code-tags-icon />
+        </IconButton>
 
 
-  </editor-menu-bar>
+        <IconButton
+        @click="commands.undo">
+        <undo-icon />
+        </IconButton>
+
+        <IconButton
+        @click="commands.redo">
+        <redo-icon />
+        </IconButton>
+
+        <IconButton
+        v-on:click="showImagePrompt(commands.image)">
+        <image-icon />
+        </IconButton>
+
+        <IconButton
+        v-on:click="showVideoPromt(commands.iframe)">
+        <youtube-icon />
+        </IconButton>
+
+        <IconButton
+        v-bind:class="{ 'is-active': isActive.link() }"
+        v-on:click="prompt_for_url(commands.link)">
+        <link-icon />
+        </IconButton>
+
+
+      </div>
+
+    </editor-menu-bar>
+
+
+
+    <Modal
+      class="above_all"
+      v-bind:open="image_upload_modal.open"
+      v-on:close="image_upload_modal.open = false">
+
+      <h2>Image upload</h2>
+      <p>Using an URL</p>
+      <form
+        class=""
+        v-on:submit.prevent="submit_image_link()">
+        <input type="text" ref="image_url_input">
+        <input type="submit" name="">
+      </form>
+      <p>Or upload an image</p>
+      <form
+        class=""
+        v-on:submit.prevent="image_upload()">
+        <input type="file" ref="image_input" name="image">
+        <input type="submit" name="">
+      </form>
+
+    </Modal>
+  </div>
+
 </template>
 
 <script>
