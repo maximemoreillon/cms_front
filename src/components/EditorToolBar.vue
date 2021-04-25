@@ -191,6 +191,7 @@ export default {
     submit_image_link(){
       const src =  this.$refs.image_url_input.value
       this.editor.commands.image({src})
+      this.$refs.image_url_input.value = ""
       this.image_upload_modal.open = false
     },
 
