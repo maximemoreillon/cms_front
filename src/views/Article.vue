@@ -19,21 +19,21 @@
         <!-- Author -->
         <div class="metadata_wrapper">
           <span>Written by</span>
-          <Author v-bind:author="author"/>
+          <Author v-bind:author="article.author"/>
         </div>
 
         <div
           class="metadata_wrapper"
-          v-if="authorship.properties.creation_date">
+          v-if="article.authorship.properties.creation_date">
           <span>Creation date:</span>
-          <span>{{format_date(authorship.properties.creation_date)}}</span>
+          <span>{{format_date(article.authorship.properties.creation_date)}}</span>
         </div>
 
         <div
           class="metadata_wrapper"
-          v-if="authorship.properties.edition_date">
+          v-if="article.authorship.properties.edition_date">
           <span>Last edited:</span>
-          <span>{{format_date(authorship.properties.edition_date)}}</span>
+          <span>{{format_date(article.authorship.properties.edition_date)}}</span>
 
         </div>
 
@@ -61,9 +61,9 @@
       <!-- Tags -->
       <div class="tags_container">
         <label>Tags:</label>
-        <template v-if="tags.length > 0">
+        <template v-if="article.tags.length > 0">
           <Tag
-            v-for="(tag) in tags"
+            v-for="(tag) in article.tags"
             v-bind:key="tag.identity"
             v-bind:tag="tag"/>
         </template>
@@ -78,6 +78,7 @@
         v-html="article.properties.content"/>
 
       <!-- Comments -->
+      <!---
       <div
         class="comment_area_wrapper"
         v-if="false">
@@ -124,6 +125,7 @@
         </div>
 
       </div>
+      -->
 
     </template>
 
@@ -166,12 +168,12 @@
 import Loader from '@moreillon/vue_loader'
 import Modal from '@moreillon/vue_modal'
 
-import IconButton from '@/components/vue_icon_button/IconButton.vue'
+//import IconButton from '@/components/vue_icon_button/IconButton.vue'
 
 import Tag from '@/components/Tag.vue'
 import Author from '@/components/Author.vue'
 
-import Comment from '@/components/Comment.vue'
+//import Comment from '@/components/Comment.vue'
 
 import {formatDate} from '@/mixins/formatDate.js'
 
@@ -180,12 +182,12 @@ import {formatDate} from '@/mixins/formatDate.js'
 
 export default {
   components: {
-    IconButton,
+    //IconButton,
     Modal,
     Loader,
     Tag,
     Author,
-    Comment,
+    //Comment,
 
   },
   mixins: [
@@ -240,25 +242,10 @@ export default {
       this.article_loading = true;
 
 
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles/${article_id}`)
-      .then(response => {
-
-        if(response.data.length === 0) return
-
-        const record = response.data[0]
-
-        // parsing the article
-        this.article = record._fields[record._fieldLookup['article']]
-        this.author = record._fields[record._fieldLookup['author']]
-        this.authorship = record._fields[record._fieldLookup['authorship']]
-        this.tags = record._fields[record._fieldLookup['tags']]
-
-        // Make the images clickable to expand
-        setTimeout(this.add_event_listeners_for_image_modals,100)
-
-        // setting the document title
-        document.title = `${this.article.properties.title} - Maxime MOREILLON`;
-
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v2/articles/${article_id}`)
+      .then( ({data}) => {
+        this.article = data
+        document.title = `${this.article.properties.title} - CMS - Maxime MOREILLON`;
       })
       .catch(error => {
 
@@ -270,8 +257,7 @@ export default {
       .finally( () => { this.article_loading = false })
     },
 
-
-
+    /*
     create_comment(){
       this.axios.post(`${process.env.VUE_APP_CMS_API_URL}/comments`, {
         article_id: this.article.identity,
@@ -289,6 +275,7 @@ export default {
       .catch(error => alert(error.response.data))
 
     },
+    */
 
 
 
@@ -321,9 +308,9 @@ export default {
       const current_user_id = current_user.identity.low || current_user.identity // new version has no .low
 
       // If article does not have no author, then nothing to edit
-      if(!this.author) return false
+      if(!this.article.author) return false
 
-      return (this.author.identity === current_user_id)
+      return (this.article.author.identity === current_user_id)
     }
   }
 
