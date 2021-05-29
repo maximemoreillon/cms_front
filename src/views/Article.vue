@@ -245,7 +245,8 @@ export default {
       this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v2/articles/${article_id}`)
       .then( ({data}) => {
         this.article = data
-        document.title = `${this.article.properties.title} - CMS - Maxime MOREILLON`;
+        document.title = `${this.article.properties.title} - CMS - Maxime MOREILLON`
+        setTimeout(this.add_event_listeners_for_image_modals,100)
       })
       .catch(error => {
 
