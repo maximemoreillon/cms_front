@@ -3,8 +3,9 @@
 
 
 
-    <form 
-      v-if="!loading && !$store.state.current_user" 
+    <form
+      class="container"
+      v-if="!loading && !$store.state.current_user"
       @submit.prevent="login()">
 
       <div class="">
@@ -15,24 +16,27 @@
         <label for="">Password</label>
         <input type="password" v-model="password" placeholder="password">
       </div>
-      
+
 
       <div>
-        <input type="submit" value="Login">
         <IconButton
+          type="submit"
           @click="login()">
           <login-icon/>
           <span>Login</span>
         </IconButton>
       </div>
 
-      
+      <div class="error_message" v-if="error">
+        {{error}}
+      </div>
+
+
     </form>
 
-    <form 
-      class="" 
-      v-if="!loading &&$store.state.current_user" 
-      @submit.prevent="logout()">
+    <div
+      class="container"
+      v-if="!loading &&$store.state.current_user">
 
       <div class="">
         Logged in as {{$store.state.current_user.properties.display_name}}
@@ -40,22 +44,22 @@
 
 
       <div class="">
-        <input type="submit" value="Logout">
         <IconButton
           @click="logout()">
           <logout-icon/>
           <span>Logout</span>
         </IconButton>
-        
+
       </div>
 
-    </form>
+    </div>
 
-    <div 
+    <div
       v-if="loading"
       class="loader_wrapper">
       <Loader />
     </div>
+
 
   </div>
 </template>
@@ -74,6 +78,7 @@ export default {
   data () {
     return {
       loading: false,
+      error: null,
       username: '',
       password: '',
     }
@@ -92,8 +97,14 @@ export default {
         this.$store.commit('check_authentication')
       })
       .catch(error => {
-        if(error.response) console.error(error.response.data)
-        else console.error(error)
+        if(error.response) {
+          console.error(error.response.data)
+          this.error = error.response.data
+        }
+        else {
+          console.error(error)
+          this.error = 'Could not login, pleae contact an administrator'
+        }
       })
       .finally(() => {this.loading = false})
     },
@@ -112,28 +123,29 @@ export default {
 
 <style scoped>
 
-form {
+.container {
   margin-top: 15vh;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-form > * {
+.container > * {
   margin: 1em 0;
 }
 
 label {
-  margin-right: 0.5em; 
+  margin-right: 0.5em;
 }
 
-input[type="submit"] {
-  display: none;
-}
 
 .loader_wrapper {
   margin-top: 15vh;
   text-align: center;
   font-size: 200%;
+}
+
+.error_message {
+  color: #c00000;
 }
 
 </style>

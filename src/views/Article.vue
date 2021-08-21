@@ -13,50 +13,8 @@
       <h1>{{article.properties.title || 'Untitled article'}}</h1>
 
 
+      <ArticleMetadata :article="article"/>
 
-      <div class="article_metadata">
-
-        <!-- Author -->
-        <div class="metadata_wrapper">
-          <span>Written by</span>
-          <Author v-bind:author="article.author"/>
-        </div>
-
-        <div
-          class="metadata_wrapper"
-          v-if="article.authorship.properties.creation_date">
-          <span>Creation date:</span>
-          <span>{{format_date(article.authorship.properties.creation_date)}}</span>
-        </div>
-
-        <div
-          class="metadata_wrapper"
-          v-if="article.authorship.properties.edition_date">
-          <span>Last edited:</span>
-          <span>{{format_date(article.authorship.properties.edition_date)}}</span>
-
-        </div>
-
-        <div
-          class="metadata_wrapper"
-          v-if="article.properties.views">
-            {{article.properties.views}} Views
-        </div>
-
-        <div
-          class="metadata_wrapper"
-          v-if="article.properties.published">
-          <earth-icon />
-          <span>published</span>
-        </div>
-        <div
-          class="metadata_wrapper"
-          v-if="!article.properties.published">
-          <lock-icon />
-          <span>private</span>
-        </div>
-
-      </div>
 
       <!-- Tags -->
       <div class="tags_container">
@@ -171,7 +129,7 @@ import Modal from '@moreillon/vue_modal'
 //import IconButton from '@/components/vue_icon_button/IconButton.vue'
 
 import Tag from '@/components/Tag.vue'
-import Author from '@/components/Author.vue'
+import ArticleMetadata from '@/components/ArticleMetadata.vue'
 
 //import Comment from '@/components/Comment.vue'
 
@@ -183,16 +141,16 @@ import {formatDate} from '@/mixins/formatDate.js'
 export default {
   components: {
     //IconButton,
+    ArticleMetadata,
     Modal,
     Loader,
     Tag,
-    Author,
+    // Author,
     //Comment,
 
   },
   mixins: [
     formatDate,
-    //parseArticleRecord,
   ],
   data () {
     return {
@@ -227,22 +185,21 @@ export default {
 
   mounted() {
     this.get_article()
-
+  },
+  beforeDestroy() {
+    document.title = `CMS - Maxime MOREILLON`
   },
   methods: {
 
     get_article(){
-      let article_id = this.$route.params.article_id
-        || this.$route.params.id
-        || this.$route.query.article_id
-        || this.$route.query.id
 
-      if(!article_id) return
+
+      if(!this.article_id) return
 
       this.article_loading = true;
 
 
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v2/articles/${article_id}`)
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v2/articles/${this.article_id}`)
       .then( ({data}) => {
         this.article = data
         document.title = `${this.article.properties.title} - CMS - Maxime MOREILLON`
@@ -290,6 +247,12 @@ export default {
     },
   },
   computed: {
+    article_id(){
+      return this.$route.params.article_id
+        || this.$route.params.id
+        || this.$route.query.article_id
+        || this.$route.query.id
+    },
     editable(){
       let article_id = this.$route.params.article_id
         || this.$route.params.id
@@ -330,7 +293,7 @@ export default {
 
 
 
-.article_metadata, .tags_container {
+.tags_container {
   font-size: 85%;
   color: #666666;
   display: flex;
@@ -338,30 +301,7 @@ export default {
   align-items: baseline;
 }
 
-.article_metadata {
-  margin-top: -0.5em;
-}
 
-.article_metadata > *:not(:last-child) {
-  margin-right: 0.5em;
-}
-
-.metadata_wrapper {
-  display: flex;
-  align-items: center;
-}
-
-.metadata_wrapper > *:not(:last-child) {
-  margin-right: 0.25em;
-}
-
-.metadata_wrapper:not(:last-child) {
-  margin-right: 1em;
-}
-
-.metadata_wrapper > *:not(:last-child) {
-  margin-right: 0.5em;
-}
 
 
 .tags_container > * {

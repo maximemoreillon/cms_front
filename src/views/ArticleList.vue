@@ -1,5 +1,4 @@
 <template>
-
   <div class="article_list_view" ref="view">
 
     <template v-if="tag">
@@ -45,10 +44,6 @@
 
     <!-- Toolbar for sorting and new article -->
     <Toolbar >
-
-
-
-
 
         <!-- article counter -->
         <!-- Maybe not necessary -->
@@ -121,6 +116,7 @@
 
     <div
       class="articles_container"
+      ref="articles_container"
       v-if="!loading_error && article_records.length > 0">
 
 
@@ -153,13 +149,19 @@
     </div>
 
     <!-- Load more -->
-    <button
-      v-if="!articles_loading && !articles_all_loaded && !loading_error"
-      class="load_more_button"
-      type="button"
-      v-on:click="get_articles()">
-      <span>Load more</span>
-    </button>
+    <div
+      class="load_more_wrapper"
+      ref="load_more"
+      :style="{display: load_more_possible ? 'block' : 'none'}"
+      >
+      <button
+        class="load_more_button"
+        type="button"
+        v-on:click="get_articles()">
+        <span>Load more</span>
+      </button>
+    </div>
+
 
 
 
@@ -233,13 +235,16 @@ export default {
       search_bar_open: false,
       batch_size: 10,
 
+      load_more_observer: null,
+
     }
   },
 
   mounted() {
 
     // Does not get called when staying in the same route!
-    this.load_more_when_scroll_to_bottom()
+
+    //this.load_more_when_scroll_to_bottom()
 
     this.get_tag()
     this.get_author()
@@ -248,8 +253,6 @@ export default {
 
   },
   beforeRouteUpdate (to, from, next) {
-
-
     next()
 
     this.$nextTick().then( () => {
@@ -273,17 +276,17 @@ export default {
 
       this.articles_loading = true
 
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles`, {
-        params: {
-          sort : this.sort,
-          order : this.order,
-          start_index : this.article_records.length,
-          search : this.search_string,
-          batch_size : this.batch_size,
-          tag_id: this.$route.query.tag_id,
-          author_id: this.$route.query.author_id
-        }
-      })
+      const params = {
+        sort : this.sort,
+        order : this.order,
+        start_index : this.article_records.length,
+        search : this.search_string,
+        batch_size : this.batch_size,
+        tag_id: this.$route.query.tag_id,
+        author_id: this.$route.query.author_id
+      }
+
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles`, { params })
       .then(response => {
 
         // Do not do anything if there is no article
@@ -291,7 +294,7 @@ export default {
 
         // Every record contains the total article count
         // Take the total article count from the first record
-        let first_record = response.data[0]
+        const first_record = response.data[0]
         this.article_count = first_record._fields[first_record._fieldLookup['article_count']]
 
 
@@ -303,6 +306,11 @@ export default {
         // Check if all articles loaded (less than batch size)
         if(response.data.length < this.batch_size) {
           this.articles_all_loaded = true
+        }
+
+        if(!this.load_more_observer){
+          setTimeout(this.load_more_when_scroll_to_bottom,200)
+
         }
 
 
@@ -428,36 +436,30 @@ export default {
         .catch(error => alert(error))
       }
     },
+
     load_more_when_scroll_to_bottom(){
       // THIS IS HIGHLY TEMPLATE DEPENDANT!
 
-      let current_view = this.$refs.view
-      let main_and_footer_wrapper = current_view.parentNode.parentNode
+      const container = this.$refs.view.parentNode.parentNode
+      const target = this.$refs.load_more
 
-
-      main_and_footer_wrapper.onscroll = () => {
-
-        // only apply to article_list route
-        if(!this.$route.name === 'article_list') return
-
-        let main = current_view.parentNode
-        let footer = main_and_footer_wrapper.getElementsByTagName('footer')[0]
-
-        let content_height = main.offsetHeight + footer.offsetHeight
-
-        let content_view_bottom = main_and_footer_wrapper.offsetHeight + main_and_footer_wrapper.scrollTop
-
-        let delta = Math.abs(content_height - content_view_bottom)
-
-
-        if( delta < 5){
-          if(!this.articles_loading && this.article_records.length > 0 && !this.articles_all_loaded) {
-            this.get_articles();
-          }
-        }
-
-
+      const options = {
+        root: container,
+        rootMargin: '0px',
+        threshold: 1.0
       }
+
+      const callback = (entries) => {
+        const {isIntersecting} = entries.find(e => e.target === target)
+        if(isIntersecting && this.load_more_possible) {
+          this.get_articles()
+        }
+      }
+
+      this.observer = new IntersectionObserver(callback, options);
+
+      this.observer.observe(target)
+
     },
 
     search(){
@@ -485,6 +487,9 @@ export default {
       if(!this.$store.state.current_user) return false
       return this.$store.state.current_user.properties.isAdmin
     },
+    load_more_possible(){
+      return !this.articles_loading && !this.articles_all_loaded && !this.loading_error
+    }
 
   }
 
@@ -499,10 +504,17 @@ export default {
 .articles_container {
 
   /* Normal behavior */
-  display: grid;
+
+  /* display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
-  grid-gap: 1em;
+  grid-gap: 1em; */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
 }
+
+
 
 .tags_buttons_wrapper > *:not(:last-child) {
   margin-right: 1em;
