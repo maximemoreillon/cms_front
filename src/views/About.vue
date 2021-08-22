@@ -1,9 +1,28 @@
 <template>
   <div class="about" >
-    <h1>Article managemet system</h1>
-    <p>Front-end version: {{version}}</p>
-    <p v-if="back_end_version">Back-end version: {{back_end_version}}</p>
-    <p>Developed by <a href="https://maximemoreillon/com">Maxime MOREILLON</a></p>
+    <h1>About</h1>
+    <p>A simple article management web application built using Node.js, Vue.js, Express and Neo4J</p>
+    <p>Author:
+      <a href="https://maximemoreillon/com">Maxime MOREILLON</a>
+    </p>
+    <h2>Services</h2>
+    <table>
+      <tr>
+        <th>Service</th>
+        <th>Version</th>
+        <th>URL</th>
+      </tr>
+      <tr
+        v-for="(service, index) in services"
+        :key="`service_${index}`">
+        <td>{{service.name}}</td>
+        <td>{{service.version}}</td>
+        <td>{{service.url}}</td>
+
+      </tr>
+    </table>
+
+
 
   </div>
 </template>
@@ -21,22 +40,41 @@ export default {
 
   data () {
     return {
-      version: pjson.version,
-      back_end_version: null,
+      services: [
+        {
+          name: 'GUI',
+          url: window.location.origin,
+          version: pjson.version
+        },
+        {
+          name: 'API',
+          url: process.env.VUE_APP_CMS_API_URL,
+          version: null
+        },
+        {
+          name: 'Authentication API',
+          url: process.env.VUE_APP_AUTHENTICATION_API_URL,
+          version: null
+        },
+        {
+          name: 'Image manager API',
+          url: process.env.VUE_APP_IMAGE_MANAGER_API_URL,
+          version: null
+        },
+      ],
     }
   },
   mounted(){
-    this.get_back_end_version()
+    this.get_services_info()
   },
   methods: {
-    get_back_end_version(){
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/`)
-      .then(response => {
-        this.back_end_version = response.data.version
-      })
-      .catch(error => {
-        if(error.response) console.error(error.response.data)
-        else console.error(error)
+    get_services_info () {
+      this.services.forEach((service) => {
+        if (service.version) return
+        service.version = 'Connecting...'
+        this.axios.get(service.url)
+          .then(({ data }) => { service.version = data.version })
+          .catch(() => { service.version = 'Unable to connect' })
       })
     }
 
@@ -50,7 +88,23 @@ export default {
 
 <style scoped>
 
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
 
+}
+
+tr:not(:last-child) {
+  border-bottom: 1px solid #dddddd;
+}
+
+th {
+  text-align: left;
+}
+td {
+  padding: 0.25em;
+}
 
 
 </style>
