@@ -14,14 +14,17 @@ export default new Vuex.Store({
 
       this.commit('update_categories',state)
 
-      if(!Vue.$cookies.get('jwt')) {
+      const jwt = localStorage.jwt
+
+
+      if(!jwt) {
         state.current_user = null
         return
       }
 
       // Retrieve current user
       const url = `${process.env.VUE_APP_AUTHENTICATION_API_URL}/whoami`
-      const options = { headers: { Authorization: "Bearer " + Vue.$cookies.get('jwt') } }
+      const options = { headers: { Authorization: `Bearer ${jwt}` } }
       axios.get(url, options)
       .then(response => {
         state.current_user = response.data

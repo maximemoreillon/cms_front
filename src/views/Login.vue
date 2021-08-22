@@ -5,7 +5,7 @@
 
     <form
       class="container"
-      v-if="!loading && !$store.state.current_user"
+      v-if="!loading && !current_user"
       @submit.prevent="login()">
 
       <div class="">
@@ -36,10 +36,10 @@
 
     <div
       class="container"
-      v-if="!loading &&$store.state.current_user">
+      v-if="!loading && current_user">
 
       <div class="">
-        Logged in as {{$store.state.current_user.properties.display_name}}
+        Logged in as {{current_user.properties.display_name}}
       </div>
 
 
@@ -92,8 +92,9 @@ export default {
       const url = `${process.env.VUE_APP_AUTHENTICATION_API_URL}/login`
       const body = {username: this.username, password: this.password}
       this.axios.post(url, body)
-      .then(response => {
-        this.$cookies.set('jwt', response.data.jwt)
+      .then(({data}) => {
+        //this.$cookies.set('jwt', response.data.jwt)
+        localStorage.jwt = data.jwt
         this.$store.commit('check_authentication')
       })
       .catch(error => {
@@ -109,10 +110,16 @@ export default {
       .finally(() => {this.loading = false})
     },
     logout(){
-      this.$cookies.remove('jwt')
+      //this.$cookies.remove('jwt')
+      localStorage.removeItem('jwt')
       this.$store.commit('check_authentication')
-    }
+    },
 
+  },
+  computed: {
+    current_user(){
+      return this.$store.state.current_user
+    }
   }
 
 

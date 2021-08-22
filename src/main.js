@@ -4,11 +4,12 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import VueCookies from 'vue-cookies'
+
+//import VueCookies from 'vue-cookies'
 
 
 Vue.use(VueAxios, axios)
-Vue.use(VueCookies)
+//Vue.use(VueCookies)
 
 
 
@@ -64,8 +65,10 @@ router.beforeEach((to, from, next) => {
   // Save authentication state in Vuex
   store.commit('check_authentication')
 
+  const jwt = localStorage.jwt
+
   // deal with authentication header
-  if(Vue.$cookies.get("jwt")) axios.defaults.headers.common['Authorization'] = `Bearer ${Vue.$cookies.get('jwt')}`
+  if(jwt) axios.defaults.headers.common['Authorization'] = `Bearer ${jwt}`
   else delete axios.defaults.headers.common['Authorization']
 
   next()
