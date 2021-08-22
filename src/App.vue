@@ -147,13 +147,17 @@ main a:hover {
   display: none;
 }
 
-.article img {
+article img {
+  cursor: pointer;
+}
+
+article img,
+.editor_content img {
   /* test CSS for images */
 
 
   display: block;
   margin: 2em auto;
-  cursor: pointer;
 
   max-width: 60%;
   max-height: 40vh;

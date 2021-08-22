@@ -18,9 +18,12 @@
 
       <!-- Tags -->
       <div class="tags_container">
-        <label>Tags:</label>
-        <template v-if="article.tags.length > 0">
+        <label>
+          <tag-icon />
+        </label>
+        <template v-if="article.tags.length">
           <Tag
+            class="tag"
             v-for="(tag) in article.tags"
             v-bind:key="tag.identity"
             v-bind:tag="tag"/>
@@ -137,6 +140,8 @@ import {formatDate} from '@/mixins/formatDate.js'
 
 // Not using Highlight JS anymore due to poor consistency
 //import highlight from 'highlight.js'
+
+
 
 export default {
   components: {
@@ -289,26 +294,18 @@ export default {
   margin-top: 0.25em;
 }
 
-
-
-
-
 .tags_container {
   font-size: 85%;
   color: #666666;
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
+  align-items: center;
 }
-
-
 
 
 .tags_container > * {
+  /* Margin top for when tags occupy two rows */
   margin-top: 0.5em;
-}
-
-.tags_container label {
   margin-right: 0.5em;
 }
 

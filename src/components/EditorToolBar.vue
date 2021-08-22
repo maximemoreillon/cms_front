@@ -117,30 +117,34 @@
 
     </editor-menu-bar>
 
-
-
+    <!-- Image upload modal -->
     <Modal
-      class="above_all"
+      class="above_all "
       v-bind:open="image_upload_modal.open"
       v-on:close="image_upload_modal.open = false">
 
-      <h2>Image upload</h2>
-      <p>Using an URL</p>
-      <form
-        class=""
-        v-on:submit.prevent="submit_image_link()">
-        <input type="text" ref="image_url_input">
-        <input type="submit" name="">
-      </form>
-      <p>Or upload an image</p>
-      <form
-        class=""
-        v-on:submit.prevent="image_upload()">
-        <input type="file" ref="image_input" name="image">
-        <input type="submit" name="">
-      </form>
+      <div class="image_upload_modal_content">
+        <h2>Image upload</h2>
+        <p>Using an URL</p>
+        <form
+          class=""
+          v-on:submit.prevent="submit_image_link()">
+          <input type="text" ref="image_url_input">
+          <input type="submit" name="">
+        </form>
+        <p>Or upload an image</p>
+        <form
+          class=""
+          v-on:submit.prevent="image_upload()">
+          <input type="file" accept="image/*" ref="image_input" name="image">
+          <input type="submit" name="">
+        </form>
+      </div>
+
+
 
     </Modal>
+
   </div>
 
 </template>
@@ -170,7 +174,7 @@ export default {
   },
   methods: {
     prompt_for_url(command){
-      let url = prompt('URL:')
+      const url = prompt('URL:')
       if(url) command({ href: url })
 
     },
@@ -198,19 +202,15 @@ export default {
     image_upload(){
 
 
-      let formData = new FormData();
+      const formData = new FormData()
       formData.append('image', this.$refs.image_input.files[0])
       const url = `${process.env.VUE_APP_IMAGE_MANAGER_API_URL}/image`
-      const options = {
-        headers: {'Content-Type': 'multipart/form-data' }
-      }
-      this.axios.post(url, formData, options)
+      this.axios.post(url, formData)
       .then(response => {
         const image_id = response.data._id
         const src = `${process.env.VUE_APP_IMAGE_MANAGER_API_URL}/images/${image_id}`
         this.editor.commands.image({src})
         this.image_upload_modal.open = false
-
       })
       .catch(error => {
 
@@ -235,4 +235,9 @@ input[type="text"], input[type="text"] {
   flex-grow: 1;
   margin-right: 1em;
 }
+
+.image_upload_modal_content {
+  margin: 1em;
+}
+
 </style>

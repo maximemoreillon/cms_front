@@ -3,6 +3,8 @@
     class="article_preview"
     :to="{ name: 'article', params: {article_id: article.identity} }">
 
+
+
     <!-- indictor for published -->
     <earth-icon
       class="publishing_status"
@@ -70,6 +72,7 @@
       v-if="tags">
 
       <Tag
+        :clickable="false"
         v-for="tag in tags"
         v-bind:key="tag.identity"
         v-bind:tag="tag"/>
@@ -160,7 +163,7 @@ export default {
 
 
 .article_preview > * {
-  margin: 1em
+  margin: 1em 1.5em;
 }
 
 .article_preview:hover {
@@ -197,17 +200,22 @@ export default {
 
 .article_preview_body {
   display: flex;
-  align-items: center;
+  align-items: top;
 }
 
 
 .article_summary {
   overflow: hidden;
   line-height: 1em;
-  height: 5.5em;
+  max-height: 10.5em;
+
+  /* Padding so that short summaries don't get clipped */
+  padding-bottom: 0.5em;
+
   position: relative;
 }
 
+/* Shadow to show there is more content available */
 .article_summary::before {
   content: '';
   position: absolute;
@@ -224,10 +232,10 @@ export default {
 
 
 .article_thumbnail {
-  max-width: 5em;
-  max-height: 5em;
+  max-width: 8em;
+  max-height: 8em;
   object-fit: contain;
-  margin-right: 1em;
+  margin-right: 1.5em;
 }
 
 

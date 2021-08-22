@@ -61,6 +61,7 @@
             removable
             v-on:remove="delete_tag(index)"/>
 
+            <!-- Why ID? -->
           <input
             id="tag_search"
             type="search"
@@ -105,7 +106,7 @@
 
       <!-- the article being written comes here -->
       <editor-content
-        class="editor_content article"
+        class="editor_content"
         v-bind:editor="editor"/>
 
     </template>
@@ -280,8 +281,7 @@ export default {
   methods: {
     get_article_if_exists(){
       // If ID is present in query, get the article corresponding to that ID
-      const article_id = this.$route.params.id
-        || this.$route.params.article_id
+      const article_id = this.$route.params.id || this.$route.params.article_id
 
       if(!article_id || article_id === 'new') {
         this.article_loading = false
@@ -337,15 +337,16 @@ export default {
 
     },
     create_article(){
-      this.axios.post(`${process.env.VUE_APP_CMS_API_URL}/articles`, {
+
+      const url = `${process.env.VUE_APP_CMS_API_URL}/v2/articles`
+      const body = {
         article: this.article,
         tag_ids: this.tags.map(tag => tag.identity),
-      })
-      .then(response => {
-        // redirect to article
-        const article = response.data[0]._fields[response.data[0]._fieldLookup['article']]
-        const article_id = article.identity
-        this.$router.push({ name: 'article', params: { article_id: article_id } })
+      }
+
+      this.axios.post(url, body )
+      .then(({data:article}) => {
+        this.$router.push({ name: 'article', params: { article_id: article.identity } })
       })
       .catch(error => {
         this.article_loading = false
@@ -387,7 +388,7 @@ export default {
       if(!confirm('Delete article?')) return
 
       this.article_loading = true
-      this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/articles/${this.article.identity}`)
+      this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/v2/articles/${this.article.identity}`)
       .then( () => {
         this.$router.push({ name: 'article_list' })
       })
@@ -459,6 +460,11 @@ export default {
 
     },
   },
+  computed: {
+    current_user(){
+      return this.$store.state.current_user
+    }
+  }
 
 
 }

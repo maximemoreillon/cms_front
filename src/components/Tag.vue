@@ -1,6 +1,7 @@
 <template>
   <span
     class="tag"
+    :class="{clickable: clickable}"
     v-on:click.stop="tag_clicked()">
 
     <span v-if="tag">{{tag.properties.name}}</span>
@@ -28,13 +29,14 @@ export default {
       type: Boolean,
       default() { return false }
     },
-    cickable: {
+    clickable: {
       type: Boolean,
-      default() { return false}
+      default() { return true }
     },
   },
   methods: {
     tag_clicked(){
+      if(!this.clickable) return
       if(!(this.$route.name === 'article_list' && this.$route.query.id === this.tag.identity)){
         this.$router.push({ name: 'article_list', query: { tag_id: this.tag.identity } })
       }
@@ -77,7 +79,7 @@ export default {
 }
 
 
-.tag:hover {
+.tag.clickable:hover {
   color:  #c00000;
   border-color:  #c00000;
 }
