@@ -151,8 +151,7 @@ article img {
   cursor: pointer;
 }
 
-article img,
-.editor_content img {
+:is(article, .editor_content) img {
   /* test CSS for images */
 
 
@@ -165,7 +164,7 @@ article img,
 
 }
 
-.article iframe {
+:is(article, .editor_content) iframe {
   display: block;
   margin-left: auto;
   margin-right: auto;
@@ -173,7 +172,7 @@ article img,
   height: 30vw;
 }
 
-.article pre code {
+:is(article, .editor_content) pre code {
   display: block;
   overflow-x: auto;
   padding: 1em;

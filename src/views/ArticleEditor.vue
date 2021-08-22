@@ -306,6 +306,7 @@ export default {
 
       })
       .catch(error => {
+        console.error(error)
         alert(error.response.data)
       })
       .finally( () => {
@@ -493,6 +494,10 @@ export default {
   max-height: 80vh;
 
   overflow-y: auto;
+  //padding: 0.5em;
+}
+
+.ProseMirror {
   padding: 0.5em;
 }
 
