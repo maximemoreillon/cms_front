@@ -204,7 +204,7 @@ export default {
 
       const formData = new FormData()
       formData.append('image', this.$refs.image_input.files[0])
-      const url = `${process.env.VUE_APP_IMAGE_MANAGER_API_URL}/image`
+      const url = `${process.env.VUE_APP_IMAGE_MANAGER_API_URL}/images`
       this.axios.post(url, formData)
       .then(response => {
         const image_id = response.data._id
