@@ -33,7 +33,7 @@
       </div>
     </template>
 
-    <template v-else-if="author.properties">
+    <template v-else-if="author">
       <h1>Articles written by {{author.properties.username}}</h1>
     </template>
 
@@ -87,21 +87,22 @@
 
 
         <!-- search -->
-        <div class="search_wrapper">
+        <form class="search_wrapper" @submit.prevent="search()">
           <input
             type="search"
             class="search_bar"
             ref="search"
             v-bind:class="{search_bar_open: search_bar_open}"
-            v-model="search_string"
-            @change="search()">
+            v-model="search_string">
+
+          <input type="submit" style="display:none;">
 
           <IconButton
             v-on:click="search()">
             <magnify-icon/>
           </IconButton>
 
-        </div>
+        </form>
 
     </Toolbar>
 
@@ -217,6 +218,8 @@ export default {
     return {
       article_records: [],
       article_count: 0,
+
+      // loading flags
       articles_loading: false,
       articles_all_loaded: false,
       loading_error: null,
@@ -224,14 +227,18 @@ export default {
       tag: null,
       tag_loading: false,
 
-      author: {},
+      author: null,
+
+
 
       // Default sorting and ordering
+
+      search_string: '',
       sort: 'date',
       order: 'DESC',
 
 
-      search_string: '',
+
       search_bar_open: false,
       batch_size: 10,
 
@@ -250,6 +257,11 @@ export default {
     this.get_author()
     this.delete_all_articles()
     this.get_articles()
+
+    if(this.$route.query.search) {
+      this.search_bar_open = true
+      this.search_string = this.$route.query.search
+    }
 
   },
   beforeRouteUpdate (to, from, next) {
@@ -276,14 +288,16 @@ export default {
 
       this.articles_loading = true
 
+      const {search, author_id, tag_id} = this.$route.query
+
       const params = {
         sort : this.sort,
         order : this.order,
         start_index : this.article_records.length,
-        search : this.search_string,
         batch_size : this.batch_size,
-        tag_id: this.$route.query.tag_id,
-        author_id: this.$route.query.author_id
+        search,
+        tag_id,
+        author_id,
       }
 
       this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles`, { params })
@@ -330,33 +344,34 @@ export default {
 
       let tag_id = this.$route.query.tag_id
 
-      if(tag_id){
-        this.tag_loading = true;
-        this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/tags/${tag_id}`)
-        .then(response => { this.tag = response.data })
-        .catch(error => {
-          if(error.response) alert(error.response.data)
-          else alert(error)
-        })
-        .finally( () => {this.tag_loading = false;})
-      }
+      if(!tag_id) return
+      this.tag_loading = true;
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/tags/${tag_id}`)
+      .then(response => { this.tag = response.data })
+      .catch(error => {
+        if(error.response) alert(error.response.data)
+        else alert(error)
+      })
+      .finally( () => {this.tag_loading = false})
     },
 
     get_author(){
-      this.author = {}
 
-      let author_id = this.$route.query.author_id
+      const author_id = this.$route.query.author_id
 
-      if(author_id){
-        this.$set(this.author,'loading',true)
-        this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/authors/${author_id}`)
-        .then(response => { this.author = response.data })
-        .catch(error => {
-          this.$set(this.author,'error', 'Error getting author')
-          if(error.response) alert(error.response.data)
-          else alert(error)
-        })
+      if(!author_id) {
+        this.author = null
+        return
       }
+
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/authors/${author_id}`)
+      .then(response => { this.author = response.data })
+      .catch(error => {
+        this.$set(this.author,'error', 'Error getting author')
+        if(error.response) alert(error.response.data)
+        else alert(error)
+      })
+
 
     },
 
@@ -465,9 +480,17 @@ export default {
     search(){
       if(this.search_bar_open){
         // if the search bar is open, search or close
+
+        if(this.search_string === this.$route.query.search) return
+
+        const query = {...this.$route.query, search: this.search_string}
+
         if(this.search_string === '') {
           this.search_bar_open = false
+          delete query.search
         }
+
+        this.$router.push({name: 'article_list', query})
 
         this.delete_all_articles()
         this.get_articles()
