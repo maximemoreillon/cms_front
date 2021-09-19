@@ -206,7 +206,6 @@ export default {
 
 .article_summary {
   overflow: hidden;
-  line-height: 1em;
   max-height: 10.5em;
 
   /* Padding so that short summaries don't get clipped */

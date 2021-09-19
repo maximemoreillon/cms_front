@@ -138,10 +138,10 @@ main a:hover {
 }
 /* TO HERE: IS DUPLICATEDD IN LOCAL TEMPLATE */
 
-
-.article {
-
+:is(article, .editor_content) {
+  line-height: 1.5;
 }
+
 
 .article:not(.editor_content) h1:first-child {
   display: none;
