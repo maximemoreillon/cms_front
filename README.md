@@ -1,24 +1,14 @@
-# cms_front
+# CMS Front
+This is the GUI of my Neo4J and Express based CMS.
 
-## Project setup
-```
-npm install
-```
+The CMS is currently deployed at https://articles.maximemoreillon.com/
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+Moreover, an article regarding its design is available here: https://articles.maximemoreillon.com/articles/112
 
-### Compiles and minifies for production
-```
-npm run build
-```
+## Environment variables
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+| Variable  | Description |
+| --- | --- |
+| VUE_APP_CMS_API_URL | URL of the CMS API |
+| VUE_APP_AUTHENTICATION_API_URL | URL of the Authentication API |
+| VUE_APP_IMAGE_MANAGER_API_URL | (Optional) URL of the image management API |
