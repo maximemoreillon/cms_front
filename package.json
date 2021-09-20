@@ -1,6 +1,6 @@
 {
   "name": "cms_front",
-  "version": "2.8.4",
+  "version": "2.8.5",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -11,7 +11,7 @@
     "@moreillon/vue_loader": "^1.0.0",
     "@moreillon/vue_modal": "^0.1.0",
     "axios": "^0.21.1",
-    "core-js": "^3.16.2",
+    "core-js": "^3.18.0",
     "dotenv": "^8.6.0",
     "tiptap": "^1.32.2",
     "tiptap-extensions": "^1.35.2",

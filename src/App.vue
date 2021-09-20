@@ -166,10 +166,9 @@ article img {
 
 :is(article, .editor_content) iframe {
   display: block;
-  margin-left: auto;
-  margin-right: auto;
   width: 80%;
   height: 30vw;
+  margin: 2.5em auto;
 }
 
 :is(article, .editor_content) pre code {
