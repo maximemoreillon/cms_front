@@ -492,8 +492,8 @@ export default {
 
         this.$router.push({name: 'article_list', query})
 
-        this.delete_all_articles()
-        this.get_articles()
+        // this.delete_all_articles()
+        // this.get_articles()
 
       }
       else {
