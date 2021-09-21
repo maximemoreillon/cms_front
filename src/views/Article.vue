@@ -192,7 +192,7 @@ export default {
     this.get_article()
   },
   beforeDestroy() {
-    document.title = `CMS - Maxime MOREILLON`
+    //document.title = `CMS - Maxime MOREILLON`
   },
   methods: {
 

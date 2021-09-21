@@ -274,7 +274,6 @@ export default {
   beforeDestroy() {
     // Always destroy your editor instance when it's no longer needed
     this.editor.destroy()
-    document.title = `CMS - Maxime MOREILLON`
     document.removeEventListener("keydown", this.handle_keydown)
   },
 
