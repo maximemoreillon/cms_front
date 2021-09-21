@@ -5,7 +5,7 @@
       <router-link
         class="button edit_button"
         v-if="editable"
-        :to="{ name: 'article_editor', query: { id: article.identity } }">
+        :to="{ name: 'article_editor', params: { id: article.identity } }">
         <pencil-icon />
         <span>Edit</span>
       </router-link>

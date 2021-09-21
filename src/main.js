@@ -50,6 +50,8 @@ Vue.component('code-tags-icon', () => import('vue-material-design-icons/CodeTags
 Vue.component('undo-icon', () => import('vue-material-design-icons/Undo.vue'))
 Vue.component('redo-icon', () => import('vue-material-design-icons/Redo.vue'))
 Vue.component('link-icon', () => import('vue-material-design-icons/Link.vue'))
+Vue.component('code-braces-icon', () => import('vue-material-design-icons/CodeBraces.vue'))
+Vue.component('code-braces-box-icon', () => import('vue-material-design-icons/CodeBracesBox.vue'))
 
 
 

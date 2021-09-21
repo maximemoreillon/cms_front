@@ -34,7 +34,7 @@
         <IconButton
         v-bind:active="isActive.code()"
         @click="commands.code">
-        <code-tags-icon />
+        <code-braces-icon />
         </IconButton>
 
         <IconButton
@@ -73,20 +73,20 @@
         <format-list-numbered-icon />
         </IconButton>
 
-        <IconButton
+        <!-- <IconButton
         v-bind:active="isActive.blockquote()"
         @click="commands.blockquote">
         <format-quote-close-icon />
-        </IconButton>
+        </IconButton> -->
 
         <IconButton
         v-bind:active="isActive.code_block()"
         @click="commands.code_block">
-        <code-tags-icon />
+        <code-braces-box-icon />
         </IconButton>
 
 
-        <IconButton
+        <!-- <IconButton
         @click="commands.undo">
         <undo-icon />
         </IconButton>
@@ -94,7 +94,7 @@
         <IconButton
         @click="commands.redo">
         <redo-icon />
-        </IconButton>
+        </IconButton> -->
 
         <IconButton
         v-on:click="showImagePrompt(commands.image)">
@@ -211,6 +211,7 @@ export default {
         const src = `${process.env.VUE_APP_IMAGE_MANAGER_API_URL}/images/${image_id}`
         this.editor.commands.image({src})
         this.image_upload_modal.open = false
+        this.$refs.image_input.value = null
       })
       .catch(error => {
 
