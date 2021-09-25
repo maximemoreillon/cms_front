@@ -118,13 +118,13 @@
     <div
       class="articles_container"
       ref="articles_container"
-      v-if="!loading_error && article_records.length > 0">
+      v-if="!loading_error && articles.length > 0">
 
 
       <ArticlePreview
-        v-for="(record, i) in article_records"
-        v-bind:key="`article_${i}`"
-        v-bind:article_record="record"/>
+        v-for="(article) in articles"
+        :key="`article_${article.identity}`"
+        :article="article"/>
 
 
 
@@ -140,7 +140,7 @@
     <!-- No articles indicator -->
     <div
       class=""
-      v-if="article_records.length === 0 && !articles_loading && !loading_error">
+      v-if="articles.length === 0 && !articles_loading && !loading_error">
       No articles
     </div>
 
@@ -216,7 +216,7 @@ export default {
   },
   data () {
     return {
-      article_records: [],
+      articles: [],
       article_count: 0,
 
       // loading flags
@@ -279,7 +279,7 @@ export default {
   methods: {
     delete_all_articles(){
       // Turned into its own method to work with the "load more" feature
-      this.article_records.splice(0,this.article_records.length)
+      this.articles.splice(0,this.articles.length)
       this.articles_all_loaded = false
     },
 
@@ -293,38 +293,32 @@ export default {
       const params = {
         sort : this.sort,
         order : this.order,
-        start_index : this.article_records.length,
+        start_index : this.articles.length,
         batch_size : this.batch_size,
         search,
         tag_id,
         author_id,
       }
 
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/articles`, { params })
-      .then(response => {
+      const url = `${process.env.VUE_APP_CMS_API_URL}/v2/articles`
+
+      this.axios.get(url, { params })
+      .then( ({data}) => {
 
         // Do not do anything if there is no article
-        if(response.data < 1) return this.articles_all_loaded = true
+        // if(data.length < 1) return this.articles_all_loaded = true
 
-        // Every record contains the total article count
-        // Take the total article count from the first record
-        const first_record = response.data[0]
-        this.article_count = first_record._fields[first_record._fieldLookup['article_count']]
-
-
-        response.data.forEach( (record) => {
-          this.article_records.push(record)
-        })
+        this.article_count = data.article_count
+        data.articles.forEach(a => {this.articles.push(a)})
 
 
         // Check if all articles loaded (less than batch size)
-        if(response.data.length < this.batch_size) {
+        if(data.articles < this.batch_size) {
           this.articles_all_loaded = true
         }
 
         if(!this.load_more_observer){
           setTimeout(this.load_more_when_scroll_to_bottom,200)
-
         }
 
 

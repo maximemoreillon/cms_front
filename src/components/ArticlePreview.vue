@@ -21,8 +21,8 @@
         <!-- date -->
         <span
           class="article_date"
-          v-if="authorship.properties.creation_date">
-          {{format_date(authorship.properties.creation_date)}}
+          v-if="article.authorship.properties.creation_date">
+          {{format_date(article.authorship.properties.creation_date)}}
         </span>
 
         <span>|</span>
@@ -95,13 +95,12 @@
 import {formatDate} from '@/mixins/formatDate.js'
 
 import Tag from '@/components/Tag.vue'
-import EarthIcon from 'vue-material-design-icons/Earth.vue';
 
 
 export default {
   name: 'ArticlePreview',
   props: {
-    article_record: Object
+    article: Object
   },
   data() {
     return {
@@ -110,32 +109,24 @@ export default {
   },
   mixins: [
     formatDate,
-    //parseArticleRecord
   ],
   components: {
     Tag,
-
-    // Icons
-    EarthIcon
   },
-  mounted() {
 
-  },
   methods: {
 
   },
   computed: {
-    article(){
-      return this.article_record._fields[this.article_record._fieldLookup.article]
-    },
+
     author(){
-      return this.article_record._fields[this.article_record._fieldLookup.author]
+      return this.article.author
     },
     tags(){
-      return this.article_record._fields[this.article_record._fieldLookup.tags]
+      return this.article.tags
     },
     authorship(){
-      return this.article_record._fields[this.article_record._fieldLookup.authorship]
+      return this.article.author.authoriship
     },
   }
 
