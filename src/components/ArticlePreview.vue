@@ -71,6 +71,8 @@
       class="tags_container"
       v-if="tags">
 
+      <!-- <tag-icon /> -->
+
       <Tag
         :clickable="false"
         v-for="tag in tags"
@@ -243,7 +245,10 @@ export default {
 
 .tags_container > *:not(:last-child) {
   margin-right: 5px;
+}
 
+.tags_container > *:first-child {
+  margin-left: 0;
 }
 
 
