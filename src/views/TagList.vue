@@ -3,6 +3,26 @@
 
     <h1>Tags</h1>
 
+    <Toolbar >
+
+      <span class="article_counter">
+        {{tags.length}} Tags
+      </span>
+
+      <div class="growing_spacer"/>
+
+
+        <!-- search -->
+        <input
+          type="search"
+          class="search_bar"
+          v-model="filter">
+
+        <magnify-icon/>
+
+
+    </Toolbar>
+
     <div
       class="loader_container"
       v-if="loading">
@@ -11,7 +31,7 @@
 
     <div class="tag_container">
       <Tag
-        v-for="tag in tags"
+        v-for="tag in filtered_tags"
         :key="tag.identity"
         :tag="tag"/>
     </div>
@@ -25,18 +45,21 @@
 import Loader from '@moreillon/vue_loader'
 
 import Tag from '@/components/Tag.vue'
+import Toolbar from '@/components/Toolbar.vue'
 
 
 export default {
   components: {
     Loader,
-    Tag
+    Tag,
+    Toolbar
   },
   data () {
     return {
       tags: [],
       loading: false,
       error: null,
+      filter: '',
 
     }
   },
@@ -71,12 +94,9 @@ export default {
 
   },
   computed: {
-    user_is_admin(){
-      if(!this.$store.state.current_user) return false
-      return this.$store.state.current_user.properties.isAdmin
-    },
-    load_more_possible(){
-      return !this.articles_loading && !this.articles_all_loaded && !this.loading_error
+    filtered_tags(){
+      if(this.filter === '') return this.tags
+      return this.tags.filter(t => t.properties.name.toLowerCase().includes(this.filter.toLowerCase()))
     }
 
   }
@@ -95,7 +115,7 @@ export default {
 }
 
 .tag_container > * {
-  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 

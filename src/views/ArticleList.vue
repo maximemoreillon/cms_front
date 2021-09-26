@@ -108,13 +108,6 @@
 
 
 
-
-
-
-
-
-
-
     <div
       class="articles_container"
       ref="articles_container"
@@ -183,9 +176,7 @@ import Toolbar from '@/components/Toolbar.vue'
 import AlphabeticalIcon from 'vue-material-design-icons/Alphabetical.vue';
 import SortDescendingIcon from 'vue-material-design-icons/SortDescending.vue';
 import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue';
-import PencilIcon from 'vue-material-design-icons/Pencil.vue';
 import PinIcon from 'vue-material-design-icons/Pin.vue';
-import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
 
 
 export default {
@@ -198,14 +189,12 @@ export default {
     //Author,
 
     // icons
-    PencilIcon,
     PinIcon,
     //FileDocumentOutlineIcon,
     AlphabeticalIcon,
     SortDescendingIcon,
     SortAscendingIcon,
     //DotsHorizontalIcon,
-    MagnifyIcon,
     //CloseIcon,
   },
   data () {

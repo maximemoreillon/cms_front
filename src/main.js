@@ -11,6 +11,7 @@ Vue.use(VueAxios, axios)
 
 // Icon import
 Vue.component('arrow-left-icon', () => import('vue-material-design-icons/ArrowLeft.vue'))
+Vue.component('magnify-icon', () => import('vue-material-design-icons/Magnify.vue'))
 Vue.component('earth-icon', () => import('vue-material-design-icons/Earth.vue'))
 Vue.component('pencil-icon', () => import('vue-material-design-icons/Pencil.vue'))
 Vue.component('send-icon', () => import('vue-material-design-icons/Send.vue'))
