@@ -39,6 +39,12 @@ const routes = [
     component: () => import('@/views/ArticleEditor.vue'),
   },
 
+  {
+    path: '/tags/',
+    name: 'tags',
+    component: () => import('@/views/TagList.vue'),
+  },
+
   // Legacy
   {
     path: '/article', redirect: to => {

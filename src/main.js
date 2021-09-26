@@ -5,13 +5,8 @@ import store from './store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
-//import VueCookies from 'vue-cookies'
-
 
 Vue.use(VueAxios, axios)
-//Vue.use(VueCookies)
-
-
 
 
 // Icon import
@@ -20,6 +15,7 @@ Vue.component('earth-icon', () => import('vue-material-design-icons/Earth.vue'))
 Vue.component('pencil-icon', () => import('vue-material-design-icons/Pencil.vue'))
 Vue.component('send-icon', () => import('vue-material-design-icons/Send.vue'))
 Vue.component('tag-icon', () => import('vue-material-design-icons/Tag.vue'))
+Vue.component('tag-multiple-icon', () => import('vue-material-design-icons/TagMultiple.vue'))
 Vue.component('calendar-icon', () => import('vue-material-design-icons/Calendar.vue'))
 Vue.component('account-icon', () => import('vue-material-design-icons/Account.vue'))
 Vue.component('lock-icon', () => import('vue-material-design-icons/Lock.vue'))

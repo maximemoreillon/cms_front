@@ -4,6 +4,7 @@
     <AppTemplateNav
       :visible="nav_visible"
       @navToggle="nav_visible =! nav_visible"/>
+
     <AppTemplateHeader @navToggle="nav_visible =! nav_visible"/>
 
 

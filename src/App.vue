@@ -1,72 +1,7 @@
 <template>
-
-  <div id="app">
-
-    <AppTemplate
-      applicationName="Knowledge base">
-
-      <!-- proper way to embed navigation -->
-      <template v-slot:navigation>
-
-        <router-link
-          v-if="$store.state.current_user"
-          :to="{ name: 'article_editor', params: {article_id: 'new'}}">
-
-          <plus-icon />
-          <span>New article</span>
-
-        </router-link>
-
-        <router-link :to="{ name: 'article_list'}">
-          <account-icon />
-          <span>All articles</span>
-
-        </router-link>
-
-        <router-link
-        v-if="$store.state.current_user"
-        :to="{ name: 'article_list', query: {author_id: current_user_id}}">
-        <newspaper-variant-multiple-outline-icon />
-        <span>My articles</span>
-
-        </router-link>
-
-
-        <router-link
-          v-for="(item, index) in $store.state.pinned_tags"
-          v-bind:key="`nav_${index}`"
-          :to="item.route">
-          <tag-icon />
-          <span>{{item.label}}</span>
-
-        </router-link>
-
-        <router-link :to="{ name: 'login' }">
-          <login-icon />
-          <span>Login</span>
-        </router-link>
-
-
-        <router-link :to="{ name: 'about' }">
-          <information-outline-icon />
-          <span>About</span>
-        </router-link>
-
-
-
-      </template>
-
-      <main>
-        <router-view />
-      </main>
-
-
-    </AppTemplate>
-
-  </div>
-
+  <AppTemplate
+    applicationName="Knowledge base"/>
 </template>
-
 <script>
 
 //import AppTemplate from '@moreillon/vue_application_template'
@@ -96,7 +31,6 @@ export default {
 
 <style>
 
-/* FROM HERE */
 @font-face {
   font-family: lexend;
   src: url(./assets/LexendDeca-Regular.ttf);

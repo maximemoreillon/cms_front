@@ -20,11 +20,10 @@
     </router-link>
 
     <router-link
-    v-if="$store.state.current_user"
-    :to="{ name: 'article_list', query: {author_id: current_user_id}}">
-    <account-icon />
-    <span>My articles</span>
-
+      v-if="$store.state.current_user"
+      :to="{ name: 'article_list', query: {author_id: current_user_id}}">
+      <account-icon />
+      <span>My articles</span>
     </router-link>
 
 
@@ -34,6 +33,13 @@
       :to="item.route">
       <tag-icon />
       <span>{{item.label}}</span>
+
+    </router-link>
+
+    <router-link :to="{ name: 'tags'}">
+
+      <tag-multiple-icon />
+      <span>Tag list</span>
 
     </router-link>
 

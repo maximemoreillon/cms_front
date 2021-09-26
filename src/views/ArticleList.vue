@@ -180,16 +180,12 @@ import Toolbar from '@/components/Toolbar.vue'
 //import Author from '@/components/Author.vue'
 
 // icons
-import CalendarIcon from 'vue-material-design-icons/Calendar.vue';
 import AlphabeticalIcon from 'vue-material-design-icons/Alphabetical.vue';
 import SortDescendingIcon from 'vue-material-design-icons/SortDescending.vue';
 import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue';
 import PencilIcon from 'vue-material-design-icons/Pencil.vue';
 import PinIcon from 'vue-material-design-icons/Pin.vue';
-//import FileDocumentOutlineIcon from 'vue-material-design-icons/FileDocumentOutline.vue';
-import DeleteIcon from 'vue-material-design-icons/Delete.vue';
 import MagnifyIcon from 'vue-material-design-icons/Magnify.vue';
-//import CloseIcon from 'vue-material-design-icons/Close.vue';
 
 
 export default {
@@ -205,8 +201,6 @@ export default {
     PencilIcon,
     PinIcon,
     //FileDocumentOutlineIcon,
-    DeleteIcon,
-    CalendarIcon,
     AlphabeticalIcon,
     SortDescendingIcon,
     SortAscendingIcon,
