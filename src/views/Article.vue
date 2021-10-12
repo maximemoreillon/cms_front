@@ -313,7 +313,7 @@ export default {
 
 .modal_image {
   width: 80vw;
-  height: 80vh;
+  height: 70vh;
   margin: 10px;
   object-fit: contain;
 }
