@@ -295,12 +295,18 @@ export default {
 
 
       this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v3/articles/${article_id}/`)
-      .then( ({data: {article, authorship, author, tags}}) => {
+      .then( ({data: article}) => {
 
         this.article = article
-        this.authorship = authorship
-        this.author = author
-        this.tags = tags
+
+        // this.authorship = authorship
+        // this.author = author
+        // this.tags = tags
+
+        // a bit of a dirty trick
+        this.authorship = article.authorship
+        this.author = article.author
+        this.tags = article.tags
 
         this.editor.setContent(this.article.content)
 
@@ -344,7 +350,7 @@ export default {
 
       const url = `${process.env.VUE_APP_CMS_API_URL}/v3/articles`
       const body = {
-        article: this.article,
+        ...this.article,
         tag_ids: this.tags.map(tag => this.get_id_of_item(tag)),
       }
 
@@ -368,7 +374,7 @@ export default {
 
 
       const body = {
-        article: this.article,
+        ...this.article,
         tag_ids: this.tags.map(tag => this.get_id_of_item(tag)),
       }
 

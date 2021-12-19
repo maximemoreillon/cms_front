@@ -149,12 +149,18 @@ export default {
 
 
       this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v3/articles/${this.article_id}`)
-      .then( ({data: {article, tags, author, authorship}}) => {
+      .then( ({data: article}) => {
 
         this.article = article
-        this.tags = tags
-        this.author = author
-        this.authorship = authorship
+
+        // a bit of a dirty trick
+        this.tags = article.tags
+        this.author = article.author
+        this.authorship = article.authorship
+
+        // this.tags = tags
+        // this.author = author
+        // this.authorship = authorship
 
         document.title = `${this.article.title} - CMS - Maxime MOREILLON`
         setTimeout(this.add_event_listeners_for_image_modals,100)
