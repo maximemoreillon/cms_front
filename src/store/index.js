@@ -40,17 +40,17 @@ export default new Vuex.Store({
     update_categories(state){
 
       // Get pinned tags
-      axios.get(`${process.env.VUE_APP_CMS_API_URL}/v3/tags/pinned`)
-      .then(response => {
+      const url = `${process.env.VUE_APP_CMS_API_URL}/v3/tags/`
+      const params = {pinned: true}
+      axios.get(url, {params})
+      .then( ({data}) => {
         // delete all navigation items
 
-        state.pinned_tags = response.data.map(record => {
-          const tag = record._fields[record._fieldLookup['tag']]
-          return {
-            route: `/?tag_id=${tag.properties._id}`,
-            label: tag.properties.name,
-          }
-        })
+        state.pinned_tags = data.map( tag => ({
+            route: `/?tag_id=${tag._id}`,
+            label: tag.name,
+          })
+        )
 
       })
       .catch(error => console.log(error))
