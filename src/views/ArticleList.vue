@@ -2,7 +2,7 @@
   <div class="article_list_view" ref="view">
 
     <template v-if="tag">
-      <h1>Articles tagged with "{{tag.properties.name}}"</h1>
+      <h1>Articles tagged with "{{tag.name}}"</h1>
       <div class="tags_buttons_wrapper" v-if="user_is_admin">
 
         <button
@@ -24,7 +24,7 @@
         <button
           type="button"
           class="button"
-          :class="{active:tag.properties.navigation_item}"
+          :class="{active:tag.navigation_item}"
           @click="pin_to_navbar()">
           <pin-icon/>
           <span>Pin to nav</span>
@@ -34,7 +34,7 @@
     </template>
 
     <template v-else-if="author">
-      <h1>Articles written by {{author.properties.username}}</h1>
+      <h1>Articles written by {{author.username}}</h1>
     </template>
 
     <template v-else>
@@ -115,8 +115,8 @@
 
 
       <ArticlePreview
-        v-for="(article) in articles"
-        :key="`article_${article.identity}`"
+        v-for="(article, index) in articles"
+        :key="`article_${index}`"
         :article="article"/>
 
 
@@ -178,6 +178,7 @@ import SortDescendingIcon from 'vue-material-design-icons/SortDescending.vue';
 import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue';
 import PinIcon from 'vue-material-design-icons/Pin.vue';
 
+import IdUtils from '@/mixins/IdUtils'
 
 export default {
   components: {
@@ -197,6 +198,9 @@ export default {
     //DotsHorizontalIcon,
     //CloseIcon,
   },
+  mixins: [
+    IdUtils
+  ],
   data () {
     return {
       articles: [],
@@ -283,7 +287,7 @@ export default {
         author_id,
       }
 
-      const url = `${process.env.VUE_APP_CMS_API_URL}/v2/articles`
+      const url = `${process.env.VUE_APP_CMS_API_URL}/v3/articles`
 
       this.axios.get(url, { params })
       .then( ({data}) => {
@@ -292,19 +296,12 @@ export default {
         // if(data.length < 1) return this.articles_all_loaded = true
 
         this.article_count = data.article_count
-        data.articles.forEach(a => {this.articles.push(a)})
 
+        this.articles = data.articles
 
         // Check if all articles loaded (less than batch size)
-        if(data.articles < this.batch_size) {
-          this.articles_all_loaded = true
-        }
-
-        if(!this.load_more_observer){
-          setTimeout(this.load_more_when_scroll_to_bottom,200)
-        }
-
-
+        if(data.article_count < this.batch_size) this.articles_all_loaded = true
+        if(!this.load_more_observer) setTimeout(this.load_more_when_scroll_to_bottom,200)
 
       })
       .catch(error => {
@@ -319,12 +316,13 @@ export default {
     get_tag(){
       this.tag = null
 
-      let tag_id = this.$route.query.tag_id
+      const tag_id = this.$route.query.tag_id
 
       if(!tag_id) return
+
       this.tag_loading = true;
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/tags/${tag_id}`)
-      .then(response => { this.tag = response.data })
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v3/tags/${tag_id}`)
+      .then( ({data}) => { this.tag = data })
       .catch(error => {
         if(error.response) alert(error.response.data)
         else alert(error)
@@ -341,7 +339,7 @@ export default {
         return
       }
 
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/authors/${author_id}`)
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v3/authors/${author_id}`)
       .then(response => { this.author = response.data })
       .catch(error => {
         this.$set(this.author,'error', 'Error getting author')
@@ -381,17 +379,17 @@ export default {
     update_tag(){
       // Used for admins to edit tags
 
-      this.tag_loading = true;
+      this.tag_loading = true
 
-      this.axios.put(`${process.env.VUE_APP_CMS_API_URL}/tags/${this.tag.identity}`, {
-        properties: this.tag.properties
-      })
-      .then( response => {
+      const tag_id = this.get_id_of_item(this.tag)
 
-        if(response.data.length > 0){
-          let record = response.data[0]
-          this.tag = record._fields[record._fieldLookup['tag']]
-        }
+      const url = `${process.env.VUE_APP_CMS_API_URL}/v3/tags/${tag_id}`
+      const body = this.tag
+
+      this.axios.put(url, body)
+      .then( ({data}) => {
+
+        this.tag = data
 
         this.$store.commit('update_categories')
 
@@ -405,28 +403,29 @@ export default {
     },
 
     prompt_for_rename(){
-      let new_name = prompt("New tag name", this.tag.properties.name)
-      if(new_name){
-        this.tag.properties.name = new_name
-        this.update_tag()
-      }
+      const new_name = prompt("New tag name", this.tag.name)
+      if(!new_name) return
+      this.tag.name = new_name
+      this.update_tag()
     },
 
     pin_to_navbar(){
-      this.tag.properties.navigation_item = !this.tag.properties.navigation_item
+      this.tag.navigation_item = !this.tag.navigation_item
       this.update_tag()
     },
 
     delete_tag(){
-      if(confirm('Delete tag?')){
-        this.article_loading = true;
+      if(!confirm('Delete tag?')) return
+      this.article_loading = true;
 
-        this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/tags/${this.tag.identity}`)
-        .then( () => {
-          this.$router.push({ name: 'article_list' })
-        })
-        .catch(error => alert(error))
-      }
+      const tag_id = this.get_id_of_item(this.tag)
+
+      this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/v3/tags/${tag_id}`)
+      .then( () => {
+        this.$router.push({ name: 'article_list' })
+      })
+      .catch(error => alert(error))
+
     },
 
     load_more_when_scroll_to_bottom(){
@@ -443,9 +442,7 @@ export default {
 
       const callback = (entries) => {
         const {isIntersecting} = entries.find(e => e.target === target)
-        if(isIntersecting && this.load_more_possible) {
-          this.get_articles()
-        }
+        if(isIntersecting && this.load_more_possible) this.get_articles()
       }
 
       this.observer = new IntersectionObserver(callback, options);
@@ -485,7 +482,7 @@ export default {
   computed: {
     user_is_admin(){
       if(!this.$store.state.current_user) return false
-      return this.$store.state.current_user.properties.isAdmin
+      return this.$store.state.current_user.isAdmin
     },
     load_more_possible(){
       return !this.articles_loading && !this.articles_all_loaded && !this.loading_error

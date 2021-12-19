@@ -8,6 +8,7 @@
 import AppTemplate from '@/components/template/AppTemplate.vue'
 
 import 'vue-material-design-icons/styles.css'
+import IdUtils from '@/mixins/IdUtils'
 
 
 export default {
@@ -15,16 +16,16 @@ export default {
   components: {
     AppTemplate
   },
+  mixins: [
+    IdUtils
+  ],
   data(){
     return{
 
     }
   },
   computed: {
-    current_user_id(){
-      const current_user = this.$store.state.current_user
-      return current_user.identity.low || current_user.identity
-    }
+
   }
 }
 </script>

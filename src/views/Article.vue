@@ -5,15 +5,18 @@
       <router-link
         class="button edit_button"
         v-if="editable"
-        :to="{ name: 'article_editor', params: { id: article.identity } }">
+        :to="{ name: 'article_editor', params: { id: get_id_of_item(article) } }">
         <pencil-icon />
         <span>Edit</span>
       </router-link>
 
-      <h1>{{article.properties.title || 'Untitled article'}}</h1>
+      <h1>{{article.title || 'Untitled article'}}</h1>
 
 
-      <ArticleMetadata :article="article"/>
+      <ArticleMetadata
+        :article="article"
+        :author="author"
+        :authorship="authorship"/>
 
 
       <!-- Tags -->
@@ -21,11 +24,11 @@
         <label>
           <tag-icon />
         </label>
-        <template v-if="article.tags.length">
+        <template v-if="tags.length">
           <Tag
             class="tag"
-            v-for="(tag) in article.tags"
-            v-bind:key="tag.identity"
+            v-for="(tag, index) in tags"
+            v-bind:key="`tag_${index}`"
             v-bind:tag="tag"/>
         </template>
         <span v-else>None</span>
@@ -36,57 +39,7 @@
         class="article"
         v-if="article && !article_loading"
         ref="article_content"
-        v-html="article.properties.content"/>
-
-      <!-- Comments -->
-      <!---
-      <div
-        class="comment_area_wrapper"
-        v-if="false">
-
-        <div class="new_comment_wrapper" >
-
-          <h2 class="">
-            Leave a comment
-          </h2>
-          <div class="">
-            <label>Name: </label>
-            <input
-              type="text"
-              v-model="comment.properties.author"
-              placeholder="Name">
-          </div>
-          <textarea
-            v-model="comment.properties.content"
-            placeholder="Comment"/>
-          <div class="create_comment_button_wrapper">
-            <IconButton
-              v-on:buttonClicked="create_comment()">
-              <send-icon/>
-            </IconButton>
-          </div>
-
-        </div>
-
-        <div class="comments_wrapper">
-
-          <template v-if="comments.length > 0 && !comments_loading">
-            <Comment
-              class="comment"
-              v-for="comment in comments"
-              v-bind:comment="comment"
-              v-bind:deletable="editable"
-              v-on:deleted="get_comments_of_article()"
-              v-bind:key="comment.identity"/>
-          </template>
-          <Loader v-else-if="comments_loading"/>
-          <div v-else>No comments yet</div>
-
-
-        </div>
-
-      </div>
-      -->
+        v-html="article.content"/>
 
     </template>
 
@@ -137,6 +90,7 @@ import ArticleMetadata from '@/components/ArticleMetadata.vue'
 //import Comment from '@/components/Comment.vue'
 
 import {formatDate} from '@/mixins/formatDate.js'
+import IdUtils from '@/mixins/IdUtils'
 
 // Not using Highlight JS anymore due to poor consistency
 //import highlight from 'highlight.js'
@@ -156,6 +110,7 @@ export default {
   },
   mixins: [
     formatDate,
+    IdUtils,
   ],
   data () {
     return {
@@ -166,17 +121,6 @@ export default {
       error: null,
 
       tags: [],
-
-      comments: [],
-      comments_loading: false,
-
-      comment: {
-        properties: {
-          author: '',
-          content: '',
-        },
-      },
-
       author: null,
       authorship: null,
 
@@ -204,10 +148,15 @@ export default {
       this.article_loading = true;
 
 
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v2/articles/${this.article_id}`)
-      .then( ({data}) => {
-        this.article = data
-        document.title = `${this.article.properties.title} - CMS - Maxime MOREILLON`
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v3/articles/${this.article_id}`)
+      .then( ({data: {article, tags, author, authorship}}) => {
+
+        this.article = article
+        this.tags = tags
+        this.author = author
+        this.authorship = authorship
+
+        document.title = `${this.article.title} - CMS - Maxime MOREILLON`
         setTimeout(this.add_event_listeners_for_image_modals,100)
       })
       .catch(error => {
@@ -219,28 +168,6 @@ export default {
       })
       .finally( () => { this.article_loading = false })
     },
-
-    /*
-    create_comment(){
-      this.axios.post(`${process.env.VUE_APP_CMS_API_URL}/comments`, {
-        article_id: this.article.identity,
-        comment: this.comment,
-      })
-      .then( () => {
-
-        // clear inputs
-        this.comment.properties.author = ''
-        this.comment.properties.content = ''
-
-        this.get_comments_of_article()
-
-      })
-      .catch(error => alert(error.response.data))
-
-    },
-    */
-
-
 
     add_event_listeners_for_image_modals(){
       this.$refs.article_content.querySelectorAll('img').forEach(img => {
@@ -259,7 +186,7 @@ export default {
         || this.$route.query.id
     },
     editable(){
-      let article_id = this.$route.params.article_id
+      const article_id = this.$route.params.article_id
         || this.$route.params.id
         || this.$route.query.article_id
         || this.$route.query.id
@@ -272,14 +199,16 @@ export default {
       // If the user is not logged in, then unable to edit
       if(!current_user) return false
 
-      if(current_user.properties.isAdmin) return true
+      if(current_user.isAdmin) return true
 
-      const current_user_id = current_user.identity.low || current_user.identity // new version has no .low
+      const current_user_id = this.get_id_of_item(current_user)
 
       // If article does not have no author, then nothing to edit
-      if(!this.article.author) return false
+      if(!this.author) return false
 
-      return (this.article.author.identity === current_user_id)
+      const author_id = this.get_id_of_item(this.author)
+
+      return (author_id === current_user_id)
     }
   }
 

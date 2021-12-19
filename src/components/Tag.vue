@@ -4,7 +4,7 @@
     :class="{clickable: clickable}"
     v-on:click.stop="tag_clicked()">
 
-    <span v-if="tag">{{tag.properties.name}}</span>
+    <span v-if="tag">{{tag.name}}</span>
     <span v-else>Invalid tag</span>
 
     <!-- button to remove tag -->
@@ -18,9 +18,13 @@
 
 <script>
 
+import IdUtils from '@/mixins/IdUtils'
 
 export default {
   name: 'Tag',
+  mixins: [
+    IdUtils
+  ],
   props: {
     tag: {
       type: Object
@@ -37,8 +41,9 @@ export default {
   methods: {
     tag_clicked(){
       if(!this.clickable) return
-      if(!(this.$route.name === 'article_list' && this.$route.query.id === this.tag.identity)){
-        this.$router.push({ name: 'article_list', query: { tag_id: this.tag.identity } })
+      const tag_id = this.get_id_of_item(this.tag)
+      if(!(this.$route.name === 'article_list' && this.$route.query.tag_id !== tag_id)){
+        this.$router.push({ name: 'article_list', query: { tag_id } })
       }
 
     }

@@ -26,8 +26,8 @@ export default new Vuex.Store({
       const url = `${process.env.VUE_APP_AUTHENTICATION_API_URL}/whoami`
       const options = { headers: { Authorization: `Bearer ${jwt}` } }
       axios.get(url, options)
-      .then(response => {
-        state.current_user = response.data
+      .then( ({data}) => {
+        state.current_user = data
       })
       .catch(error => {
         if(error.response) console.error(error.response.data)
@@ -40,14 +40,14 @@ export default new Vuex.Store({
     update_categories(state){
 
       // Get pinned tags
-      axios.get(`${process.env.VUE_APP_CMS_API_URL}/tags/pinned`)
+      axios.get(`${process.env.VUE_APP_CMS_API_URL}/v3/tags/pinned`)
       .then(response => {
         // delete all navigation items
 
         state.pinned_tags = response.data.map(record => {
           const tag = record._fields[record._fieldLookup['tag']]
           return {
-            route: `/?tag_id=${tag.identity}`,
+            route: `/?tag_id=${tag.properties._id}`,
             label: tag.properties.name,
           }
         })

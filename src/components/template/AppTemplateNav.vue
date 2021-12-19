@@ -71,6 +71,7 @@
 
 <script>
 
+import IdUtils from '@/mixins/IdUtils'
 
 
 export default {
@@ -78,6 +79,9 @@ export default {
   props: {
     visible: Boolean,
   },
+  mixins: [
+    IdUtils
+  ],
   components: {
 
 
@@ -86,10 +90,7 @@ export default {
 
   },
   computed: {
-    current_user_id(){
-      const current_user = this.$store.state.current_user
-      return current_user.identity.low || current_user.identity
-    }
+
   }
 
 }

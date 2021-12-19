@@ -31,8 +31,8 @@
 
     <div class="tag_container">
       <Tag
-        v-for="tag in filtered_tags"
-        :key="tag.identity"
+        v-for="(tag, index) in filtered_tags"
+        :key="`tag_${index}`"
         :tag="tag"/>
     </div>
 
@@ -76,7 +76,7 @@ export default {
 
       this.loading = true
 
-      const url = `${process.env.VUE_APP_CMS_API_URL}/v2/tags`
+      const url = `${process.env.VUE_APP_CMS_API_URL}/v3/tags`
 
       this.axios.get(url)
       .then( ({data}) => {
@@ -96,7 +96,7 @@ export default {
   computed: {
     filtered_tags(){
       if(this.filter === '') return this.tags
-      return this.tags.filter(t => t.properties.name.toLowerCase().includes(this.filter.toLowerCase()))
+      return this.tags.filter(t => t.name.toLowerCase().includes(this.filter.toLowerCase()))
     }
 
   }

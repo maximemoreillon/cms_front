@@ -1,19 +1,19 @@
 <template>
   <router-link
     class="article_preview"
-    :to="{ name: 'article', params: {article_id: article.identity} }">
+    :to="{ name: 'article', params: {article_id: get_id_of_item(article)} }">
 
 
 
     <!-- indictor for published -->
     <earth-icon
       class="publishing_status"
-      v-if="article.properties.published && $store.state.current_user"/>
+      v-if="article.published && $store.state.current_user"/>
 
     <!-- Article title, consists of first h1 of the content -->
     <div class="preview_header">
       <div class="article_title">
-        {{article.properties.title || 'Untitled article'}}
+        {{article.title || 'Untitled article'}}
       </div>
 
       <div class="article_metadata">
@@ -21,8 +21,8 @@
         <!-- date -->
         <span
           class="article_date"
-          v-if="article.authorship.properties.creation_date">
-          {{format_date(article.authorship.properties.creation_date)}}
+          v-if="article.authorship.creation_date">
+          {{format_date(article.authorship.creation_date)}}
         </span>
 
         <span>|</span>
@@ -30,14 +30,14 @@
         <!-- Author -->
         <span
           class="article_author"
-          v-if="author.properties.username">
-          {{author.properties.username}}
+          v-if="author.username">
+          {{author.username}}
         </span>
 
-        <template v-if="article.properties.views">
+        <template v-if="article.views">
           <span>|</span>
           <span>
-            {{article.properties.views}} views
+            {{article.views}} views
           </span>
         </template>
       </div>
@@ -50,15 +50,15 @@
     <div class="article_preview_body">
       <img
         class="article_thumbnail"
-        v-if="article.properties.thumbnail_src"
-        v-bind:src="article.properties.thumbnail_src"
+        v-if="article.thumbnail_src"
+        v-bind:src="article.thumbnail_src"
         alt="">
 
       <!-- Summary -->
       <article
         class="article_summary"
-        v-if="article.properties.summary"
-        v-html="article.properties.summary"/>
+        v-if="article.summary"
+        v-html="article.summary"/>
 
       <div class="article_summary" v-else>
         No summary available
@@ -75,8 +75,8 @@
 
       <Tag
         :clickable="false"
-        v-for="tag in tags"
-        v-bind:key="tag.identity"
+        v-for="(tag, index) in tags"
+        v-bind:key="`tag_${index}`"
         v-bind:tag="tag"/>
 
     </div>
@@ -97,6 +97,7 @@
 import {formatDate} from '@/mixins/formatDate.js'
 
 import Tag from '@/components/Tag.vue'
+import IdUtils from '@/mixins/IdUtils'
 
 
 export default {
@@ -111,6 +112,7 @@ export default {
   },
   mixins: [
     formatDate,
+    IdUtils,
   ],
   components: {
     Tag,

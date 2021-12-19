@@ -37,7 +37,7 @@
         </IconButton>
 
         <IconButton
-          v-if="article.identity"
+          v-if="article.identity || article._id"
           v-on:click="delete_article()">
           <delete-icon />
           <span>Delete</span>
@@ -56,7 +56,7 @@
 
           <Tag
             v-for="(tag, index) in tags"
-            v-bind:key="tag.identity"
+            v-bind:key="`tag_${index}`"
             v-bind:tag="tag"
             removable
             v-on:remove="delete_tag(index)"/>
@@ -72,9 +72,9 @@
 
           <datalist id="existing_tag_list">
             <option
-              v-for="existing_tag in existing_tags"
-              v-bind:value="existing_tag.properties.name"
-              v-bind:key="existing_tag.identity"/>
+              v-for="(existing_tag, index) in existing_tags"
+              v-bind:value="existing_tag.name"
+              v-bind:key="`existing_tag_${index}`"/>
           </datalist>
 
         </div>
@@ -82,14 +82,21 @@
         <!-- Visibility -->
         <div class="visibility_wrapper">
           <div>
-            <input type="radio" id="private" :value="false" v-model="article.properties.published">
+            <input
+              type="radio"
+              id="private"
+              :value="false"
+              v-model="article.published">
             <label for="private">
               <lock-icon/>
               <span>Private</span>
             </label>
           </div>
           <div>
-            <input type="radio" id="public" :value="true" v-model="article.properties.published">
+            <input
+              type="radio" id="public"
+              :value="true"
+              v-model="article.published">
             <label for="public">
               <earth-icon/>
               <span>Public</span>
@@ -167,6 +174,7 @@ import {
 } from 'tiptap-extensions'
 
 import Iframe from '@/misc/Iframe.js'
+import IdUtils from '@/mixins/IdUtils'
 
 
 export default {
@@ -181,6 +189,7 @@ export default {
   },
   mixins: [
     formatDate,
+    IdUtils,
   ],
   data () {
     return {
@@ -228,21 +237,18 @@ export default {
       // This gets sent to the DB
       article: {
 
-        identity: undefined,
+        content: null,
+        published: false,
 
-        properties: {
-          content: null,
-          published: false,
+        // Article metadata (generated when inputing data)
+        title: '',
+        summary: '',
+        thumbnail_src: '',
 
-          // Article metadata (generated when inputing data)
-          title: '',
-          summary: '',
-          thumbnail_src: '',
-        }
       },
 
+      author: null,
       authorship: null,
-
       tags: [],
 
       editable: true,
@@ -288,19 +294,17 @@ export default {
       }
 
 
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v2/articles/${article_id}/`)
-      .then( ({data: article}) => {
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v3/articles/${article_id}/`)
+      .then( ({data: {article, authorship, author, tags}}) => {
 
         this.article = article
-        const {authorship, tags} = article
-        this.authorship =authorship
+        this.authorship = authorship
+        this.author = author
         this.tags = tags
 
-        this.editor.setContent(this.article.properties.content)
+        this.editor.setContent(this.article.content)
 
-        if(this.article.properties.title) {
-          document.title = `${this.article.properties.title} - Maxime MOREILLON`
-        }
+        if(this.article.title) document.title = `${this.article.title} - Maxime MOREILLON`
 
 
       })
@@ -316,7 +320,7 @@ export default {
     },
 
     toggle_published(){
-      this.article.properties.published = !this.article.properties.published
+      this.article.published = !this.article.published
     },
     submit_article(){
 
@@ -324,13 +328,13 @@ export default {
       this.article_loading = true;
 
       // Parse the article to find metadata
-      this.article.properties.content = this.editor.getHTML()
+      this.article.content = this.editor.getHTML()
       this.set_article_title()
       this.set_article_summary()
       this.set_article_thumbnail_src()
 
       // if the article has an ID, UPDATE
-      if(this.article.identity) this.update_article()
+      if(this.article.identity || this.article._id) this.update_article()
 
       // If the article does not have an ID, CREATE
       else this.create_article()
@@ -338,15 +342,16 @@ export default {
     },
     create_article(){
 
-      const url = `${process.env.VUE_APP_CMS_API_URL}/v2/articles`
+      const url = `${process.env.VUE_APP_CMS_API_URL}/v3/articles`
       const body = {
         article: this.article,
-        tag_ids: this.tags.map(tag => tag.identity),
+        tag_ids: this.tags.map(tag => this.get_id_of_item(tag)),
       }
 
       this.axios.post(url, body )
       .then(({data:article}) => {
-        this.$router.push({ name: 'article', params: { article_id: article.identity } })
+        const article_id = this.get_id_of_item(article)
+        this.$router.push({ name: 'article', params: { article_id } })
       })
       .catch(error => {
         this.article_loading = false
@@ -358,23 +363,20 @@ export default {
       })
     },
     update_article(){
+      const article_id = this.get_id_of_item(this.article)
+      const url = `${process.env.VUE_APP_CMS_API_URL}/v3/articles/${article_id}`
 
-      const url = `${process.env.VUE_APP_CMS_API_URL}/v2/articles/${this.article.identity}`
+
       const body = {
-        properties: {
-          content: this.article.properties.content,
-          published: this.article.properties.published,
-          title: this.article.properties.title,
-          summary: this.article.properties.summary,
-          thumbnail_src: this.article.properties.thumbnail_src,
-        },
-        tag_ids: this.tags.map(tag => tag.identity),
+        article: this.article,
+        tag_ids: this.tags.map(tag => this.get_id_of_item(tag)),
       }
 
       this.axios.put(url, body)
       .then( ({data: article}) => {
         // redirect to article
-        this.$router.push({ name: 'article', params: { article_id: article.identity } })
+        const article_id = this.get_id_of_item(article)
+        this.$router.push({ name: 'article', params: { article_id } })
       })
       .catch(error => {
         console.error(error)
@@ -388,7 +390,8 @@ export default {
       if(!confirm('Delete article?')) return
 
       this.article_loading = true
-      this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/v2/articles/${this.article.identity}`)
+      const article_id = this.get_id_of_item(this.article)
+      this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/v3/articles/${article_id}`)
       .then( () => {
         this.$router.push({ name: 'article_list' })
       })
@@ -403,8 +406,8 @@ export default {
     },
     create_tag(){
       if(!this.$refs.tag_input.value.length) return
-      const url = `${process.env.VUE_APP_CMS_API_URL}/v2/tags`
-      const body = { tag_name: this.$refs.tag_input.value }
+      const url = `${process.env.VUE_APP_CMS_API_URL}/v3/tags`
+      const body = { name: this.$refs.tag_input.value }
       this.axios.post(url, body)
       .then(({data: tag}) => {
         this.tags.push(tag)
@@ -419,7 +422,7 @@ export default {
     },
     get_existing_tags(){
 
-      const url = `${process.env.VUE_APP_CMS_API_URL}/v2/tags/`
+      const url = `${process.env.VUE_APP_CMS_API_URL}/v3/tags/`
       this.axios.get(url)
       .then(({data: tags}) => { this.existing_tags = tags })
       .catch(error => alert(error))
@@ -428,26 +431,26 @@ export default {
     set_article_title(){
       // get article title from content (first h1 tag of the content)
       const virtual_container = document.createElement('div')
-      virtual_container.innerHTML = this.article.properties.content
+      virtual_container.innerHTML = this.article.content
       const first_h1 = virtual_container.getElementsByTagName('h1')[0]
-      if(first_h1) this.article.properties.title = first_h1.innerHTML
-      else this.article.properties.title = null
+      if(first_h1) this.article.title = first_h1.innerHTML
+      else this.article.title = null
     },
     set_article_summary(){
       // get article summary from content (first p tag of the content)
       const virtual_container = document.createElement('div')
-      virtual_container.innerHTML = this.article.properties.content
+      virtual_container.innerHTML = this.article.content
       var first_p = virtual_container.getElementsByTagName('p')[0]
-      if(first_p) this.article.properties.summary = first_p.innerHTML
-      else this.article.properties.summary = null
+      if(first_p) this.article.summary = first_p.innerHTML
+      else this.article.summary = null
     },
     set_article_thumbnail_src(){
       // get article thumbnail from content (first img tag of the content)
       const virtual_container = document.createElement('div')
-      virtual_container.innerHTML = this.article.properties.content
+      virtual_container.innerHTML = this.article.content
       const first_img = virtual_container.getElementsByTagName('img')[0]
-      if(first_img) this.article.properties.thumbnail_src = first_img.src
-      else this.article.properties.thumbnail_src = null
+      if(first_img) this.article.thumbnail_src = first_img.src
+      else this.article.thumbnail_src = null
     },
     handle_keydown(e){
       // Keyboard events

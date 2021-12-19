@@ -39,7 +39,7 @@
       v-if="!loading && current_user">
 
       <div class="">
-        Logged in as {{current_user.properties.display_name}}
+        Logged in as {{current_user.display_name}}
       </div>
 
 

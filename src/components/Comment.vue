@@ -3,9 +3,9 @@
     <div class="comment_header">
       <div class="">
         <span class="author">
-          {{comment.properties.author}}
+          {{comment.author}}
         </span>
-        <span class="date">({{format_date(comment.properties.date)}})</span>
+        <span class="date">({{format_date(comment.date)}})</span>
       </div>
 
       <IconButton
@@ -16,7 +16,7 @@
     </div>
 
     <div class="content">
-      {{comment.properties.content}}
+      {{comment.content}}
     </div>
 
   </div>
@@ -27,6 +27,7 @@
 import DeleteIcon from 'vue-material-design-icons/Delete.vue';
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import {formatDate} from '@/mixins/formatDate.js'
+import IdUtils from '@/mixins/IdUtils'
 
 
 export default {
@@ -37,6 +38,7 @@ export default {
   },
   mixins: [
     formatDate,
+    IdUtils
   ],
   props: {
     comment: {
@@ -51,7 +53,8 @@ export default {
   methods: {
     delete_comment(){
       if(confirm('Delete comment?')){
-        const url = `${process.env.VUE_APP_CMS_API_URL}/comments/${this.comment.identity}`
+        const comment_id = this.get_id_of_item(this.comment)
+        const url = `${process.env.VUE_APP_CMS_API_URL}/comments/${comment_id}`
         this.axios.delete(url)
         .then( () => {
           this.$emit('deleted')

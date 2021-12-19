@@ -3,40 +3,48 @@
 
     <!-- Author -->
     <div class="metadata_wrapper">
-      <span>Written by</span>
-      <Author v-bind:author="article.author"/>
+      <!-- <span>Written by</span> -->
+      <account-icon
+        title="Author"/>
+      <Author v-bind:author="author"/>
     </div>
 
     <div
       class="metadata_wrapper"
-      v-if="article.authorship.properties.creation_date">
-      <span>Creation date:</span>
-      <span>{{format_date(article.authorship.properties.creation_date)}}</span>
+      v-if="authorship.creation_date">
+      <calendar-icon
+        title="Creation date"/>
+      <!-- <span>Creation date:</span> -->
+      <span>{{format_date(authorship.creation_date)}}</span>
     </div>
 
     <div
       class="metadata_wrapper"
-      v-if="article.authorship.properties.edition_date">
-      <span>Last edited:</span>
-      <span>{{format_date(article.authorship.properties.edition_date)}}</span>
+      v-if="authorship.edition_date">
+      <!-- <span>Last edited:</span> -->
+      <calendar-edit-icon
+        title="Last edition date"/>
+      <span>{{format_date(authorship.edition_date)}}</span>
 
     </div>
 
     <div
       class="metadata_wrapper"
-      v-if="article.properties.views">
-        {{article.properties.views}} Views
+      v-if="article.views">
+      <eye-icon
+        title="views"/>
+      <span>{{article.views}}</span>
     </div>
 
     <div
       class="metadata_wrapper"
-      v-if="article.properties.published">
+      v-if="article.published">
       <earth-icon />
       <span>published</span>
     </div>
     <div
       class="metadata_wrapper"
-      v-if="!article.properties.published">
+      v-if="!article.published">
       <lock-icon />
       <span>private</span>
     </div>
@@ -52,7 +60,9 @@ import {formatDate} from '@/mixins/formatDate.js'
 export default {
   name: 'ArticleMetadata',
   props: {
-    article: Object
+    article: Object,
+    author: Object,
+    authorship: Object,
   },
   mixins: [
     formatDate,
@@ -92,7 +102,7 @@ export default {
 }
 
 .metadata_wrapper:not(:last-child) {
-  margin-right: 1em;
+  margin-right: 1.5em;
 }
 
 .metadata_wrapper > *:not(:last-child) {

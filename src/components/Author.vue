@@ -6,10 +6,10 @@
     <template v-if="author">
       <img
         class="avatar"
-        :src="author.properties.avatar_src"
-        v-if="author.properties.avatar_src">
+        :src="author.avatar_src"
+        v-if="author.avatar_src">
       <span>
-        {{author.properties.username}}
+        {{author.username}}
       </span>
     </template>
 
@@ -21,6 +21,7 @@
 
 <script>
 
+import IdUtils from '@/mixins/IdUtils'
 
 export default {
   name: 'Author',
@@ -29,11 +30,16 @@ export default {
       type: Object
     },
   },
+  mixins: [
+    IdUtils
+  ],
   methods: {
     author_clicked(){
       let target_route_name = 'article_list'
-      if(!(this.$route.name === target_route_name && this.$route.query.id === this.author.identity)){
-        this.$router.push({ name: target_route_name, query: { author_id: this.author.identity } })
+      const author_id = this.get_id_of_item(this.author)
+
+      if(!(this.$route.name === target_route_name && this.$route.query.id === author_id)){
+        this.$router.push({ name: target_route_name, query: { author_id } })
       }
     }
   },
