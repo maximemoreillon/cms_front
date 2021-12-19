@@ -322,7 +322,9 @@ export default {
 
       this.tag_loading = true;
       this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v3/tags/${tag_id}`)
-      .then( ({data}) => { this.tag = data })
+      .then( ({data}) => {
+        this.tag = data
+       })
       .catch(error => {
         if(error.response) alert(error.response.data)
         else alert(error)
@@ -481,8 +483,10 @@ export default {
   },
   computed: {
     user_is_admin(){
-      if(!this.$store.state.current_user) return false
-      return this.$store.state.current_user.isAdmin
+      const current_user = this.$store.state.current_user
+      if(!current_user) return false
+      return current_user.isAdmin
+        || current_user.properties.isAdmin
     },
     load_more_possible(){
       return !this.articles_loading && !this.articles_all_loaded && !this.loading_error
