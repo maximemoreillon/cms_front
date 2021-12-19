@@ -55,7 +55,7 @@
           </label>
 
           <Tag
-            v-for="(tag, index) in tags"
+            v-for="(tag, index) in article.tags"
             v-bind:key="`tag_${index}`"
             v-bind:tag="tag"
             removable
@@ -245,11 +245,9 @@ export default {
         summary: '',
         thumbnail_src: '',
 
-      },
+        tags: [],
 
-      author: null,
-      authorship: null,
-      tags: [],
+      },
 
       editable: true,
 
@@ -299,15 +297,6 @@ export default {
 
         this.article = article
 
-        // this.authorship = authorship
-        // this.author = author
-        // this.tags = tags
-
-        // a bit of a dirty trick
-        this.authorship = article.authorship
-        this.author = article.author
-        this.tags = article.tags
-
         this.editor.setContent(this.article.content)
 
         if(this.article.title) document.title = `${this.article.title} - Maxime MOREILLON`
@@ -351,7 +340,7 @@ export default {
       const url = `${process.env.VUE_APP_CMS_API_URL}/v3/articles`
       const body = {
         ...this.article,
-        tag_ids: this.tags.map(tag => this.get_id_of_item(tag)),
+        tag_ids: this.article.tags.map(tag => this.get_id_of_item(tag)),
       }
 
       this.axios.post(url, body )
@@ -375,7 +364,7 @@ export default {
 
       const body = {
         ...this.article,
-        tag_ids: this.tags.map(tag => this.get_id_of_item(tag)),
+        tag_ids: this.article.tags.map(tag => this.get_id_of_item(tag)),
       }
 
       this.axios.put(url, body)
@@ -416,7 +405,7 @@ export default {
       const body = { name: this.$refs.tag_input.value }
       this.axios.post(url, body)
       .then(({data: tag}) => {
-        this.tags.push(tag)
+        this.article.tags.push(tag)
         this.$refs.tag_input.value = ""
       })
       .catch(error => {

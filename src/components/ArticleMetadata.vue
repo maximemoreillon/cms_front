@@ -6,25 +6,25 @@
       <!-- <span>Written by</span> -->
       <account-icon
         title="Author"/>
-      <Author v-bind:author="author"/>
+      <Author v-bind:author="article.author"/>
     </div>
 
     <div
       class="metadata_wrapper"
-      v-if="authorship.creation_date">
+      v-if="article.authorship.creation_date">
       <calendar-icon
         title="Creation date"/>
       <!-- <span>Creation date:</span> -->
-      <span>{{format_date(authorship.creation_date)}}</span>
+      <span>{{format_date(article.authorship.creation_date)}}</span>
     </div>
 
     <div
       class="metadata_wrapper"
-      v-if="authorship.edition_date">
+      v-if="article.authorship.edition_date">
       <!-- <span>Last edited:</span> -->
       <calendar-edit-icon
         title="Last edition date"/>
-      <span>{{format_date(authorship.edition_date)}}</span>
+      <span>{{format_date(article.authorship.edition_date)}}</span>
 
     </div>
 

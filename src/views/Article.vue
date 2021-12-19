@@ -14,20 +14,19 @@
 
 
       <ArticleMetadata
-        :article="article"
-        :author="author"
-        :authorship="authorship"/>
+        :article="article" />
 
 
       <!-- Tags -->
+      <!-- Could be part of metadata -->
       <div class="tags_container">
         <label>
           <tag-icon />
         </label>
-        <template v-if="tags.length">
+        <template v-if="article.tags.length">
           <Tag
             class="tag"
-            v-for="(tag, index) in tags"
+            v-for="(tag, index) in article.tags"
             v-bind:key="`tag_${index}`"
             v-bind:tag="tag"/>
         </template>
@@ -120,10 +119,6 @@ export default {
       article_loading: false,
       error: null,
 
-      tags: [],
-      author: null,
-      authorship: null,
-
 
       modal: {
         open: false,
@@ -152,15 +147,6 @@ export default {
       .then( ({data: article}) => {
 
         this.article = article
-
-        // a bit of a dirty trick
-        this.tags = article.tags
-        this.author = article.author
-        this.authorship = article.authorship
-
-        // this.tags = tags
-        // this.author = author
-        // this.authorship = authorship
 
         document.title = `${this.article.title} - CMS - Maxime MOREILLON`
         setTimeout(this.add_event_listeners_for_image_modals,100)
@@ -210,9 +196,9 @@ export default {
       const current_user_id = this.get_id_of_item(current_user)
 
       // If article does not have no author, then nothing to edit
-      if(!this.author) return false
+      if(!this.article.author) return false
 
-      const author_id = this.get_id_of_item(this.author)
+      const author_id = this.get_id_of_item(this.article.author)
 
       return (author_id === current_user_id)
     }
