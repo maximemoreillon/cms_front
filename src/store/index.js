@@ -40,7 +40,7 @@ export default new Vuex.Store({
     update_categories(state){
 
       // Get pinned tags
-      const url = `${process.env.VUE_APP_CMS_API_URL}/v3/tags/`
+      const url = `${process.env.VUE_APP_CMS_API_URL}/v1/tags/`
       const params = {pinned: true}
       axios.get(url, {params})
       .then( ({data}) => {

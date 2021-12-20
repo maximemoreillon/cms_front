@@ -287,7 +287,7 @@ export default {
         author_id,
       }
 
-      const url = `${process.env.VUE_APP_CMS_API_URL}/v3/articles`
+      const url = `${process.env.VUE_APP_CMS_API_URL}/v1/articles`
 
       this.axios.get(url, { params })
       .then( ({data}) => {
@@ -321,7 +321,7 @@ export default {
       if(!tag_id) return
 
       this.tag_loading = true;
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v3/tags/${tag_id}`)
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v1/tags/${tag_id}`)
       .then( ({data}) => {
         this.tag = data
        })
@@ -341,7 +341,7 @@ export default {
         return
       }
 
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v3/authors/${author_id}`)
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v1/authors/${author_id}`)
       .then(response => { this.author = response.data })
       .catch(error => {
         this.$set(this.author,'error', 'Error getting author')
@@ -385,7 +385,7 @@ export default {
 
       const tag_id = this.get_id_of_item(this.tag)
 
-      const url = `${process.env.VUE_APP_CMS_API_URL}/v3/tags/${tag_id}`
+      const url = `${process.env.VUE_APP_CMS_API_URL}/v1/tags/${tag_id}`
       const body = this.tag
 
       this.axios.put(url, body)
@@ -422,7 +422,7 @@ export default {
 
       const tag_id = this.get_id_of_item(this.tag)
 
-      this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/v3/tags/${tag_id}`)
+      this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/v1/tags/${tag_id}`)
       .then( () => {
         this.$router.push({ name: 'article_list' })
       })

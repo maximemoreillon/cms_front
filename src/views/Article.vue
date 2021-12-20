@@ -143,7 +143,7 @@ export default {
       this.article_loading = true;
 
 
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v3/articles/${this.article_id}`)
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v1/articles/${this.article_id}`)
       .then( ({data: article}) => {
 
         this.article = article

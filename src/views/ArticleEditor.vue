@@ -292,7 +292,7 @@ export default {
       }
 
 
-      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v3/articles/${article_id}/`)
+      this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v1/articles/${article_id}/`)
       .then( ({data: article}) => {
 
         this.article = article
@@ -337,7 +337,7 @@ export default {
     },
     create_article(){
 
-      const url = `${process.env.VUE_APP_CMS_API_URL}/v3/articles`
+      const url = `${process.env.VUE_APP_CMS_API_URL}/v1/articles`
       const body = {
         ...this.article,
         tag_ids: this.article.tags.map(tag => this.get_id_of_item(tag)),
@@ -359,7 +359,7 @@ export default {
     },
     update_article(){
       const article_id = this.get_id_of_item(this.article)
-      const url = `${process.env.VUE_APP_CMS_API_URL}/v3/articles/${article_id}`
+      const url = `${process.env.VUE_APP_CMS_API_URL}/v1/articles/${article_id}`
 
 
       const body = {
@@ -386,7 +386,7 @@ export default {
 
       this.article_loading = true
       const article_id = this.get_id_of_item(this.article)
-      this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/v3/articles/${article_id}`)
+      this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/v1/articles/${article_id}`)
       .then( () => {
         this.$router.push({ name: 'article_list' })
       })
@@ -401,7 +401,7 @@ export default {
     },
     create_tag(){
       if(!this.$refs.tag_input.value.length) return
-      const url = `${process.env.VUE_APP_CMS_API_URL}/v3/tags`
+      const url = `${process.env.VUE_APP_CMS_API_URL}/v1/tags`
       const body = { name: this.$refs.tag_input.value }
       this.axios.post(url, body)
       .then(({data: tag}) => {
@@ -417,7 +417,7 @@ export default {
     },
     get_existing_tags(){
 
-      const url = `${process.env.VUE_APP_CMS_API_URL}/v3/tags/`
+      const url = `${process.env.VUE_APP_CMS_API_URL}/v1/tags/`
       this.axios.get(url)
       .then(({data: tags}) => { this.existing_tags = tags })
       .catch(error => alert(error))
