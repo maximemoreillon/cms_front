@@ -6,10 +6,15 @@ variables:
   APPLICATION_NAME: cms-front
   DOCKER_IMAGE: ${DOCKER_HUB_USERNAME}/${APPLICATION_NAME}
 
+image: moreillon/ci-dind
+services:
+  - name: docker:19.03.12-dind
+
+
 containerization:
   stage: containerization
   tags:
-    - moreillon
+    - dind
   script:
     # Docker hub login
     - echo "${DOCKER_HUB_PASSWORD}" | docker login --username ${DOCKER_HUB_USERNAME} --password-stdin
@@ -23,7 +28,7 @@ containerization:
 deployment:
   stage: deployment
   tags:
-    - moreillon
+    - dind
   script:
     # create/update the deployment
     - envsubst < kubernetes/deployment.yml | kubectl apply -f -
@@ -34,7 +39,7 @@ deployment:
       then echo "SERVICE_PORT not set, skipping creation of NodePort service";
       else envsubst < kubernetes/nodeport_service.yml | kubectl apply -f -;
       fi
-      
+
     # if a domain name is specified, serve app through an ingress
     - >
       if [ -z ${CERTIFICATE_DOMAIN} ];
