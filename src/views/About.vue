@@ -52,8 +52,8 @@ export default {
           version: null
         },
         {
-          name: 'Authentication API',
-          url: process.env.VUE_APP_AUTHENTICATION_API_URL,
+          name: 'User management API',
+          url: process.env.VUE_APP_USER_MANAGER_API_URL,
           version: null
         },
         {

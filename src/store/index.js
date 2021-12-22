@@ -23,7 +23,7 @@ export default new Vuex.Store({
       }
 
       // Retrieve current user
-      const url = `${process.env.VUE_APP_AUTHENTICATION_API_URL}/whoami`
+      const url = `${process.env.VUE_APP_USER_MANAGER_API_URL}/v2/users/self`
       const options = { headers: { Authorization: `Bearer ${jwt}` } }
       axios.get(url, options)
       .then( ({data}) => {

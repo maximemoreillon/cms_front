@@ -89,7 +89,7 @@ export default {
   methods: {
     login(){
       this.loading = true
-      const url = `${process.env.VUE_APP_AUTHENTICATION_API_URL}/login`
+      const url = `${process.env.VUE_APP_USER_MANAGER_API_URL}/v2/auth/login`
       const body = {username: this.username, password: this.password}
       this.axios.post(url, body)
       .then(({data}) => {
