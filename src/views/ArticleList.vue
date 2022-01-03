@@ -297,7 +297,11 @@ export default {
 
         this.article_count = data.article_count
 
-        this.articles = data.articles
+        data.articles.forEach( (article) => {
+          this.articles.push(article)
+        })
+
+        //this.articles = data.articles
 
         // Check if all articles loaded (less than batch size)
         if(data.article_count < this.batch_size) this.articles_all_loaded = true

@@ -51,7 +51,7 @@
       <img
         class="article_thumbnail"
         v-if="article.thumbnail_src"
-        v-bind:src="article.thumbnail_src"
+        :src="article.thumbnail_src"
         alt="">
 
       <!-- Summary -->
