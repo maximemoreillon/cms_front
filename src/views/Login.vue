@@ -94,7 +94,18 @@ export default {
       this.axios.post(url, body)
       .then(({data}) => {
         //this.$cookies.set('jwt', response.data.jwt)
-        localStorage.jwt = data.jwt
+        //localStorage.jwt = data.jwt
+
+
+        const cookie_options = {
+          secure: location.protocol === 'https:',
+          samesite: 'Strict',
+          expires: '1M',
+        }
+
+        this.$cookie.set('jwt',data.jwt, cookie_options)
+
+
         this.$store.commit('check_authentication')
       })
       .catch(error => {
@@ -111,7 +122,9 @@ export default {
     },
     logout(){
       //this.$cookies.remove('jwt')
-      localStorage.removeItem('jwt')
+      //localStorage.removeItem('jwt')
+      this.$cookie.delete('jwt')
+      delete this.axios.defaults.headers.common['Authorization']
       this.$store.commit('check_authentication')
     },
 

@@ -4,8 +4,10 @@ import router from './router'
 import store from './store'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
+import VueCookie from 'vue-cookie'
 
 
+Vue.use(VueCookie)
 Vue.use(VueAxios, axios)
 
 

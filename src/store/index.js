@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
+import VueCookie from 'vue-cookie'
 
 Vue.use(Vuex)
 
@@ -14,7 +15,7 @@ export default new Vuex.Store({
 
       this.commit('update_categories',state)
 
-      const jwt = localStorage.jwt
+      const jwt = VueCookie.get('jwt')
 
 
       if(!jwt) {
@@ -32,6 +33,12 @@ export default new Vuex.Store({
       .catch(error => {
         if(error.response) console.error(error.response.data)
         else console.error(error)
+
+        state.current_user = null
+
+        VueCookie.delete('jwt')
+
+
       })
 
 
