@@ -17,16 +17,20 @@ export default new Vuex.Store({
 
       const jwt = VueCookie.get('jwt')
 
+      // deal with authentication header
+      if(jwt)
 
       if(!jwt) {
         state.current_user = null
+        delete axios.defaults.headers.common['Authorization']
         return
       }
 
+      axios.defaults.headers.common['Authorization'] = `Bearer ${jwt}`
+
       // Retrieve current user
       const url = `${process.env.VUE_APP_USER_MANAGER_API_URL}/v2/users/self`
-      const options = { headers: { Authorization: `Bearer ${jwt}` } }
-      axios.get(url, options)
+      axios.get(url)
       .then( ({data}) => {
         state.current_user = data
       })
@@ -34,8 +38,8 @@ export default new Vuex.Store({
         if(error.response) console.error(error.response.data)
         else console.error(error)
 
+        delete axios.defaults.headers.common['Authorization']
         state.current_user = null
-
         VueCookie.delete('jwt')
 
 
