@@ -76,7 +76,7 @@ export default {
 
       this.loading = true
 
-      const url = `${process.env.VUE_APP_CMS_API_URL}/v3/tags`
+      const url = `${process.env.VUE_APP_CMS_API_URL}/v1/tags`
 
       this.axios.get(url)
       .then( ({data}) => {

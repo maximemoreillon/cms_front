@@ -138,16 +138,17 @@
     </div>
 
     <!-- Error loading -->
-    <div class="error" v-if="loading_error">
+    <div class="error"
+      v-if="loading_error">
       Error loading articles
     </div>
 
     <!-- Load more -->
+    <!-- Not using v-if because used in intersection observer -->
     <div
       class="load_more_wrapper"
       ref="load_more"
-      :style="{display: load_more_possible ? 'block' : 'none'}"
-      >
+      :style="{display: load_more_possible ? 'block' : 'none'}">
       <button
         class="load_more_button"
         type="button"
@@ -297,14 +298,10 @@ export default {
 
         this.article_count = data.article_count
 
-        data.articles.forEach( (article) => {
-          this.articles.push(article)
-        })
-
-        //this.articles = data.articles
+        data.articles.forEach( (article) => { this.articles.push(article) })
 
         // Check if all articles loaded (less than batch size)
-        if(data.article_count < this.batch_size) this.articles_all_loaded = true
+        if(this.articles.length >= this.article_count) this.articles_all_loaded = true
         if(!this.load_more_observer) setTimeout(this.load_more_when_scroll_to_bottom,200)
 
       })
@@ -435,7 +432,6 @@ export default {
     },
 
     load_more_when_scroll_to_bottom(){
-      // THIS IS HIGHLY TEMPLATE DEPENDANT!
 
       const container = this.$refs.view.parentNode.parentNode
       const target = this.$refs.load_more
