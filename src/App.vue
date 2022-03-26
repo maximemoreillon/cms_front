@@ -159,7 +159,7 @@ main {
       'nav';
 
       /* all horizontal space */
-      grid-template-columns: 1fr;
+      grid-template-columns: 100%;
       grid-template-rows: var(--header-height-mobile) 1fr;
 
   }
@@ -203,9 +203,9 @@ main {
   aspect-ratio: 3/2; /* This is super useful */
 }
 
-.article_content code {
+.article_content pre code {
   display: block;
-  overflow-x: auto; /* Allow hoprizontal scroll */
+  overflow-x: auto; /* Allow horizontal scroll */
   font-size: 90%;
   padding: 1em;
   background: #282b2e;
