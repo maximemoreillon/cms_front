@@ -57,29 +57,20 @@
 import Loader from '@moreillon/vue_loader'
 import Modal from '@moreillon/vue_modal'
 
-//import IconButton from '@/components/vue_icon_button/IconButton.vue'
-
 import ArticleMetadata from '@/components/ArticleMetadata.vue'
 
-//import Comment from '@/components/Comment.vue'
 
 import {formatDate} from '@/mixins/formatDate.js'
 import IdUtils from '@/mixins/IdUtils'
 
-// Not using Highlight JS anymore due to poor consistency
-//import highlight from 'highlight.js'
-
 
 
 export default {
+  name: 'Article',
   components: {
-    //IconButton,
     ArticleMetadata,
     Modal,
     Loader,
-    // Author,
-    //Comment,
-
   },
   mixins: [
     formatDate,
@@ -87,7 +78,6 @@ export default {
   ],
   data () {
     return {
-      sending: false,
 
       article: null,
       article_loading: false,
@@ -98,6 +88,7 @@ export default {
         open: false,
         image_src: "",
       }
+
     }
   },
 
@@ -136,16 +127,19 @@ export default {
     },
 
     add_event_listeners_for_image_modals(){
-      this.$refs.article_content.querySelectorAll('img').forEach(img => {
-        img.addEventListener("click", event => {
-          this.modal.open = true;
-          this.modal.image_src = event.target.src;
-        }, false)
-      })
+      this.$refs.article_content
+        .querySelectorAll('img')
+        .forEach(img => {
+          img.addEventListener("click", event => {
+            this.modal.open = true;
+            this.modal.image_src = event.target.src;
+          }, false)
+        })
     },
   },
   computed: {
     article_id(){
+      // Accounting for legacy routes
       return this.$route.params.article_id
         || this.$route.params.id
         || this.$route.query.article_id
@@ -184,21 +178,11 @@ export default {
 
 <style scoped>
 
-
-
-.edit_button{
-  /* Button should be somewhere else */
-  float: right;
-  margin-top: 0.25em;
-}
-
-/* HERE? */
 .modal_image {
   max-width: 70vw;
   max-height: 70vh;
   margin: 1em;
   object-fit: contain;
-  filter: drop-shadow(2.5px 2.5px 5px #44444444); /* Using filter because of object fit contain */
 }
 
 </style>

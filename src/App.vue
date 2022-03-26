@@ -1,9 +1,12 @@
 <template>
   <div class="app">
 
-    <nav>
-      <router-link :to="{ name: 'article_list' }">Articles</router-link>
-    </nav>
+    <!-- Wrapping because Nav is fixed -->
+    <div class="nav_wrapper">
+      <Nav/>
+    </div>
+
+
 
     <main>
       <router-view />
@@ -16,9 +19,13 @@
 <script>
 
 import 'vue-material-design-icons/styles.css'
+import Nav from '@/components/Nav.vue'
 
 export default {
   name: 'App',
+  components: {
+    Nav,
+  }
 
 }
 </script>
@@ -32,6 +39,10 @@ export default {
 
 .material-design-icon__svg {
   bottom: 0 !important;
+}
+
+:root {
+  --nav-width: 10em;
 }
 
 * {
@@ -53,41 +64,64 @@ body {
 }
 
 .app {
-
+  display: grid;
+  grid-template-areas:
+    '. nav main .';
+  grid-template-columns: 1fr var(--nav-width) minmax(0, 800px) 1fr;
+  grid-gap: 1em;
 }
 
-nav {
-  position: fixed;
-
-  height: 56px;
-  outline: 1px solid red;
+.nav_wrapper {
+  grid-area: nav;
+  outline: 1px solid green;
 }
+
+
 
 main {
-  padding: 56px 0 0 0; /* Accounting for Nav */
-  margin-left: auto;
-  margin-right: auto;
+  grid-area: main;
   outline: 1px solid blue;
-  max-width: 800px;
 }
 
+/*
+  Article related stuff
+  Writen here because sometiems shared between editor and article itself
+  Sometimes inaccessible from Article because scoped
+*/
+
+/* TODO: Also apply to editor */
+
+
+/* Hide H1 of article because displayed separately */
 .article_content h1 {
   display: none;
 }
 
+/* Could maybe benefitt from being whole article */
 .article_content {
   line-height: 1.5;
+}
+
+.article_content :is(img, iframe) {
+  display: block; /* img, iframe default is inline */
+  margin: 2em auto; /* horizontal margin auto for centering */
+  width: 80%;
+  filter: drop-shadow(2.5px 2.5px 5px #44444444); /* Using filter because of object fit contain */
 
 }
 
 .article_content img {
-  display: block; /* img default is inline */
   max-height: 50vh;
-  margin: 2em auto; /* horizontal margin auto for centering */
   object-fit: contain;
-  filter: drop-shadow(2.5px 2.5px 5px #44444444); /* Using filter because of object fit contain */
   cursor: pointer;
 }
+
+.article_content iframe {
+  aspect-ratio: 3/2; /* This is super useful */
+}
+
+
+
 
 .article_content code {
   display: block;

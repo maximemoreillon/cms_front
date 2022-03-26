@@ -1,4 +1,5 @@
 <template>
+  <!-- The whole preview is a link to the article -->
   <router-link
     class="article_preview"
     :to="{ name: 'article', params: {article_id: get_id_of_item(article)} }">
@@ -13,7 +14,6 @@
       <div class="article_metadata">
         <!-- date -->
         <div v-if="article.authorship.creation_date">
-
           <calendar-icon/>
           <span class="article_date" >
             {{format_date(article.authorship.creation_date)}}
@@ -29,7 +29,6 @@
         </div>
 
         <!-- Publishing status and views only visible to users logged in -->
-
         <template >
           <div v-if="article.views">
             <eye-icon/>
@@ -44,10 +43,7 @@
           </div>
         </template>
 
-
-
       </div>
-
 
     </div>
 
@@ -63,12 +59,7 @@
       <!-- Summary -->
       <article
         class="article_summary"
-        v-if="article.summary"
-        v-html="article.summary"/>
-
-      <div class="article_summary" v-else>
-        No summary available
-      </div>
+        v-html="article.summary || 'No summary available'"/>
 
     </div>
 
@@ -77,8 +68,7 @@
       class="tags_container"
       v-if="tags">
 
-      <!-- <tag-icon /> -->
-
+      <tag-icon />
       <Tag
         :clickable="false"
         v-for="(tag, index) in tags"
@@ -89,12 +79,6 @@
 
 
   </router-link>
-
-
-
-
-
-
 
 </template>
 
@@ -111,11 +95,6 @@ export default {
   props: {
     article: Object
   },
-  data() {
-    return {
-
-    }
-  },
   mixins: [
     formatDate,
     IdUtils,
@@ -124,11 +103,7 @@ export default {
     Tag,
   },
 
-  methods: {
-
-  },
   computed: {
-
     author(){
       return this.article.author
     },
@@ -250,6 +225,7 @@ export default {
 .tags_container > *{
   margin-top: 0.25em;
   //margin: 0.25em 0;
+  color: #666666;
 
 }
 
@@ -261,7 +237,7 @@ export default {
   margin-left: 0;
 }
 
-
+/* Fading last tags when too many */
 .tags_container::before {
   content: '';
   position: absolute;

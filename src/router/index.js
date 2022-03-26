@@ -13,19 +13,10 @@ const routes = [
   {
     path: '/articles',
     alias: '/',
-    name: 'article_list',
+    name: 'articles',
     component: ArticleList,
   },
-  {
-    path: '/about',
-    name: 'about',
-    component: About,
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: () => import('@/views/Login.vue'),
-  },
+
 
   {
     path: '/articles/:article_id',
@@ -39,7 +30,16 @@ const routes = [
     name: 'article_editor',
     component: () => import('@/views/ArticleEditor.vue'),
   },
-
+  {
+    path: '/about',
+    name: 'about',
+    component: About,
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/Login.vue'),
+  },
   {
     path: '/tags/',
     name: 'tags',
