@@ -1,7 +1,8 @@
 <template>
   <div class="app">
 
-    <Header @navToggle="nav = !nav"/>
+    <Header
+      @navToggle="nav = !nav"/>
 
     <Nav
       :open="nav"
@@ -130,8 +131,10 @@ main {
 .navigation_button{
   cursor: pointer;
 }
+
+
 .nav_backround {
-  display: none;
+  display: block;
   position: fixed;
   z-index: 9;
   top: 0;
@@ -139,14 +142,33 @@ main {
   right: 0;
   bottom: 0;
   background-color: #44444444;
+
+  visibility: hidden;
+  opacity: 0;
+
+  transition:
+    visibility 0.5s,
+    opacity 0.5s;
+
 }
 
-.nav_backround.visible {
-  display: block;
+
+/* WARNING: Affects stuff like the edit button */
+main a {
+  text-decoration: none;
+
+  color: var(--accent-color);
+  font-weight: bold;
+  transition: 0.25s;
 }
 
 /* responsivity */
 @media only screen and (max-width: 800px) {
+
+  .nav_backround.visible {
+    visibility: visible;
+    opacity: 1;
+  }
 
   body {
     font-size: 1rem;
@@ -212,12 +234,6 @@ main {
   color: #e0e2e4;
 }
 
-.article_content a {
-  text-decoration: none;
 
-  color: var(--accent-color);
-  font-weight: bold;
-  transition: 0.25s;
-}
 
 </style>

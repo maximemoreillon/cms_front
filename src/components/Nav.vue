@@ -1,6 +1,5 @@
 <template lang="html">
-  <nav
-    :class="{open}">
+  <nav :class="{open}">
 
     <div class="close_wrapper">
       <close-icon
@@ -90,6 +89,12 @@ export default {
   props: {
     open: Boolean
   },
+  // beforeRouteUpdate (to, from, next) {
+  //   // Closing the nav when a link is pressed
+  //   next()
+  //   if(this.open) this.$emit('navToggle')
+  // },
+
   mixins: [
     IdUtils
   ],
