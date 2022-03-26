@@ -1,5 +1,6 @@
 import Vue from 'vue'
 
+Vue.component('close-icon', () => import('vue-material-design-icons/Close.vue'))
 Vue.component('arrow-left-icon', () => import('vue-material-design-icons/ArrowLeft.vue'))
 Vue.component('magnify-icon', () => import('vue-material-design-icons/Magnify.vue'))
 Vue.component('earth-icon', () => import('vue-material-design-icons/Earth.vue'))

@@ -450,7 +450,7 @@ export default {
           delete query.search
         }
 
-        this.$router.push({name: 'article_list', query})
+        this.$router.push({name: 'articles', query})
 
         // this.delete_all_articles()
         // this.get_articles()
@@ -488,11 +488,11 @@ export default {
 
 .articles_container {
 
-  /* Normal behavior */
 
   /* display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
   grid-gap: 1em; */
+
   display: flex;
   flex-direction: column;
   align-items: stretch;

@@ -17,7 +17,6 @@ const routes = [
     component: ArticleList,
   },
 
-
   {
     path: '/articles/:article_id',
     name: 'article',

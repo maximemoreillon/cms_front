@@ -2,6 +2,23 @@
   <nav
     :class="{open}">
 
+    <div class="close_wrapper">
+      <close-icon
+        class="navigation_button"
+        @click="$emit('navToggle')"/>
+    </div>
+
+
+
+    <a
+      class="logo_wrapper"
+      href="https://maximemoreillon.com">
+      <img
+        class="logo"
+        src="@/assets/logo/logo.svg"
+        alt="">
+    </a>
+
     <router-link
       v-if="$store.state.current_user"
       :to="{ name: 'article_editor', params: {article_id: 'new'}}">
@@ -84,13 +101,14 @@ export default {
 nav {
   grid-area: nav;
   position: sticky;
-  top: var(--header-height-desktop);
+  top: var(--header-margin);
   align-self: start;
 
-  background-color: lightblue;
+  background-color: white;
 
   display: flex;
   flex-direction: column;
+  border-right: 1px solid #dddddd;
 }
 
 a {
@@ -115,28 +133,42 @@ nav a > *:not(:last-child) {
 }
 
 
-a:hover {
+a:not(.logo_wrapper):hover {
   /* color: var(--accent-color); */
   /* color: #666666; */
   border-right: 3px solid #666666;
 }
 
-a.router-link-exact-active {
+a:not(.logo_wrapper).router-link-exact-active {
   border-right: 3px solid var(--accent-color);
+}
+
+.close_wrapper{
+  height: var(--header-height-mobile);
+  display: none;
+  align-items: center;
+  padding: 0.25em 1em;
+  font-size: 150%;
 }
 
 
 @media only screen and (max-width: 800px) {
 
+  .close_wrapper {
+    display: flex;
+  }
+
   nav {
     height: 100%;
     position: fixed;
-    top: var(--header-height-mobile);
+    top: 0;
+    /* top: var(--header-height-mobile); */
     width: var(--nav-width);
     z-index: 10;
     left: 0;
     transform: translateX(-100%);
     transition: transform 0.5s;
+    border: none;
   }
 
   .open {

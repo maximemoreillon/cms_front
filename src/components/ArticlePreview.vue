@@ -78,9 +78,13 @@
       <tag-icon />
       <Tag
         :clickable="false"
-        v-for="(tag, index) in tags"
+        v-for="(tag, index) in tags.slice(0,3)"
         v-bind:key="`tag_${index}`"
         v-bind:tag="tag"/>
+
+      <span v-if="tags.length > 3">
+        +{{tags.length -3}}
+      </span>
 
     </div>
 
@@ -158,9 +162,10 @@ export default {
 .article_title {
   font-weight: bold;
   font-size: 120%;
-  white-space: nowrap;
+  /* problem here, not ellipsising */
+  /* white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
+  text-overflow: ellipsis; */
 }
 
 
@@ -226,6 +231,7 @@ export default {
 .tags_container {
   position: relative;
   display: flex;
+  align-items: center;
   overflow-x: hidden;
 }
 

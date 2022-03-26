@@ -1,15 +1,16 @@
 <template>
   <div class="app">
 
-    <header>
-      <button
-        type="button" @click="nav_open = !nav_open">
-        nav
-      </button>
-    </header>
+    <Header @navToggle="nav = !nav"/>
 
-    <Nav :open="nav_open"/>
+    <Nav
+      :open="nav"
+      @navToggle="nav = !nav"/>
 
+    <div
+      @click="nav = !nav"
+      class="nav_backround"
+      :class="{visible: nav}"/>
 
 
     <main>
@@ -24,15 +25,17 @@
 
 import 'vue-material-design-icons/styles.css'
 import Nav from '@/components/Nav.vue'
+import Header from '@/components/Header.vue'
 
 export default {
   name: 'App',
   components: {
     Nav,
+    Header
   },
   data(){
     return {
-      nav_open: false,
+      nav: false,
     }
   }
 
@@ -52,7 +55,9 @@ export default {
 
 :root {
   /* Sizes */
+
   --nav-width: 12em;
+  --header-margin: 1em;
   --header-height-desktop: 200px;
   --header-height-mobile: 56px;
   /* Colors */
@@ -84,50 +89,83 @@ body {
 }
 
 .app {
+  /* Needed because otherwise nav jumping when page empty */
+  min-height: 100vh;
   display: grid;
   grid-template-areas:
-    '. header main .'
     '. nav main .';
   grid-template-columns: 1fr var(--nav-width) minmax(0, 800px) 1fr;
-  grid-template-rows: var(--header-height-desktop) auto;
+  /* I don't get this */
+  /* grid-template-rows: var(--header-height-desktop) auto; */
   /* grid-gap: 1em; */
 }
 
 
-header {
-  grid-area: header;
-  position: sticky;
-  top: 0;
-
-
-  background-color: lightpink;
-
-}
-
-
-
 main {
   grid-area: main;
-  outline: 1px solid blue;
   padding: 0 1em;
+  align-self: start;
 }
 
+/* Logo related */
+@keyframes logo_rotation {
+  from {transform: rotate(0deg);}
+  to {transform: rotate(360deg);}
+}
 
+.logo_wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  width: 5em;
+  animation-name: logo_rotation;
+  animation-iteration-count: infinite;
+  animation-duration: 60s;
+  animation-timing-function: linear;
+}
+
+.navigation_button{
+  cursor: pointer;
+}
+.nav_backround {
+  display: none;
+  position: fixed;
+  z-index: 9;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #44444444;
+}
+
+.nav_backround.visible {
+  display: block;
+}
 
 /* responsivity */
 @media only screen and (max-width: 800px) {
+
+  body {
+    font-size: 1rem;
+  }
   .app {
     /* Nav becomes absolutely positioned so anywhere is fine */
     grid-template-areas:
       'header'
-      'nav'
-      'main';
+      'main'
+      'nav';
 
+      /* all horizontal space */
       grid-template-columns: 1fr;
       grid-template-rows: var(--header-height-mobile) 1fr;
 
   }
 }
+
+
 
 /*
   Article related stuff
@@ -142,7 +180,6 @@ main {
   display: none;
 }
 
-/* Could maybe benefitt from being whole article */
 .article_content {
   line-height: 1.5;
 }
@@ -169,7 +206,7 @@ main {
 .article_content code {
   display: block;
   overflow-x: auto; /* Allow hoprizontal scroll */
-  font-size: 0.9rem;
+  font-size: 90%;
   padding: 1em;
   background: #282b2e;
   color: #e0e2e4;
