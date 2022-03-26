@@ -1,38 +1,11 @@
 <template>
-  <article class="container" >
+  <article>
 
     <template v-if="article">
 
-      <router-link
-        class="button edit_button"
-        v-if="editable"
-        :to="{ name: 'article_editor', params: { id: get_id_of_item(article) } }">
-        <pencil-icon />
-        <span>Edit</span>
-      </router-link>
-
       <h1>{{article.title || 'Untitled article'}}</h1>
 
-
-      <ArticleMetadata
-        :article="article" />
-
-
-      <!-- Tags -->
-      <!-- Could be part of metadata -->
-      <div class="tags_container">
-        <label>
-          <tag-icon />
-        </label>
-        <template v-if="article.tags.length">
-          <Tag
-            class="tag"
-            v-for="(tag, index) in article.tags"
-            v-bind:key="`tag_${index}`"
-            v-bind:tag="tag"/>
-        </template>
-        <span v-else>None</span>
-      </div>
+      <ArticleMetadata :article="article" />
 
       <!-- the article itself -->
       <div
@@ -82,7 +55,6 @@ import Modal from '@moreillon/vue_modal'
 
 //import IconButton from '@/components/vue_icon_button/IconButton.vue'
 
-import Tag from '@/components/Tag.vue'
 import ArticleMetadata from '@/components/ArticleMetadata.vue'
 
 //import Comment from '@/components/Comment.vue'
@@ -101,7 +73,6 @@ export default {
     ArticleMetadata,
     Modal,
     Loader,
-    Tag,
     // Author,
     //Comment,
 
@@ -217,23 +188,7 @@ export default {
   margin-top: 0.25em;
 }
 
-.tags_container {
-  font-size: 85%;
-  color: #666666;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-
-.tags_container > * {
-  /* Margin top for when tags occupy two rows */
-  margin-top: 0.5em;
-  margin-right: 0.5em;
-}
-
-
-
+/* HERE? */
 .modal_image {
   max-width: 70vw;
   max-height: 70vh;
@@ -241,7 +196,5 @@ export default {
   object-fit: contain;
   filter: drop-shadow(2.5px 2.5px 5px #44444444); /* Using filter because of object fit contain */
 }
-
-
 
 </style>
