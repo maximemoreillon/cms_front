@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO: Have tag as a link -->
   <span
     class="tag"
     :class="{clickable: clickable}"
@@ -42,8 +43,8 @@ export default {
     tag_clicked(){
       if(!this.clickable) return
       const tag_id = this.get_id_of_item(this.tag)
-      if(!(this.$route.name === 'article_list' && this.$route.query.tag_id !== tag_id)){
-        this.$router.push({ name: 'article_list', query: { tag_id } })
+      if(!(this.$route.name === 'articles' && this.$route.query.tag_id !== tag_id)){
+        this.$router.push({ name: 'articles', query: { tag_id } })
       }
 
     }

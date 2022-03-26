@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{ name: 'article_list', query: {author_id} }">
+  <router-link :to="{ name: 'articles', query: {author_id} }">
     {{author.display_name}}
   </router-link>
 </template>

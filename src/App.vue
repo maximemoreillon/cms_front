@@ -1,10 +1,14 @@
 <template>
   <div class="app">
 
-    <!-- Wrapping because Nav is fixed -->
-    <div class="nav_wrapper">
-      <Nav/>
-    </div>
+    <header>
+      <button
+        type="button" @click="nav_open = !nav_open">
+        nav
+      </button>
+    </header>
+
+    <Nav :open="nav_open"/>
 
 
 
@@ -25,6 +29,11 @@ export default {
   name: 'App',
   components: {
     Nav,
+  },
+  data(){
+    return {
+      nav_open: false,
+    }
   }
 
 }
@@ -42,7 +51,18 @@ export default {
 }
 
 :root {
-  --nav-width: 10em;
+  /* Sizes */
+  --nav-width: 12em;
+  --header-height-desktop: 200px;
+  --header-height-mobile: 56px;
+  /* Colors */
+  --accent-color:#c00000;
+}
+
+
+html {
+  /* Keep the scrollbar visible at all time */
+  overflow-y: scroll;
 }
 
 * {
@@ -66,14 +86,22 @@ body {
 .app {
   display: grid;
   grid-template-areas:
+    '. header main .'
     '. nav main .';
   grid-template-columns: 1fr var(--nav-width) minmax(0, 800px) 1fr;
-  grid-gap: 1em;
+  grid-template-rows: var(--header-height-desktop) auto;
+  /* grid-gap: 1em; */
 }
 
-.nav_wrapper {
-  grid-area: nav;
-  outline: 1px solid green;
+
+header {
+  grid-area: header;
+  position: sticky;
+  top: 0;
+
+
+  background-color: lightpink;
+
 }
 
 
@@ -81,6 +109,24 @@ body {
 main {
   grid-area: main;
   outline: 1px solid blue;
+  padding: 0 1em;
+}
+
+
+
+/* responsivity */
+@media only screen and (max-width: 800px) {
+  .app {
+    /* Nav becomes absolutely positioned so anywhere is fine */
+    grid-template-areas:
+      'header'
+      'nav'
+      'main';
+
+      grid-template-columns: 1fr;
+      grid-template-rows: var(--header-height-mobile) 1fr;
+
+  }
 }
 
 /*
@@ -91,9 +137,8 @@ main {
 
 /* TODO: Also apply to editor */
 
-
 /* Hide H1 of article because displayed separately */
-.article_content h1 {
+.article_content:not(.editor_content) h1 {
   display: none;
 }
 
@@ -105,7 +150,7 @@ main {
 .article_content :is(img, iframe) {
   display: block; /* img, iframe default is inline */
   margin: 2em auto; /* horizontal margin auto for centering */
-  width: 80%;
+  max-width: 80%;
   filter: drop-shadow(2.5px 2.5px 5px #44444444); /* Using filter because of object fit contain */
 
 }
@@ -117,11 +162,9 @@ main {
 }
 
 .article_content iframe {
+  width: 80%;
   aspect-ratio: 3/2; /* This is super useful */
 }
-
-
-
 
 .article_content code {
   display: block;
@@ -130,6 +173,14 @@ main {
   padding: 1em;
   background: #282b2e;
   color: #e0e2e4;
+}
+
+.article_content a {
+  text-decoration: none;
+
+  color: var(--accent-color);
+  font-weight: bold;
+  transition: 0.25s;
 }
 
 </style>

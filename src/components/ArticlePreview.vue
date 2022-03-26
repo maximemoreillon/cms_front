@@ -13,7 +13,9 @@
 
       <div class="article_metadata">
         <!-- date -->
-        <div v-if="article.authorship.creation_date">
+        <div
+          class="metadata_item"
+          v-if="article.authorship.creation_date">
           <calendar-icon/>
           <span class="article_date" >
             {{format_date(article.authorship.creation_date)}}
@@ -21,7 +23,9 @@
         </div>
 
         <!-- Author -->
-        <div v-if="author">
+        <div
+          class="metadata_item"
+          v-if="author">
           <account-icon/>
           <span class="article_author">
             {{author.display_name || 'Unnnamed'}}
@@ -30,14 +34,17 @@
 
         <!-- Publishing status and views only visible to users logged in -->
         <template >
-          <div v-if="article.views">
+          <div
+            class="metadata_item"
+            v-if="article.views">
             <eye-icon/>
             <span>
               {{article.views}}
             </span>
           </div>
 
-          <div>
+          <div
+            class="metadata_item" >
             <earth-icon v-if="article.published"/>
             <lock-icon v-else />
           </div>
@@ -58,7 +65,7 @@
 
       <!-- Summary -->
       <article
-        class="article_summary"
+        class="article_summary article_content"
         v-html="article.summary || 'No summary available'"/>
 
     </div>

@@ -179,8 +179,8 @@ export default {
 <style scoped>
 
 .modal_image {
-  max-width: 70vw;
-  max-height: 70vh;
+  max-width: calc(100vw - 8em);
+  max-height: calc(100vh - 8em);
   margin: 1em;
   object-fit: contain;
 }
