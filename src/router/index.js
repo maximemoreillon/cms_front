@@ -12,6 +12,7 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/articles',
+    alias: '/',
     name: 'article_list',
     component: ArticleList,
   },

@@ -1,32 +1,28 @@
 <template>
-  <AppTemplate
-    applicationName="Knowledge base"/>
+  <div class="app">
+
+    <nav>
+      <router-link :to="{ name: 'article_list' }">Articles</router-link>
+    </nav>
+
+    <main>
+      <router-view />
+    </main>
+
+
+  </div>
 </template>
 <script>
 
-//import AppTemplate from '@moreillon/vue_application_template'
-import AppTemplate from '@/components/template/AppTemplate.vue'
+
 
 import 'vue-material-design-icons/styles.css'
-import IdUtils from '@/mixins/IdUtils'
+
 
 
 export default {
   name: 'App',
-  components: {
-    AppTemplate
-  },
-  mixins: [
-    IdUtils
-  ],
-  data(){
-    return{
 
-    }
-  },
-  computed: {
-
-  }
 }
 </script>
 
@@ -46,102 +42,62 @@ export default {
 }
 
 body {
-  font-family: lexend, sans-serif;
+  /* font-family: lexend, sans-serif; */
+  font-family: sans-serif;
+  padding: 0;
+  margin: 0;
+  font-size: 1.4rem;
+
+}
+
+.material-design-icon__svg {
+  /* Override default meterial design icon behavior */
+  bottom: 0 !important;
+}
+
+.app {
+
 }
 
 nav {
-  grid-area: nav;
+  position: fixed;
+
+  height: 56px;
+  outline: 1px solid red;
 }
 
 main {
-  grid-area: main;
-  padding: 0.25em 1em;
+  padding: 56px 0 0 0; /* Accounting for Nav */
+  margin-left: auto;
+  margin-right: auto;
+  outline: 1px solid blue;
+  max-width: 800px;
 }
 
-
-main a {
-  text-decoration: none;
-
-  color: #c00000;
-  font-weight: bold;
-  transition: 0.25s;
-}
-
-main a:hover {
-  color: #c00000;
-  text-decoration: underline;
-}
-/* TO HERE: IS DUPLICATEDD IN LOCAL TEMPLATE */
-
-:is(article, .editor_content) {
-  line-height: 1.5;
-}
-
-
-.article:not(.editor_content) h1:first-child {
+.article_content h1 {
   display: none;
 }
 
-article img {
+.article_content {
+  line-height: 1.5;
+
+}
+
+.article_content img {
+  display: block; /* img default is inline */
+  max-height: 50vh;
+  margin: 2em auto; /* horizontal margin auto for centering */
+  object-fit: contain;
+  filter: drop-shadow(2.5px 2.5px 5px #44444444); /* Using filter because of object fit contain */
   cursor: pointer;
 }
 
-:is(article, .editor_content) img {
-  /* test CSS for images */
-
-
+.article_content code {
   display: block;
-  margin: 2em auto;
-
-  max-width: 60%;
-  max-height: 40vh;
-  object-fit: contain;
-
-}
-
-:is(article, .editor_content) iframe {
-  display: block;
-  width: 80%;
-  height: 30vw;
-  margin: 2.5em auto;
-}
-
-:is(article, .editor_content) pre code {
-  display: block;
-  overflow-x: auto;
-  padding: 1em;
+  overflow-x: auto; /* Allow hoprizontal scroll */
+  padding: 1em 0.5em;
   background: #282b2e;
   color: #e0e2e4;
-}
-
-.loader_container {
-  margin: 1em;
-  text-align: center;
-  font-size: 300%;
-}
-
-.button {
-  background-color: white;
-  cursor: pointer;
-  border: 1px solid #aaaaaa;
-  padding: 0.25em 0.5em;
-  border-radius: 0.25em;
-  color: #444444;
-  transition: 0.25s;
-  outline: none;
-}
-
-.button:hover, .button.active {
-  color: #c00000;
-  border-color: #c00000;
-}
-
-.button > *:not(:last-child) {
-  margin-right: 0.25em;
-}
-
-.error {
-  color: #c00000;
 }
 
 </style>

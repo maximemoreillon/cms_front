@@ -1,5 +1,5 @@
 <template>
-  <div class="container" >
+  <article class="container" >
     <template v-if="article">
 
       <router-link
@@ -34,10 +34,10 @@
       </div>
 
       <!-- the article itself -->
-      <article
-        class="article"
-        v-if="article && !article_loading"
+      <div
         ref="article_content"
+        class="article_content"
+        v-if="article && !article_loading"
         v-html="article.content"/>
 
     </template>
@@ -71,9 +71,7 @@
 
     </Modal>
 
-  </div>
-
-
+  </article>
 </template>
 
 <script>
@@ -148,7 +146,7 @@ export default {
 
         this.article = article
 
-        document.title = `${this.article.title} - CMS - Maxime MOREILLON`
+        document.title = `${this.article.title} - Maxime MOREILLON`
         setTimeout(this.add_event_listeners_for_image_modals,100)
       })
       .catch(error => {
@@ -210,7 +208,10 @@ export default {
 
 <style scoped>
 
+
+
 .edit_button{
+  /* Button should be somewhere else */
   float: right;
   margin-top: 0.25em;
 }
@@ -233,38 +234,13 @@ export default {
 
 
 .modal_image {
-  width: 80vw;
-  height: 70vh;
-  margin: 10px;
+  max-width: 70vw;
+  max-height: 70vh;
+  margin: 1em;
   object-fit: contain;
+  filter: drop-shadow(2.5px 2.5px 5px #44444444); /* Using filter because of object fit contain */
 }
 
-/* COMMENTS */
-.comment_area_wrapper {
-  border-top: 1px solid #dddddd;
-  padding-top: 10px;
-}
 
-.new_comment_wrapper {
-  border: 1px solid #dddddd;
-  padding: 5px;
-}
-.new_comment_wrapper > * {
-  margin: 5px 0;
-}
-
-.create_comment_button_wrapper {
-  text-align: right;
-}
-
-.comments_wrapper {
-  padding: 5px;
-}
-
-textarea {
-
-  width: 100%;
-  resize:vertical;
-}
 
 </style>

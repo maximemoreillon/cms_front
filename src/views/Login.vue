@@ -1,5 +1,5 @@
 <template>
-  <div class="login" >
+  <div class="login">
 
 
 
@@ -9,14 +9,20 @@
       @submit.prevent="login()">
 
       <div class="">
-        <label for="">Username</label>
-        <input type="text" v-model="username" placeholder="username">
-      </div>
-      <div class="">
-        <label for="">Password</label>
-        <input type="password" v-model="password" placeholder="password">
+        <label>Username</label>
+        <input
+          type="text"
+          v-model="username"
+          placeholder="username">
       </div>
 
+      <div class="">
+        <label>Password</label>
+        <input
+          type="password"
+          v-model="password"
+          placeholder="password">
+      </div>
 
       <div>
         <IconButton

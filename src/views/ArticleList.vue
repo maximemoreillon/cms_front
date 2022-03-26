@@ -293,9 +293,6 @@ export default {
       this.axios.get(url, { params })
       .then( ({data}) => {
 
-        // Do not do anything if there is no article
-        // if(data.length < 1) return this.articles_all_loaded = true
-
         this.article_count = data.article_count
 
         data.articles.forEach( (article) => { this.articles.push(article) })
