@@ -7,7 +7,7 @@
     v-on:click="button_clicked()"
     type="button">
 
-    <slot></slot>
+    <slot />
 
   </button>
 

@@ -48,14 +48,16 @@
     <!-- Toolbar for sorting and new article -->
     <Toolbar >
 
-        <!-- article counter -->
-        <!-- Maybe not necessary -->
-        <span class="article_counter">
-          {{article_count}} Articles
-        </span>
+      <!-- article counter -->
+      <!-- Maybe not necessary -->
+      <div class="article_counter">
+        <file-document-outline-icon class="counter_icon"/>
+        {{article_count}}
+      </div>
 
+      <div class="sort_and_order">
         <IconButton
-          :active="this.$route.query.sort === 'date'"
+          :active="this.$route.query.sort !== 'title' && this.$route.query.sort !== 'views'"
           @click="sort('date')">
           <calendar-icon/>
         </IconButton>
@@ -73,7 +75,7 @@
         </IconButton>
 
         <IconButton
-          :active="this.$route.query.order === 'DESC'"
+          :active="this.$route.query.order !== 'ASC'"
           @click="order('DESC')">
           <sort-descending-icon/>
         </IconButton>
@@ -83,28 +85,31 @@
           @click="order('ASC')">
           <sort-ascending-icon/>
         </IconButton>
-
-        <div class="growing_spacer"/>
-
+      </div>
 
 
-        <!-- search -->
-        <form class="search_wrapper" @submit.prevent="search()">
-          <input
-            type="search"
-            class="search_bar"
-            ref="search"
-            v-bind:class="{search_bar_open: search_bar_open}"
-            v-model="search_string">
 
-          <input type="submit" style="display:none;">
+      <div class="growing_spacer"/>
 
-          <IconButton
-            v-on:click="search()">
-            <magnify-icon/>
-          </IconButton>
 
-        </form>
+
+      <!-- search -->
+      <form class="search_wrapper" @submit.prevent="search()">
+        <input
+          type="search"
+          class="search_bar"
+          ref="search"
+          v-bind:class="{search_bar_open: search_bar_open}"
+          v-model="search_string">
+
+        <input type="submit" style="display:none;">
+
+        <IconButton
+          v-on:click="search()">
+          <magnify-icon/>
+        </IconButton>
+
+      </form>
 
     </Toolbar>
 
@@ -176,10 +181,7 @@ import Toolbar from '@/components/Toolbar.vue'
 //import Author from '@/components/Author.vue'
 
 // icons
-import AlphabeticalIcon from 'vue-material-design-icons/Alphabetical.vue';
-import SortDescendingIcon from 'vue-material-design-icons/SortDescending.vue';
-import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue';
-import PinIcon from 'vue-material-design-icons/Pin.vue';
+
 
 import IdUtils from '@/mixins/IdUtils'
 
@@ -192,15 +194,6 @@ export default {
     Loader,
     //Tag,
     //Author,
-
-    // icons
-    PinIcon,
-    //FileDocumentOutlineIcon,
-    AlphabeticalIcon,
-    SortDescendingIcon,
-    SortAscendingIcon,
-    //DotsHorizontalIcon,
-    //CloseIcon,
   },
   mixins: [
     IdUtils
@@ -287,8 +280,6 @@ export default {
         tag_id,
         author_id,
       }
-
-      console.log(params);
 
       const url = `${process.env.VUE_APP_CMS_API_URL}/v1/articles`
 
@@ -536,16 +527,7 @@ export default {
   color: #c00000;
 }
 
-.article_counter{
-  display: flex;
-  align-items: center;
-  color: #444444;
-}
 
-.tool_cluster {
-  display: flex;
-  flex-wrap: wrap;
-}
 
 .search_bar {
   transition: 0.25s;
@@ -563,6 +545,14 @@ export default {
   align-items: stretch;
 }
 
+.article_counter {
+  color: #444444;
+  display: flex;
+  align-items: center;
+}
 
+.article_counter > *:first-child {
+  margin-right: 0.25em;
+}
 
 </style>

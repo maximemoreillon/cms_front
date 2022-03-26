@@ -1,37 +1,40 @@
 <template>
-  <article>
+  <div>
+    <!-- Wrapping in a div so that modal is not affected by CSS -->
+    <article v-if="article && !article_loading">
 
-    <template v-if="article">
-
+      <!-- Article title displayed separately from content for metadata -->
       <h1>{{article.title || 'Untitled article'}}</h1>
 
       <ArticleMetadata :article="article" />
 
-      <!-- the article itself -->
+      <!-- the article content -->
       <div
         ref="article_content"
         class="article_content"
         v-if="article && !article_loading"
         v-html="article.content"/>
 
-    </template>
+    </article>
 
-    <!-- messages when no content -->
-    <div class="loader_container" v-else-if="article_loading">
+    <!-- Loaders and error messages -->
+    <div
+      class="loader_container"
+      v-else-if="article_loading">
       <Loader />
     </div>
 
-    <div class="error" v-if="error">
+    <div
+      class="error"
+      v-if="error">
       Error loading article
     </div>
-
 
     <div
       class="error"
       v-if="!article_loading && !error && !article">
       Article not found
     </div>
-
 
     <!-- modal for images -->
     <Modal
@@ -45,7 +48,8 @@
 
     </Modal>
 
-  </article>
+  </div>
+
 </template>
 
 <script>

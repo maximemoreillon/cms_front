@@ -33,13 +33,9 @@ export default {
   flex-wrap: wrap;
 }
 
-.toolbar > * > *:not(:last-child) {
-  //margin-right: 1em;
-}
-
 
 .toolbar > *:not(:last-child){
-  margin-right: 0.25em;
+  margin-right: 1em;
 }
 
 .growing_spacer{
