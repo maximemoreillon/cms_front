@@ -1,6 +1,5 @@
 <template>
-  <AppTemplate
-    applicationName="Knowledge base"/>
+  <AppTemplate/>
 </template>
 <script>
 
@@ -86,16 +85,24 @@ article img {
   cursor: pointer;
 }
 
+article img, .modal_image {
+  object-fit: contain;
+  filter: drop-shadow(2.5px 2.5px 5px #44444444); /* Using filter because of object fit contain */
+}
+
+.modal_image {
+  max-width: 70vw;
+  max-height: 70vh;
+  margin: 1em;
+}
+
 :is(article, .editor_content) img {
-  /* test CSS for images */
 
-
-  display: block;
-  margin: 2em auto;
+  display: block; /* Default for img is inline */
+  margin: 2em auto; /* auto horizontal margin for centering */
 
   max-width: 60%;
   max-height: 40vh;
-  object-fit: contain;
 
 }
 

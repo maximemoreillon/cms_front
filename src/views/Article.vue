@@ -232,12 +232,7 @@ export default {
 
 
 
-.modal_image {
-  width: 80vw;
-  height: 70vh;
-  margin: 10px;
-  object-fit: contain;
-}
+
 
 /* COMMENTS */
 .comment_area_wrapper {
