@@ -4,12 +4,6 @@
     :to="{ name: 'article', params: {article_id: get_id_of_item(article)} }">
 
 
-
-    <!-- indictor for published -->
-    <earth-icon
-      class="publishing_status"
-      v-if="article.published && $store.state.current_user"/>
-
     <!-- Article title, consists of first h1 of the content -->
     <div class="preview_header">
       <div class="article_title">
@@ -17,29 +11,41 @@
       </div>
 
       <div class="article_metadata">
-
         <!-- date -->
-        <span
-          class="article_date"
-          v-if="article.authorship.creation_date">
-          {{format_date(article.authorship.creation_date)}}
-        </span>
+        <div v-if="article.authorship.creation_date">
 
-        <span>|</span>
+          <calendar-icon/>
+          <span class="article_date" >
+            {{format_date(article.authorship.creation_date)}}
+          </span>
+        </div>
 
         <!-- Author -->
-        <span
-          class="article_author"
-          v-if="author.username">
-          {{author.username}}
-        </span>
-
-        <template v-if="article.views">
-          <span>|</span>
-          <span>
-            {{article.views}} views
+        <div v-if="author">
+          <account-icon/>
+          <span class="article_author">
+            {{author.display_name || 'Unnnamed'}}
           </span>
+        </div>
+
+        <!-- Publishing status and views only visible to users logged in -->
+
+        <template >
+          <div v-if="article.views">
+            <eye-icon/>
+            <span>
+              {{article.views}}
+            </span>
+          </div>
+
+          <div>
+            <earth-icon v-if="article.published"/>
+            <lock-icon v-else />
+          </div>
         </template>
+
+
+
       </div>
 
 
@@ -95,9 +101,9 @@
 <script>
 
 import {formatDate} from '@/mixins/formatDate.js'
+import IdUtils from '@/mixins/IdUtils'
 
 import Tag from '@/components/Tag.vue'
-import IdUtils from '@/mixins/IdUtils'
 
 
 export default {
@@ -184,14 +190,16 @@ export default {
   color: #666666;
 }
 
-.article_metadata > *:not(:last-child) {
+.article_metadata > div {
+  margin-right: 1em;
+  display: flex;
+  align-items: center;
+}
+
+.article_metadata > div > * {
   margin-right: 0.25em;
 }
 
-.publishing_status {
-  /* not too happy with float */
-  float: right;
-}
 
 .article_preview_body {
   display: flex;

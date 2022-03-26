@@ -3,6 +3,8 @@
 
     <template v-if="tag">
       <h1>Articles tagged with "{{tag.name}}"</h1>
+
+      <!-- TODO: Manage tag in another component -->
       <div class="tags_buttons_wrapper" v-if="user_is_admin">
 
         <button
@@ -31,10 +33,11 @@
         </button>
 
       </div>
+
     </template>
 
     <template v-else-if="author">
-      <h1>Articles written by {{author.username}}</h1>
+      <h1>Articles written by {{author.display_name}}</h1>
     </template>
 
     <template v-else>
@@ -52,33 +55,32 @@
         </span>
 
         <IconButton
-          v-bind:active="sort === 'date'"
-          v-on:click="sort_by_date()">
+          :active="this.$route.query.sort === 'date'"
+          @click="sort('date')">
           <calendar-icon/>
         </IconButton>
 
         <IconButton
-          v-bind:active="sort === 'title'"
-          v-on:click="sort_by_title()">
+          :active="this.$route.query.sort === 'title'"
+          @click="sort('title')">
           <alphabetical-icon/>
         </IconButton>
 
         <IconButton
-          v-bind:active="sort === 'views'"
-          v-on:click="sort_by_views()">
+          :active="this.$route.query.sort === 'views'"
+          @click="sort('views')">
           <eye-icon/>
         </IconButton>
 
         <IconButton
-          v-bind:active="order === 'DESC'"
-          v-on:click="sort_order_descending()">
+          :active="this.$route.query.order === 'DESC'"
+          @click="order('DESC')">
           <sort-descending-icon/>
         </IconButton>
 
-
         <IconButton
-          v-bind:active="order === 'ASC'"
-          v-on:click="sort_order_ascending()">
+          :active="this.$route.query.order === 'ASC'"
+          @click="order('ASC')">
           <sort-ascending-icon/>
         </IconButton>
 
@@ -182,6 +184,7 @@ import PinIcon from 'vue-material-design-icons/Pin.vue';
 import IdUtils from '@/mixins/IdUtils'
 
 export default {
+  name: 'Articles',
   components: {
     IconButton,
     ArticlePreview,
@@ -217,15 +220,7 @@ export default {
 
       author: null,
 
-
-
-      // Default sorting and ordering
-
       search_string: '',
-      sort: 'date',
-      order: 'DESC',
-
-
 
       search_bar_open: false,
       batch_size: 10,
@@ -246,10 +241,10 @@ export default {
     this.delete_all_articles()
     this.get_articles()
 
-    if(this.$route.query.search) {
-      this.search_bar_open = true
-      this.search_string = this.$route.query.search
-    }
+    // if(this.$route.query.search) {
+    //   this.search_bar_open = true
+    //   this.search_string = this.$route.query.search
+    // }
 
   },
   beforeRouteUpdate (to, from, next) {
@@ -261,13 +256,12 @@ export default {
       this.delete_all_articles()
       this.get_articles()
     })
-
   },
 
   methods: {
     delete_all_articles(){
       // Turned into its own method to work with the "load more" feature
-      this.articles.splice(0,this.articles.length)
+      this.articles = []
       this.articles_all_loaded = false
     },
 
@@ -276,17 +270,25 @@ export default {
 
       this.articles_loading = true
 
-      const {search, author_id, tag_id} = this.$route.query
+      const {
+        search,
+        author_id,
+        tag_id,
+        sort = 'date',
+        order = 'DESC',
+      } = this.$route.query
 
       const params = {
-        sort : this.sort,
-        order : this.order,
+        sort,
+        order,
         start_index : this.articles.length,
         batch_size : this.batch_size,
         search,
         tag_id,
         author_id,
       }
+
+      console.log(params);
 
       const url = `${process.env.VUE_APP_CMS_API_URL}/v1/articles`
 
@@ -295,6 +297,7 @@ export default {
 
         this.article_count = data.article_count
 
+        // Add batch of articles
         data.articles.forEach( (article) => { this.articles.push(article) })
 
         // Check if all articles loaded (less than batch size)
@@ -349,32 +352,13 @@ export default {
 
 
     },
+    sort(val){
+      this.add_query_parameter('sort', val)
+    },
+    order(val){
+      this.add_query_parameter('order',val)
+    },
 
-    sort_by_date(){
-      this.sort = 'date'
-      this.delete_all_articles()
-      this.get_articles()
-    },
-    sort_by_title(){
-      this.sort = 'title'
-      this.delete_all_articles()
-      this.get_articles()
-    },
-    sort_by_views(){
-      this.sort = 'views'
-      this.delete_all_articles()
-      this.get_articles()
-    },
-    sort_order_ascending(){
-      this.order = 'ASC'
-      this.delete_all_articles()
-      this.get_articles()
-    },
-    sort_order_descending(){
-      this.order = 'DESC'
-      this.delete_all_articles()
-      this.get_articles()
-    },
 
     update_tag(){
       // Used for admins to edit tags
@@ -430,23 +414,35 @@ export default {
 
     load_more_when_scroll_to_bottom(){
 
-      const container = this.$refs.view.parentNode.parentNode
-      const target = this.$refs.load_more
+      // const container = this.$refs.view.parentNode.parentNode
+      // const target = this.$refs.load_more
+      //
+      // const options = {
+      //   root: container,
+      //   rootMargin: '0px',
+      //   threshold: 1.0
+      // }
+      //
+      // const callback = (entries) => {
+      //   const {isIntersecting} = entries.find(e => e.target === target)
+      //   if(isIntersecting && this.load_more_possible) this.get_articles()
+      // }
+      //
+      // this.observer = new IntersectionObserver(callback, options);
+      //
+      // this.observer.observe(target)
 
-      const options = {
-        root: container,
-        rootMargin: '0px',
-        threshold: 1.0
-      }
+    },
 
-      const callback = (entries) => {
-        const {isIntersecting} = entries.find(e => e.target === target)
-        if(isIntersecting && this.load_more_possible) this.get_articles()
-      }
+    add_query_parameter(key, value){
+      // Do nothing if already the right query
+      if(this.$route.query[key] === value) return
+      // Unpack query
+      const query = {...this.$route.query}
+      // Add the new parameter
+      query[key] = value
 
-      this.observer = new IntersectionObserver(callback, options);
-
-      this.observer.observe(target)
+      this.$router.push({name: 'article_list', query})
 
     },
 

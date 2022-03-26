@@ -12,13 +12,10 @@
 
   </div>
 </template>
+
 <script>
 
-
-
 import 'vue-material-design-icons/styles.css'
-
-
 
 export default {
   name: 'App',
@@ -46,7 +43,7 @@ body {
   font-family: sans-serif;
   padding: 0;
   margin: 0;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
 
 }
 
@@ -95,7 +92,8 @@ main {
 .article_content code {
   display: block;
   overflow-x: auto; /* Allow hoprizontal scroll */
-  padding: 1em 0.5em;
+  font-size: 0.9rem;
+  padding: 1em;
   background: #282b2e;
   color: #e0e2e4;
 }

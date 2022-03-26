@@ -42,12 +42,21 @@
       <earth-icon />
       <span>published</span>
     </div>
+
     <div
       class="metadata_wrapper"
       v-if="!article.published">
       <lock-icon />
       <span>private</span>
     </div>
+
+    <router-link
+      :to="{ name: 'article_editor', params: { id: get_id_of_item(article) } }"
+      class="metadata_wrapper"
+      v-if="user_is_author">
+      <pencil-icon />
+      <span>Edit</span>
+    </router-link>
 
   </div>
 </template>
@@ -56,16 +65,16 @@
 
 import Author from '@/components/Author.vue'
 import {formatDate} from '@/mixins/formatDate.js'
+import IdUtils from '@/mixins/IdUtils'
 
 export default {
   name: 'ArticleMetadata',
   props: {
     article: Object,
-    author: Object,
-    authorship: Object,
   },
   mixins: [
     formatDate,
+    IdUtils,
   ],
   components: {
     Author
@@ -73,6 +82,15 @@ export default {
   methods: {
 
   },
+  computed: {
+    user_is_author(){
+      const current_user = this.$store.state.current_user
+      const current_user_id = this.get_id_of_item(current_user)
+      const author_id = this.article.author._id
+
+      return current_user_id === author_id
+    }
+  }
 }
 </script>
 
