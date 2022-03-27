@@ -1,6 +1,6 @@
 stages:
-  - containerization
-  - deployment
+  - build
+  - deploy
 
 variables:
   APPLICATION_NAME: cms-front
@@ -15,8 +15,8 @@ services:
   - name: docker:19.03.12-dind
 
 
-containerization:
-  stage: containerization
+build:
+  stage: build
   tags:
     - dind
   only:
