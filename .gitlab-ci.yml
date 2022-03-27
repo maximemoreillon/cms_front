@@ -4,7 +4,11 @@ stages:
 
 variables:
   APPLICATION_NAME: cms-front
-  DOCKER_IMAGE: ${DOCKER_HUB_USERNAME}/${APPLICATION_NAME}
+  CONTAINER_REGISTRY: ${DOCKER_HUB_USERNAME}
+  CONTAINER_IMAGE: ${CONTAINER_REGISTRY}/${APPLICATION_NAME}
+  CONTAINER_IMAGE_LATEST: ${CONTAINER_IMAGE}:latest
+  CONTAINER_IMAGE_TAGGED: ${CONTAINER_IMAGE}:${CI_COMMIT_SHORT_SHA}
+
 
 image: moreillon/ci-dind
 services:
@@ -17,43 +21,29 @@ containerization:
     - dind
   only:
     - master
-  script:
+  before_script:
     # Docker hub login
     - echo "${DOCKER_HUB_PASSWORD}" | docker login --username ${DOCKER_HUB_USERNAME} --password-stdin
+  script:
     # Building the container image
-    - docker build -t ${DOCKER_IMAGE} .
-    # Pushing the image to the registry
-    - docker push ${DOCKER_IMAGE}
-    # Cleanup
-    - docker image rm ${DOCKER_IMAGE}
+    - docker build -t ${CONTAINER_IMAGE} .
+    # Tagging
+    - docker tag ${CONTAINER_IMAGE} ${CONTAINER_IMAGE_TAGGED}
+    - docker tag ${CONTAINER_IMAGE} ${CONTAINER_IMAGE_LATEST}
+    # Pushing
+    - docker push ${CONTAINER_IMAGE_TAGGED}
+    - docker push ${CONTAINER_IMAGE_LATEST}
 
-deployment:
-  stage: deployment
-  only:
-    - master
+
+deploy:
+  stage: deploy
   tags:
     - dind
+  only:
+    - master
   script:
-    # create/update the deployment
     - envsubst < kubernetes/deployment.yml | kubectl apply -f -
-
-    # If a nodeport is specified, serve app through a nodeport service
-    - >
-      if [ -z ${SERVICE_PORT} ];
-      then echo "SERVICE_PORT not set, skipping creation of NodePort service";
-      else envsubst < kubernetes/nodeport_service.yml | kubectl apply -f -;
-      fi
-
-    # if a domain name is specified, serve app through an ingress
-    - >
-      if [ -z ${CERTIFICATE_DOMAIN} ];
-      then echo "CERTIFICATE_DOMAIN not set, skipping creation of ingress";
-      else envsubst < kubernetes/ingress.yml | kubectl apply -f -;
-      fi
-
-    # Pull latest image of deployment
-    - kubectl rollout restart deployment/${APPLICATION_NAME}
   environment:
     name: production
     kubernetes:
-      namespace: ${KUBERNETES_NAMESPACE} # Obtained from GitLab
+      namespace: ${KUBERNETES_NAMESPACE}
