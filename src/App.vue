@@ -234,6 +234,10 @@ main a {
   color: #e0e2e4;
 }
 
-
+.loader_container {
+  margin: 1em;
+  text-align: center;
+  font-size: 300%;
+}
 
 </style>

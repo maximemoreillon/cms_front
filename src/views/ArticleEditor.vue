@@ -6,9 +6,16 @@
 
       <Toolbar>
 
+        <IconButton
+          v-if="article_id"
+          v-on:click="$router.push({ name: 'article', params: { article_id } })">
+          <arrow-left-icon />
+          <span>Return</span>
+        </IconButton>
 
         <IconButton
-          v-on:click="$router.push({ name: 'article', params: { article_id } })">
+          v-else
+          v-on:click="$router.push({ name: 'articles' })">
           <arrow-left-icon />
           <span>Return</span>
         </IconButton>
@@ -393,7 +400,7 @@ export default {
       })
     },
     delete_tag(index){
-      this.tags.splice(index,1)
+      this.article.tags.splice(index,1)
     },
     get_existing_tags(){
 
@@ -443,7 +450,8 @@ export default {
       return this.$store.state.current_user
     },
     article_id(){
-      return this.get_id_of_item(this.article)
+      const id = this.get_id_of_item(this.article)
+      return id
     }
   }
 
