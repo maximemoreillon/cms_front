@@ -18,7 +18,7 @@
     </template>
 
     <template v-else>
-      <h1>All articles</h1>
+      <h1>Articles</h1>
     </template>
 
 
@@ -26,7 +26,6 @@
     <Toolbar >
 
       <!-- article counter -->
-      <!-- Maybe not necessary -->
       <div class="article_counter">
         <file-document-outline-icon class="counter_icon"/>
         {{article_count}}
@@ -39,29 +38,14 @@
 
       <div class="spacer"/>
 
+      <ArticleSearch />
+
 
 
       <!-- search -->
-      <form class="search_wrapper" @submit.prevent="search()">
-        <input
-          type="search"
-          class="search_bar"
-          ref="search"
-          v-bind:class="{search_bar_open: search_bar_open}"
-          v-model="search_string">
 
-        <input type="submit" style="display:none;">
-
-        <IconButton
-          v-on:click="search()">
-          <magnify-icon/>
-        </IconButton>
-
-      </form>
 
     </Toolbar>
-
-
 
     <div
       class="articles_container"
@@ -123,8 +107,10 @@
 import Loader from '@moreillon/vue_loader'
 
 import SortingTools from '@/components/SortingTools.vue'
+import ArticleSearch from '@/components/ArticleSearch.vue'
+
 import TagManagement from '@/components/TagManagement.vue'
-import IconButton from '@/components/vue_icon_button/IconButton.vue'
+// import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import ArticlePreview from '@/components/ArticlePreview.vue'
 import Toolbar from '@/components/Toolbar.vue'
 
@@ -135,12 +121,13 @@ import IdUtils from '@/mixins/IdUtils'
 export default {
   name: 'Articles',
   components: {
-    IconButton,
+    // IconButton,
     ArticlePreview,
     Toolbar,
     Loader,
     TagManagement,
     SortingTools,
+    ArticleSearch,
     //Tag,
     //Author,
   },
@@ -162,10 +149,6 @@ export default {
 
       author: null,
 
-      search_string: '',
-
-      search_bar_open: false,
-      batch_size: 10,
 
       load_more_observer: null,
 
@@ -225,7 +208,7 @@ export default {
         sort,
         order,
         start_index : this.articles.length,
-        batch_size : this.batch_size,
+        batch_size : 10,
         search,
         tag_id,
         author_id,
@@ -322,29 +305,7 @@ export default {
 
 
 
-    search(){
-      if(this.search_bar_open){
-        // if the search bar is open, search or close
 
-        if(this.search_string === this.$route.query.search) return
-
-        const query = {...this.$route.query, search: this.search_string}
-
-        if(this.search_string === '') {
-          this.search_bar_open = false
-          delete query.search
-        }
-
-        this.$router.push({name: 'articles', query})
-
-      }
-      else {
-        // If the search bar is closed, open it
-        this.search_bar_open = true
-        setTimeout(() => this.$refs.search.focus(),50)
-      }
-
-    }
 
   },
   computed: {
@@ -408,21 +369,7 @@ export default {
 
 
 
-.search_bar {
-  transition: 0.25s;
-  width: 0;
-  visibility: hidden;
-}
 
-.search_bar.search_bar_open {
-  width: 20vw;
-  visibility: visible;
-}
-
-.search_wrapper {
-  display: flex;
-  align-items: stretch;
-}
 
 .article_counter {
   color: #444444;

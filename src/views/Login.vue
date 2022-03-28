@@ -9,19 +9,27 @@
       @submit.prevent="login()">
 
       <div class="">
-        <label>Username</label>
+        <label
+          for="username">
+          Username
+        </label>
         <input
+          id="username"
           type="text"
           v-model="username"
-          placeholder="username">
+          placeholder="Username">
       </div>
 
       <div class="">
-        <label>Password</label>
+        <label
+          for="password">
+          Password
+        </label>
         <input
+          id="password"
           type="password"
           v-model="password"
-          placeholder="password">
+          placeholder="Password">
       </div>
 
       <div>
@@ -33,7 +41,9 @@
         </IconButton>
       </div>
 
-      <div class="error_message" v-if="error">
+      <div
+        class="error_message"
+        v-if="error">
         {{error}}
       </div>
 
@@ -62,7 +72,7 @@
 
     <div
       v-if="loading"
-      class="loader_wrapper">
+      class="loader_container">
       <Loader />
     </div>
 
@@ -99,9 +109,6 @@ export default {
       const body = {username: this.username, password: this.password}
       this.axios.post(url, body)
       .then(({data}) => {
-        //this.$cookies.set('jwt', response.data.jwt)
-        //localStorage.jwt = data.jwt
-
 
         const cookie_options = {
           secure: location.protocol === 'https:',
@@ -110,7 +117,6 @@ export default {
         }
 
         this.$cookie.set('jwt',data.jwt, cookie_options)
-
 
         this.$store.commit('check_authentication')
       })
@@ -124,11 +130,10 @@ export default {
           this.error = 'Could not login, pleae contact an administrator'
         }
       })
-      .finally(() => {this.loading = false})
+      .finally(() => { this.loading = false })
     },
     logout(){
-      //this.$cookies.remove('jwt')
-      //localStorage.removeItem('jwt')
+
       this.$cookie.delete('jwt')
       delete this.axios.defaults.headers.common['Authorization']
       this.$store.commit('check_authentication')
@@ -150,7 +155,6 @@ export default {
 <style scoped>
 
 .container {
-  margin-top: 15vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -163,15 +167,5 @@ label {
   margin-right: 0.5em;
 }
 
-
-.loader_wrapper {
-  margin-top: 15vh;
-  text-align: center;
-  font-size: 200%;
-}
-
-.error_message {
-  color: #c00000;
-}
 
 </style>
