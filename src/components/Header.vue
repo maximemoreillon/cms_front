@@ -15,8 +15,7 @@
         alt="logo">
     </a>
 
-    <!-- Necessary? -->
-    <span>
+    <span class="title">
       Maxime Moreillon
     </span>
 
@@ -53,12 +52,6 @@ header {
 
   background-color: white;
 
-
-
-
-}
-
-header, .nav_buton_container {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -68,7 +61,7 @@ header, .nav_buton_container {
   font-size: 150%;
   border-bottom: 1px solid #dddddd;
 
-  position: fixed;
+  position: sticky;
   height: var(--header-height);
   left: 0;
   top: 0;
@@ -85,6 +78,7 @@ header > *+* {
 
 
 .logo_wrapper {
+  grid-area: logo;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -106,8 +100,11 @@ header > *+* {
 
 .navigation_button {
   cursor: pointer;
-  transition: opacity 0.25s;
-  opacity: 0;
+  display: none;
+}
+
+.title {
+  grid-area: title;
 }
 
 

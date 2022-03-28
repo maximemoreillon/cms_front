@@ -85,24 +85,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
-nav {
-  grid-area: nav;
 
-  font-size: 110%;
-
-  /* So that border does not go all the way down */
-  align-self: start;
-
-
-  background-color: white;
-  border-right: 1px solid #dddddd;
-
-  /* Content in flex column */
-  display: flex;
-  flex-direction: column;
-
-  transition: transform 0.25s;
-}
 
 a {
   padding: 0.5em 1em;

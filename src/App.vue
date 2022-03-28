@@ -94,8 +94,9 @@ body {
 
 .app {
   display: grid;
+  /* header does not matter because fixed */
   grid-template-areas:
-    'header header header header'
+    '. header header .'
     '. nav main .';
   grid-template-columns: 1fr var(--nav-width) minmax(0, 50rem) 1fr;
   grid-template-rows: var(--header-height) 1fr;
@@ -150,6 +151,27 @@ main a {
   transition: 0.25s;
 }
 
+nav {
+  grid-area: nav;
+
+  font-size: 110%;
+
+  position: sticky;
+  top: calc(1rem + var(--header-height)) ;
+
+  /* So that border does not go all the way down */
+  align-self: start;
+
+  background-color: white;
+  border-right: 1px solid #dddddd;
+
+  /* Content in flex column */
+  display: flex;
+  flex-direction: column;
+
+  transition: transform 0.25s;
+}
+
 /* responsivity */
 /* Not mobile first, I know it's bad practice */
 @media only screen and (max-width: 50rem) {
@@ -184,7 +206,7 @@ main a {
   }
 
   header .navigation_button {
-    opacity: 1;
+    display: block;
   }
 }
 
