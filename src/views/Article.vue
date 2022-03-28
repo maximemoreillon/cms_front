@@ -3,7 +3,7 @@
     <!-- Wrapping in a div so that modal is not affected by CSS -->
     <article v-if="article && !article_loading">
 
-      <!-- Article title displayed separately from content for metadata -->
+
       <h1>{{article.title || 'Untitled article'}}</h1>
 
       <ArticleMetadata :article="article" />
@@ -12,7 +12,6 @@
       <div
         ref="article_content"
         class="article_content"
-        v-if="article && !article_loading"
         v-html="article.content"/>
 
     </article>

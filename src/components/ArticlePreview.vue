@@ -2,78 +2,69 @@
   <!-- The whole preview is a link to the article -->
   <router-link
     class="article_preview"
+    :class="{article_with_thumbnail: !!article.thumbnail_src}"
     :to="{ name: 'article', params: {article_id: get_id_of_item(article)} }">
 
+    <h2>{{article.title || 'Untitled article'}}</h2>
 
-    <!-- Article title, consists of first h1 of the content -->
-    <div class="preview_header">
-      <div class="article_title">
-        {{article.title || 'Untitled article'}}
+    <div class="metadata">
+      <!-- date -->
+      <div
+        class="metadata_item"
+        v-if="article.authorship.creation_date">
+        <calendar-icon/>
+        <span class="article_date" >
+          {{format_date(article.authorship.creation_date)}}
+        </span>
       </div>
 
-      <div class="article_metadata">
-        <!-- date -->
+      <!-- Author -->
+      <div
+        class="metadata_item"
+        v-if="author">
+        <account-icon/>
+        <span class="author">
+          {{author.display_name || 'Unnnamed'}}
+        </span>
+      </div>
+
+      <!-- Publishing status and views only visible to users logged in -->
+      <template >
         <div
           class="metadata_item"
-          v-if="article.authorship.creation_date">
-          <calendar-icon/>
-          <span class="article_date" >
-            {{format_date(article.authorship.creation_date)}}
+          v-if="article.views">
+          <eye-icon/>
+          <span>
+            {{article.views}}
           </span>
         </div>
 
-        <!-- Author -->
         <div
-          class="metadata_item"
-          v-if="author">
-          <account-icon/>
-          <span class="article_author">
-            {{author.display_name || 'Unnnamed'}}
-          </span>
+          class="metadata_item" >
+          <earth-icon v-if="article.published"/>
+          <lock-icon v-else />
         </div>
-
-        <!-- Publishing status and views only visible to users logged in -->
-        <template >
-          <div
-            class="metadata_item"
-            v-if="article.views">
-            <eye-icon/>
-            <span>
-              {{article.views}}
-            </span>
-          </div>
-
-          <div
-            class="metadata_item" >
-            <earth-icon v-if="article.published"/>
-            <lock-icon v-else />
-          </div>
-        </template>
-
-      </div>
+      </template>
 
     </div>
 
 
-    <!-- alt set to empty string to display nothing if no thumbnail -->
-    <div class="article_preview_body">
-      <img
-        class="article_thumbnail"
-        v-if="article.thumbnail_src"
-        :src="article.thumbnail_src"
-        alt="">
+    <img
+      class="thumbnail"
+      v-if="article.thumbnail_src"
+      :src="article.thumbnail_src"
+      alt="">
 
-      <!-- Summary -->
-      <article
-        class="article_summary article_content"
-        v-html="article.summary || 'No summary available'"/>
 
-    </div>
+    <!-- Summary -->
+    <div
+      class="summary"
+      v-html="article.summary || 'No summary available'"/>
 
 
     <div
-      class="tags_container"
-      v-if="tags">
+      class="tags"
+      v-if="tags && tags.length">
 
       <tag-icon />
       <Tag
@@ -140,36 +131,51 @@ export default {
 
   cursor: pointer;
 
-  /*box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);*/
   border: 1px solid #dddddd;
   transition: border-color 0.25s;
 
+  display: grid;
 
-  margin-bottom: 2em;
+  grid-template-areas:
+    'title'
+    'metadata'
+    'summary'
+    'tags';
+
+  align-items: start;
+
+  padding: 1em;
+
+  grid-gap: 0.5em;
+
+
+}
+
+.article_with_thumbnail {
+  grid-template-areas:
+    'title thumbnail'
+    'metadata thumbnail'
+    'summary thumbnail'
+    'tags thumbnail';
+
+  grid-template-columns: 5fr 2fr;
+
 }
 
 
-.article_preview > * {
-  margin: 1em 1.5em;
-}
 
 .article_preview:hover {
   border-color: #c00000;
 }
 
 
-
-.article_title {
-  font-weight: bold;
-  font-size: 120%;
-  /* problem here, not ellipsising */
-  /* white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis; */
+h2 {
+  grid-area: title;
+  margin: 0;
 }
 
-
-.article_metadata {
+.metadata {
+  grid-area: metadata;
   margin-top: 0.25em;
   display: flex;
   align-items: center;
@@ -177,26 +183,30 @@ export default {
   color: #666666;
 }
 
-.article_metadata > div {
+.metadata > div {
   margin-right: 1em;
   display: flex;
   align-items: center;
 }
 
-.article_metadata > div > * {
+.metadata > div > * {
   margin-right: 0.25em;
 }
 
-
-.article_preview_body {
-  display: flex;
-  align-items: top;
+.thumbnail {
+  grid-area: thumbnail;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 
-.article_summary {
+.summary {
+  outline: 1px solid red;
+  grid-area: summary;
   overflow: hidden;
-  max-height: 10.5em;
+  /* max-height: 10em; */
+  max-height: 100%;
 
   /* Padding so that short summaries don't get clipped */
   padding-bottom: 0.5em;
@@ -205,7 +215,7 @@ export default {
 }
 
 /* Shadow to show there is more content available */
-.article_summary::before {
+.summary::before {
   content: '';
   position: absolute;
   bottom: 0;
@@ -220,50 +230,39 @@ export default {
 }
 
 
-.article_thumbnail {
-  max-width: 8em;
-  max-height: 8em;
-  object-fit: contain;
-  margin-right: 1.5em;
-}
-
-
-.tags_container {
-  position: relative;
+.tags {
+  grid-area: tags;
   display: flex;
   align-items: center;
-  overflow-x: hidden;
 }
 
-.tags_container > *{
+
+.tags > *{
   margin-top: 0.25em;
   //margin: 0.25em 0;
   color: #666666;
 
 }
 
-.tags_container > *:not(:last-child) {
+.tags > *:not(:last-child) {
   margin-right: 5px;
 }
 
-.tags_container > *:first-child {
+.tags > *:first-child {
   margin-left: 0;
 }
 
-/* Fading last tags when too many */
-.tags_container::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  top: 0;
-  width: 50px;
-  z-index: 5;
 
-  background-image: linear-gradient(to left, white, transparent);
-  background-position: 0 100%;
-  background-size: 100% 100%;
-}
+
+
+
+
+
+
+
+
+
+
 
 
 

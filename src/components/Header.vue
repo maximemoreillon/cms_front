@@ -12,8 +12,13 @@
       <img
         class="logo"
         src="@/assets/logo/logo.svg"
-        alt="">
+        alt="logo">
     </a>
+
+    <!-- Necessary? -->
+    <span>
+      Maxime Moreillon
+    </span>
 
   </header>
 </template>
@@ -42,19 +47,18 @@ export default {
 
 
 header {
-  display: none;
+  grid-area: header;
 
   background-color: white;
-  z-index: 8;
-  grid-area: header;
   position: sticky;
   top: 0;
+  z-index: 8;
 
+  display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start;
 
-  padding: 0.25em 1em;
+  padding: 0.5em 1em;
 
   font-size: 150%;
   border-bottom: 1px solid #dddddd;
@@ -62,28 +66,36 @@ header {
 
 }
 
-.logo {
-  height: 1.5em;
-  width: 1.5em;
+header > *+* {
+  margin-left: 0.5em;
 }
 
+
+
+
+.logo_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  height: 3rem;
+  width: 3rem;
+  animation-name: logo_rotation;
+  animation-iteration-count: infinite;
+  animation-duration: 60s;
+  animation-timing-function: linear;
+}
+
+@keyframes logo_rotation {
+  from {transform: rotate(0deg);}
+  to {transform: rotate(360deg);}
+}
 
 
 .navigation_button {
-  display: none;
-}
-
-
-
-@media only screen and (max-width: 800px) {
-  header {
-    display: flex;
-  }
-
-  .navigation_button {
-    display: inline;
-    margin-right: 1em;
-  }
+  transition: opacity 0.25s;
 }
 
 

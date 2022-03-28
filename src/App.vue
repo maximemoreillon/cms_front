@@ -6,7 +6,8 @@
 
     <Nav
       :open="nav"
-      @navToggle="nav = !nav"/>
+      @navToggle="nav = !nav"
+      @navClose="nav = false"/>
 
     <div
       @click="nav = !nav"
@@ -56,11 +57,10 @@ export default {
 
 :root {
   /* Sizes */
-
   --nav-width: 12em;
-  --header-margin: 1em;
-  --header-height-desktop: 200px;
+
   --header-height-mobile: 56px;
+
   /* Colors */
   --accent-color:#c00000;
 }
@@ -80,7 +80,9 @@ body {
   font-family: sans-serif;
   padding: 0;
   margin: 0;
-  font-size: 1.2rem;
+
+  /* TODO: Text color depends on the type */
+  color: #222222;
 
 }
 
@@ -90,44 +92,23 @@ body {
 }
 
 .app {
-  /* Needed because otherwise nav jumping when page empty */
-  min-height: 100vh;
   display: grid;
   grid-template-areas:
+    'header header header header'
     '. nav main .';
-  grid-template-columns: 1fr var(--nav-width) minmax(0, 800px) 1fr;
-  /* I don't get this */
-  /* grid-template-rows: var(--header-height-desktop) auto; */
-  /* grid-gap: 1em; */
+  grid-template-columns: 1fr auto minmax(0, 50rem) 1fr;
+  grid-gap: 1rem;
+  outline: 1px solid blue;
 }
 
 
 main {
   grid-area: main;
-  padding: 0 1em;
-  align-self: start;
 }
 
-/* Logo related */
-@keyframes logo_rotation {
-  from {transform: rotate(0deg);}
-  to {transform: rotate(360deg);}
-}
 
-.logo_wrapper {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
 
-.logo {
-  width: 5em;
-  animation-name: logo_rotation;
-  animation-iteration-count: infinite;
-  animation-duration: 60s;
-  animation-timing-function: linear;
-}
-
+/* NOT GOOD: BUTTONS SHOULD HAVE A SHARED STYLE */
 .navigation_button{
   cursor: pointer;
 }
@@ -136,11 +117,12 @@ main {
 .nav_backround {
   display: block;
   position: fixed;
-  z-index: 9;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 9;
+
   background-color: #44444444;
 
   visibility: hidden;
@@ -150,6 +132,12 @@ main {
     visibility 0.5s,
     opacity 0.5s;
 
+}
+
+.loader_container {
+  margin: 1em;
+  text-align: center;
+  font-size: 300%;
 }
 
 
@@ -163,27 +151,21 @@ main a {
 }
 
 /* responsivity */
-@media only screen and (max-width: 800px) {
+/* TODO: Deal with responsivity beign delcared in multiple locations */
+@media only screen and (max-width: 50rem) {
 
   .nav_backround.visible {
     visibility: visible;
     opacity: 1;
   }
 
-  body {
-    font-size: 1rem;
-  }
   .app {
-    /* Nav becomes absolutely positioned so anywhere is fine */
-    grid-template-areas:
-      'header'
-      'main'
-      'nav';
 
-      /* all horizontal space */
-      grid-template-columns: 100%;
-      grid-template-rows: var(--header-height-mobile) 1fr;
+  }
 
+  nav {
+    /* PROBLEM: top needs to be set so as to fit header */
+    position: fixed;
   }
 }
 
@@ -234,10 +216,6 @@ main a {
   color: #e0e2e4;
 }
 
-.loader_container {
-  margin: 1em;
-  text-align: center;
-  font-size: 300%;
-}
+
 
 </style>

@@ -7,17 +7,6 @@
         @click="$emit('navToggle')"/>
     </div>
 
-
-
-    <a
-      class="logo_wrapper"
-      href="https://maximemoreillon.com">
-      <img
-        class="logo"
-        src="@/assets/logo/logo.svg"
-        alt="">
-    </a>
-
     <router-link
       v-if="$store.state.current_user"
       :to="{ name: 'article_editor', params: {article_id: 'new'}}">
@@ -54,11 +43,9 @@
     <router-link :to="{ name: 'tags'}">
 
       <tag-multiple-icon />
-      <span>Tag list</span>
+      <span>Tags</span>
 
     </router-link>
-
-    <!--<div class="spacer" />-->
 
     <router-link :to="{ name: 'login' }">
       <template v-if="!$store.state.current_user">
@@ -89,11 +76,11 @@ export default {
   props: {
     open: Boolean
   },
-  // beforeRouteUpdate (to, from, next) {
-  //   // Closing the nav when a link is pressed
-  //   next()
-  //   if(this.open) this.$emit('navToggle')
-  // },
+  beforeRouteUpdate (to, from, next) {
+    // Closing the nav when a link is pressed
+    next()
+    this.$emit('navClose')
+  },
 
   mixins: [
     IdUtils
@@ -105,15 +92,17 @@ export default {
 
 nav {
   grid-area: nav;
-  position: sticky;
-  top: var(--header-margin);
-  align-self: start;
 
-  background-color: white;
+  width: var(--nav-width);
 
+  /* position: sticky; */
+
+  /* background-color: white; */
+  border-right: 1px solid #dddddd;
+
+  /* Content in flex column */
   display: flex;
   flex-direction: column;
-  border-right: 1px solid #dddddd;
 }
 
 a {
@@ -157,29 +146,5 @@ a:not(.logo_wrapper).router-link-exact-active {
 }
 
 
-@media only screen and (max-width: 800px) {
-
-  .close_wrapper {
-    display: flex;
-  }
-
-  nav {
-    height: 100%;
-    position: fixed;
-    top: 0;
-    /* top: var(--header-height-mobile); */
-    width: var(--nav-width);
-    z-index: 10;
-    left: 0;
-    transform: translateX(-100%);
-    transition: transform 0.5s;
-    border: none;
-  }
-
-  .open {
-    transform: translateX(0);
-  }
-
-}
 
 </style>

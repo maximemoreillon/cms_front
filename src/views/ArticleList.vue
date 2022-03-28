@@ -1,5 +1,5 @@
 <template>
-  <div class="article_list_view" ref="view">
+  <div>
 
     <template v-if="tag">
       <h1>Articles tagged with "{{tag.name}}"</h1>
@@ -428,12 +428,14 @@ export default {
     add_query_parameter(key, value){
       // Do nothing if already the right query
       if(this.$route.query[key] === value) return
+
+      const {name} = this.$route
       // Unpack query
       const query = {...this.$route.query}
       // Add the new parameter
       query[key] = value
 
-      this.$router.push({name: 'article_list', query})
+      this.$router.push({name, query})
 
     },
 
@@ -496,6 +498,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  gap: 1em;
 
 }
 
@@ -508,6 +511,7 @@ export default {
 .tags_buttons_wrapper {
   margin: 1em 0;
 }
+
 .load_more_button {
   display: flex;
   align-items: center;
