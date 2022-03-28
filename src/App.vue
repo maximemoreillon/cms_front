@@ -59,8 +59,6 @@ export default {
   /* Sizes */
   --nav-width: 12em;
 
-  --header-height-mobile: 56px;
-
   /* Colors */
   --accent-color:#c00000;
 }
@@ -92,7 +90,6 @@ body {
 }
 
 .app {
-  /* PROBLEM: small content causes nav to move around */
   display: grid;
   grid-template-areas:
     '. header header .'

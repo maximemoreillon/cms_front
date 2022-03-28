@@ -1,3 +1,4 @@
+<!-- This componentt is useless as it simply holds CSS -->
 <template>
   <div class="toolbar">
     <slot></slot>
@@ -38,9 +39,6 @@ export default {
   margin-right: 1em;
 }
 
-.growing_spacer{
-  flex-grow: 1;
-}
 
 .dates_container {
   font-size: 80%;

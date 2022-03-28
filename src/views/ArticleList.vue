@@ -4,35 +4,12 @@
     <template v-if="tag">
       <h1>Articles tagged with "{{tag.name}}"</h1>
 
-      <!-- TODO: Manage tag in another component -->
-      <div class="tags_buttons_wrapper" v-if="user_is_admin">
 
-        <button
-          type="button"
-          class="button"
-          @click="prompt_for_rename()">
-          <pencil-icon/>
-          <span>Rename tag</span>
-        </button>
+      <TagManagement
+        v-if="user_is_admin"
+        :tag="tag"
+        @tagUpdate="delete_all_and_get_articles()"/>
 
-        <button
-          type="button"
-          class="button"
-          @click="delete_tag()">
-          <delete-icon/>
-          <span>Delete tag</span>
-        </button>
-
-        <button
-          type="button"
-          class="button"
-          :class="{active:tag.navigation_item}"
-          @click="pin_to_navbar()">
-          <pin-icon/>
-          <span>Pin to nav</span>
-        </button>
-
-      </div>
 
     </template>
 
@@ -55,41 +32,12 @@
         {{article_count}}
       </div>
 
-      <div class="sort_and_order">
-        <IconButton
-          :active="this.$route.query.sort !== 'title' && this.$route.query.sort !== 'views'"
-          @click="sort('date')">
-          <calendar-icon/>
-        </IconButton>
-
-        <IconButton
-          :active="this.$route.query.sort === 'title'"
-          @click="sort('title')">
-          <alphabetical-icon/>
-        </IconButton>
-
-        <IconButton
-          :active="this.$route.query.sort === 'views'"
-          @click="sort('views')">
-          <eye-icon/>
-        </IconButton>
-
-        <IconButton
-          :active="this.$route.query.order !== 'ASC'"
-          @click="order('DESC')">
-          <sort-descending-icon/>
-        </IconButton>
-
-        <IconButton
-          :active="this.$route.query.order === 'ASC'"
-          @click="order('ASC')">
-          <sort-ascending-icon/>
-        </IconButton>
-      </div>
+      <SortingTools />
 
 
 
-      <div class="growing_spacer"/>
+
+      <div class="spacer"/>
 
 
 
@@ -174,13 +122,12 @@
 
 import Loader from '@moreillon/vue_loader'
 
+import SortingTools from '@/components/SortingTools.vue'
+import TagManagement from '@/components/TagManagement.vue'
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import ArticlePreview from '@/components/ArticlePreview.vue'
 import Toolbar from '@/components/Toolbar.vue'
-//import Tag from '@/components/Tag.vue'
-//import Author from '@/components/Author.vue'
 
-// icons
 
 
 import IdUtils from '@/mixins/IdUtils'
@@ -192,6 +139,8 @@ export default {
     ArticlePreview,
     Toolbar,
     Loader,
+    TagManagement,
+    SortingTools,
     //Tag,
     //Author,
   },
@@ -231,8 +180,8 @@ export default {
 
     this.get_tag()
     this.get_author()
-    this.delete_all_articles()
-    this.get_articles()
+    this.delete_all_and_get_articles()
+
 
     // if(this.$route.query.search) {
     //   this.search_bar_open = true
@@ -246,16 +195,17 @@ export default {
     this.$nextTick().then( () => {
       this.get_tag()
       this.get_author()
-      this.delete_all_articles()
-      this.get_articles()
+      this.delete_all_and_get_articles()
     })
   },
 
   methods: {
-    delete_all_articles(){
-      // Turned into its own method to work with the "load more" feature
+
+
+    delete_all_and_get_articles(){
       this.articles = []
       this.articles_all_loaded = false
+      this.get_articles()
     },
 
 
@@ -343,65 +293,10 @@ export default {
 
 
     },
-    sort(val){
-      this.add_query_parameter('sort', val)
-    },
-    order(val){
-      this.add_query_parameter('order',val)
-    },
 
 
-    update_tag(){
-      // Used for admins to edit tags
 
-      this.tag_loading = true
 
-      const tag_id = this.get_id_of_item(this.tag)
-
-      const url = `${process.env.VUE_APP_CMS_API_URL}/v1/tags/${tag_id}`
-      const body = this.tag
-
-      this.axios.put(url, body)
-      .then( ({data}) => {
-
-        this.tag = data
-
-        this.$store.commit('update_categories')
-
-        this.delete_all_articles()
-        this.get_articles()
-
-        this.tag_loading = false
-      })
-      .catch(error => alert(error))
-
-    },
-
-    prompt_for_rename(){
-      const new_name = prompt("New tag name", this.tag.name)
-      if(!new_name) return
-      this.tag.name = new_name
-      this.update_tag()
-    },
-
-    pin_to_navbar(){
-      this.tag.navigation_item = !this.tag.navigation_item
-      this.update_tag()
-    },
-
-    delete_tag(){
-      if(!confirm('Delete tag?')) return
-      this.article_loading = true;
-
-      const tag_id = this.get_id_of_item(this.tag)
-
-      this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/v1/tags/${tag_id}`)
-      .then( () => {
-        this.$router.push({ name: 'article_list' })
-      })
-      .catch(error => alert(error))
-
-    },
 
     load_more_when_scroll_to_bottom(){
 
@@ -425,19 +320,7 @@ export default {
 
     },
 
-    add_query_parameter(key, value){
-      // Do nothing if already the right query
-      if(this.$route.query[key] === value) return
 
-      const {name} = this.$route
-      // Unpack query
-      const query = {...this.$route.query}
-      // Add the new parameter
-      query[key] = value
-
-      this.$router.push({name, query})
-
-    },
 
     search(){
       if(this.search_bar_open){
@@ -453,9 +336,6 @@ export default {
         }
 
         this.$router.push({name: 'articles', query})
-
-        // this.delete_all_articles()
-        // this.get_articles()
 
       }
       else {
@@ -489,11 +369,6 @@ export default {
 <style scoped>
 
 .articles_container {
-
-
-  /* display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
-  grid-gap: 1em; */
 
   display: flex;
   flex-direction: column;
