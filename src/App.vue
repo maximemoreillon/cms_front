@@ -199,6 +199,7 @@ nav {
     z-index: 10;
     height: 100%;
     transform: translateX(-100%);
+    border: none;
   }
 
   nav.open {
