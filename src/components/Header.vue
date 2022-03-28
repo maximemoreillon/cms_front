@@ -20,12 +20,6 @@
       Maxime Moreillon
     </span>
 
-    <div class="spacer" />
-
-    <router-link :to="{ name: 'login' }">
-      <logout-icon v-if="$store.state.current_user"/>
-      <login-icon v-else/>
-    </router-link>
 
   </header>
 </template>

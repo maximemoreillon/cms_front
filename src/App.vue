@@ -76,7 +76,9 @@ html {
 
 body {
   /* font-family: lexend, sans-serif; */
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
   font-family: sans-serif;
+
   padding: 0;
   margin: 0;
 
@@ -109,22 +111,7 @@ main {
   grid-area: main;
 }
 
-nav {
-  grid-area: nav;
 
-  /* So that border does not go all the way down */
-  align-self: start;
-
-
-  background-color: white;
-  border-right: 1px solid #dddddd;
-
-  /* Content in flex column */
-  display: flex;
-  flex-direction: column;
-
-  transition: transform 0.25s;
-}
 
 
 .nav_backround {
@@ -164,6 +151,7 @@ main a {
 }
 
 /* responsivity */
+/* Not mobile first, I know it's bad practice */
 @media only screen and (max-width: 50rem) {
 
   .nav_backround.visible {
