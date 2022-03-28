@@ -135,6 +135,7 @@ export default {
   border: 1px solid #dddddd;
   transition: border-color 0.25s;
   padding: 1em;
+  max-height: 20em;
 
   display: grid;
 
@@ -144,11 +145,11 @@ export default {
     'summary'
     'tags';
 
+  /* Can use minmax thanks to max-height being set on container */
   grid-auto-rows: auto auto minmax(0, 1fr) auto;
-  grid-gap: 0.5em;
+  grid-gap: 1em;
 
-  max-height: 20em;
-
+  /* WARNING: Grid gap applies even if no tags */
 }
 
 .article_with_thumbnail {
@@ -177,7 +178,8 @@ h2 {
 
 .metadata {
   grid-area: metadata;
-  margin-top: 0.25em;
+  /* Bring metadata closer to title */
+  margin-top: -0.75em;
   display: flex;
   align-items: center;
   font-size: 75%;
@@ -198,13 +200,11 @@ h2 {
   grid-area: thumbnail;
   width: 100%;
   height: 100%;
-
   object-fit: cover;
 }
 
 
 .summary {
-  outline: 1px solid red;
   grid-area: summary;
   overflow: hidden;
 

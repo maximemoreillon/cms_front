@@ -50,7 +50,8 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+<!-- Not scoped because shared with nav -->
+<style lang="css">
 
 
 header {
@@ -61,6 +62,11 @@ header {
   top: 0;
   z-index: 8;
 
+
+
+}
+
+header, .nav_buton_container {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -69,7 +75,6 @@ header {
 
   font-size: 150%;
   border-bottom: 1px solid #dddddd;
-
 
 }
 
@@ -87,8 +92,8 @@ header > *+* {
 }
 
 .logo {
-  height: 3rem;
-  width: 3rem;
+  height: 2.5rem;
+  width: 2.5rem;
   animation-name: logo_rotation;
   animation-iteration-count: infinite;
   animation-duration: 60s;
@@ -102,6 +107,7 @@ header > *+* {
 
 
 .navigation_button {
+  cursor: pointer;
   transition: opacity 0.25s;
 }
 

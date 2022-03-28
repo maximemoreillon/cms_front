@@ -92,11 +92,12 @@ body {
 }
 
 .app {
+  /* PROBLEM: small content causes nav to move around */
   display: grid;
   grid-template-areas:
-    'header header header header'
+    '. header header .'
     '. nav main .';
-  grid-template-columns: 1fr auto minmax(0, 50rem) 1fr;
+  grid-template-columns: 1fr var(--nav-width) minmax(0, 50rem) 1fr;
   grid-gap: 1rem;
 
   /* WARNING: Gap will be present even if nav is not visible */
@@ -107,13 +108,29 @@ body {
 
 main {
   grid-area: main;
+  outline: 1px solid red;
 }
 
+nav {
+  grid-area: nav;
 
+  /* So that border does not go all the way down */
+  align-self: start;
 
-/* NOT GOOD: BUTTONS SHOULD HAVE A SHARED STYLE */
-.navigation_button{
-  cursor: pointer;
+  /* width: var(--nav-width); */
+
+  position: sticky;
+  top: 0;
+
+  z-index: 10;
+  background-color: white;
+  border-right: 1px solid #dddddd;
+
+  /* Content in flex column */
+  display: flex;
+  flex-direction: column;
+
+  transition: transform 0.25s;
 }
 
 
@@ -154,7 +171,6 @@ main a {
 }
 
 /* responsivity */
-/* TODO: Deal with responsivity beign delcared in multiple locations */
 @media only screen and (max-width: 50rem) {
 
   .nav_backround.visible {
@@ -163,12 +179,23 @@ main a {
   }
 
   .app {
+    grid-template-areas:
+      '. header .'
+      '. main .'
+      '. nav .';
 
+    grid-template-columns: 1fr minmax(0, 50rem) 1fr;
   }
 
   nav {
     /* PROBLEM: top needs to be set so as to fit header */
     position: fixed;
+    height: 100%;
+    transform: translateX(-100%);
+  }
+
+  nav.open {
+    transform: translateX(0%);
   }
 }
 

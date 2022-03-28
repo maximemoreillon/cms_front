@@ -1,12 +1,6 @@
 <template lang="html">
   <nav :class="{open}">
 
-    <div class="close_wrapper">
-      <close-icon
-        class="navigation_button"
-        @click="$emit('navToggle')"/>
-    </div>
-
     <router-link
       v-if="$store.state.current_user"
       :to="{ name: 'article_editor', params: {article_id: 'new'}}">
@@ -77,10 +71,11 @@ export default {
   props: {
     open: Boolean
   },
-  beforeRouteUpdate (to, from, next) {
-    // Closing the nav when a link is pressed
-    next()
-    this.$emit('navClose')
+  mounted(){
+    this.$router.beforeEach((to, from, next) => {
+      next()
+      this.$emit('navClose')
+    })
   },
 
   mixins: [
@@ -91,62 +86,35 @@ export default {
 
 <style lang="css" scoped>
 
-nav {
-  grid-area: nav;
 
-  /* So that border does not go all the way down */
-  align-self: start;
-
-  width: var(--nav-width);
-
-  /* position: sticky; */
-
-  /* background-color: white; */
-  border-right: 1px solid #dddddd;
-
-  /* Content in flex column */
-  display: flex;
-  flex-direction: column;
-}
 
 a {
   padding: 0.5em 1em;
-  font-size: 120%;
   text-decoration: none;
   color: currentcolor;
   display: flex;
   align-items: center;
 }
 
-/* Ellipsis on nav item if too long */
+/* Ellipsis on nav items that are too long */
 a > *:last-child {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* Spacign between icon and lavel */
-nav a > *:not(:last-child) {
+/* Spacing between icon and label */
+nav a > *:first-child {
   margin-right: 1em;
 }
 
 
 a:not(.logo_wrapper):hover {
-  /* color: var(--accent-color); */
-  /* color: #666666; */
   border-right: 3px solid #666666;
 }
 
 a:not(.logo_wrapper).router-link-exact-active {
   border-right: 3px solid var(--accent-color);
-}
-
-.close_wrapper{
-  height: var(--header-height-mobile);
-  display: none;
-  align-items: center;
-  padding: 0.25em 1em;
-  font-size: 150%;
 }
 
 
