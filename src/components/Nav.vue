@@ -47,6 +47,7 @@
 
     </router-link>
 
+    <!--
     <router-link :to="{ name: 'login' }">
       <template v-if="!$store.state.current_user">
         <login-icon />
@@ -56,8 +57,8 @@
         <logout-icon />
         <span>Logout</span>
       </template>
-
     </router-link>
+    -->
 
 
     <router-link :to="{ name: 'about' }">
@@ -92,6 +93,9 @@ export default {
 
 nav {
   grid-area: nav;
+
+  /* So that border does not go all the way down */
+  align-self: start;
 
   width: var(--nav-width);
 

@@ -29,7 +29,7 @@
       </div>
 
       <!-- Publishing status and views only visible to users logged in -->
-      <template >
+
         <div
           class="metadata_item"
           v-if="article.views">
@@ -39,6 +39,7 @@
           </span>
         </div>
 
+      <template v-if="$store.state.current_user">
         <div
           class="metadata_item" >
           <earth-icon v-if="article.published"/>
@@ -133,6 +134,7 @@ export default {
 
   border: 1px solid #dddddd;
   transition: border-color 0.25s;
+  padding: 1em;
 
   display: grid;
 
@@ -142,23 +144,22 @@ export default {
     'summary'
     'tags';
 
-  align-items: start;
-
-  padding: 1em;
-
+  grid-auto-rows: auto auto minmax(0, 1fr) auto;
   grid-gap: 0.5em;
 
+  max-height: 20em;
 
 }
 
 .article_with_thumbnail {
+  /* Special layout if the article has a thumbnail */
   grid-template-areas:
-    'title thumbnail'
-    'metadata thumbnail'
-    'summary thumbnail'
-    'tags thumbnail';
+    'title title'
+    'metadata metadata'
+    'thumbnail summary'
+    'tags tags';
 
-  grid-template-columns: 5fr 2fr;
+  grid-template-columns: 2fr 5fr;
 
 }
 
@@ -197,6 +198,7 @@ h2 {
   grid-area: thumbnail;
   width: 100%;
   height: 100%;
+
   object-fit: cover;
 }
 
@@ -205,17 +207,16 @@ h2 {
   outline: 1px solid red;
   grid-area: summary;
   overflow: hidden;
-  /* max-height: 10em; */
-  max-height: 100%;
 
   /* Padding so that short summaries don't get clipped */
   padding-bottom: 0.5em;
 
+  /* Position relative for shadow below */
   position: relative;
 }
 
-/* Shadow to show there is more content available */
 .summary::before {
+  /* Shadow to show there is more content available */
   content: '';
   position: absolute;
   bottom: 0;

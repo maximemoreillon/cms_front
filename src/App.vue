@@ -98,7 +98,10 @@ body {
     '. nav main .';
   grid-template-columns: 1fr auto minmax(0, 50rem) 1fr;
   grid-gap: 1rem;
-  outline: 1px solid blue;
+
+  /* WARNING: Gap will be present even if nav is not visible */
+
+
 }
 
 
@@ -216,6 +219,8 @@ main a {
   color: #e0e2e4;
 }
 
-
+.spacer {
+  flex-grow: 1;
+}
 
 </style>

@@ -29,17 +29,16 @@
         <span>{{format_date(article.authorship.edition_date)}}</span>
 
       </div>
+      
+      <div
+        class="metadata_element"
+        title="Views"
+        v-if="article.views">
+        <eye-icon class="metadata_icon"/>
+        <span>{{article.views}}</span>
+      </div>
 
       <template v-if="user_is_author">
-
-        <div
-          class="metadata_element"
-          title="Views"
-          v-if="article.views">
-          <eye-icon class="metadata_icon"/>
-          <span>{{article.views}}</span>
-        </div>
-
         <div
           class="metadata_element"
           title="Published"
