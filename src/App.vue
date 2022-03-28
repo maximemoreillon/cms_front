@@ -57,6 +57,7 @@ export default {
 
 :root {
   /* Sizes */
+  --header-height: 65px;
   --nav-width: 12em;
 
   /* Colors */
@@ -92,9 +93,10 @@ body {
 .app {
   display: grid;
   grid-template-areas:
-    '. header header .'
+    'header header header header'
     '. nav main .';
   grid-template-columns: 1fr var(--nav-width) minmax(0, 50rem) 1fr;
+  grid-template-rows: var(--header-height) 1fr;
   grid-gap: 1rem;
 
   /* WARNING: Gap will be present even if nav is not visible */
@@ -114,12 +116,7 @@ nav {
   /* So that border does not go all the way down */
   align-self: start;
 
-  /* width: var(--nav-width); */
 
-  position: sticky;
-  top: 0;
-
-  z-index: 10;
   background-color: white;
   border-right: 1px solid #dddddd;
 
@@ -177,22 +174,29 @@ main a {
 
   .app {
     grid-template-areas:
-      '. header .'
+      'header header header'
       '. main .'
       '. nav .';
 
-    grid-template-columns: 1fr minmax(0, 50rem) 1fr;
+    grid-template-columns: 0 1fr 0;
   }
 
   nav {
-    /* PROBLEM: top needs to be set so as to fit header */
+    /* PROBLEM: top needs to be positioned below the header */
     position: fixed;
+    top: var(--header-height);
+    width: var(--nav-width);
+    z-index: 10;
     height: 100%;
     transform: translateX(-100%);
   }
 
   nav.open {
     transform: translateX(0%);
+  }
+
+  header .navigation_button {
+    opacity: 1;
   }
 }
 

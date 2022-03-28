@@ -89,7 +89,6 @@
       ref="load_more"
       :style="{display: load_more_possible ? 'block' : 'none'}">
       <button
-        class="load_more_button"
         type="button"
         v-on:click="get_articles()">
         <span>Load more</span>
@@ -161,23 +160,13 @@ export default {
 
     //this.load_more_when_scroll_to_bottom()
 
-    this.get_tag()
-    this.get_author()
     this.delete_all_and_get_articles()
-
-
-    // if(this.$route.query.search) {
-    //   this.search_bar_open = true
-    //   this.search_string = this.$route.query.search
-    // }
 
   },
   beforeRouteUpdate (to, from, next) {
     next()
 
     this.$nextTick().then( () => {
-      this.get_tag()
-      this.get_author()
       this.delete_all_and_get_articles()
     })
   },
@@ -186,6 +175,8 @@ export default {
 
 
     delete_all_and_get_articles(){
+      this.get_tag()
+      this.get_author()
       this.articles = []
       this.articles_all_loaded = false
       this.get_articles()
@@ -348,24 +339,7 @@ export default {
   margin: 1em 0;
 }
 
-.load_more_button {
-  display: flex;
-  align-items: center;
-  margin: 25px auto;
-  padding: 10px;
-  outline: none;
-  border: 1px solid #dddddd;
-  border-radius: 5px;
-  background-color: transparent;
-  cursor: pointer;
 
-  transition: color 0.25s, border-color 0.25s;
-}
-
-.load_more_button:hover {
-  border-color: #c00000;
-  color: #c00000;
-}
 
 
 

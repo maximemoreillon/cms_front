@@ -58,9 +58,7 @@ header {
   grid-area: header;
 
   background-color: white;
-  position: sticky;
-  top: 0;
-  z-index: 8;
+
 
 
 
@@ -75,6 +73,13 @@ header, .nav_buton_container {
 
   font-size: 150%;
   border-bottom: 1px solid #dddddd;
+
+  position: fixed;
+  height: var(--header-height);
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 11;
 
 }
 
@@ -105,10 +110,10 @@ header > *+* {
   to {transform: rotate(360deg);}
 }
 
-
 .navigation_button {
   cursor: pointer;
   transition: opacity 0.25s;
+  opacity: 0;
 }
 
 
