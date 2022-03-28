@@ -29,7 +29,7 @@
         <span>{{format_date(article.authorship.edition_date)}}</span>
 
       </div>
-      
+
       <div
         class="metadata_element"
         title="Views"
@@ -127,23 +127,23 @@ export default {
 
 .article_metadata {
   margin-top: -0.5em;
-  font-size: 90%;
+  font-size: 85%;
   color: #666666;
 }
 
 .metadata_wrapper {
 
-
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 1em 1.5em;
+  gap: 1em 1em;
 }
 
 
 .metadata_element {
   display: flex;
   align-items: center;
+  margin-top: 1em;
 }
 
 
@@ -151,7 +151,6 @@ export default {
 
 
 .tags_container {
-  margin-top: 0.5em;
   color: #666666;
   display: flex;
   flex-wrap: wrap;

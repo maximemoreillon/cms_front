@@ -107,7 +107,6 @@ body {
 
 main {
   grid-area: main;
-  outline: 1px solid red;
 }
 
 nav {
@@ -137,7 +136,7 @@ nav {
   bottom: 0;
   z-index: 9;
 
-  background-color: #44444444;
+  background-color: #00000044;
 
   visibility: hidden;
   opacity: 0;
@@ -178,6 +177,7 @@ main a {
       '. main .'
       '. nav .';
 
+    /* Outer columns to zero because gap is enough */
     grid-template-columns: 0 1fr 0;
   }
 

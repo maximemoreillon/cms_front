@@ -70,10 +70,6 @@ export default {
   text-overflow: ellipsis;
 }
 
-.tag:not(:last-child) {
-  margin-left: 0.25em;
-}
-
 .remove_button {
   margin-left: 5px;
   cursor: pointer;
