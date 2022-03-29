@@ -1,0 +1,44 @@
+@import 'logo.css';
+
+header {
+  grid-area: header;
+
+  background-color: white;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0.5em 1em;
+
+  font-size: 120%;
+  font-weight: 600;
+  
+  border-bottom: 1px solid #dddddd;
+
+  /* position: fixed;
+  height: var(--header-height);
+  left: 0;
+  top: 0;
+  right: 0;
+  z-index: 11; */
+
+}
+
+header > *+* {
+  /* Spacing between all header elements */
+  margin-left: 0.5em;
+}
+
+
+
+
+
+
+header .navigation_button {
+  cursor: pointer;
+  display: none;
+}
+
+header .title {
+  grid-area: title;
+}

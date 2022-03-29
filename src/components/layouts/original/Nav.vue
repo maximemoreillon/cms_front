@@ -1,5 +1,7 @@
-<template lang="html">
-  <nav :class="{open}">
+<template>
+  <nav
+    :class="{visible: visible}"
+    @click="$emit('navToggle')">
 
     <router-link
       v-if="$store.state.current_user"
@@ -37,10 +39,11 @@
     <router-link :to="{ name: 'tags'}">
 
       <tag-multiple-icon />
-      <span>Tags</span>
+      <span>Tag list</span>
 
     </router-link>
 
+    <!--<div class="spacer" />-->
 
     <router-link :to="{ name: 'login' }">
       <template v-if="!$store.state.current_user">
@@ -51,8 +54,8 @@
         <logout-icon />
         <span>Logout</span>
       </template>
-    </router-link>
 
+    </router-link>
 
 
     <router-link :to="{ name: 'about' }">
@@ -60,61 +63,94 @@
       <span>About</span>
     </router-link>
 
+
+
   </nav>
+
 </template>
 
 <script>
+
 import IdUtils from '@/mixins/IdUtils'
 
-export default {
-  name: 'Nav',
-  props: {
-    open: Boolean
-  },
-  mounted(){
-    this.$router.beforeEach((to, from, next) => {
-      next()
-      this.$emit('navClose')
-    })
-  },
 
+export default {
+  name: 'AppTemplateNav',
+  props: {
+    visible: Boolean,
+  },
   mixins: [
     IdUtils
   ],
+  components: {
+
+
+  },
+  methods: {
+
+  },
+  computed: {
+
+  }
+
 }
 </script>
 
-<style lang="css" scoped>
+<style>
 
+nav {
+  //border-right: 1px solid #dddddd;
+}
 
-a {
+nav a {
   padding: 0.5em 1em;
+  font-size: 120%;
   text-decoration: none;
   color: currentcolor;
   display: flex;
   align-items: center;
 }
 
-/* Ellipsis on nav items that are too long */
-a > *:last-child {
+nav a  > *:first-child {
+  //flex-basis: 2em;
+}
+
+nav a > *:last-child {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* Spacing between icon and label */
-nav a > *:first-child {
+nav a > *:not(:last-child) {
   margin-right: 1em;
 }
 
 
-a:not(.logo_wrapper):hover {
-  border-right: 3px solid #666666;
+nav a:hover {
+  color: #c00000;
 }
 
-a:not(.logo_wrapper).router-link-exact-active {
-  border-right: 3px solid var(--accent-color);
+
+.spacer {
+  height: 3em;
 }
+
+@media only screen and (max-width: 800px) {
+  nav {
+    position: fixed;
+    right: 0;
+    top: 3em;
+    background-color: white;
+    z-index: 100;
+    border: 1px solid #dddddd;
+    transform: translateX(200%);
+    transition: 0.25s;
+  }
+  nav.visible {
+    transform: translateX(0);
+  }
+}
+
 
 
 

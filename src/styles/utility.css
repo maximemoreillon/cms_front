@@ -1,0 +1,8 @@
+.error {
+  color: var(--error-color);
+}
+
+.loader_container {
+  text-align: center;
+  font-size: 200%;
+}

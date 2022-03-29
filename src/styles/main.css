@@ -1,0 +1,188 @@
+@import 'articles.css';
+@import 'header.css';
+@import 'nav.css';
+@import 'utility.css';
+
+@font-face {
+  font-family: lexend;
+  /* src: url(./assets/LexendDeca-Regular.ttf); */
+}
+
+.material-design-icon__svg {
+  bottom: 0 !important;
+}
+
+:root {
+  /* Sizes */
+  --header-height: 2.5em;
+  --nav-width: 12em;
+
+  /* Colors */
+  --accent-color: #c00000;
+  --error-color: #c00000;
+}
+
+
+html {
+  /* Keep the scrollbar visible at all time */
+  overflow-y: scroll;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  /* font-family: lexend, sans-serif; */
+  font-family: sans-serif;
+  /* font-size: clamp(1rem, 2.5vw, 1.3rem); */
+
+  padding: 0;
+  margin: 0;
+
+  /* TODO: Text color depends on the type */
+  color: #222222;
+
+}
+
+.material-design-icon__svg {
+  /* Override default meterial design icon behavior */
+  bottom: 0 !important;
+}
+
+.app {
+
+  max-width: 60rem;
+  margin-right: auto;
+  margin-left: auto;
+
+  display: grid;
+
+  grid-template-areas:
+    'header header'
+    'nav main'
+    'footer footer';
+  grid-template-columns: var(--nav-width) 1fr;
+
+  /* grid-template-rows: auto 1fr; */
+  /* OR */
+  grid-template-rows: var(--header-height) 1fr;
+
+  grid-gap: 1rem;
+
+  /* OR */
+  /* grid-template-areas:
+    '. header header .'
+    '. nav main .';
+  grid-template-columns: 1fr var(--nav-width) minmax(0, 50rem) 1fr;
+  grid-template-rows: auto 1fr;
+  grid-gap: 1rem; */
+
+}
+
+
+main {
+  grid-area: main;
+}
+
+footer {
+  grid-area: footer;
+
+  display: flex;
+  justify-content: center;
+  padding: 1em;
+}
+
+
+
+.nav_backround {
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9;
+
+  background-color: #00000044;
+
+  visibility: hidden;
+  opacity: 0;
+
+  transition:
+    visibility 0.5s,
+    opacity 0.5s;
+
+}
+
+
+
+
+/* WARNING: Affects stuff like the edit button */
+main a {
+  text-decoration: none;
+
+  color: var(--accent-color);
+  font-weight: bold;
+  transition: 0.25s;
+}
+
+nav {
+  grid-area: nav;
+
+  font-size: 110%;
+
+  /* default is stretch */
+  align-self: start;
+
+
+  background-color: white;
+  border-right: 1px solid #dddddd;
+
+  /* Content in flex column */
+  display: flex;
+  flex-direction: column;
+
+  transition: transform 0.25s;
+}
+
+
+/* responsivity */
+/* Not mobile first, I know it's bad practice */
+@media only screen and (max-width: 50rem) {
+
+  .nav_backround.visible {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .app {
+    grid-template-areas:
+      'header header header'
+      '. main .'
+      '. nav .'
+      '. footer .';
+
+    /* Outer columns to zero because gap is enough */
+    grid-template-columns: 0 1fr 0;
+  }
+
+  nav {
+    /* PROBLEM: top needs to be positioned below the header */
+    position: fixed;
+    top: var(--header-height);
+    width: var(--nav-width);
+    z-index: 10;
+    height: 100%;
+    transform: translateX(-100%);
+    border: none;
+  }
+
+  nav.open {
+    transform: translateX(0%);
+  }
+
+  header .navigation_button {
+    display: block;
+  }
+}

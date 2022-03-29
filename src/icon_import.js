@@ -46,3 +46,4 @@ Vue.component('sort-descending-icon', () => import('vue-material-design-icons/So
 Vue.component('pin-icon', () => import('vue-material-design-icons/Pin.vue'))
 Vue.component('sort-ascending-icon', () => import('vue-material-design-icons/SortAscending.vue'))
 Vue.component('file-document-outline-icon', () => import('vue-material-design-icons/FileDocumentOutline.vue'))
+Vue.component('tag-off-icon', () => import('vue-material-design-icons/TagOff.vue'))

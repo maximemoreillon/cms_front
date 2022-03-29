@@ -63,20 +63,21 @@
       v-html="article.summary || 'No summary available'"/>
 
 
-    <div
-      class="tags"
-      v-if="tags && tags.length">
+    <div class="tags">
 
-      <tag-icon />
-      <Tag
-        :clickable="false"
-        v-for="(tag, index) in tags.slice(0,3)"
-        v-bind:key="`tag_${index}`"
-        v-bind:tag="tag"/>
+      <template v-if="tags && tags.length">
+        <tag-icon />
+        <Tag
+          :clickable="false"
+          v-for="(tag, index) in tags.slice(0,3)"
+          v-bind:key="`tag_${index}`"
+          v-bind:tag="tag"/>
 
-      <span v-if="tags.length > 3">
-        +{{tags.length -3}}
-      </span>
+        <span v-if="tags.length > 3">
+          +{{tags.length -3}}
+        </span>
+      </template>
+      <tag-off-icon v-else/>
 
     </div>
 
@@ -135,6 +136,7 @@ export default {
   border: 1px solid #dddddd;
   transition: border-color 0.25s;
   padding: 1em;
+
   max-height: 20em;
 
   display: grid;
@@ -161,6 +163,7 @@ export default {
     'tags tags';
 
   grid-template-columns: 2fr 5fr;
+  align-items: start;
 
 }
 
@@ -205,6 +208,10 @@ h2 {
 
 
 .summary {
+
+  /* Height is set using grid so height 100% here allows working overflows */
+  height: 100%;
+
   grid-area: summary;
   overflow: hidden;
 
@@ -213,6 +220,7 @@ h2 {
 
   /* Position relative for shadow below */
   position: relative;
+
 }
 
 .summary::before {

@@ -126,7 +126,7 @@ export default {
 <style scoped>
 
 .article_metadata {
-  margin-top: -0.5em;
+  margin-top: -1.5em;
   font-size: 85%;
   color: #666666;
 }

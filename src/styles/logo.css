@@ -1,0 +1,20 @@
+.logo_wrapper {
+  grid-area: logo;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo {
+  height: 2.5rem;
+  width: 2.5rem;
+  animation-name: logo_rotation;
+  animation-iteration-count: infinite;
+  animation-duration: 60s;
+  animation-timing-function: linear;
+}
+
+@keyframes logo_rotation {
+  from {transform: rotate(0deg);}
+  to {transform: rotate(360deg);}
+}
