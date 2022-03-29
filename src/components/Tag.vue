@@ -5,14 +5,15 @@
     :class="{clickable: clickable}"
     v-on:click.stop="tag_clicked()">
 
-    <span v-if="tag">{{tag.name}}</span>
-    <span v-else>Invalid tag</span>
+    <span class="tag_name">{{tag.name || 'Untitled'}}</span>
 
     <!-- button to remove tag -->
     <span
       v-if="removable"
       class="remove_button"
-      v-on:click.stop="$emit('remove')">&times;</span>
+      v-on:click.stop="$emit('remove')">
+      <close-icon />
+    </span>
 
   </span>
 </template>
@@ -27,9 +28,7 @@ export default {
     IdUtils
   ],
   props: {
-    tag: {
-      type: Object
-    },
+    tag: Object,
     removable: {
       type: Boolean,
       default() { return false }
@@ -56,34 +55,48 @@ export default {
 
 
 .tag {
-  font-size: 80%;
+  font-size: 85%;
   flex-shrink: 0;
   border: 1px solid #dddddd;
   border-radius: 5px;
-  padding: 5px;
+  padding: 0.5em 0.75em;
   cursor: pointer;
   transition: color 0.25s, border-color 0.25s;
 
-  max-width: 150px;
+  max-width: 9em;
+
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.tag_name {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .remove_button {
-  margin-left: 5px;
   cursor: pointer;
-  transition: color 0.25s;
+  transition:
+    color 0.25s, background-color 0.25s;
+  display: flex;
+  align-items: center;
+  border-radius: 1000px;
+  padding: 0.25em;
 }
 
 .remove_button:hover {
-  color: #c00000;
+  color: white;
+  background-color: var(--accent-color);
 }
 
 
 .tag.clickable:hover {
-  color:  #c00000;
-  border-color:  #c00000;
+  color: var(--accent-color);;
+  border-color: var(--accent-color);;
 }
 
 

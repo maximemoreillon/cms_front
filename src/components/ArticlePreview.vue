@@ -242,19 +242,14 @@ h2 {
 
 
 .tags > *{
-  margin-top: 0.25em;
-  //margin: 0.25em 0;
   color: #666666;
-
 }
 
-.tags > *:not(:last-child) {
-  margin-right: 5px;
+.tags > *+* {
+  margin-left: 5px;
 }
 
-.tags > *:first-child {
-  margin-left: 0;
-}
+
 
 
 
