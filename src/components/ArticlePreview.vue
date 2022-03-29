@@ -63,21 +63,18 @@
       v-html="article.summary || 'No summary available'"/>
 
 
-    <div class="tags">
+    <div class="tags" v-if="tags && tags.length">
 
-      <template v-if="tags && tags.length">
-        <tag-icon />
-        <Tag
-          :clickable="false"
-          v-for="(tag, index) in tags.slice(0,3)"
-          v-bind:key="`tag_${index}`"
-          v-bind:tag="tag"/>
+      <tag-icon />
+      <Tag
+        :clickable="false"
+        v-for="(tag, index) in tags.slice(0,3)"
+        v-bind:key="`tag_${index}`"
+        v-bind:tag="tag"/>
 
-        <span v-if="tags.length > 3">
-          +{{tags.length -3}}
-        </span>
-      </template>
-      <tag-off-icon v-else/>
+      <span v-if="tags.length > 3">
+        +{{tags.length -3}}
+      </span>
 
     </div>
 
@@ -144,14 +141,14 @@ export default {
   grid-template-areas:
     'title'
     'metadata'
-    'summary'
-    'tags';
+    'summary';
+
+  /* Tags intentionally left out so that no gap appears if no tags */
 
   /* Can use minmax thanks to max-height being set on container */
   grid-auto-rows: auto auto minmax(0, 1fr) auto;
   grid-gap: 1em;
 
-  /* WARNING: Grid gap applies even if no tags */
 }
 
 .article_with_thumbnail {
@@ -215,8 +212,6 @@ h2 {
   grid-area: summary;
   overflow: hidden;
 
-  /* Padding so that short summaries don't get clipped */
-  padding-bottom: 0.5em;
 
   /* Position relative for shadow below */
   position: relative;

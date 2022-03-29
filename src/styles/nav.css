@@ -1,4 +1,4 @@
-a {
+nav a {
   padding: 0.5em 1em;
   text-decoration: none;
   color: currentcolor;
@@ -7,7 +7,7 @@ a {
 }
 
 /* Ellipsis on nav items that are too long */
-a > *:last-child {
+nav a > *:last-child {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -19,10 +19,10 @@ nav a > *:first-child {
 }
 
 
-a:not(.logo_wrapper):hover {
+nav a:not(.logo_wrapper):hover {
   border-right: 3px solid #666666;
 }
 
-a:not(.logo_wrapper).router-link-exact-active {
+nav a:not(.logo_wrapper).router-link-exact-active {
   border-right: 3px solid var(--accent-color);
 }

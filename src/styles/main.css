@@ -66,7 +66,7 @@ body {
 
   /* grid-template-rows: auto 1fr; */
   /* OR */
-  grid-template-rows: var(--header-height) 1fr;
+  grid-template-rows: auto 1fr auto;
 
   grid-gap: 1rem;
 

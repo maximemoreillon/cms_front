@@ -1,5 +1,3 @@
-@import 'logo.css';
-
 header {
   grid-area: header;
 
@@ -12,7 +10,7 @@ header {
 
   font-size: 120%;
   font-weight: 600;
-  
+
   border-bottom: 1px solid #dddddd;
 
   /* position: fixed;
@@ -30,10 +28,6 @@ header > *+* {
 }
 
 
-
-
-
-
 header .navigation_button {
   cursor: pointer;
   display: none;
@@ -41,4 +35,26 @@ header .navigation_button {
 
 header .title {
   grid-area: title;
+}
+
+
+header .logo_wrapper {
+  grid-area: logo;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+header .logo {
+  height: 2.5rem;
+  width: 2.5rem;
+  animation-name: one_minute_rotation;
+  animation-iteration-count: infinite;
+  animation-duration: 60s;
+  animation-timing-function: linear;
+}
+
+@keyframes one_minute_rotation {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
