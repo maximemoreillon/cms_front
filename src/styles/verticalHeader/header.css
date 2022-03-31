@@ -1,0 +1,41 @@
+
+
+header > *+* {
+  /* Spacing between all header elements */
+  margin-left: 0.5em;
+}
+
+
+header .navigation_button {
+  grid-area: navButton;
+  cursor: pointer;
+  display: none;
+}
+
+header .title {
+  grid-area: title;
+}
+
+
+header .logo_wrapper {
+  grid-area: logo;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 100%; */
+  /* outline: 1px solid red; */
+}
+
+header .logo {
+  height: 2.5rem;
+  width: 2.5rem;
+  animation-name: one_minute_rotation;
+  animation-iteration-count: infinite;
+  animation-duration: 60s;
+  animation-timing-function: linear;
+}
+
+@keyframes one_minute_rotation {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

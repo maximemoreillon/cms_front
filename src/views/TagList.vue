@@ -3,7 +3,7 @@
 
     <h1>Tags</h1>
 
-    <Toolbar >
+    <div class="toolbar">
 
       <span class="article_counter">
         {{tags.length}} Tags
@@ -21,7 +21,7 @@
         <magnify-icon/>
 
 
-    </Toolbar>
+    </div>
 
     <div
       class="loader_container"
@@ -42,17 +42,13 @@
 
 <script>
 
-import Loader from '@moreillon/vue_loader'
 
 import Tag from '@/components/Tag.vue'
-import Toolbar from '@/components/Toolbar.vue'
 
 
 export default {
   components: {
-    Loader,
     Tag,
-    Toolbar
   },
   data () {
     return {

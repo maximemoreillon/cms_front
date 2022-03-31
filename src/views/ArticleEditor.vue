@@ -4,7 +4,7 @@
 
     <template v-if="$store.state.current_user && !article_loading">
 
-      <Toolbar>
+      <div class="toolbar">
 
         <IconButton
           v-if="article_id"
@@ -38,7 +38,7 @@
         </IconButton>
 
 
-      </Toolbar>
+      </div>
 
       <div class="tags_and_visibility_wrapper">
         <!-- Tags -->
@@ -136,13 +136,11 @@
 
 <script>
 
-import Loader from '@moreillon/vue_loader'
 
 import {formatDate} from '@/mixins/formatDate.js'
 
 import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import EditorToolBar from '@/components/EditorToolBar.vue'
-import Toolbar from '@/components/Toolbar.vue'
 import Tag from '@/components/Tag.vue'
 
 import { Editor, EditorContent } from 'tiptap'
@@ -175,8 +173,6 @@ import IdUtils from '@/mixins/IdUtils'
 export default {
   name: 'ArticleEditor',
   components: {
-    Toolbar,
-    Loader,
     Tag,
     IconButton,
     EditorToolBar,

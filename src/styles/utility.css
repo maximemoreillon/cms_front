@@ -2,6 +2,10 @@
   color: var(--error-color);
 }
 
+.spacer {
+  flex-grow: 1;
+}
+
 .loader_container {
   text-align: center;
   font-size: 200%;

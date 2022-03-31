@@ -34,7 +34,7 @@ import Nav from './Nav.vue'
 import Header from './Header.vue'
 
 import 'vue-material-design-icons/styles.css'
-import '@/styles/main.css'
+import '@/styles/horizontalTopHeader/main.css'
 
 export default {
   name: 'Layout',

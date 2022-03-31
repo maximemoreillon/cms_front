@@ -23,7 +23,7 @@
 
 
     <!-- Toolbar for sorting and new article -->
-    <Toolbar >
+    <div class="toolbar" >
 
       <!-- article counter -->
       <div class="article_counter">
@@ -33,32 +33,22 @@
 
       <SortingTools />
 
-
-
-
       <div class="spacer"/>
 
       <ArticleSearch />
 
-
-
-      <!-- search -->
-
-
-    </Toolbar>
+    </div>
 
     <div
       class="articles_container"
       ref="articles_container"
-      v-if="!loading_error && articles.length > 0">
+      v-if="!loading_error && articles.length">
 
 
       <ArticlePreview
         v-for="(article, index) in articles"
         :key="`article_${index}`"
         :article="article"/>
-
-
 
     </div>
 
@@ -72,7 +62,7 @@
     <!-- No articles indicator -->
     <div
       class=""
-      v-if="articles.length === 0 && !articles_loading && !loading_error">
+      v-if="!articles.length && !articles_loading && !loading_error">
       No articles
     </div>
 
@@ -103,7 +93,6 @@
 
 <script>
 
-import Loader from '@moreillon/vue_loader'
 
 import SortingTools from '@/components/SortingTools.vue'
 import ArticleSearch from '@/components/ArticleSearch.vue'
@@ -111,7 +100,7 @@ import ArticleSearch from '@/components/ArticleSearch.vue'
 import TagManagement from '@/components/TagManagement.vue'
 // import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import ArticlePreview from '@/components/ArticlePreview.vue'
-import Toolbar from '@/components/Toolbar.vue'
+// import Toolbar from '@/components/Toolbar.vue'
 
 
 
@@ -121,9 +110,8 @@ export default {
   name: 'Articles',
   components: {
     // IconButton,
+    // Toolbar,
     ArticlePreview,
-    Toolbar,
-    Loader,
     TagManagement,
     SortingTools,
     ArticleSearch,
@@ -330,7 +318,6 @@ export default {
 }
 
 
-
 .tags_buttons_wrapper > *:not(:last-child) {
   margin-right: 1em;
 }
@@ -338,11 +325,6 @@ export default {
 .tags_buttons_wrapper {
   margin: 1em 0;
 }
-
-
-
-
-
 
 
 .article_counter {

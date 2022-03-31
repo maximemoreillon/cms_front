@@ -1,14 +1,13 @@
-<!-- This componentt is useless as it simply holds CSS -->
+<!-- This component is much useless as it simply holds CSS -->
 <template>
   <div class="toolbar">
-    <slot></slot>
+    <slot />
   </div>
 </template>
 
 <script>
 export default {
   name: 'Toolbar',
-
 }
 </script>
 
@@ -25,6 +24,7 @@ export default {
 }
 
 .toolbar .tools {
+  /* Why? */
   flex-shrink: 0;
 }
 

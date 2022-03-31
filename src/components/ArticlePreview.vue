@@ -66,14 +66,16 @@
     <div class="tags" v-if="tags && tags.length">
 
       <tag-icon />
+
+
       <Tag
         :clickable="false"
-        v-for="(tag, index) in tags.slice(0,3)"
+        v-for="(tag, index) in tags.slice(0,max_tags)"
         v-bind:key="`tag_${index}`"
         v-bind:tag="tag"/>
 
-      <span v-if="tags.length > 3">
-        +{{tags.length -3}}
+      <span v-if="tags.length > max_tags">
+        +{{tags.length - max_tags}}
       </span>
 
     </div>
@@ -102,6 +104,11 @@ export default {
   ],
   components: {
     Tag,
+  },
+  data(){
+    return {
+      max_tags: 5,
+    }
   },
 
   computed: {
@@ -141,9 +148,10 @@ export default {
   grid-template-areas:
     'title'
     'metadata'
-    'summary';
+    'summary'
+    'tags';
 
-  /* Tags intentionally left out so that no gap appears if no tags */
+  /* WARNING: Missing tags will create a gap */
 
   /* Can use minmax thanks to max-height being set on container */
   grid-auto-rows: auto auto minmax(0, 1fr) auto;
@@ -237,7 +245,9 @@ h2 {
 .tags {
   grid-area: tags;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
+  gap: 0.5em;
 }
 
 
@@ -245,9 +255,6 @@ h2 {
   color: #666666;
 }
 
-.tags > *+* {
-  margin-left: 5px;
-}
 
 
 
