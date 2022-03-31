@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <!-- Wrapping in a div so that modal is not affected by CSS -->
+  <!-- Wrapping in a div so that modal is not affected by CSS -->
+  <div class="article_wrapper">
     <article v-if="article && !article_loading">
 
 
@@ -26,13 +26,13 @@
     <div
       class="error"
       v-if="error">
-      Error loading article
+      An error occured while loading articles
     </div>
 
     <div
       class="error"
       v-if="!article_loading && !error && !article">
-      Article not found
+      Article {{article_id}} not found
     </div>
 
     <!-- modal for images -->
@@ -43,7 +43,7 @@
       <img
         class="modal_image"
         v-bind:src="modal.image_src"
-        alt=""/>
+        :alt="article.title"/>
 
     </Modal>
 

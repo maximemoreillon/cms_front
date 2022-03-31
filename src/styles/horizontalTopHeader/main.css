@@ -15,7 +15,7 @@
 
 :root {
   /* Sizes */
-  --header-height: 2.5em;
+  --header-height: 3.5em;
   --nav-width: 12em;
   --grid-gap: 1em;
   --main-max-width: 50em;
@@ -92,8 +92,6 @@ header {
   font-weight: 600;
 
   border-bottom: 1px solid #dddddd;
-
-  position: relative;
 
 }
 
