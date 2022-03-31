@@ -85,7 +85,7 @@ header {
   align-items: center;
 
 
-  /* Padding pretty much irrelevant because height set with grid */
+  /* Padding pretty much irrelevant because height is fixed */
   padding: 0 1em;
 
   font-size: 120%;
@@ -93,9 +93,10 @@ header {
 
   border-bottom: 1px solid #dddddd;
 
-
+  position: relative;
 
 }
+
 
 
 nav {

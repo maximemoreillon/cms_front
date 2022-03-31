@@ -1,7 +1,7 @@
-@import 'articles.css';
 @import 'header.css';
 @import 'nav.css';
-@import 'utility.css';
+@import '../utility.css';
+@import '../articles.css';
 
 @font-face {
   font-family: lexend;
@@ -22,6 +22,7 @@
   /* Colors */
   --accent-color: #c00000;
   --error-color: #c00000;
+  --border-color: #dddddd;
 }
 
 
@@ -54,7 +55,7 @@ body {
 
 .app {
 
-  /* Not using margin auto since can be done with grid */
+  /* Not using margin auto since same can be achieved with grid */
 
   display: grid;
 
@@ -62,7 +63,7 @@ body {
   grid-template-rows: 1fr auto;
   grid-gap: var(--grid-gap);
   grid-template-areas:
-    '. nav main .'
+    '. header main .'
     '. footer footer .';
 
 
@@ -71,12 +72,9 @@ body {
 
 header {
   grid-area: header;
+  align-self: start;
   /* Height is set using grid */
 
-
-  display: none;
-  /* display: flex; */
-  align-items: center;
 
   background-color: white;
 
@@ -84,37 +82,22 @@ header {
   top: 0;
   z-index: 11;
 
-
-
-  /* Vertical padding pretty much irrelevant because height set with grid */
-  padding: 0.5em 0;
-
-  font-size: 120%;
-  font-weight: 600;
+  border-right: 1px solid var(--border-color);
 
   /* Debug */
-  border-bottom: 1px solid #dddddd;
-
-
+  /* outline: 1px solid red; */
+  /* background-color: lightblue; */
 
 }
 
 
 nav {
 
-
-
-  grid-area: nav;
-
-  position: sticky;
-  top: var(--grid-gap);
-
   /* default is stretch, preventing proper sticky behaviour */
   align-self: start;
 
+  /* Re-applying background color for times where position fixed */
   background-color: white;
-  border-right: 1px solid #dddddd;
-
 
   display: flex;
   flex-direction: column;
@@ -130,7 +113,7 @@ main {
   grid-area: main;
 
   /* Debug */
-  background-color: lightblue;
+  /* background-color: lightgreen; */
 }
 
 /* WARNING: Affects stuff like the edit button */
@@ -191,15 +174,22 @@ footer {
     grid-template-areas:
       'header header header'
       '. main .'
-      '. nav .'
       '. footer .';
+  }
 
+  header {
+    display: flex;
+    border: none;
+    border-bottom: 1px solid var(--border-color);
+  }
 
+  header > *:not(nav) {
+    margin-left: 1em;
   }
 
   nav {
-    /* PROBLEM: top needs to be positioned below the header */
     position: fixed;
+    left: 0;
     top: var(--header-height);
     width: var(--nav-width);
     z-index: 10;
@@ -208,9 +198,7 @@ footer {
     border: none;
   }
 
-  header {
-    display: flex;
-  }
+
 
   nav.open {
     transform: translateX(0%);

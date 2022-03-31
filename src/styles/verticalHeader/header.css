@@ -1,11 +1,5 @@
 
 
-header > *+* {
-  /* Spacing between all header elements */
-  margin-left: 0.5em;
-}
-
-
 header .navigation_button {
   grid-area: navButton;
   cursor: pointer;
