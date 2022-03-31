@@ -1,6 +1,6 @@
 <template>
   <div class="app">
-    
+
     <!-- NAV management is a bit tedious -->
     <Header
       :nav="nav"
@@ -34,6 +34,13 @@ export default {
   name: 'Layout',
   components: {
     Header
+  },
+  mounted(){
+    this.$router.beforeEach((to, from, next) => {
+      // Close Nav when link is clicked
+      next()
+      this.nav = false
+    })
   },
   data(){
     return {

@@ -21,8 +21,8 @@ header .logo_wrapper {
 }
 
 header .logo {
-  height: 2.5rem;
-  width: 2.5rem;
+  height: 7.5em;
+  width: 7.5em;
   animation-name: one_minute_rotation;
   animation-iteration-count: infinite;
   animation-duration: 60s;

@@ -74,12 +74,7 @@ export default {
   props: {
     open: Boolean
   },
-  mounted(){
-    this.$router.beforeEach((to, from, next) => {
-      next()
-      this.$emit('navClose')
-    })
-  },
+  
 
   mixins: [
     IdUtils

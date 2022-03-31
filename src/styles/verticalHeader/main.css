@@ -2,6 +2,7 @@
 @import 'nav.css';
 @import '../utility.css';
 @import '../articles.css';
+@import '../toolbar.css';
 
 @font-face {
   font-family: lexend;
@@ -64,7 +65,7 @@ body {
   grid-gap: var(--grid-gap);
   grid-template-areas:
     '. header main .'
-    '. footer footer .';
+    '. header footer .';
 
 
 
@@ -78,6 +79,7 @@ header {
 
   background-color: white;
 
+  /* Sticky because still needs to be in the document flow for grid */
   position: sticky;
   top: 0;
   z-index: 11;
@@ -170,7 +172,7 @@ footer {
   .app {
     /* Outer columns to zero because gap is enough */
     grid-template-columns: 0 1fr 0;
-    grid-template-rows: var(--header-height) 1fr auto;
+    grid-template-rows: auto 1fr auto;
     grid-template-areas:
       'header header header'
       '. main .'
@@ -179,21 +181,33 @@ footer {
 
   header {
     display: flex;
+
+    font-size: 1.5rem;
+
     border: none;
     border-bottom: 1px solid var(--border-color);
+
+    padding: 0.5em;
+
   }
 
-  header > *:not(nav) {
-    margin-left: 1em;
-  }
 
   nav {
-    position: fixed;
+    font-size: 1.2rem;
+    position: absolute;
     left: 0;
-    top: var(--header-height);
+
+    /* Need to accoutn for border */
+    /* Thsi is a bit dirty */
+    top: calc(100% + 1px);
+
+    /* Cannot be behind header because parent */
+    /* z-index: 8; */
+
+    /* Quite a bit dirty */
+    height: 100vh;
     width: var(--nav-width);
-    z-index: 10;
-    height: 100%;
+
     transform: translateX(-100%);
     border: none;
   }
@@ -206,5 +220,13 @@ footer {
 
   header .navigation_button {
     display: block;
+    margin-right: 1em;
   }
+
+  header .logo {
+    height: 2em;
+    width: 2em;
+
+  }
+
 }
