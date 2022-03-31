@@ -1,7 +1,7 @@
 nav a {
   padding: 0.5em 1em;
   text-decoration: none;
-  color: currentcolor;
+  color: var(--nav-color);
   display: flex;
   align-items: stretch;
 }

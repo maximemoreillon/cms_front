@@ -37,6 +37,7 @@
 
     <!-- modal for images -->
     <Modal
+      v-if="article"
       v-bind:open="modal.open"
       v-on:close="modal.open = false">
 

@@ -73,12 +73,11 @@
     </div>
 
     <!-- Load more -->
-    <!-- Not using v-if because used in intersection observer -->
     <div
       class="load_more_wrapper"
-      ref="load_more"
       :style="{display: load_more_possible ? 'block' : 'none'}">
       <button
+        ref="load_more"
         type="button"
         v-on:click="get_articles()">
         <span>Load more</span>
@@ -146,7 +145,7 @@ export default {
 
     // Does not get called when staying in the same route!
 
-    //this.load_more_when_scroll_to_bottom()
+    this.load_more_when_scroll_to_bottom()
 
     this.delete_all_and_get_articles()
 
@@ -175,6 +174,7 @@ export default {
 
       this.articles_loading = true
 
+
       const {
         search,
         author_id,
@@ -202,6 +202,7 @@ export default {
 
         // Add batch of articles
         data.articles.forEach( (article) => { this.articles.push(article) })
+
 
         // Check if all articles loaded (less than batch size)
         if(this.articles.length >= this.article_count) this.articles_all_loaded = true
@@ -263,22 +264,21 @@ export default {
     load_more_when_scroll_to_bottom(){
 
       // const container = this.$refs.view.parentNode.parentNode
-      // const target = this.$refs.load_more
-      //
-      // const options = {
-      //   root: container,
-      //   rootMargin: '0px',
-      //   threshold: 1.0
-      // }
-      //
-      // const callback = (entries) => {
-      //   const {isIntersecting} = entries.find(e => e.target === target)
-      //   if(isIntersecting && this.load_more_possible) this.get_articles()
-      // }
-      //
-      // this.observer = new IntersectionObserver(callback, options);
-      //
-      // this.observer.observe(target)
+      const target = this.$refs.load_more
+
+      const options = {
+        rootMargin: '0px',
+        threshold: 1.0
+      }
+
+      const callback = (entries) => {
+        const {isIntersecting} = entries.find(e => e.target === target)
+        if(isIntersecting && this.load_more_possible) this.get_articles()
+      }
+
+      this.observer = new IntersectionObserver(callback, options);
+
+      this.observer.observe(target)
 
     },
 
@@ -317,16 +317,6 @@ export default {
 
 }
 
-
-.tags_buttons_wrapper > *:not(:last-child) {
-  margin-right: 1em;
-}
-
-.tags_buttons_wrapper {
-  margin: 1em 0;
-}
-
-
 .article_counter {
   color: #444444;
   display: flex;
@@ -335,6 +325,11 @@ export default {
 
 .article_counter > *:first-child {
   margin-right: 0.25em;
+}
+
+.load_more_wrapper {
+  padding: 1em;
+  text-align: center;
 }
 
 </style>
