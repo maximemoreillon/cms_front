@@ -24,6 +24,9 @@
   --accent-color: #c00000;
   --error-color: #c00000;
   --border-color: #dddddd;
+
+  /* Text */
+  --line-height: 1.5;
 }
 
 
@@ -58,14 +61,16 @@ body {
 
   /* Not using margin auto since same can be achieved with grid */
 
-  display: grid;
+  min-height: 100vh;
 
-  grid-template-columns: 1fr var(--nav-width) minmax(auto,var(--main-max-width)) 1fr;
-  grid-template-rows: 1fr auto;
+  display: grid;
+  grid-template-columns: 1fr auto minmax(auto,var(--main-max-width)) 1fr;
+  grid-template-rows: 0 1fr auto;
   grid-gap: var(--grid-gap);
   grid-template-areas:
+    '. . . . '
     '. header main .'
-    '. header footer .';
+    '. footer footer .';
 
 
 
@@ -76,12 +81,16 @@ header {
   align-self: start;
   /* Height is set using grid */
 
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
 
   background-color: white;
 
   /* Sticky because still needs to be in the document flow for grid */
   position: sticky;
-  top: 0;
+  top: var(--grid-gap);
   z-index: 11;
 
   border-right: 1px solid var(--border-color);
@@ -94,9 +103,6 @@ header {
 
 
 nav {
-
-  /* default is stretch, preventing proper sticky behaviour */
-  align-self: start;
 
   /* Re-applying background color for times where position fixed */
   background-color: white;
@@ -180,14 +186,16 @@ footer {
   }
 
   header {
-    display: flex;
+    flex-direction: row;
 
     font-size: 1.5rem;
 
     border: none;
     border-bottom: 1px solid var(--border-color);
 
-    padding: 0.5em;
+    padding: 0.25em 0.5em;
+
+    top: 0;
 
   }
 
@@ -197,7 +205,7 @@ footer {
     position: absolute;
     left: 0;
 
-    /* Need to accoutn for border */
+    /* Need to account for border */
     /* Thsi is a bit dirty */
     top: calc(100% + 1px);
 
@@ -223,10 +231,14 @@ footer {
     margin-right: 1em;
   }
 
-  header .logo {
-    height: 2em;
-    width: 2em;
+  header .logo_wrapper {
+    padding: 0;
 
+  }
+
+  header .logo {
+    height: 1.75em;
+    width: 1.75em;
   }
 
 }

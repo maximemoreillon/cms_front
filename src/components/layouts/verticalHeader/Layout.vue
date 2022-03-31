@@ -11,7 +11,7 @@
     </main>
 
     <footer>
-      Maxime Moreillon
+      Article management system - Maxime Moreillon
     </footer>
 
     <!-- Overlay when the nav is open -->

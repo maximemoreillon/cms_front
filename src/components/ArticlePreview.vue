@@ -217,6 +217,8 @@ h2 {
   /* Height is set using grid so height 100% here allows working overflows */
   height: 100%;
 
+  line-height: var(--line-height);
+
   grid-area: summary;
   overflow: hidden;
 

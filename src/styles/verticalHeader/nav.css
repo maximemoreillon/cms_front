@@ -3,7 +3,7 @@ nav a {
   text-decoration: none;
   color: currentcolor;
   display: flex;
-  align-items: center;
+  align-items: stretch;
 }
 
 /* Ellipsis on nav items that are too long */

@@ -108,10 +108,7 @@ export default {
 .tag_container{
   display: flex;
   flex-wrap: wrap;
-}
-
-.tag_container > * {
-  margin-bottom: 1em;
+  gap: 0.5em;
 }
 
 

@@ -12,7 +12,7 @@
 }
 
 .article_content {
-  line-height: 1.5;
+  line-height: var(--line-height);
 }
 
 .article_content :is(img, iframe) {
