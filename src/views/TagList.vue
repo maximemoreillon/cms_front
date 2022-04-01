@@ -5,18 +5,21 @@
 
     <div class="toolbar">
 
-      <span class="article_counter">
-        {{tags.length}} Tags
-      </span>
+      <!-- Class should have a better name -->
+      <div class="article_counter">
+        <tag-icon class="counter_icon"/>
+        {{tags.length}}
+      </div>
 
-      <div class="growing_spacer"/>
+      <div class="spacer"/>
 
 
         <!-- search -->
         <input
           type="search"
           class="search_bar"
-          v-model="filter">
+          v-model="filter"
+          placeholder="Search tags">
 
         <magnify-icon/>
 

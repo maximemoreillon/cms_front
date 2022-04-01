@@ -236,7 +236,7 @@ h2 {
   left: 0;
   right: 0;
   height: 25%;
-  z-index: 5;
+  z-index: 1;
 
   background-image: linear-gradient(to top, white, transparent);
   background-position: 100% 0;

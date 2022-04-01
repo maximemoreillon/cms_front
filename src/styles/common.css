@@ -7,16 +7,17 @@
   /* Sizes */
   --header-height: 2.5em;
   --nav-width: 12em;
+  --aside-width: var(--nav-width);
   --grid-gap: 1em;
-  --main-max-width: 50em;
+  --main-max-width: 40em;
 
   /* Colors */
   --accent-color: #c00000;
   --error-color: #c00000;
   --border-color: #dddddd;
-  --text-color: #444444;
+  --text-color: #555555;
   --headers-color: #222222;
-  --nav-color: #444444;
+  --nav-color: #222222;
 
 
   /* Text */
@@ -41,8 +42,9 @@ body {
   padding: 0;
   margin: 0;
 
-  /* TODO: Text color depends on the type */
   color: var(--text-color);
+
+  font-size: clamp(1rem, 2vw, 1.2rem);
 
 }
 

@@ -1,0 +1,38 @@
+
+
+aside .navigation_button {
+  grid-area: navButton;
+  cursor: pointer;
+  display: none;
+}
+
+aside .title {
+  grid-area: title;
+}
+
+
+aside .logo_wrapper {
+
+  grid-area: logo;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 100%; */
+  /* outline: 1px solid red; */
+  padding: 1.5em;
+}
+
+aside .logo {
+  width: 7.5em;
+  height: 7.5em;
+  animation-name: one_minute_rotation;
+  animation-iteration-count: infinite;
+  animation-duration: 60s;
+  animation-timing-function: linear;
+}
+
+@keyframes one_minute_rotation {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

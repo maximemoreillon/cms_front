@@ -1,16 +1,20 @@
 <template lang="html">
-  <form class="search_wrapper" @submit.prevent="search()">
+  <form
+    class="search_wrapper"
+    @submit.prevent="search()">
+
     <input
       type="search"
       class="search_bar"
       ref="search"
+      placeholder="Search articles"
       :class="{search_bar_open}"
       v-model="search_string">
 
     <input type="submit" style="display:none;">
 
     <IconButton
-      v-on:click="search()">
+      @click="search()">
       <magnify-icon/>
     </IconButton>
 

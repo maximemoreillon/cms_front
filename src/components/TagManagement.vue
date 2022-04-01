@@ -101,4 +101,8 @@ export default {
 </script>
 
 <style lang="css" scoped>
+.tag_management {
+  display: flex;
+  gap: 0.5em;
+}
 </style>

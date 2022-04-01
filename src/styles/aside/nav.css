@@ -2,9 +2,13 @@ nav a {
   padding: 0.5em 1em;
   text-decoration: none;
   color: var(--nav-color);
-  
+
   display: flex;
   align-items: stretch;
+  border-right: 3px solid transparent;
+
+  transition:
+    border-color 0.25s;
 }
 
 /* Ellipsis on nav items that are too long */
@@ -21,9 +25,9 @@ nav a > *:first-child {
 
 
 nav a:not(.logo_wrapper):hover {
-  border-right: 3px solid #666666;
+  border-right-color: #666666;
 }
 
 nav a:not(.logo_wrapper).router-link-exact-active {
-  border-right: 3px solid var(--accent-color);
+  border-right-color: var(--accent-color);
 }

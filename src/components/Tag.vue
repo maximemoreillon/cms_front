@@ -8,12 +8,12 @@
     <span class="tag_name">{{tag.name || 'Untitled'}}</span>
 
     <!-- button to remove tag -->
-    <span
+    <button
       v-if="removable"
       class="remove_button"
       v-on:click.stop="$emit('remove')">
       <close-icon />
-    </span>
+    </button>
 
   </span>
 </template>
@@ -31,7 +31,6 @@ export default {
     tag: Object,
     removable: {
       type: Boolean,
-      default() { return false }
     },
     clickable: {
       type: Boolean,
@@ -59,7 +58,7 @@ export default {
   flex-shrink: 0;
   border: 1px solid #dddddd;
   border-radius: 5px;
-  padding: 0.5em 0.75em;
+  padding: 0.25em 0.5em;
   cursor: pointer;
   transition: color 0.25s, border-color 0.25s;
 
@@ -80,8 +79,13 @@ export default {
 
 .remove_button {
   cursor: pointer;
+  background-color: transparent;
+  border: none;
+
   transition:
-    color 0.25s, background-color 0.25s;
+    color 0.25s,
+    background-color 0.25s;
+
   display: flex;
   align-items: center;
   border-radius: 1000px;

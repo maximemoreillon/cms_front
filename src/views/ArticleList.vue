@@ -2,7 +2,7 @@
   <div>
 
     <template v-if="tag">
-      <h1>Articles tagged with "{{tag.name}}"</h1>
+      <h1>Articles tagged with {{tag.name}}</h1>
 
 
       <TagManagement
@@ -200,7 +200,7 @@ export default {
 
         this.article_count = data.article_count
 
-        // Add batch of articles
+        // Add batch of articles to existing list
         data.articles.forEach( (article) => { this.articles.push(article) })
 
 
@@ -239,12 +239,11 @@ export default {
 
     get_author(){
 
+      this.author = null
+
       const author_id = this.$route.query.author_id
 
-      if(!author_id) {
-        this.author = null
-        return
-      }
+      if(!author_id) return
 
       this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v1/authors/${author_id}`)
       .then(response => { this.author = response.data })
@@ -254,16 +253,10 @@ export default {
         else alert(error)
       })
 
-
     },
-
-
-
-
 
     load_more_when_scroll_to_bottom(){
 
-      // const container = this.$refs.view.parentNode.parentNode
       const target = this.$refs.load_more
 
       const options = {
@@ -295,7 +288,9 @@ export default {
         || current_user.properties.isAdmin
     },
     load_more_possible(){
-      return !this.articles_loading && !this.articles_all_loaded && !this.loading_error
+      return !this.articles_loading
+        && !this.articles_all_loaded
+        && !this.loading_error
     }
 
   }
@@ -317,11 +312,7 @@ export default {
 
 }
 
-.article_counter {
-  color: #444444;
-  display: flex;
-  align-items: center;
-}
+
 
 .article_counter > *:first-child {
   margin-right: 0.25em;
