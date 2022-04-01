@@ -4,9 +4,12 @@
     <!-- Would be forgiven to wrap stuff other than nav in its own div-->
 
     <!-- Open/close navigation -->
-    <menu-icon
-      class="navigation_button"
-      @click="$emit('navToggle')"/>
+    <div class="nav_button_wrapper">
+      <menu-icon
+        class="navigation_button"
+        @click="$emit('navToggle')"/>
+    </div>
+
 
     <!-- Logo as link to homepage -->
     <a

@@ -58,7 +58,7 @@
 
         <router-link
           :to="{ name: 'article_editor', params: { id: get_id_of_item(article) } }"
-          class="metadata_element edit_button">
+          class="metadata_element edit_button button">
           <pencil-icon class="metadata_icon"/>
           <span>Edit</span>
         </router-link>
@@ -67,7 +67,9 @@
 
 
 
-    <div class="metadata_element" v-if="article.tags.length">
+    <div
+      class="metadata_element tags_wrapper"
+      v-if="article.tags.length">
 
       <tag-icon class="metadata_icon"/>
 
@@ -143,19 +145,21 @@ export default {
 .metadata_element {
   display: flex;
   align-items: center;
-  margin-top: 1em;
+  /* margin-top: 1em; */
 }
 
 
 
-
+.tags_wrapper {
+  margin-top: 1em;
+}
 
 .tags_container {
   color: #666666;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1em 0.25em;
+  gap: 0.25em;
 }
 
 

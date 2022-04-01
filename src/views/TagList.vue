@@ -6,9 +6,9 @@
     <div class="toolbar">
 
       <!-- Class should have a better name -->
-      <div class="article_counter">
-        <tag-icon class="counter_icon"/>
-        {{tags.length}}
+      <div class="counter">
+        <tag-icon/>
+        <span>{{tags.length}}</span>
       </div>
 
       <div class="spacer"/>

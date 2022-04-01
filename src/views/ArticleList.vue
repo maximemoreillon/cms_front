@@ -27,8 +27,8 @@
 
       <!-- article counter -->
       <div class="counter">
-        <file-document-outline-icon class="counter_icon"/>
-        {{article_count}}
+        <file-document-outline-icon/>
+        <span>{{article_count}}</span>
       </div>
 
       <SortingTools />
@@ -77,8 +77,8 @@
       class="load_more_wrapper"
       :style="{display: load_more_possible ? 'block' : 'none'}">
       <button
+        class="outlined"
         ref="load_more"
-        type="button"
         v-on:click="get_articles()">
         <span>Load more</span>
       </button>
@@ -143,10 +143,6 @@ export default {
 
   mounted() {
 
-    // Does not get called when staying in the same route!
-
-    this.load_more_when_scroll_to_bottom()
-
     this.delete_all_and_get_articles()
 
   },
@@ -206,7 +202,7 @@ export default {
 
         // Check if all articles loaded (less than batch size)
         if(this.articles.length >= this.article_count) this.articles_all_loaded = true
-        if(!this.load_more_observer) setTimeout(this.load_more_when_scroll_to_bottom,200)
+        // if(!this.load_more_observer) setTimeout(this.load_more_when_scroll_to_bottom,200)
 
       })
       .catch(error => {

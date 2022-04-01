@@ -6,36 +6,36 @@
 
       <div class="toolbar">
 
-        <IconButton
+        <button
           v-if="article_id"
-          v-on:click="$router.push({ name: 'article', params: { article_id } })">
+          @click="$router.push({ name: 'article', params: { article_id } })">
           <arrow-left-icon />
           <span>Return</span>
-        </IconButton>
+        </button>
 
-        <IconButton
+        <button
           v-else
-          v-on:click="$router.push({ name: 'articles' })">
+          @click="$router.push({ name: 'articles' })">
           <arrow-left-icon />
           <span>Return</span>
-        </IconButton>
+        </button>
 
 
-        <div class="growing_spacer"/>
+        <div class="spacer"/>
 
 
-        <IconButton
+        <button
           v-on:click="submit_article()">
           <content-save-icon />
           <span>Save</span>
-        </IconButton>
+        </button>
 
-        <IconButton
+        <button
           v-if="article_id"
           v-on:click="delete_article()">
           <delete-icon />
           <span>Delete</span>
-        </IconButton>
+        </button>
 
 
       </div>
@@ -139,7 +139,6 @@
 
 import {formatDate} from '@/mixins/formatDate.js'
 
-import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import EditorToolBar from '@/components/EditorToolBar.vue'
 import Tag from '@/components/Tag.vue'
 
@@ -174,7 +173,6 @@ export default {
   name: 'ArticleEditor',
   components: {
     Tag,
-    IconButton,
     EditorToolBar,
     EditorContent,
   },

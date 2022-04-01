@@ -5,7 +5,7 @@
 @import '../articles.css';
 @import '../toolbar.css';
 @import '../common.css';
-/* @import '../buttons.css'; */
+@import '../buttons.css';
 
 @font-face {
   font-family: lexend;
@@ -17,18 +17,19 @@
 
 .app {
 
-  /* Not using margin auto since same can be achieved with grid */
-
+  /* Spacing achieved using grid */
   min-height: 100vh;
 
   display: grid;
-  grid-template-columns: 1fr var(--aside-width) minmax(auto,var(--main-max-width)) 1fr;
-  grid-template-rows: 0 1fr auto;
+  grid-template-columns: 1fr var(--aside-width) minmax(auto, var(--main-max-width)) 1fr;
+  grid-template-rows: 0 1fr auto 0;
   grid-gap: var(--grid-gap);
   grid-template-areas:
-    '. . . . '
+    '. . . .'
     '. aside main .'
-    '. footer footer .';
+    '. footer footer .'
+    '. . . .'
+    ;
 
 
 
@@ -54,7 +55,6 @@ aside {
 
   grid-area: aside;
   align-self: start;
-  /* Height is set using grid */
 
   display: flex;
   flex-direction: column;
@@ -75,6 +75,8 @@ aside {
 }
 
 
+
+
 nav {
 
   font-size: 1.2em;
@@ -90,17 +92,21 @@ nav {
 main {
   grid-area: main;
 
+  /* If not set like that, pre code overflows */
+  /* This is absolute horseshit */
+  overflow-x: auto;
+
   /* Debug */
   /* background-color: lightgreen; */
+
+
 }
 
 /* WARNING: Affects stuff like the edit button */
 main a {
   text-decoration: none;
-
   color: var(--accent-color);
   font-weight: bold;
-  transition: 0.25s;
 }
 
 footer {
@@ -108,7 +114,6 @@ footer {
 
   display: flex;
   justify-content: center;
-  padding: 1em;
 }
 
 
@@ -152,15 +157,14 @@ footer {
     grid-template-rows: auto 1fr auto;
     grid-template-areas:
       'header header header'
+      /* '. . .' */
       '. main .'
-      '. footer .';
+      '. footer .'
+      '. . .';
   }
 
   header {
     display: flex;
-
-
-
   }
 
 
@@ -175,12 +179,16 @@ footer {
 
     transform: translateX(-100%);
     border: none;
+
+    filter: drop-shadow(0em 0em 0.25em #44444444);
   }
-
-
 
   aside.open {
     transform: translateX(0%);
+  }
+
+  aside .nav_button_wrapper {
+    /* display: flex; */
   }
 
   header .navigation_button {

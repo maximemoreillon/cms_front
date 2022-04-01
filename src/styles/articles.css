@@ -34,9 +34,13 @@
   aspect-ratio: 3/2; /* This is super useful */
 }
 
-.article_content pre code {
+
+article pre code {
+  /* width: 80%; */
   display: block;
-  overflow-x: auto; /* Allow horizontal scroll */
+
+  /* Allow horizontal scroll */
+  overflow-x: auto;
   font-size: 90%;
   padding: 1em;
   background: #282b2e;
