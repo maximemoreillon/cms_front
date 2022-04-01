@@ -8,54 +8,49 @@
       class="search_bar"
       ref="search"
       placeholder="Search articles"
-      :class="{search_bar_open}"
+      :class="{ open }"
       v-model="search_string">
 
-    <input type="submit" style="display:none;">
-
-    <IconButton
-      @click="search()">
+    <button
+      type="submit">
       <magnify-icon/>
-    </IconButton>
+    </button>
 
   </form>
 </template>
 
 <script>
-import IconButton from '@/components/vue_icon_button/IconButton.vue'
 
 export default {
   name: 'ArticleSearch',
   components: {
-    IconButton,
   },
   data(){
     return {
-      search_bar_open: false,
+      open: false,
       search_string: '',
     }
   },
   methods: {
     search(){
-      if(this.search_bar_open){
+      if(this.open){
         // if the search bar is open, search or close
-
-        // This check does nto accoutn for wehn search is '' and query is undefined
-        if(this.search_string === this.$route.query.search) return
 
         const query = {...this.$route.query, search: this.search_string}
 
         if(this.search_string === '') {
-          this.search_bar_open = false
+          this.open = false
           delete query.search
         }
+
+        if(this.$route.query.search === query.search) return
 
         this.$router.push({name: 'articles', query})
 
       }
       else {
         // If the search bar is closed, open it
-        this.search_bar_open = true
+        this.open = true
         setTimeout(() => this.$refs.search.focus(),50)
       }
 
@@ -66,19 +61,23 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.search_bar {
-  transition: 0.25s;
-  width: 0;
-  visibility: hidden;
-}
-
-.search_bar.search_bar_open {
-  width: 20vw;
-  visibility: visible;
-}
 
 .search_wrapper {
   display: flex;
   align-items: stretch;
 }
+
+.search_bar {
+  width: 0;
+  transition: 0.25s;
+  visibility: hidden;
+}
+
+.search_bar.open {
+  /* DIRTY */
+  width: 20vw;
+  visibility: visible;
+}
+
+
 </style>

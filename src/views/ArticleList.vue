@@ -26,7 +26,7 @@
     <div class="toolbar" >
 
       <!-- article counter -->
-      <div class="article_counter">
+      <div class="counter">
         <file-document-outline-icon class="counter_icon"/>
         {{article_count}}
       </div>

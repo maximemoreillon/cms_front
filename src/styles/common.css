@@ -51,3 +51,12 @@ body {
 h1,h2,h3 {
   color: var(--headers-color)
 }
+
+
+/* MISC */
+.counter {
+  color: #444444;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+}

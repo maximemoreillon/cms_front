@@ -199,11 +199,3 @@ footer {
   }
 
 }
-
-
-/* MISC */
-.article_counter {
-  color: #444444;
-  display: flex;
-  align-items: center;
-}
