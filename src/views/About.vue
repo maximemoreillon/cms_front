@@ -6,21 +6,26 @@
       <a href="https://maximemoreillon/com">Maxime MOREILLON</a>
     </p>
     <h2>Services</h2>
-    <table>
-      <tr>
-        <th>Service</th>
-        <th>Version</th>
-        <th>URL</th>
-      </tr>
-      <tr
-        v-for="(service, index) in services"
-        :key="`service_${index}`">
-        <td>{{service.name}}</td>
-        <td>{{service.version}}</td>
-        <td>{{service.url}}</td>
 
-      </tr>
-    </table>
+    <div class="table_wrapper">
+      <table>
+        <tr>
+          <th>Service</th>
+          <th>Version</th>
+          <th>URL</th>
+        </tr>
+        <tr
+          v-for="(service, index) in services"
+          :key="`service_${index}`">
+          <td>{{service.name}}</td>
+          <td>{{service.version}}</td>
+          <td>{{service.url}}</td>
+
+        </tr>
+      </table>
+    </div>
+
+
 
 
 
@@ -88,23 +93,30 @@ export default {
 
 <style scoped>
 
+
+.table_wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+
 table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed;
-
 }
 
 tr:not(:last-child) {
   border-bottom: 1px solid #dddddd;
 }
 
+th, td {
+  white-space: nowrap;
+  padding: 0.25em 1em;
+}
 th {
   text-align: left;
 }
-td {
-  padding: 0.25em;
-}
+
 
 
 </style>

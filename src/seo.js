@@ -1,7 +1,8 @@
 const defaults = {
   title: `Articles - Maxime MOREILLON`,
   description: 'An article management system developed by Maxime MOREILLON',
-  image: `${window.location.origin}/logo.png`
+  image: `${window.location.origin}/logo.png`,
+  url: window.location.origin,
 }
 
 const metas = [
@@ -16,9 +17,12 @@ const metas = [
     default_value: defaults.description,
   },
   {
-    // article_key: 'summary',
     properties: ['twitter:image', 'og:image'],
     default_value: defaults.image,
+  },
+  {
+    properties: ['og:url'],
+    default_value: defaults.url,
   },
 ]
 
