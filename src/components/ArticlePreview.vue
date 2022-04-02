@@ -238,7 +238,8 @@ h2 {
   height: 25%;
   z-index: 1;
 
-  background-image: linear-gradient(to top, white, transparent);
+  /* PROBLEM: What if background is not white? */
+  background-image: linear-gradient(to top, rgba(255,255,255, 1), rgba(255,255,255, 0));
   background-position: 100% 0;
   background-size: 100% 100%;
 }
