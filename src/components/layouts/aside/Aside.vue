@@ -21,11 +21,7 @@
         alt="logo">
     </a>
 
-
     <Nav/>
-
-
-
 
   </aside>
 </template>
@@ -49,11 +45,6 @@ export default {
 }
 </script>
 
-<!-- Not scoped because shared with nav -->
 <style lang="css">
-
-
-
-
 
 </style>
