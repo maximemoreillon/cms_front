@@ -1,3 +1,7 @@
+/*
+Important notice: OpenGraph crawlers require SSR so dynamically setting meta tags will not work
+*/
+
 const defaults = {
   title: `Articles - Maxime MOREILLON`,
   description: 'An article management system developed by Maxime MOREILLON',
