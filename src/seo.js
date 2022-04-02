@@ -4,7 +4,7 @@ Important notice: OpenGraph crawlers require SSR so dynamically setting meta tag
 
 const defaults = {
   title: `Articles - Maxime MOREILLON`,
-  description: 'An article management system developed by Maxime MOREILLON',
+  description: 'An article management system',
   image: `${window.location.origin}/logo.png`,
   url: window.location.origin,
 }

@@ -202,7 +202,9 @@ export default {
           new Strike(),
           new Underline(),
           new History(),
-          new Image(),
+          new Image({
+            allowBase64: false,
+          }),
           new Iframe(), // For Youtube videos
           new Placeholder({
             emptyEditorClass: 'is-editor-empty',

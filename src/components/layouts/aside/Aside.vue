@@ -18,7 +18,7 @@
       <img
         class="logo"
         src="@/assets/logo/logo.svg"
-        alt="logo">
+        alt="Maxiime Moreillon logo">
     </a>
 
     <Nav/>
