@@ -159,7 +159,9 @@ export default {
   /* WARNING: Missing tags will create a gap */
 
   /* Can use minmax thanks to max-height being set on container */
-  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  /* Safari problem can be recreated by setting auto instead of minmax */
+  /* minmax can be replaced by 1fr and it works the same */
+  grid-template-rows: auto auto 1fr auto;
   grid-gap: 1em;
 
 }
