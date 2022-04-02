@@ -1,13 +1,14 @@
 export const formatDate = {
 
   methods: {
-    format_date(date){
-
-
-      var mm = date.month; // getMonth() is zero-based
-      var dd = date.day;
-
-      return [date.year, (mm>9 ? '' : '0') + mm, (dd>9 ? '' : '0') + dd ].join('/');
+    format_date({day,month,year}){
+      // Dates are Neo4J formatted
+      // i.e. {day, month, year}
+      return [
+        year,
+        month.toString().padStart(2,'0'),
+        day.toString().padStart(2,'0'),
+      ].join('/');
     }
   },
 

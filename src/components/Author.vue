@@ -1,5 +1,7 @@
 <template>
-  <router-link :to="{ name: 'articles', query: {author_id} }">
+  <router-link
+    :to="{ name: 'articles', query: {author_id} }
+    ">
     {{author.display_name}}
   </router-link>
 </template>
@@ -23,7 +25,7 @@ export default {
   },
   methods: {
     author_clicked(){
-      let target_route_name = 'article_list'
+      let target_route_name = 'articles'
       const author_id = this.get_id_of_item(this.author)
 
       if(!(this.$route.name === target_route_name && this.$route.query.id === author_id)){

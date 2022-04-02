@@ -202,7 +202,7 @@ export default {
 
         // Check if all articles loaded (less than batch size)
         if(this.articles.length >= this.article_count) this.articles_all_loaded = true
-        // if(!this.load_more_observer) setTimeout(this.load_more_when_scroll_to_bottom,200)
+        if(!this.load_more_observer) setTimeout(this.load_more_when_scroll_to_bottom,200)
 
       })
       .catch(error => {
@@ -244,6 +244,7 @@ export default {
       this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v1/authors/${author_id}`)
       .then(response => { this.author = response.data })
       .catch(error => {
+        // Dirty
         this.$set(this.author,'error', 'Error getting author')
         if(error.response) alert(error.response.data)
         else alert(error)
@@ -255,13 +256,10 @@ export default {
 
       const target = this.$refs.load_more
 
-      const options = {
-        rootMargin: '0px',
-        threshold: 1.0
-      }
+      const options = { rootMargin: '0px', threshold: 1.0 }
 
       const callback = (entries) => {
-        const {isIntersecting} = entries.find(e => e.target === target)
+        const { isIntersecting } = entries.find(e => e.target === target)
         if(isIntersecting && this.load_more_possible) this.get_articles()
       }
 
@@ -278,7 +276,7 @@ export default {
   },
   computed: {
     user_is_admin(){
-      const current_user = this.$store.state.current_user
+      const {current_user} = this.$store.state
       if(!current_user) return false
       return current_user.isAdmin
         || current_user.properties.isAdmin

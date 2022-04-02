@@ -38,7 +38,7 @@ body {
   /* font-family: lexend, sans-serif; */
   font-family: sans-serif;
   /* font-size: clamp(1rem, 2.5vw, 1.3rem); */
-  /* font-size: clamp(1rem, 2vw, 1.2rem); */
+  font-size: clamp(1rem, 2.5vw, 1.2rem);
 
   padding: 0;
   margin: 0;

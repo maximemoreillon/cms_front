@@ -1,10 +1,27 @@
 <template>
   <!-- Wrapping in a div so that modal is not affected by CSS -->
   <div class="article_wrapper">
-    <article v-if="article && !article_loading">
+    <!-- Using schema.org -->
+    <article
+      v-if="article && !article_loading"
+      itemscope
+      itemtype="http://schema.org/Article">
 
+      <!-- Meta tags for SEO -->
+      <meta itemprop="publisher" content="Maxime Moreillon">
+      <meta itemprop="image" content="/logo.png">
+      <meta
+        itemprop="datePublished"
+        :content="format_date_for_meta(article.authorship.creation_date)">
+      <meta
+        itemprop="dateModified"
+        :content="format_date_for_meta(article.authorship.edition_date)">
 
-      <h1>{{article.title || 'Untitled article'}}</h1>
+      <h1
+        itemprop="name headline"
+        :content="article.title">
+        {{article.title || 'Untitled article'}}
+      </h1>
 
       <ArticleMetadata :article="article" />
 
@@ -136,6 +153,16 @@ export default {
           }, false)
         })
     },
+
+    format_date_for_meta({day,month,year}){
+      // TODO: Move with date utils mixin
+      return [
+        year,
+        month.toString().padStart(2,'0'),
+        day.toString().padStart(2,'0'),
+      ].join('-');
+
+    }
   },
   computed: {
     article_id(){
