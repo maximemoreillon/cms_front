@@ -14,17 +14,13 @@
     <!-- Logo as link to homepage -->
     <a
       class="logo_wrapper"
-      href="#">
+      href="https://maximemoreillon.com">
       <img
         class="logo"
         src="@/assets/logo/logo.svg"
         alt="logo">
     </a>
 
-    <!--App title -->
-    <!-- <span class="title">
-      Maxime Moreillon
-    </span> -->
 
     <Nav/>
 
