@@ -2,7 +2,7 @@
   <!-- TODO: Have tag as a link -->
   <span
     class="tag"
-    :class="{clickable: clickable}"
+    :class="{clickable}"
     v-on:click.stop="tag_clicked()">
 
     <span class="tag_name">{{tag.name || 'Untitled'}}</span>

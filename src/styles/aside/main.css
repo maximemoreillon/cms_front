@@ -21,15 +21,20 @@
   min-height: 100vh;
 
   display: grid;
-  grid-template-columns: 1fr var(--aside-width) minmax(auto, var(--main-max-width)) 1fr;
-  grid-template-rows: 0 1fr auto 0;
-  grid-gap: var(--grid-gap);
   grid-template-areas:
     '. . . .'
     '. aside main .'
-    '. footer footer .'
-    '. . . .'
+    /* '. footer footer .' */
+    /* '. . . .' */
     ;
+  grid-template-columns: 1fr var(--aside-width) minmax(auto, var(--main-max-width)) 1fr;
+  grid-template-rows:
+    0
+    1fr
+    /* auto */
+    ;
+  grid-gap: var(--grid-gap);
+
 
 
 
@@ -112,8 +117,14 @@ main a {
 footer {
   grid-area: footer;
 
+
+  border-top: 1px solid var(--border-color);
+  padding: var(--grid-gap);
+
   display: flex;
   justify-content: center;
+
+  display: none;
 }
 
 

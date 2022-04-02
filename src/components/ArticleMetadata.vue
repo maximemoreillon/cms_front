@@ -128,7 +128,7 @@ export default {
 <style scoped>
 
 .article_metadata {
-  margin-top: -1.5em;
+  margin-top: -1em;
   font-size: 85%;
   color: #666666;
 }
@@ -145,7 +145,6 @@ export default {
 .metadata_element {
   display: flex;
   align-items: center;
-  /* margin-top: 1em; */
 }
 
 

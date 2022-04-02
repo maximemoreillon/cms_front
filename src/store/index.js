@@ -57,9 +57,9 @@ export default new Vuex.Store({
       .then( ({data}) => {
         // delete all navigation items
 
-        state.pinned_tags = data.map( tag => ({
-            route: `/?tag_id=${tag._id}`,
-            label: tag.name,
+        state.pinned_tags = data.map( ({_id, name}) => ({
+            to: {name: 'articles', query: {tag_id: _id}},
+            label: name,
           })
         )
 

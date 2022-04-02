@@ -28,18 +28,16 @@
 
 
     <router-link
-      v-for="(item, index) in $store.state.pinned_tags"
-      v-bind:key="`nav_${index}`"
-      :to="item.route">
+      v-for="({to, label}, index) in $store.state.pinned_tags"
+      :key="`nav_${index}`"
+      :to="to">
       <tag-icon />
-      <span>{{item.label}}</span>
+      <span>{{label}}</span>
     </router-link>
 
     <router-link :to="{ name: 'tags'}">
-
       <tag-multiple-icon />
       <span>Tags</span>
-
     </router-link>
 
     <!-- Login / Logout -->

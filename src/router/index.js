@@ -58,7 +58,7 @@ const routes = [
     }
   },
 
-  { path: '/*', redirect: { name: 'article_list' }}
+  { path: '/*', redirect: { name: 'articles' }}
 
 
 ]
