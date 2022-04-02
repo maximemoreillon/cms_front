@@ -4,47 +4,41 @@
 
     <template v-if="$store.state.current_user && !article_loading">
 
-      <Toolbar>
+      <div class="toolbar">
 
-
-        <IconButton
-          v-if="$route.query.id"
-          v-on:click="$router.push({ name: 'article', params: { article_id: $route.query.id } })">
+        <button
+          v-if="article_id"
+          @click="$router.push({ name: 'article', params: { article_id } })">
           <arrow-left-icon />
           <span>Return</span>
-        </IconButton>
+        </button>
 
-        <IconButton
+        <button
           v-else
-          v-on:click="$router.push({ name: 'article_list' })">
+          @click="$router.push({ name: 'articles' })">
           <arrow-left-icon />
           <span>Return</span>
-        </IconButton>
+        </button>
 
-        <div class="growing_spacer"/>
 
-        <IconButton
-          v-if="false"
-          v-bind:active="editable"
-          v-on:click="editable = !editable">
-          <pencil-icon/>
-        </IconButton>
+        <div class="spacer"/>
 
-        <IconButton
+
+        <button
           v-on:click="submit_article()">
           <content-save-icon />
           <span>Save</span>
-        </IconButton>
+        </button>
 
-        <IconButton
-          v-if="article.identity || article._id"
+        <button
+          v-if="article_id"
           v-on:click="delete_article()">
           <delete-icon />
           <span>Delete</span>
-        </IconButton>
+        </button>
 
 
-      </Toolbar>
+      </div>
 
       <div class="tags_and_visibility_wrapper">
         <!-- Tags -->
@@ -109,12 +103,13 @@
 
 
       <!-- editor for the content of the article -->
-      <EditorToolBar :editor="editor" />
+      <EditorToolBar
+        :editor="editor" />
 
       <!-- the article being written comes here -->
       <editor-content
-        class="editor_content"
-        v-bind:editor="editor"/>
+        class="editor_content article_content"
+        :editor="editor"/>
 
     </template>
 
@@ -141,13 +136,10 @@
 
 <script>
 
-import Loader from '@moreillon/vue_loader'
 
 import {formatDate} from '@/mixins/formatDate.js'
 
-import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import EditorToolBar from '@/components/EditorToolBar.vue'
-import Toolbar from '@/components/Toolbar.vue'
 import Tag from '@/components/Tag.vue'
 
 import { Editor, EditorContent } from 'tiptap'
@@ -180,10 +172,7 @@ import IdUtils from '@/mixins/IdUtils'
 export default {
   name: 'ArticleEditor',
   components: {
-    Toolbar,
-    Loader,
     Tag,
-    IconButton,
     EditorToolBar,
     EditorContent,
   },
@@ -226,8 +215,8 @@ export default {
 
         disablePasteRules:true, // disable Markdown when pasting
         disableInputRules:true, // disable Markdown when typing
-        editable: true,
-        content: "",
+
+        content: "", // The actual content of the editor
 
 
 
@@ -249,7 +238,6 @@ export default {
 
       },
 
-      editable: true,
 
       article_loading: true, // set to true because otherwise tiptap errors
       article_error: null,
@@ -262,14 +250,7 @@ export default {
 
     }
   },
-  watch: {
-    // used for readonly mode
-    editable() {
-      this.editor.setOptions({
-        editable: this.editable,
-      })
-    },
-  },
+
   mounted(){
     this.get_article_if_exists()
     this.get_existing_tags()
@@ -413,7 +394,7 @@ export default {
       })
     },
     delete_tag(index){
-      this.tags.splice(index,1)
+      this.article.tags.splice(index,1)
     },
     get_existing_tags(){
 
@@ -461,6 +442,10 @@ export default {
   computed: {
     current_user(){
       return this.$store.state.current_user
+    },
+    article_id(){
+      const id = this.get_id_of_item(this.article)
+      return id
     }
   }
 

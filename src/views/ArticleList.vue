@@ -1,125 +1,54 @@
 <template>
-  <div class="article_list_view" ref="view">
+  <div>
 
     <template v-if="tag">
-      <h1>Articles tagged with "{{tag.name}}"</h1>
-      <div class="tags_buttons_wrapper" v-if="user_is_admin">
+      <h1>Articles tagged with {{tag.name}}</h1>
 
-        <button
-          type="button"
-          class="button"
-          @click="prompt_for_rename()">
-          <pencil-icon/>
-          <span>Rename tag</span>
-        </button>
 
-        <button
-          type="button"
-          class="button"
-          @click="delete_tag()">
-          <delete-icon/>
-          <span>Delete tag</span>
-        </button>
+      <TagManagement
+        v-if="user_is_admin"
+        :tag="tag"
+        @tagUpdate="delete_all_and_get_articles()"/>
 
-        <button
-          type="button"
-          class="button"
-          :class="{active:tag.navigation_item}"
-          @click="pin_to_navbar()">
-          <pin-icon/>
-          <span>Pin to nav</span>
-        </button>
 
-      </div>
     </template>
 
     <template v-else-if="author">
-      <h1>Articles written by {{author.username}}</h1>
+      <h1>Articles written by {{author.display_name}}</h1>
     </template>
 
     <template v-else>
-      <h1>All articles</h1>
+      <h1>Articles</h1>
     </template>
 
 
     <!-- Toolbar for sorting and new article -->
-    <Toolbar >
+    <div class="toolbar" >
 
-        <!-- article counter -->
-        <!-- Maybe not necessary -->
-        <span class="article_counter">
-          {{article_count}} Articles
-        </span>
+      <!-- article counter -->
+      <div class="counter">
+        <file-document-outline-icon/>
+        <span>{{article_count}}</span>
+      </div>
 
-        <IconButton
-          v-bind:active="sort === 'date'"
-          v-on:click="sort_by_date()">
-          <calendar-icon/>
-        </IconButton>
+      <SortingTools />
 
-        <IconButton
-          v-bind:active="sort === 'title'"
-          v-on:click="sort_by_title()">
-          <alphabetical-icon/>
-        </IconButton>
+      <div class="spacer"/>
 
-        <IconButton
-          v-bind:active="sort === 'views'"
-          v-on:click="sort_by_views()">
-          <eye-icon/>
-        </IconButton>
+      <ArticleSearch />
 
-        <IconButton
-          v-bind:active="order === 'DESC'"
-          v-on:click="sort_order_descending()">
-          <sort-descending-icon/>
-        </IconButton>
-
-
-        <IconButton
-          v-bind:active="order === 'ASC'"
-          v-on:click="sort_order_ascending()">
-          <sort-ascending-icon/>
-        </IconButton>
-
-        <div class="growing_spacer"/>
-
-
-
-        <!-- search -->
-        <form class="search_wrapper" @submit.prevent="search()">
-          <input
-            type="search"
-            class="search_bar"
-            ref="search"
-            v-bind:class="{search_bar_open: search_bar_open}"
-            v-model="search_string">
-
-          <input type="submit" style="display:none;">
-
-          <IconButton
-            v-on:click="search()">
-            <magnify-icon/>
-          </IconButton>
-
-        </form>
-
-    </Toolbar>
-
-
+    </div>
 
     <div
       class="articles_container"
       ref="articles_container"
-      v-if="!loading_error && articles.length > 0">
+      v-if="!loading_error && articles.length">
 
 
       <ArticlePreview
         v-for="(article, index) in articles"
         :key="`article_${index}`"
         :article="article"/>
-
-
 
     </div>
 
@@ -133,7 +62,7 @@
     <!-- No articles indicator -->
     <div
       class=""
-      v-if="articles.length === 0 && !articles_loading && !loading_error">
+      v-if="!articles.length && !articles_loading && !loading_error">
       No articles
     </div>
 
@@ -144,14 +73,12 @@
     </div>
 
     <!-- Load more -->
-    <!-- Not using v-if because used in intersection observer -->
     <div
       class="load_more_wrapper"
-      ref="load_more"
       :style="{display: load_more_possible ? 'block' : 'none'}">
       <button
-        class="load_more_button"
-        type="button"
+        class="outlined"
+        ref="load_more"
         v-on:click="get_articles()">
         <span>Load more</span>
       </button>
@@ -165,39 +92,30 @@
 
 <script>
 
-import Loader from '@moreillon/vue_loader'
 
-import IconButton from '@/components/vue_icon_button/IconButton.vue'
+import SortingTools from '@/components/SortingTools.vue'
+import ArticleSearch from '@/components/ArticleSearch.vue'
+
+import TagManagement from '@/components/TagManagement.vue'
+// import IconButton from '@/components/vue_icon_button/IconButton.vue'
 import ArticlePreview from '@/components/ArticlePreview.vue'
-import Toolbar from '@/components/Toolbar.vue'
-//import Tag from '@/components/Tag.vue'
-//import Author from '@/components/Author.vue'
+// import Toolbar from '@/components/Toolbar.vue'
 
-// icons
-import AlphabeticalIcon from 'vue-material-design-icons/Alphabetical.vue';
-import SortDescendingIcon from 'vue-material-design-icons/SortDescending.vue';
-import SortAscendingIcon from 'vue-material-design-icons/SortAscending.vue';
-import PinIcon from 'vue-material-design-icons/Pin.vue';
+
 
 import IdUtils from '@/mixins/IdUtils'
 
 export default {
+  name: 'Articles',
   components: {
-    IconButton,
+    // IconButton,
+    // Toolbar,
     ArticlePreview,
-    Toolbar,
-    Loader,
+    TagManagement,
+    SortingTools,
+    ArticleSearch,
     //Tag,
     //Author,
-
-    // icons
-    PinIcon,
-    //FileDocumentOutlineIcon,
-    AlphabeticalIcon,
-    SortDescendingIcon,
-    SortAscendingIcon,
-    //DotsHorizontalIcon,
-    //CloseIcon,
   },
   mixins: [
     IdUtils
@@ -218,18 +136,6 @@ export default {
       author: null,
 
 
-
-      // Default sorting and ordering
-
-      search_string: '',
-      sort: 'date',
-      order: 'DESC',
-
-
-
-      search_bar_open: false,
-      batch_size: 10,
-
       load_more_observer: null,
 
     }
@@ -237,38 +143,26 @@ export default {
 
   mounted() {
 
-    // Does not get called when staying in the same route!
-
-    //this.load_more_when_scroll_to_bottom()
-
-    this.get_tag()
-    this.get_author()
-    this.delete_all_articles()
-    this.get_articles()
-
-    if(this.$route.query.search) {
-      this.search_bar_open = true
-      this.search_string = this.$route.query.search
-    }
+    this.delete_all_and_get_articles()
 
   },
   beforeRouteUpdate (to, from, next) {
     next()
 
     this.$nextTick().then( () => {
-      this.get_tag()
-      this.get_author()
-      this.delete_all_articles()
-      this.get_articles()
+      this.delete_all_and_get_articles()
     })
-
   },
 
   methods: {
-    delete_all_articles(){
-      // Turned into its own method to work with the "load more" feature
-      this.articles.splice(0,this.articles.length)
+
+
+    delete_all_and_get_articles(){
+      this.get_tag()
+      this.get_author()
+      this.articles = []
       this.articles_all_loaded = false
+      this.get_articles()
     },
 
 
@@ -276,13 +170,20 @@ export default {
 
       this.articles_loading = true
 
-      const {search, author_id, tag_id} = this.$route.query
+
+      const {
+        search,
+        author_id,
+        tag_id,
+        sort = 'date',
+        order = 'DESC',
+      } = this.$route.query
 
       const params = {
-        sort : this.sort,
-        order : this.order,
+        sort,
+        order,
         start_index : this.articles.length,
-        batch_size : this.batch_size,
+        batch_size : 10,
         search,
         tag_id,
         author_id,
@@ -293,12 +194,11 @@ export default {
       this.axios.get(url, { params })
       .then( ({data}) => {
 
-        // Do not do anything if there is no article
-        // if(data.length < 1) return this.articles_all_loaded = true
-
         this.article_count = data.article_count
 
+        // Add batch of articles to existing list
         data.articles.forEach( (article) => { this.articles.push(article) })
+
 
         // Check if all articles loaded (less than batch size)
         if(this.articles.length >= this.article_count) this.articles_all_loaded = true
@@ -335,115 +235,31 @@ export default {
 
     get_author(){
 
+      this.author = null
+
       const author_id = this.$route.query.author_id
 
-      if(!author_id) {
-        this.author = null
-        return
-      }
+      if(!author_id) return
 
       this.axios.get(`${process.env.VUE_APP_CMS_API_URL}/v1/authors/${author_id}`)
       .then(response => { this.author = response.data })
       .catch(error => {
+        // Dirty
         this.$set(this.author,'error', 'Error getting author')
         if(error.response) alert(error.response.data)
         else alert(error)
       })
 
-
-    },
-
-    sort_by_date(){
-      this.sort = 'date'
-      this.delete_all_articles()
-      this.get_articles()
-    },
-    sort_by_title(){
-      this.sort = 'title'
-      this.delete_all_articles()
-      this.get_articles()
-    },
-    sort_by_views(){
-      this.sort = 'views'
-      this.delete_all_articles()
-      this.get_articles()
-    },
-    sort_order_ascending(){
-      this.order = 'ASC'
-      this.delete_all_articles()
-      this.get_articles()
-    },
-    sort_order_descending(){
-      this.order = 'DESC'
-      this.delete_all_articles()
-      this.get_articles()
-    },
-
-    update_tag(){
-      // Used for admins to edit tags
-
-      this.tag_loading = true
-
-      const tag_id = this.get_id_of_item(this.tag)
-
-      const url = `${process.env.VUE_APP_CMS_API_URL}/v1/tags/${tag_id}`
-      const body = this.tag
-
-      this.axios.put(url, body)
-      .then( ({data}) => {
-
-        this.tag = data
-
-        this.$store.commit('update_categories')
-
-        this.delete_all_articles()
-        this.get_articles()
-
-        this.tag_loading = false
-      })
-      .catch(error => alert(error))
-
-    },
-
-    prompt_for_rename(){
-      const new_name = prompt("New tag name", this.tag.name)
-      if(!new_name) return
-      this.tag.name = new_name
-      this.update_tag()
-    },
-
-    pin_to_navbar(){
-      this.tag.navigation_item = !this.tag.navigation_item
-      this.update_tag()
-    },
-
-    delete_tag(){
-      if(!confirm('Delete tag?')) return
-      this.article_loading = true;
-
-      const tag_id = this.get_id_of_item(this.tag)
-
-      this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/v1/tags/${tag_id}`)
-      .then( () => {
-        this.$router.push({ name: 'article_list' })
-      })
-      .catch(error => alert(error))
-
     },
 
     load_more_when_scroll_to_bottom(){
 
-      const container = this.$refs.view.parentNode.parentNode
       const target = this.$refs.load_more
 
-      const options = {
-        root: container,
-        rootMargin: '0px',
-        threshold: 1.0
-      }
+      const options = { rootMargin: '0px', threshold: 1.0 }
 
       const callback = (entries) => {
-        const {isIntersecting} = entries.find(e => e.target === target)
+        const { isIntersecting } = entries.find(e => e.target === target)
         if(isIntersecting && this.load_more_possible) this.get_articles()
       }
 
@@ -453,43 +269,22 @@ export default {
 
     },
 
-    search(){
-      if(this.search_bar_open){
-        // if the search bar is open, search or close
 
-        if(this.search_string === this.$route.query.search) return
 
-        const query = {...this.$route.query, search: this.search_string}
 
-        if(this.search_string === '') {
-          this.search_bar_open = false
-          delete query.search
-        }
-
-        this.$router.push({name: 'article_list', query})
-
-        // this.delete_all_articles()
-        // this.get_articles()
-
-      }
-      else {
-        // If the search bar is closed, open it
-        this.search_bar_open = true
-        setTimeout(() => this.$refs.search.focus(),50)
-      }
-
-    }
 
   },
   computed: {
     user_is_admin(){
-      const current_user = this.$store.state.current_user
+      const {current_user} = this.$store.state
       if(!current_user) return false
       return current_user.isAdmin
         || current_user.properties.isAdmin
     },
     load_more_possible(){
-      return !this.articles_loading && !this.articles_all_loaded && !this.loading_error
+      return !this.articles_loading
+        && !this.articles_all_loaded
+        && !this.loading_error
     }
 
   }
@@ -504,72 +299,22 @@ export default {
 
 .articles_container {
 
-  /* Normal behavior */
-
-  /* display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px,1fr));
-  grid-gap: 1em; */
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  gap: 1em;
 
 }
 
 
 
-.tags_buttons_wrapper > *:not(:last-child) {
-  margin-right: 1em;
+.article_counter > *:first-child {
+  margin-right: 0.25em;
 }
 
-.tags_buttons_wrapper {
-  margin: 1em 0;
+.load_more_wrapper {
+  padding: 1em;
+  text-align: center;
 }
-.load_more_button {
-  display: flex;
-  align-items: center;
-  margin: 25px auto;
-  padding: 10px;
-  outline: none;
-  border: 1px solid #dddddd;
-  border-radius: 5px;
-  background-color: transparent;
-  cursor: pointer;
-
-  transition: color 0.25s, border-color 0.25s;
-}
-
-.load_more_button:hover {
-  border-color: #c00000;
-  color: #c00000;
-}
-
-.article_counter{
-  display: flex;
-  align-items: center;
-  color: #444444;
-}
-
-.tool_cluster {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.search_bar {
-  transition: 0.25s;
-  width: 0;
-  visibility: hidden;
-}
-
-.search_bar.search_bar_open {
-  width: 20vw;
-  visibility: visible;
-}
-
-.search_wrapper {
-  display: flex;
-  align-items: stretch;
-}
-
-
 
 </style>

@@ -4,10 +4,12 @@ export default {
     get_id_of_item(item){
 
       let id = item._id
-        || item.properties._id
 
-      if(!id) {
-        console.warn(`Item does not have an _id`)
+      if(!id && item.properties ) {
+        item.properties._id
+      }
+
+      if(!id && item.identity) {
         id = item.identity.low
         || item.identity
       }

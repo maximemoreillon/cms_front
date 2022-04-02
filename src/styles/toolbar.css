@@ -1,0 +1,19 @@
+
+.toolbar{
+  display: flex;
+  /* Why no wrap? */
+  /* flex-wrap: nowrap; */
+  align-items: center;
+  gap: 1em;
+  /* padding: 0.5em 0; */
+  margin-bottom: 1.5em;
+  border-bottom: 1px solid #dddddd;
+}
+
+
+.toolbar > * {
+  /* Used for nested stuff */
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}

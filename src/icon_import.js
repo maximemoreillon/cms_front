@@ -1,5 +1,6 @@
 import Vue from 'vue'
 
+Vue.component('close-icon', () => import('vue-material-design-icons/Close.vue'))
 Vue.component('arrow-left-icon', () => import('vue-material-design-icons/ArrowLeft.vue'))
 Vue.component('magnify-icon', () => import('vue-material-design-icons/Magnify.vue'))
 Vue.component('earth-icon', () => import('vue-material-design-icons/Earth.vue'))
@@ -40,3 +41,9 @@ Vue.component('redo-icon', () => import('vue-material-design-icons/Redo.vue'))
 Vue.component('link-icon', () => import('vue-material-design-icons/Link.vue'))
 Vue.component('code-braces-icon', () => import('vue-material-design-icons/CodeBraces.vue'))
 Vue.component('code-braces-box-icon', () => import('vue-material-design-icons/CodeBracesBox.vue'))
+Vue.component('alphabetical-icon', () => import('vue-material-design-icons/Alphabetical.vue'))
+Vue.component('sort-descending-icon', () => import('vue-material-design-icons/SortDescending.vue'))
+Vue.component('pin-icon', () => import('vue-material-design-icons/Pin.vue'))
+Vue.component('sort-ascending-icon', () => import('vue-material-design-icons/SortAscending.vue'))
+Vue.component('file-document-outline-icon', () => import('vue-material-design-icons/FileDocumentOutline.vue'))
+Vue.component('tag-off-icon', () => import('vue-material-design-icons/TagOff.vue'))

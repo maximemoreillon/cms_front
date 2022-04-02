@@ -1,78 +1,71 @@
 <template>
-  <div class="container" >
-    <template v-if="article">
+  <!-- Wrapping in a div so that modal is not affected by CSS -->
+  <div class="article_wrapper">
+    <!-- Using schema.org -->
+    <article
+      v-if="article && !article_loading"
+      itemscope
+      itemtype="http://schema.org/Article">
 
-      <router-link
-        class="button edit_button"
-        v-if="editable"
-        :to="{ name: 'article_editor', params: { id: get_id_of_item(article) } }">
-        <pencil-icon />
-        <span>Edit</span>
-      </router-link>
+      <!-- Meta tags for SEO -->
+      <meta itemprop="publisher" content="Maxime Moreillon">
+      <meta itemprop="image" content="/logo.png">
+      <meta
+        itemprop="datePublished"
+        :content="format_date_for_meta(article.authorship.creation_date)">
+      <meta
+        itemprop="dateModified"
+        :content="format_date_for_meta(article.authorship.edition_date)">
 
-      <h1>{{article.title || 'Untitled article'}}</h1>
+      <h1
+        itemprop="name headline"
+        :content="article.title">
+        {{article.title || 'Untitled article'}}
+      </h1>
 
+      <ArticleMetadata :article="article" />
 
-      <ArticleMetadata
-        :article="article" />
-
-
-      <!-- Tags -->
-      <!-- Could be part of metadata -->
-      <div class="tags_container">
-        <label>
-          <tag-icon />
-        </label>
-        <template v-if="article.tags.length">
-          <Tag
-            class="tag"
-            v-for="(tag, index) in article.tags"
-            v-bind:key="`tag_${index}`"
-            v-bind:tag="tag"/>
-        </template>
-        <span v-else>None</span>
-      </div>
-
-      <!-- the article itself -->
-      <article
-        class="article"
-        v-if="article && !article_loading"
+      <!-- the article content -->
+      <div
         ref="article_content"
+        class="article_content"
         v-html="article.content"/>
 
-    </template>
+    </article>
 
-    <!-- messages when no content -->
-    <div class="loader_container" v-else-if="article_loading">
+    <!-- Loaders and error messages -->
+    <div
+      class="loader_container"
+      v-else-if="article_loading">
       <Loader />
     </div>
 
-    <div class="error" v-if="error">
-      Error loading article
+    <div
+      class="error"
+      v-if="error">
+      An error occured while loading articles
     </div>
-
 
     <div
       class="error"
       v-if="!article_loading && !error && !article">
-      Article not found
+      Article {{article_id}} not found
     </div>
-
 
     <!-- modal for images -->
     <Modal
+      v-if="article"
       v-bind:open="modal.open"
       v-on:close="modal.open = false">
 
       <img
         class="modal_image"
         v-bind:src="modal.image_src"
-        alt=""/>
+        :alt="article.title"/>
 
     </Modal>
 
   </div>
-
 
 </template>
 
@@ -81,31 +74,20 @@
 import Loader from '@moreillon/vue_loader'
 import Modal from '@moreillon/vue_modal'
 
-//import IconButton from '@/components/vue_icon_button/IconButton.vue'
-
-import Tag from '@/components/Tag.vue'
 import ArticleMetadata from '@/components/ArticleMetadata.vue'
 
-//import Comment from '@/components/Comment.vue'
 
 import {formatDate} from '@/mixins/formatDate.js'
 import IdUtils from '@/mixins/IdUtils'
 
-// Not using Highlight JS anymore due to poor consistency
-//import highlight from 'highlight.js'
-
 
 
 export default {
+  name: 'Article',
   components: {
-    //IconButton,
     ArticleMetadata,
     Modal,
     Loader,
-    Tag,
-    // Author,
-    //Comment,
-
   },
   mixins: [
     formatDate,
@@ -113,7 +95,6 @@ export default {
   ],
   data () {
     return {
-      sending: false,
 
       article: null,
       article_loading: false,
@@ -124,6 +105,7 @@ export default {
         open: false,
         image_src: "",
       }
+
     }
   },
 
@@ -148,7 +130,7 @@ export default {
 
         this.article = article
 
-        document.title = `${this.article.title} - CMS - Maxime MOREILLON`
+        document.title = `${this.article.title} - Maxime MOREILLON`
         setTimeout(this.add_event_listeners_for_image_modals,100)
       })
       .catch(error => {
@@ -162,16 +144,29 @@ export default {
     },
 
     add_event_listeners_for_image_modals(){
-      this.$refs.article_content.querySelectorAll('img').forEach(img => {
-        img.addEventListener("click", event => {
-          this.modal.open = true;
-          this.modal.image_src = event.target.src;
-        }, false)
-      })
+      this.$refs.article_content
+        .querySelectorAll('img')
+        .forEach(img => {
+          img.addEventListener("click", event => {
+            this.modal.open = true;
+            this.modal.image_src = event.target.src;
+          }, false)
+        })
     },
+
+    format_date_for_meta({day,month,year}){
+      // TODO: Move with date utils mixin
+      return [
+        year,
+        month.toString().padStart(2,'0'),
+        day.toString().padStart(2,'0'),
+      ].join('-');
+
+    }
   },
   computed: {
     article_id(){
+      // Accounting for legacy routes
       return this.$route.params.article_id
         || this.$route.params.id
         || this.$route.query.article_id
@@ -210,61 +205,11 @@ export default {
 
 <style scoped>
 
-.edit_button{
-  float: right;
-  margin-top: 0.25em;
-}
-
-.tags_container {
-  font-size: 85%;
-  color: #666666;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-}
-
-
-.tags_container > * {
-  /* Margin top for when tags occupy two rows */
-  margin-top: 0.5em;
-  margin-right: 0.5em;
-}
-
-
-
 .modal_image {
-  width: 80vw;
-  height: 70vh;
-  margin: 10px;
+  max-width: calc(100vw - 8em);
+  max-height: calc(100vh - 8em);
+  margin: 1em;
   object-fit: contain;
-}
-
-/* COMMENTS */
-.comment_area_wrapper {
-  border-top: 1px solid #dddddd;
-  padding-top: 10px;
-}
-
-.new_comment_wrapper {
-  border: 1px solid #dddddd;
-  padding: 5px;
-}
-.new_comment_wrapper > * {
-  margin: 5px 0;
-}
-
-.create_comment_button_wrapper {
-  text-align: right;
-}
-
-.comments_wrapper {
-  padding: 5px;
-}
-
-textarea {
-
-  width: 100%;
-  resize:vertical;
 }
 
 </style>

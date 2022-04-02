@@ -1,0 +1,13 @@
+.error {
+  color: var(--error-color);
+}
+
+.spacer {
+  flex-grow: 1;
+}
+
+.loader_container {
+  padding: 1em;
+  text-align: center;
+  font-size: 200%;
+}

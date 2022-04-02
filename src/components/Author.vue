@@ -1,22 +1,9 @@
 <template>
-  <span
-    class="author"
-    v-on:click.stop="author_clicked()">
-
-    <template v-if="author">
-      <img
-        class="avatar"
-        :src="author.avatar_src"
-        v-if="author.avatar_src">
-      <span>
-        {{author.username}}
-      </span>
-    </template>
-
-
-    <span v-else>Invalid author</span>
-
-  </span>
+  <router-link
+    :to="{ name: 'articles', query: {author_id} }
+    ">
+    {{author.display_name}}
+  </router-link>
 </template>
 
 <script>
@@ -26,16 +13,19 @@ import IdUtils from '@/mixins/IdUtils'
 export default {
   name: 'Author',
   props: {
-    author: {
-      type: Object
-    },
+    author: Object
   },
   mixins: [
     IdUtils
   ],
+  computed: {
+    author_id(){
+      return this.get_id_of_item(this.author)
+    }
+  },
   methods: {
     author_clicked(){
-      let target_route_name = 'article_list'
+      let target_route_name = 'articles'
       const author_id = this.get_id_of_item(this.author)
 
       if(!(this.$route.name === target_route_name && this.$route.query.id === author_id)){

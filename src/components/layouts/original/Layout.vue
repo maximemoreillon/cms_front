@@ -1,11 +1,11 @@
 <template>
   <div class="template_wrapper">
 
-    <AppTemplateNav
+    <Nav
       :visible="nav_visible"
       @navToggle="nav_visible =! nav_visible"/>
 
-    <AppTemplateHeader @navToggle="nav_visible =! nav_visible"/>
+    <Header @navToggle="nav_visible =! nav_visible"/>
 
 
     <main>
@@ -19,17 +19,17 @@
 
 <script>
 
-import AppTemplateNav from '@/components/template/AppTemplateNav.vue'
-import AppTemplateHeader from '@/components/template/AppTemplateHeader.vue'
+import Nav from './Nav.vue'
+import Header from './Header.vue'
 
 import 'vue-material-design-icons/styles.css'
 
 
 export default {
-  name: 'AppTemplate',
+  name: 'Layout',
   components: {
-    AppTemplateNav,
-    AppTemplateHeader
+    Nav,
+    Header
 
   },
   data(){
@@ -46,10 +46,10 @@ export default {
 
 <style>
 
-@font-face {
+/* @font-face {
   font-family: lexend;
   src: url(../../assets/LexendDeca-Regular.ttf);
-}
+} */
 
 .material-design-icon__svg {
   bottom: 0 !important;
@@ -61,7 +61,8 @@ export default {
 
 body {
   margin: 0;
-  font-family: lexend, sans-serif;
+  /* font-family: lexend, sans-serif; */
+  font-family: sans-serif;
   height: 100vh;
 }
 
@@ -149,5 +150,75 @@ main a:hover {
   }
 }
 
+:is(article, .editor_content) {
+  line-height: 1.5;
+}
+
+
+.article:not(.editor_content) h1:first-child {
+  display: none;
+}
+
+article img {
+  cursor: pointer;
+}
+
+:is(article, .editor_content) img {
+  /* test CSS for images */
+
+
+  display: block;
+  margin: 2em auto;
+
+  max-width: 60%;
+  max-height: 40vh;
+  object-fit: contain;
+
+}
+
+:is(article, .editor_content) iframe {
+  display: block;
+  width: 80%;
+  height: 30vw;
+  margin: 2.5em auto;
+}
+
+:is(article, .editor_content) pre code {
+  display: block;
+  overflow-x: auto;
+  padding: 1em;
+  background: #282b2e;
+  color: #e0e2e4;
+}
+
+.loader_container {
+  margin: 1em;
+  text-align: center;
+  font-size: 300%;
+}
+
+.button {
+  background-color: white;
+  cursor: pointer;
+  border: 1px solid #aaaaaa;
+  padding: 0.25em 0.5em;
+  border-radius: 0.25em;
+  color: #444444;
+  transition: 0.25s;
+  outline: none;
+}
+
+.button:hover, .button.active {
+  color: #c00000;
+  border-color: #c00000;
+}
+
+.button > *:not(:last-child) {
+  margin-right: 0.25em;
+}
+
+.error {
+  color: #c00000;
+}
 
 </style>

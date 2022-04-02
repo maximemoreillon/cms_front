@@ -1,114 +1,102 @@
 <template>
+  <!-- The whole preview is a link to the article -->
   <router-link
     class="article_preview"
+    :class="{article_with_thumbnail: !!article.thumbnail_src}"
     :to="{ name: 'article', params: {article_id: get_id_of_item(article)} }">
 
+    <h2>{{article.title || 'Untitled article'}}</h2>
 
-
-    <!-- indictor for published -->
-    <earth-icon
-      class="publishing_status"
-      v-if="article.published && $store.state.current_user"/>
-
-    <!-- Article title, consists of first h1 of the content -->
-    <div class="preview_header">
-      <div class="article_title">
-        {{article.title || 'Untitled article'}}
-      </div>
-
-      <div class="article_metadata">
-
-        <!-- date -->
-        <span
-          class="article_date"
-          v-if="article.authorship.creation_date">
+    <div class="metadata">
+      <!-- date -->
+      <div
+        class="metadata_item"
+        v-if="article.authorship.creation_date">
+        <calendar-icon/>
+        <span class="article_date" >
           {{format_date(article.authorship.creation_date)}}
         </span>
+      </div>
 
-        <span>|</span>
-
-        <!-- Author -->
-        <span
-          class="article_author"
-          v-if="author.username">
-          {{author.username}}
+      <!-- Author -->
+      <div
+        class="metadata_item"
+        v-if="author">
+        <account-icon/>
+        <span class="author">
+          {{author.display_name || 'Unnnamed'}}
         </span>
+      </div>
 
-        <template v-if="article.views">
-          <span>|</span>
+      <!-- Publishing status and views only visible to users logged in -->
+
+        <div
+          class="metadata_item"
+          v-if="article.views">
+          <eye-icon/>
           <span>
-            {{article.views}} views
+            {{article.views}}
           </span>
-        </template>
-      </div>
+        </div>
 
-
-    </div>
-
-
-    <!-- alt set to empty string to display nothing if no thumbnail -->
-    <div class="article_preview_body">
-      <img
-        class="article_thumbnail"
-        v-if="article.thumbnail_src"
-        :src="article.thumbnail_src"
-        alt="">
-
-      <!-- Summary -->
-      <article
-        class="article_summary"
-        v-if="article.summary"
-        v-html="article.summary"/>
-
-      <div class="article_summary" v-else>
-        No summary available
-      </div>
+      <template v-if="$store.state.current_user">
+        <div
+          class="metadata_item" >
+          <earth-icon v-if="article.published"/>
+          <lock-icon v-else />
+        </div>
+      </template>
 
     </div>
 
 
+    <img
+      class="thumbnail"
+      v-if="article.thumbnail_src"
+      :src="article.thumbnail_src"
+      alt="">
+
+
+    <!-- Summary -->
     <div
-      class="tags_container"
-      v-if="tags">
+      class="summary"
+      v-html="article.summary || 'No summary available'"/>
 
-      <!-- <tag-icon /> -->
+
+    <div class="tags" v-if="tags && tags.length">
+
+      <tag-icon />
+
 
       <Tag
         :clickable="false"
-        v-for="(tag, index) in tags"
+        v-for="(tag, index) in tags.slice(0,max_tags)"
         v-bind:key="`tag_${index}`"
         v-bind:tag="tag"/>
+
+      <span v-if="tags.length > max_tags">
+        +{{tags.length - max_tags}}
+      </span>
 
     </div>
 
 
   </router-link>
 
-
-
-
-
-
-
 </template>
 
 <script>
 
 import {formatDate} from '@/mixins/formatDate.js'
+import IdUtils from '@/mixins/IdUtils'
 
 import Tag from '@/components/Tag.vue'
-import IdUtils from '@/mixins/IdUtils'
 
 
 export default {
   name: 'ArticlePreview',
   props: {
     article: Object
-  },
-  data() {
-    return {
-
-    }
   },
   mixins: [
     formatDate,
@@ -117,12 +105,13 @@ export default {
   components: {
     Tag,
   },
-
-  methods: {
-
+  data(){
+    return {
+      max_tags: 5,
+    }
   },
-  computed: {
 
+  computed: {
     author(){
       return this.article.author
     },
@@ -148,76 +137,106 @@ export default {
 
   cursor: pointer;
 
-  /*box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);*/
   border: 1px solid #dddddd;
   transition: border-color 0.25s;
+  padding: 1em;
 
+  max-height: 20em;
 
-  margin-bottom: 2em;
+  display: grid;
+
+  grid-template-areas:
+    'title'
+    'metadata'
+    'summary'
+    'tags';
+
+  /* WARNING: Missing tags will create a gap */
+
+  /* Can use minmax thanks to max-height being set on container */
+  grid-auto-rows: auto auto minmax(0, 1fr) auto;
+  grid-gap: 1em;
+
+}
+
+.article_with_thumbnail {
+  /* Special layout if the article has a thumbnail */
+  grid-template-areas:
+    'title title'
+    'metadata metadata'
+    'thumbnail summary'
+    'tags tags';
+
+  grid-template-columns: 2fr 5fr;
+  align-items: start;
+
 }
 
 
-.article_preview > * {
-  margin: 1em 1.5em;
-}
 
 .article_preview:hover {
   border-color: #c00000;
 }
 
 
-
-.article_title {
-  font-weight: bold;
-  font-size: 120%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+h2 {
+  grid-area: title;
+  margin: 0;
 }
 
-
-.article_metadata {
-  margin-top: 0.25em;
+.metadata {
+  grid-area: metadata;
+  /* Bring metadata closer to title */
+  margin-top: -0.75em;
   display: flex;
   align-items: center;
   font-size: 75%;
   color: #666666;
 }
 
-.article_metadata > *:not(:last-child) {
+.metadata > div {
+  margin-right: 1em;
+  display: flex;
+  align-items: center;
+}
+
+.metadata > div > * {
   margin-right: 0.25em;
 }
 
-.publishing_status {
-  /* not too happy with float */
-  float: right;
-}
-
-.article_preview_body {
-  display: flex;
-  align-items: top;
+.thumbnail {
+  grid-area: thumbnail;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 
-.article_summary {
+.summary {
+
+  /* Height is set using grid so height 100% here allows working overflows */
+  height: 100%;
+
+  line-height: var(--line-height);
+
+  grid-area: summary;
   overflow: hidden;
-  max-height: 10.5em;
 
-  /* Padding so that short summaries don't get clipped */
-  padding-bottom: 0.5em;
 
+  /* Position relative for shadow below */
   position: relative;
+
 }
 
-/* Shadow to show there is more content available */
-.article_summary::before {
+.summary::before {
+  /* Shadow to show there is more content available */
   content: '';
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   height: 25%;
-  z-index: 5;
+  z-index: 1;
 
   background-image: linear-gradient(to top, white, transparent);
   background-position: 100% 0;
@@ -225,48 +244,33 @@ export default {
 }
 
 
-.article_thumbnail {
-  max-width: 8em;
-  max-height: 8em;
-  object-fit: contain;
-  margin-right: 1.5em;
-}
-
-
-.tags_container {
-  position: relative;
+.tags {
+  grid-area: tags;
   display: flex;
-  overflow-x: hidden;
-}
-
-.tags_container > *{
-  margin-top: 0.25em;
-  //margin: 0.25em 0;
-
-}
-
-.tags_container > *:not(:last-child) {
-  margin-right: 5px;
-}
-
-.tags_container > *:first-child {
-  margin-left: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em;
 }
 
 
-.tags_container::before {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  top: 0;
-  width: 50px;
-  z-index: 5;
-
-  background-image: linear-gradient(to left, white, transparent);
-  background-position: 0 100%;
-  background-size: 100% 100%;
+.tags > *{
+  color: #666666;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

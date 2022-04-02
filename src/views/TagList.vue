@@ -3,25 +3,28 @@
 
     <h1>Tags</h1>
 
-    <Toolbar >
+    <div class="toolbar">
 
-      <span class="article_counter">
-        {{tags.length}} Tags
-      </span>
+      <!-- Class should have a better name -->
+      <div class="counter">
+        <tag-icon/>
+        <span>{{tags.length}}</span>
+      </div>
 
-      <div class="growing_spacer"/>
+      <div class="spacer"/>
 
 
         <!-- search -->
         <input
           type="search"
           class="search_bar"
-          v-model="filter">
+          v-model="filter"
+          placeholder="Search tags">
 
         <magnify-icon/>
 
 
-    </Toolbar>
+    </div>
 
     <div
       class="loader_container"
@@ -42,17 +45,13 @@
 
 <script>
 
-import Loader from '@moreillon/vue_loader'
 
 import Tag from '@/components/Tag.vue'
-import Toolbar from '@/components/Toolbar.vue'
 
 
 export default {
   components: {
-    Loader,
     Tag,
-    Toolbar
   },
   data () {
     return {
@@ -112,10 +111,7 @@ export default {
 .tag_container{
   display: flex;
   flex-wrap: wrap;
-}
-
-.tag_container > * {
-  margin-bottom: 1em;
+  gap: 0.5em;
 }
 
 

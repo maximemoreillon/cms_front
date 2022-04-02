@@ -1,13 +1,13 @@
+<!-- This component is much useless as it simply holds CSS -->
 <template>
   <div class="toolbar">
-    <slot></slot>
+    <slot />
   </div>
 </template>
 
 <script>
 export default {
   name: 'Toolbar',
-
 }
 </script>
 
@@ -24,6 +24,7 @@ export default {
 }
 
 .toolbar .tools {
+  /* Why? */
   flex-shrink: 0;
 }
 
@@ -33,18 +34,11 @@ export default {
   flex-wrap: wrap;
 }
 
-.toolbar > * > *:not(:last-child) {
-  //margin-right: 1em;
-}
-
 
 .toolbar > *:not(:last-child){
-  margin-right: 0.25em;
+  margin-right: 1em;
 }
 
-.growing_spacer{
-  flex-grow: 1;
-}
 
 .dates_container {
   font-size: 80%;

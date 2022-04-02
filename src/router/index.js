@@ -12,18 +12,9 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/articles',
-    name: 'article_list',
+    alias: '/',
+    name: 'articles',
     component: ArticleList,
-  },
-  {
-    path: '/about',
-    name: 'about',
-    component: About,
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: () => import('@/views/Login.vue'),
   },
 
   {
@@ -38,7 +29,16 @@ const routes = [
     name: 'article_editor',
     component: () => import('@/views/ArticleEditor.vue'),
   },
-
+  {
+    path: '/about',
+    name: 'about',
+    component: About,
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('@/views/Login.vue'),
+  },
   {
     path: '/tags/',
     name: 'tags',
@@ -58,7 +58,7 @@ const routes = [
     }
   },
 
-  { path: '/*', redirect: { name: 'article_list' }}
+  { path: '/*', redirect: { name: 'articles' }}
 
 
 ]

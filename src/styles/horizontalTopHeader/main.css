@@ -1,0 +1,175 @@
+@import 'header.css';
+@import 'nav.css';
+@import '../utility.css';
+@import '../articles.css';
+@import '../toolbar.css';
+@import '../common.css';
+
+@font-face {
+  font-family: lexend;
+  /* src: url(./assets/LexendDeca-Regular.ttf); */
+}
+
+.app {
+
+  /* Not using margin auto since can be done with grid */
+
+  display: grid;
+
+  grid-template-columns: 1fr var(--nav-width) minmax(auto,var(--main-max-width)) 1fr;
+  grid-template-rows: var(--header-height) 1fr auto;
+  grid-gap: var(--grid-gap);
+  grid-template-areas:
+    '. header header .'
+    '. nav main .'
+    '. footer footer .';
+
+}
+
+header {
+  grid-area: header;
+  /* Height is set using grid */
+
+  /* display: none; */
+
+  background-color: white;
+
+  position: sticky;
+  top: 0;
+  z-index: 11;
+
+  display: flex;
+  align-items: center;
+
+
+  /* Padding pretty much irrelevant because height is fixed */
+  padding: 0 1em;
+
+  font-size: 120%;
+  font-weight: 600;
+
+  border-bottom: 1px solid #dddddd;
+
+}
+
+
+
+nav {
+
+
+
+  grid-area: nav;
+
+  position: sticky;
+  top: calc(var(--grid-gap) + var(--header-height));
+
+  /* default is stretch, preventing proper sticky behaviour */
+  align-self: start;
+
+  background-color: white;
+  border-right: 1px solid #dddddd;
+
+
+  display: flex;
+  flex-direction: column;
+
+  /* Transition for transitions when hidden */
+  transition: transform 0.25s;
+
+  /* Debug */
+  /* background-color: lightpink; */
+}
+
+main {
+  grid-area: main;
+
+  /* Debug */
+  /* background-color: lightblue; */
+}
+
+/* WARNING: Affects stuff like the edit button */
+main a {
+  text-decoration: none;
+
+  color: var(--accent-color);
+  font-weight: bold;
+  transition: 0.25s;
+}
+
+footer {
+  grid-area: footer;
+
+  display: flex;
+  justify-content: center;
+  padding: 1em;
+}
+
+
+
+.nav_backround {
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9;
+
+  background-color: #00000044;
+
+  visibility: hidden;
+  opacity: 0;
+
+  transition:
+    visibility 0.5s,
+    opacity 0.5s;
+
+}
+
+
+
+
+
+
+
+
+
+/* responsivity */
+/* Not mobile first, I know it's bad practice */
+@media only screen and (max-width: 50rem) {
+
+  .nav_backround.visible {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  .app {
+    grid-template-areas:
+      'header header header'
+      '. main .'
+      '. nav .'
+      '. footer .';
+
+    /* Outer columns to zero because gap is enough */
+    grid-template-columns: 0 1fr 0;
+  }
+
+  nav {
+    /* PROBLEM: top needs to be positioned below the header */
+    position: fixed;
+    top: var(--header-height);
+    width: var(--nav-width);
+    z-index: 10;
+    height: 100%;
+    transform: translateX(-100%);
+    border: none;
+  }
+
+  nav.open {
+    transform: translateX(0%);
+  }
+
+  header .navigation_button {
+    display: block;
+  }
+}

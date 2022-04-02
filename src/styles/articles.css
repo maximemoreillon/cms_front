@@ -1,0 +1,48 @@
+/*
+  Article related stuff
+  Writen here because sometiems shared between editor and article itself
+  Sometimes inaccessible from Article because scoped
+*/
+
+/* TODO: Also apply to editor */
+
+/* Hide H1 of article because displayed separately */
+.article_content:not(.editor_content) h1 {
+  display: none;
+}
+
+.article_content {
+  line-height: var(--line-height);
+}
+
+.article_content :is(img, iframe) {
+  display: block; /* img, iframe default is inline */
+  margin: 2em auto; /* horizontal margin auto for centering */
+  max-width: 80%;
+  filter: drop-shadow(2.5px 2.5px 5px #44444444); /* Using filter because of object fit contain */
+
+}
+
+.article_content img {
+  max-height: 50vh;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+.article_content iframe {
+  width: 80%;
+  aspect-ratio: 3/2; /* This is super useful */
+}
+
+
+article pre code {
+  /* width: 80%; */
+  display: block;
+
+  /* Allow horizontal scroll */
+  overflow-x: auto;
+  font-size: 90%;
+  padding: 1em;
+  background: #282b2e;
+  color: #e0e2e4;
+}

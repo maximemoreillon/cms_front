@@ -1,13 +1,14 @@
+<!-- This is just a gloriofied wrapper for CSS so stop using it -->
 <template>
 
   <button
     class="icon_button"
-    v-bind:style="{ fontSize: size}"
-    v-bind:class="{active: active}"
-    v-on:click="button_clicked()"
+    :style="{ fontSize: size}"
+    :class="{ active }"
+    @click="button_clicked()"
     type="button">
 
-    <slot></slot>
+    <slot />
 
   </button>
 
@@ -67,7 +68,4 @@ export default {
   color: #c00000;
 }
 
-.icon_button > *:not(:last-child) {
-  margin-right: 0.5em;
-}
 </style>

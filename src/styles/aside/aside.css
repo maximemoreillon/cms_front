@@ -1,0 +1,52 @@
+aside .nav_button_wrapper {
+  display: none;
+  background-color: white;
+  width: var(--header-height);
+  height: var(--header-height);
+
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 100%;
+  border-top-right-radius: 100%;
+  border-bottom-right-radius: 100%;
+  top: 0;
+  /* z-index: -1; */
+  font-size: 120%;
+}
+
+aside .navigation_button {
+  grid-area: navButton;
+  cursor: pointer;
+}
+
+aside .title {
+  grid-area: title;
+}
+
+
+aside .logo_wrapper {
+
+  grid-area: logo;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 100%; */
+  /* outline: 1px solid red; */
+  padding: 1.5em;
+}
+
+aside .logo {
+  width: 7.5em;
+  height: 7.5em;
+  animation-name: one_minute_rotation;
+  animation-iteration-count: infinite;
+  animation-duration: 60s;
+  animation-timing-function: linear;
+}
+
+@keyframes one_minute_rotation {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

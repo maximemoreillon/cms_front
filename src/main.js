@@ -7,8 +7,12 @@ import VueAxios from 'vue-axios'
 import VueCookie from 'vue-cookie'
 import './icon_import.js'
 
+import Loader from '@moreillon/vue_loader'
+
 Vue.use(VueCookie)
 Vue.use(VueAxios, axios)
+
+Vue.component('Loader', Loader)
 
 
 Vue.config.productionTip = false
