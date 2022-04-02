@@ -80,6 +80,8 @@ import ArticleMetadata from '@/components/ArticleMetadata.vue'
 import {formatDate} from '@/mixins/formatDate.js'
 import IdUtils from '@/mixins/IdUtils'
 
+import {set_article_seo} from '@/seo.js'
+
 
 
 export default {
@@ -130,8 +132,12 @@ export default {
 
         this.article = article
 
-        document.title = `${this.article.title} - Maxime MOREILLON`
         setTimeout(this.add_event_listeners_for_image_modals,100)
+
+        // SEO config
+        set_article_seo(this.article)
+
+
       })
       .catch(error => {
 

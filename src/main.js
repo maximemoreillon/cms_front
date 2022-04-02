@@ -6,6 +6,7 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueCookie from 'vue-cookie'
 import './icon_import.js'
+import {reset_seo} from './seo.js'
 
 import Loader from '@moreillon/vue_loader'
 
@@ -18,7 +19,8 @@ Vue.component('Loader', Loader)
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
-  document.title = `Articles - Maxime MOREILLON`
+  // Reset SEO
+  reset_seo()
   store.commit('check_authentication')
   next()
 })
