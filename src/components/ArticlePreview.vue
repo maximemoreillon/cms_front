@@ -63,20 +63,25 @@
       v-html="article.summary || 'No summary available'"/>
 
 
-    <div class="tags" v-if="tags && tags.length">
+    <div class="tags">
 
-      <tag-icon />
+      <template v-if="tags && tags.length">
+        <tag-icon />
+
+        <Tag
+          :clickable="false"
+          v-for="(tag, index) in tags.slice(0,max_tags)"
+          v-bind:key="`tag_${index}`"
+          v-bind:tag="tag"/>
+
+        <span v-if="tags.length > max_tags">
+          +{{tags.length - max_tags}}
+        </span>
+      </template>
+
+      <tag-off-icon v-else/>
 
 
-      <Tag
-        :clickable="false"
-        v-for="(tag, index) in tags.slice(0,max_tags)"
-        v-bind:key="`tag_${index}`"
-        v-bind:tag="tag"/>
-
-      <span v-if="tags.length > max_tags">
-        +{{tags.length - max_tags}}
-      </span>
 
     </div>
 
@@ -144,31 +149,29 @@ export default {
   max-height: 20em;
 
   display: grid;
-
   grid-template-areas:
     'title'
     'metadata'
     'summary'
     'tags';
+  align-items: start;
 
   /* WARNING: Missing tags will create a gap */
 
   /* Can use minmax thanks to max-height being set on container */
-  grid-auto-rows: auto auto minmax(0, 1fr) auto;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
   grid-gap: 1em;
 
 }
 
 .article_with_thumbnail {
   /* Special layout if the article has a thumbnail */
+  grid-template-columns: 2fr 5fr;
   grid-template-areas:
     'title title'
     'metadata metadata'
     'thumbnail summary'
     'tags tags';
-
-  grid-template-columns: 2fr 5fr;
-  align-items: start;
 
 }
 
@@ -190,19 +193,17 @@ h2 {
   margin-top: -0.75em;
   display: flex;
   align-items: center;
+  gap: 1em;
   font-size: 75%;
   color: #666666;
 }
 
 .metadata > div {
-  margin-right: 1em;
   display: flex;
   align-items: center;
+  gap: 0.25em;
 }
 
-.metadata > div > * {
-  margin-right: 0.25em;
-}
 
 .thumbnail {
   grid-area: thumbnail;
@@ -220,7 +221,7 @@ h2 {
   line-height: var(--line-height);
 
   grid-area: summary;
-  overflow: hidden;
+  overflow-y: hidden;
 
 
   /* Position relative for shadow below */
