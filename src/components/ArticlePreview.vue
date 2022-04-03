@@ -146,7 +146,6 @@ export default {
   transition: border-color 0.25s;
   padding: 1em;
 
-  max-height: 20em;
 
   display: grid;
   grid-template-areas:
@@ -154,14 +153,12 @@ export default {
     'metadata'
     'summary'
     'tags';
-  align-items: start;
+
+  /* align-items: start; */
 
   /* WARNING: Missing tags will create a gap */
 
-  /* Can use minmax thanks to max-height being set on container */
-  /* Safari problem can be recreated by setting auto instead of minmax */
-  /* minmax can be replaced by 1fr and it works the same */
-  grid-template-rows: auto auto 1fr auto;
+  grid-template-rows: repeat(auto,4);
   grid-gap: 1em;
 
 }
@@ -209,21 +206,26 @@ h2 {
 
 .thumbnail {
   grid-area: thumbnail;
+
+  /* Span the whole available surface */
+  /* NOTE: Does not work with max-width and max-height */
   width: 100%;
   height: 100%;
+  max-height: 10em;
   object-fit: cover;
 }
 
 
 .summary {
+  grid-area: summary;
 
   /* Height is set using grid so height 100% here allows working overflows */
-  height: 100%;
+  max-height: 10em;
+  overflow-y: hidden;
+
 
   line-height: var(--line-height);
 
-  grid-area: summary;
-  overflow-y: hidden;
 
 
   /* Position relative for shadow below */
