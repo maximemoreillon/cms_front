@@ -298,19 +298,17 @@ export default {
 <style scoped>
 
 .articles_container {
-
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 1em;
+  gap: 1em; */
+}
 
+.articles_container > *+* {
+  margin-top: 1em;
 }
 
 
-
-.article_counter > *:first-child {
-  margin-right: 0.25em;
-}
 
 .load_more_wrapper {
   padding: 1em;

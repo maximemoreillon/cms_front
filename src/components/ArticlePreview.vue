@@ -134,7 +134,10 @@ export default {
 <style scoped>
 
 .article_preview {
+
+  /* Relative for shadow */
   position: relative;
+
   text-decoration: none;
 
   color: currentColor;
@@ -147,6 +150,7 @@ export default {
   padding: 1em;
 
 
+
   display: grid;
   grid-template-areas:
     'title'
@@ -154,7 +158,6 @@ export default {
     'summary'
     'tags';
 
-  /* align-items: start; */
 
   /* WARNING: Missing tags will create a gap */
 
@@ -163,9 +166,11 @@ export default {
 
 }
 
+
+
 .article_with_thumbnail {
   /* Special layout if the article has a thumbnail */
-  grid-template-columns: 2fr 5fr;
+  grid-template-columns: 3fr 5fr;
   grid-template-areas:
     'title title'
     'metadata metadata'

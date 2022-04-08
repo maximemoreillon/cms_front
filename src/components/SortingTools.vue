@@ -44,7 +44,7 @@ export default {
   },
   methods: {
     add_query_parameter(key, value){
-      
+
       // Do nothing if already the right query
       if(this.$route.query[key] === value) return
 
@@ -70,4 +70,5 @@ export default {
 </script>
 
 <style lang="css" scoped>
+
 </style>
