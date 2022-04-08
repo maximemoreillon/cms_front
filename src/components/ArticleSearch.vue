@@ -65,12 +65,12 @@ export default {
 .search_wrapper {
   display: flex;
   align-items: stretch;
+  font-size: 120%;
 }
 
 .search_bar {
-  width: 0;
-  transition: 0.25s;
-  visibility: hidden;
+  flex-grow: 1;
+  padding: 0.5em;
 }
 
 .search_bar.open {

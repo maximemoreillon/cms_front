@@ -23,19 +23,32 @@
 
 
     <!-- Toolbar for sorting and new article -->
-    <div class="toolbar" >
-
-      <!-- article counter -->
+    <!-- <div class="toolbar" >
       <div class="counter">
         <file-document-outline-icon/>
         <span>{{article_count}}</span>
       </div>
-
       <SortingTools />
-
       <div class="spacer"/>
+    </div> -->
 
-      <ArticleSearch />
+    <div class="query_tools">
+
+      <div class="">
+        <ArticleSearch />
+      </div>
+
+      <div class="query_tools_row">
+        <div class="counter">
+          <file-document-outline-icon/>
+          <span>{{article_count}}</span>
+        </div>
+        <div class="spacer" />
+        <SortingTools />
+
+      </div>
+
+
 
     </div>
 
@@ -297,12 +310,7 @@ export default {
 
 <style scoped>
 
-.articles_container {
-  /* display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 1em; */
-}
+
 
 .articles_container > *+* {
   margin-top: 1em;
@@ -313,6 +321,24 @@ export default {
 .load_more_wrapper {
   padding: 1em;
   text-align: center;
+}
+
+.query_tools {
+  padding-bottom: 0.5em;
+  margin-bottom: 1em;
+  border-bottom: 1px solid #dddddd;
+}
+
+.query_tools > *+* {
+  margin-top: .5em;
+}
+.query_tools_row {
+
+}
+
+.query_tools_row {
+  display: flex;
+  flex-direction: row;
 }
 
 </style>

@@ -6,7 +6,7 @@
   font-size: var(--text-size);
 
   display: inline-flex;
-  gap: 0.5em;
+  gap: 0.25em;
 
   color: var(--text-color);
 
