@@ -21,10 +21,10 @@
       <!-- Author -->
       <div
         class="metadata_item"
-        v-if="author">
+        v-if="article.author">
         <account-icon/>
         <span class="author">
-          {{author.display_name || 'Unnnamed'}}
+          {{article.author.display_name || 'Unnnamed'}}
         </span>
       </div>
 
@@ -65,17 +65,17 @@
 
     <div class="tags">
 
-      <template v-if="tags && tags.length">
+      <template v-if="article.tags && article.tags.length">
         <tag-icon />
 
         <Tag
           :clickable="false"
-          v-for="(tag, index) in tags.slice(0,max_tags)"
+          v-for="(tag, index) in article.tags.slice(0,max_tags)"
           v-bind:key="`tag_${index}`"
           v-bind:tag="tag"/>
 
-        <span v-if="tags.length > max_tags">
-          +{{tags.length - max_tags}}
+        <span v-if="article.tags.length > max_tags">
+          +{{article.tags.length - max_tags}}
         </span>
       </template>
 
@@ -115,18 +115,6 @@ export default {
       max_tags: 5,
     }
   },
-
-  computed: {
-    author(){
-      return this.article.author
-    },
-    tags(){
-      return this.article.tags
-    },
-    authorship(){
-      return this.article.author.authoriship
-    },
-  }
 
 }
 </script>

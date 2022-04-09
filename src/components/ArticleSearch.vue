@@ -31,17 +31,10 @@ export default {
   },
   methods: {
     search(){
-
       const query = {...this.$route.query, search: this.search_string}
-
-      if(this.search_string === '') delete query.search
-
       if(this.$route.query.search === query.search) return
-
+      if(this.search_string === '') delete query.search
       this.$router.push({name: 'articles', query})
-
-
-
     }
   }
 
