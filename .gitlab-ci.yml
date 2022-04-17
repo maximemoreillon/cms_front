@@ -17,7 +17,6 @@ image: moreillon/ci-dind
 services:
   - name: docker:19.03.12-dind
 
-
 build:
   stage: build
   tags:
