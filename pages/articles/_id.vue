@@ -125,8 +125,8 @@ export default {
         { hid: 'twitter:card', name: 'twitter:card', content: 'summary' },
         { hid: 'twitter:site', name: 'twitter:site', content: '@m_moreillon' },
         { hid: 'twitter:title', name: 'twitter:title', content: this.article?.title },
-        { hid: 'twitter:image', name: 'twitter:image', content: this.article?.summary },
-        { hid: 'twitter:description', name: 'twitter:description', content: 'https://articles.maximemoreillon.com/logo.png' },
+        { hid: 'twitter:description', name: 'twitter:description', content: this.article?.summary },
+        { hid: 'twitter:image', name: 'twitter:image', content: 'https://articles.maximemoreillon.com/logo.png' },
         { hid: 'twitter:image:alt', name: 'twitter:image:alt', content: 'Maxime Moreillon logo' },
 
       ]
