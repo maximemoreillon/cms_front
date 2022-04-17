@@ -101,7 +101,7 @@ export default {
   data () {
     return {
 
-      article: null,
+      // article: null,
       article_loading: false,
       error: null,
 
@@ -112,8 +112,12 @@ export default {
     }
   },
 
-  fetch(){
-    this.get_article()
+  async asyncData ( {$axios, params} ){
+    const api_url = 'https://api.cms.maximemoreillon.com'
+    const {data: article} = await $axios.get(`${api_url}/v1/articles/${params.id}`)
+
+    return { article }
+
   },
   head(){
     return {
@@ -137,32 +141,6 @@ export default {
 
   methods: {
 
-    get_article(){
-
-
-      if(!this.article_id) return
-
-      this.article_loading = true
-
-
-      this.$axios.get(`${this.api_url}/v1/articles/${this.article_id}`)
-      .then( ({data: article}) => {
-
-        this.article = article
-
-        // setTimeout(this.add_event_listeners_for_image_modals,100)
-
-
-      })
-      .catch(error => {
-
-        this.error = true
-        if(error.response) console.error(error.response.data)
-        else console.error(error)
-
-      })
-      .finally( () => { this.article_loading = false })
-    },
 
     add_event_listeners_for_image_modals(){
       this.$refs.article_content
@@ -186,7 +164,6 @@ export default {
   },
   computed: {
     article_id(){
-      // Accounting for legacy routes
       return this.$route.params.id
     },
     editable(){
