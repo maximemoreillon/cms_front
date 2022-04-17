@@ -117,7 +117,20 @@ export default {
   },
   head(){
     return {
-      title: this.article?.title
+      title: this.article?.title,
+
+      meta: [
+        { hid: 'description', name: 'description', content: this.article?.summary },
+        // Twitter
+        { hid: 'twitter:card', name: 'twitter:card', content: 'summary' },
+        { hid: 'twitter:site', name: 'twitter:site', content: '@m_moreillon' },
+        { hid: 'twitter:title', name: 'twitter:title', content: this.article?.title },
+        { hid: 'twitter:image', name: 'twitter:image', content: this.article?.summary },
+        { hid: 'twitter:description', name: 'twitter:description', content: 'https://articles.maximemoreillon.com/logo.png' },
+        { hid: 'twitter:image:alt', name: 'twitter:image:alt', content: 'Maxime Moreillon logo' },
+
+      ]
+
     }
   },
 
