@@ -22,8 +22,6 @@ build:
   stage: build
   tags:
     - dind
-  only:
-    - master
   before_script:
     # Docker hub login
     - echo "${DOCKER_HUB_PASSWORD}" | docker login --username ${DOCKER_HUB_USERNAME} --password-stdin
@@ -38,8 +36,6 @@ deploy:
   stage: deploy
   tags:
     - dind
-  only:
-    - master
   script:
     - envsubst < kubernetes_manifest.yml | kubectl apply -f -
   environment:
