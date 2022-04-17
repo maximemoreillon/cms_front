@@ -30,7 +30,7 @@ spec:
   selector:
     app: ${APPLICATION_NAME}
   ports:
-  - port: 80
+  - port: 8080
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -51,4 +51,4 @@ spec:
       - path: /
         backend:
           serviceName: ${APPLICATION_NAME} # Name of the service, named after the app
-          servicePort: 80
+          servicePort: 8080
