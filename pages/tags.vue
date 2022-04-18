@@ -50,6 +50,14 @@ import Tag from '@/components/Tag.vue'
 
 
 export default {
+  name: 'Tags',
+  modules: [
+    '@nuxtjs/axios',
+  ],
+
+  axios: {
+    // proxy: true
+  },
   components: {
     Tag,
   },
@@ -59,6 +67,7 @@ export default {
       loading: false,
       error: null,
       filter: '',
+      api_url: 'https://api.cms.maximemoreillon.com'
 
     }
   },
@@ -75,9 +84,9 @@ export default {
 
       this.loading = true
 
-      const url = `${process.env.VUE_APP_CMS_API_URL}/v1/tags`
+      const url = `${this.api_url}/v1/tags`
 
-      this.axios.get(url)
+      this.$axios.get(url)
       .then( ({data}) => {
         this.tags = data
       })
