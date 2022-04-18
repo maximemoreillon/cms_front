@@ -53,7 +53,7 @@ export default {
         },
         {
           name: 'API',
-          url: process.env.VUE_APP_CMS_API_URL,
+          url: process.env.NUXT_ENV_CMS_API_URL,
           version: null
         },
         {

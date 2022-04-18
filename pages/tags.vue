@@ -67,7 +67,6 @@ export default {
       loading: false,
       error: null,
       filter: '',
-      api_url: 'https://api.cms.maximemoreillon.com'
 
     }
   },
@@ -84,7 +83,7 @@ export default {
 
       this.loading = true
 
-      const url = `${this.api_url}/v1/tags`
+      const url = `${process.env.NUXT_ENV_CMS_API_URL}/v1/tags`
 
       this.$axios.get(url)
       .then( ({data}) => {

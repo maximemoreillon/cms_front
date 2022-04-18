@@ -83,8 +83,7 @@ export default {
 
   async fetch (){
     // Async data only allowed for pages
-    const api_url = 'https://api.cms.maximemoreillon.com'
-    const url = `${api_url}/v1/tags/`
+    const url = `${process.env.NUXT_ENV_CMS_API_URL}/v1/tags/`
     const params = { pinned: true }
 
     const {data} = await this.$axios.get(url, {params})
