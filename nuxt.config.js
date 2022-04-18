@@ -59,6 +59,10 @@ export default {
 
   serverMiddleware: [
     '~/server-middleware/logger',
-  ]
+  ],
+
+  publicRuntimeConfig: {
+    apiUrl: process.env.NUXT_ENV_CMS_API_URL
+  },
 
 }

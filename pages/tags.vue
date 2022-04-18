@@ -83,7 +83,7 @@ export default {
 
       this.loading = true
 
-      const url = `${process.env.NUXT_ENV_CMS_API_URL}/v1/tags`
+      const url = `${this.$config.apiUrl}/v1/tags`
 
       this.$axios.get(url)
       .then( ({data}) => {

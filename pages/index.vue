@@ -205,7 +205,7 @@ export default {
         author_id,
       }
 
-      const url = `${process.env.NUXT_ENV_CMS_API_URL}/v1/articles`
+      const url = `${this.$config.apiUrl}/v1/articles`
 
       this.$axios.get(url, { params })
       .then( ({data}) => {
@@ -238,7 +238,7 @@ export default {
       if(!tag_id) return
 
       this.tag_loading = true;
-      this.$axios.get(`${process.env.NUXT_ENV_CMS_API_URL}/v1/tags/${tag_id}`)
+      this.$axios.get(`${this.$config.apiUrl}/v1/tags/${tag_id}`)
       .then( ({data}) => {
         this.tag = data
        })
@@ -257,7 +257,7 @@ export default {
 
       if(!author_id) return
 
-      this.$axios.get(`${process.env.NUXT_ENV_CMS_API_URL}/v1/authors/${author_id}`)
+      this.$axios.get(`${this.$config.apiUrl}/v1/authors/${author_id}`)
       .then(response => { this.author = response.data })
       .catch(error => {
         // Dirty

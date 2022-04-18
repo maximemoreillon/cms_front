@@ -111,12 +111,9 @@ export default {
     }
   },
 
-  async asyncData ( {$axios, params} ){
-    const api_url = 'https://api.cms.maximemoreillon.com'
-    const {data: article} = await $axios.get(`${api_url}/v1/articles/${params.id}`)
-
+  async asyncData ( {$axios, params, $config: { apiUrl }} ){
+    const {data: article} = await $axios.get(`${apiUrl}/v1/articles/${params.id}`)
     return { article }
-
   },
   head(){
     return {
