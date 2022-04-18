@@ -34,7 +34,7 @@ export default {
       const query = {...this.$route.query, search: this.search_string}
       if(this.$route.query.search === query.search) return
       if(this.search_string === '') delete query.search
-      this.$router.push({name: 'articles', query})
+      this.$router.push({name: 'index', query})
     }
   }
 
