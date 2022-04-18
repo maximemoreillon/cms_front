@@ -17,6 +17,9 @@ spec:
         image: ${CONTAINER_IMAGE_TAGGED}
         ports:
         - containerPort: 80
+        env:
+        - name: NUXT_ENV_CMS_API_URL
+          value: https://api.cms.maximemoreillon.com
         envFrom:
         - secretRef:
            name: environment-variables
