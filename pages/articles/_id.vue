@@ -101,7 +101,6 @@ export default {
   data () {
     return {
 
-      // article: null,
       article_loading: false,
       error: null,
 

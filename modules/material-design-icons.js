@@ -7,6 +7,7 @@ const icons = [
   'Pencil',
   'Tag',
   'TagOff',
+  'TagMultiple',
   'InformationOutline',
   'Calendar',
   'CalendarEdit',

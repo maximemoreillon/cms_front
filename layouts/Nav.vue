@@ -27,18 +27,18 @@
     </router-link> -->
 
 
-    <!-- <router-link
-      v-for="({to, label}, index) in $store.state.pinned_tags"
+    <router-link
+      v-for="(tag, index) in tags"
       :key="`nav_${index}`"
-      :to="to">
-      <tag-icon />
-      <span>{{label}}</span>
+      :to="{name: 'index', query: {tag_id: tag._id} }">
+      <MaterialIconTag />
+      <span>{{tag.name}}</span>
     </router-link>
 
     <router-link :to="{ name: 'tags'}">
-      <tag-multiple-icon />
+      <MaterialIconTagMultiple />
       <span>Tags</span>
-    </router-link> -->
+    </router-link>
 
     <!-- Login / Logout -->
     <!-- <router-link :to="{ name: 'login' }">
@@ -68,8 +68,33 @@
 
 export default {
   name: 'Nav',
-  props: {
+  modules: [
+    '@nuxtjs/axios',
+  ],
+
+  axios: {
+    // proxy: true
   },
+  data(){
+    return {
+      tags: []
+    }
+  },
+
+  async fetch (){
+    // Async data only allowed for pages
+    const api_url = 'https://api.cms.maximemoreillon.com'
+    const url = `${api_url}/v1/tags/`
+    const params = { pinned: true }
+
+    const {data} = await this.$axios.get(url, {params})
+
+    this.tags = data
+
+
+
+  },
+
 
 }
 </script>
