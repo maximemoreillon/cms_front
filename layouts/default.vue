@@ -31,8 +31,14 @@
 import Aside from './Aside.vue'
 import Header from './Header.vue'
 
+import VueCookie from 'vue-cookie'
+
 export default {
   name: 'Layout',
+  modules: [
+    '@nuxtjs/axios',
+  ],
+  axios: { },
   components: {
     Aside,
     Header
@@ -43,12 +49,37 @@ export default {
       next()
       this.aside_open = false
     })
+
+    this.get_current_user()
+
   },
   data(){
     return {
       aside_open: false,
     }
+  },
+  methods: {
+    get_current_user(){
+      const jwt = VueCookie.get('jwt')
+
+      if(!jwt) {
+        this.$store.commit('set_current_user', null)
+        return
+      }
+
+      const url = 'https://api.users.maximemoreillon.com/v2/users/self'
+      const headers = { Authorization: `Bearer ${jwt}` }
+      this.$axios.get(url, { headers })
+        .then( ({data: user}) => {
+          this.$store.commit('set_current_user', user)
+        })
+        .catch( (error) => {
+          console.error(error);
+        })
+
+    }
   }
+
 
 }
 </script>

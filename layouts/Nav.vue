@@ -41,16 +41,16 @@
     </router-link>
 
     <!-- Login / Logout -->
-    <!-- <router-link :to="{ name: 'login' }">
+    <router-link :to="{ name: 'login' }">
       <template v-if="!$store.state.current_user">
-        <login-icon />
+        <MaterialIconLogin />
         <span>Login</span>
       </template>
       <template v-else>
-        <logout-icon />
+        <MaterialIconLogout />
         <span>Logout</span>
       </template>
-    </router-link> -->
+    </router-link>
 
 
 

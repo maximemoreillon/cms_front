@@ -18,7 +18,9 @@ const icons = [
   'Magnify',
   'FileDocumentOutline',
   'Earth',
-  'NewspaperVariantMultipleOutline'
+  'NewspaperVariantMultipleOutline',
+  'Login',
+  'Logout',
 ]
 
 export default function () {

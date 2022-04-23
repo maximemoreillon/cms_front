@@ -57,12 +57,17 @@ export default {
   build: {
   },
 
+  loading: {
+    color: '#c00000',
+  },
+
   serverMiddleware: [
     '~/server-middleware/logger',
   ],
 
   publicRuntimeConfig: {
-    apiUrl: process.env.NUXT_ENV_CMS_API_URL
+    apiUrl: process.env.NUXT_ENV_CMS_API_URL,
+    authApiUrl: process.env.NUXT_ENV_USER_MANAGER_API_URL
   },
 
 }

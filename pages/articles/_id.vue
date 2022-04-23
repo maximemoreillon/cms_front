@@ -55,17 +55,17 @@
 
 
     <!-- modal for images -->
-    <!-- <Modal
+    <Modal
       v-if="article"
-      v-bind:open="modal.open"
-      v-on:close="modal.open = false">
+      :open="modal.open"
+      @close="modal.open = false">
 
       <img
         class="modal_image"
-        v-bind:src="modal.image_src"
+        :src="modal.image_src"
         :alt="article.title"/>
 
-    </Modal> -->
+    </Modal>
 
   </div>
 
@@ -77,7 +77,7 @@
 import ArticleMetadata from '@/components/ArticleMetadata.vue'
 
 // import Loader from '@moreillon/vue_loader'
-// import Modal from '@moreillon/vue_modal'
+import Modal from '@moreillon/vue_modal'
 
 
 
@@ -94,7 +94,7 @@ export default {
   },
   components: {
     // Loader,
-    // Modal,
+    Modal,
     ArticleMetadata,
   },
 
@@ -104,7 +104,13 @@ export default {
       article_loading: false,
       error: null,
 
-      api_url: 'https://api.cms.maximemoreillon.com'
+      api_url: 'https://api.cms.maximemoreillon.com',
+
+      modal: {
+        open: false,
+        image_src: "",
+      }
+
 
 
 
@@ -132,6 +138,9 @@ export default {
       ]
 
     }
+  },
+  mounted(){
+    this.add_event_listeners_for_image_modals()
   },
 
 

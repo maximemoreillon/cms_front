@@ -42,5 +42,6 @@ module.exports = {
     'block-spacing': 'warn',
     'arrow-parens': 'warn',
     'import/order': 'warn',
+    'brace-style': 'warn',
   }
 }

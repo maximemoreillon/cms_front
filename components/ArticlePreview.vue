@@ -29,7 +29,6 @@
       </div>
 
       <!-- Publishing status and views only visible to users logged in -->
-
         <div
           class="metadata_item"
           v-if="article.views">
@@ -39,13 +38,13 @@
           </span>
         </div>
 
-      <!-- <template v-if="$store.state.current_user">
+      <template v-if="$store.state.current_user">
         <div
           class="metadata_item" >
-          <earth-icon v-if="article.published"/>
-          <lock-icon v-else />
+          <MaterialIconEarth v-if="article.published"/>
+          <MaterialIconLock v-else />
         </div>
-      </template> -->
+      </template>
 
     </div>
 
