@@ -43,5 +43,6 @@ module.exports = {
     'arrow-parens': 'warn',
     'import/order': 'warn',
     'brace-style': 'warn',
+    'vue/max-attributes-per-line': 'warn',
   }
 }

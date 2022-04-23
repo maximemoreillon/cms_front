@@ -1,12 +1,12 @@
 <template lang="html">
   <nav >
 
-    <!-- <router-link
+    <router-link
       v-if="$store.state.current_user"
-      :to="{ name: 'index', params: {article_id: 'new'}}">
+      :to="{ name: 'articles-id-edit', params: {id: 'new'}}">
       <MaterialIconPlus />
       <span>New article</span>
-    </router-link> -->
+    </router-link>
 
     <router-link :to="{ name: 'index'}">
       <MaterialIconNewspaperVariantMultipleOutline />

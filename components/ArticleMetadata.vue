@@ -6,30 +6,27 @@
       <div
         class="metadata_element"
         title="Author">
-        <!-- <span>Written by</span> -->
         <MaterialIconAccount class="metadata_icon"/>
         <Author v-bind:author="article.author"/>
       </div>
-
+      <!-- Creation date -->
       <div
         class="metadata_element"
         title="Created"
         v-if="article.authorship.creation_date">
         <MaterialIconCalendar class="metadata_icon"/>
-        <!-- <span>Creation date:</span> -->
         <span>{{format_date(article.authorship.creation_date)}}</span>
       </div>
-
+      <!-- Last edited date -->
       <div
         class="metadata_element"
         title="last edited"
         v-if="article.authorship.edition_date">
-        <!-- <span>Last edited:</span> -->
         <MaterialIconCalendarEdit class="metadata_icon"/>
         <span>{{format_date(article.authorship.edition_date)}}</span>
-
       </div>
 
+      <!-- View count -->
       <div
         class="metadata_element"
         title="Views"
@@ -38,6 +35,7 @@
         <span>{{article.views}}</span>
       </div>
 
+      <!-- Published indicator -->
       <template v-if="user_is_author">
         <div
           class="metadata_element"
@@ -47,7 +45,7 @@
           <span>Published</span>
         </div>
 
-
+        <!-- Privacy indicator -->
         <div
           class="metadata_element"
           title="Private"
@@ -57,9 +55,9 @@
         </div>
 
         <router-link
-          :to="{ name: 'article_editor', params: { id: article._id } }"
+          :to="{ name: 'articles-id-edit', params: { id: article._id } }"
           class="metadata_element edit_button button">
-          <pencil-icon class="metadata_icon"/>
+          <MaterialIconPencil class="metadata_icon"/>
           <span>Edit</span>
         </router-link>
       </template>
@@ -116,8 +114,14 @@ export default {
   },
   computed: {
     user_is_author(){
-      return false
+      const current_user = this.$store.state.current_user
+      if(!current_user) return false
+      const current_user_id = current_user._id
+      const author_id = this.article.author._id
+
+      return current_user_id === author_id
     }
+
   }
 }
 </script>

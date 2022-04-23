@@ -104,7 +104,6 @@ export default {
       article_loading: false,
       error: null,
 
-      api_url: 'https://api.cms.maximemoreillon.com',
 
       modal: {
         open: false,
@@ -127,6 +126,7 @@ export default {
 
       meta: [
         { hid: 'description', name: 'description', content: this.article?.summary },
+        
         // Twitter
         { hid: 'twitter:card', name: 'twitter:card', content: 'summary' },
         { hid: 'twitter:site', name: 'twitter:site', content: '@m_moreillon' },
