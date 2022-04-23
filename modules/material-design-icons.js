@@ -2,6 +2,7 @@ import { resolve } from 'path'
 
 const icons = [
   'Account',
+  'Close',
   'Menu',
   'Lock',
   'Pencil',

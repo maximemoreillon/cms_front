@@ -23,14 +23,6 @@
 
 
     <!-- Toolbar for sorting and new article -->
-    <!-- <div class="toolbar" >
-      <div class="counter">
-        <file-document-outline-icon/>
-        <span>{{article_count}}</span>
-      </div>
-      <SortingTools />
-      <div class="spacer"/>
-    </div> -->
 
     <div class="query_tools">
 

@@ -1,9 +1,9 @@
 <template>
-  <!-- TODO: Have tag as a link -->
+<!-- Cannot have tag as link because remove button -->
   <span
     class="tag"
     :class="{clickable}"
-    v-on:click.stop="tag_clicked()">
+    @click.stop="tag_clicked()">
 
     <span class="tag_name">{{tag.name || 'Untitled'}}</span>
 
@@ -11,8 +11,8 @@
     <button
       v-if="removable"
       class="remove_button"
-      v-on:click.stop="$emit('remove')">
-      <close-icon />
+      @click.stop="$emit('remove')">
+      <MaterialIconClose />
     </button>
 
   </span>
