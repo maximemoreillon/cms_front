@@ -21,6 +21,8 @@ const icons = [
   'NewspaperVariantMultipleOutline',
   'Login',
   'Logout',
+  'Plus',
+  
 ]
 
 export default function () {

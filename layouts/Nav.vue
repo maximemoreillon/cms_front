@@ -1,30 +1,24 @@
 <template lang="html">
   <nav >
 
-    <!-- Nav is just a collection of links -->
-
     <!-- <router-link
       v-if="$store.state.current_user"
-      :to="{ name: 'article_editor', params: {article_id: 'new'}}">
-
-      <plus-icon />
+      :to="{ name: 'index', params: {article_id: 'new'}}">
+      <MaterialIconPlus />
       <span>New article</span>
-
     </router-link> -->
 
     <router-link :to="{ name: 'index'}">
-
       <MaterialIconNewspaperVariantMultipleOutline />
       <span>All articles</span>
-
     </router-link>
 
-    <!-- <router-link
+    <router-link
       v-if="$store.state.current_user"
-      :to="{ name: 'articles', query: {author_id: current_user_id}}">
-      <account-icon />
+      :to="{ name: 'index', query: {author_id: $store.state.current_user._id}}">
+      <MaterialIconAccount />
       <span>My articles</span>
-    </router-link> -->
+    </router-link>
 
 
     <router-link
@@ -89,8 +83,6 @@ export default {
     const {data} = await this.$axios.get(url, {params})
 
     this.tags = data
-
-
 
   },
 

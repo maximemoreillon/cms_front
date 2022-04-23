@@ -64,6 +64,7 @@ export default {
 
       if(!jwt) {
         this.$store.commit('set_current_user', null)
+        delete this.axios.defaults.headers.common.Authorization
         return
       }
 
@@ -72,9 +73,15 @@ export default {
       this.$axios.get(url, { headers })
         .then( ({data: user}) => {
           this.$store.commit('set_current_user', user)
+          this.$axios.defaults.headers.common.Authorization = `Bearer ${jwt}`
         })
         .catch( (error) => {
-          console.error(error);
+          console.error(error)
+
+          VueCookie.delete('jwt')
+          this.$store.commit('set_current_user', null)
+          delete this.axios.defaults.headers.common.Authorization
+
         })
 
     }
