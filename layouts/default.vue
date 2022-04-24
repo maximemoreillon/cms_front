@@ -68,8 +68,9 @@ export default {
         return
       }
 
-      const url = 'https://api.users.maximemoreillon.com/v2/users/self'
+      const url = `${this.$config.userManagerApiUrl}/v2/users/self`
       const headers = { Authorization: `Bearer ${jwt}` }
+      
       this.$axios.get(url, { headers })
         .then( ({data: user}) => {
           this.$store.commit('set_current_user', user)

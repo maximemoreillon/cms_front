@@ -22,6 +22,8 @@ spec:
           value: https://api.cms.maximemoreillon.com
         - name: NUXT_ENV_USER_MANAGER_API_URL
           value: https://api.users.maximemoreillon.com
+        - name: NUXT_ENV_IMAGE_MANAGER_API_URL
+          value: https://img.maximemoreillon.com
         envFrom:
         - secretRef:
            name: environment-variables

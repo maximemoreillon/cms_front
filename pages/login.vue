@@ -110,7 +110,7 @@ export default {
   methods: {
     login(){
       this.loading = true
-      const url = `${this.$config.authApiUrl}/v2/auth/login`
+      const url = `${this.$config.userManagerApiUrl}/v2/auth/login`
       const body = {username: this.username, password: this.password}
 
       this.$axios.post(url, body)
@@ -128,7 +128,7 @@ export default {
 
         this.$axios.defaults.headers.common.Authorization = `Bearer ${jwt}`
 
-        const url = 'https://api.users.maximemoreillon.com/v2/users/self'
+        const url = `${this.$config.userManagerApiUrl}/v2/users/self`
         // const headers = { Authorization: `Bearer ${jwt}` }
         const headers = {}
 

@@ -67,7 +67,8 @@ export default {
 
   publicRuntimeConfig: {
     apiUrl: process.env.NUXT_ENV_CMS_API_URL,
-    authApiUrl: process.env.NUXT_ENV_USER_MANAGER_API_URL
+    userManagerApiUrl: process.env.NUXT_ENV_USER_MANAGER_API_URL,
+    imageManagerApiUrl: process.env.NUXT_ENV_IMAGE_MANAGER_API_URL,
   },
 
 }
