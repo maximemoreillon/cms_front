@@ -15,6 +15,28 @@
       :class="{ 'active': editor.isActive('italic') }">
       <MaterialIconFormatItalic />
     </button>
+
+    <button 
+      @click="editor.commands.toggleHeading({ level: 1 })"
+      :class="{ 'active': editor.isActive('heading', { level: 1 }) }">
+      <MaterialIconFormatHeader1 />
+    </button>
+
+    <button 
+      @click="editor.commands.toggleHeading({ level: 2 })"
+      :class="{ 'active': editor.isActive('heading', { level: 2 }) }">
+      <MaterialIconFormatHeader2 />
+    </button>
+
+    <button 
+      @click="editor.commands.toggleHeading({ level: 3 })"
+      :class="{ 'active': editor.isActive('heading', { level: 3 }) }">
+      <MaterialIconFormatHeader3 />
+    </button>
+
+    
+    
+
     <button 
       @click="image_upload_modal = true">
       <MaterialIconImage />
