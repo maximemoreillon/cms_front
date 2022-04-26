@@ -23,6 +23,21 @@ const icons = [
   'Login',
   'Logout',
   'Plus',
+  'Image',
+  // Editor toolbar
+  'CodeBracesBox',
+  'CodeBraces',
+  'FormatListNumbered',
+  'FormatListBulleted',
+  'FormatHeader1',
+  'FormatHeader2',
+  'FormatHeader3',
+  'FormatParagraph',
+  'FormatUnderline',
+  'FormatStrikethrough',
+  'FormatBold',
+  'FormatItalic',
+  'Link',
   
 ]
 

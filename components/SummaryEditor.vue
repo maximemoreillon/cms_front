@@ -1,30 +1,20 @@
 <template>
-  <div>
-    <EditorToolbar :editor="editor" />
-    <editor-content :editor="editor" />
-  </div>
+  <editor-content :editor="editor" />
 </template>
 
 <script>
-import EditorToolbar from '@/components/EditorToolbar.vue'
-
 import { Editor, EditorContent } from '@tiptap/vue-2'
 
 import Document from '@tiptap/extension-document'
 import History from '@tiptap/extension-history'
 import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text'
-import Heading from '@tiptap/extension-heading'
-import Link from '@tiptap/extension-link'
-import Image from '@tiptap/extension-image'
-import Bold from '@tiptap/extension-bold'
-import Italic from '@tiptap/extension-italic'
+
 
 export default {
-  name: 'ArticleEditor',
+  name: 'SummaryEditor',
   components: {
     EditorContent,
-    EditorToolbar,
   },
 
   props: {
@@ -57,16 +47,6 @@ export default {
         Document,
         Paragraph,
         Text,
-        Bold,
-        Italic,
-        // Underline,
-        Link,
-        Heading.configure({
-          levels: [1, 2, 3],
-        }),
-        Image.configure({
-          inline: true,
-        }),
         History.configure({})
       ],
       onUpdate: () => {

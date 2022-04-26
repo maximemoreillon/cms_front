@@ -31,7 +31,8 @@
 
         </div>
         <h2>Summary</h2>
-        <textarea v-model="article.summary" />
+        <SummaryEditor v-model="article.summary" />
+
         <h2>Thumbnail</h2>
 
         <img 
@@ -64,12 +65,15 @@
 
 <script>
 import ArticleEditor from '~/components/ArticleEditor.vue'
+import SummaryEditor from '~/components/SummaryEditor.vue'
+
 import Tag from '~/components/Tag.vue'
 
 
 export default {
   components: {
     ArticleEditor,
+    SummaryEditor,
     Tag,
   },
 
@@ -182,12 +186,5 @@ export default {
 .tags_wrapper{
     display: flex;
     gap: 0.5em;
-}
-.editor_content {
-    border: 1px solid #dddddd;
-}
-textarea {
-    width: 100%;
-    resize: vertical;
 }
 </style>

@@ -1,3 +1,5 @@
+
+
 <template>
   <div class="">
 
@@ -8,79 +10,79 @@
       <div class="menubar">
 
         <IconButton
-        v-bind:active="isActive.bold()"
+        :active="isActive.bold()"
         @click="commands.bold">
         <format-bold-icon />
         </IconButton>
 
         <IconButton
-        v-bind:active="isActive.italic()"
+        :active="isActive.italic()"
         @click="commands.italic">
         <format-italic-icon />
         </IconButton>
 
         <IconButton
-        v-bind:active="isActive.strike()"
+        :active="isActive.strike()"
         @click="commands.strike">
         <format-strikethrough-icon />
         </IconButton>
 
         <IconButton
-        v-bind:active="isActive.underline()"
+        :active="isActive.underline()"
         @click="commands.underline">
         <format-underline-icon />
         </IconButton>
 
         <IconButton
-        v-bind:active="isActive.code()"
+        :active="isActive.code()"
         @click="commands.code">
         <code-braces-icon />
         </IconButton>
 
         <IconButton
-        v-bind:active="isActive.paragraph()"
+        :active="isActive.paragraph()"
         @click="commands.paragraph">
         <format-paragraph-icon />
         </IconButton>
 
         <IconButton
-        v-bind:active="isActive.heading({ level: 1 })"
+        :active="isActive.heading({ level: 1 })"
         @click="commands.heading({ level: 1 })">
         <format-header-1-icon />
         </IconButton>
 
         <IconButton
-        v-bind:active="isActive.heading({ level: 2 })"
+        :active="isActive.heading({ level: 2 })"
         @click="commands.heading({ level: 2 })">
         <format-header-2-icon />
         </IconButton>
 
         <IconButton
-        v-bind:active="isActive.heading({ level: 3 })"
+        :active="isActive.heading({ level: 3 })"
         @click="commands.heading({ level: 3 })">
         <format-header-3-icon />
         </IconButton>
 
         <IconButton
-        v-bind:active="isActive.bullet_list()"
+        :active="isActive.bullet_list()"
         @click="commands.bullet_list">
         <format-list-bulleted-icon />
         </IconButton>
 
         <IconButton
-        v-bind:active="isActive.ordered_list()"
+        :active="isActive.ordered_list()"
         @click="commands.ordered_list">
         <format-list-numbered-icon />
         </IconButton>
 
         <!-- <IconButton
-        v-bind:active="isActive.blockquote()"
+        :active="isActive.blockquote()"
         @click="commands.blockquote">
         <format-quote-close-icon />
         </IconButton> -->
 
         <IconButton
-        v-bind:active="isActive.code_block()"
+        :active="isActive.code_block()"
         @click="commands.code_block">
         <code-braces-box-icon />
         </IconButton>
@@ -107,7 +109,7 @@
         </IconButton>
 
         <IconButton
-        v-bind:class="{ 'is-active': isActive.link() }"
+        :class="{ 'is-active': isActive.link() }"
         v-on:click="prompt_for_url(commands.link)">
         <link-icon />
         </IconButton>
@@ -120,8 +122,8 @@
     <!-- Image upload modal -->
     <Modal
       class="above_all "
-      v-bind:open="image_upload_modal.open"
-      v-on:close="image_upload_modal.open = false">
+      :open="image_upload_modal.open"
+      @close="image_upload_modal.open = false">
 
       <div class="image_upload_modal_content">
         <h2>Image upload</h2>
@@ -242,3 +244,4 @@ input[type="text"], input[type="text"] {
 }
 
 </style>
+
