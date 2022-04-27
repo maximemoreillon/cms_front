@@ -38,7 +38,7 @@ export default {
   modules: [
     '@nuxtjs/axios',
   ],
-  axios: { },
+  axios: {},
   components: {
     Aside,
     Header
@@ -66,7 +66,7 @@ export default {
     destroy_user(){
       VueCookie.delete('jwt')
       this.$store.commit('set_current_user', null)
-      delete this.axios.defaults.headers.common.Authorization
+      delete this.$axios.defaults.headers.common.Authorization
     },
 
     get_current_user(){

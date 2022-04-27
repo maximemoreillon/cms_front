@@ -62,7 +62,7 @@ export default {
   },
 
   serverMiddleware: [
-    // '~/server-middleware/logger',
+    '~/server-middleware/auth',
   ],
 
   publicRuntimeConfig: {

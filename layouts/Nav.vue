@@ -74,15 +74,32 @@ export default {
       tags: []
     }
   },
+  mounted(){
+
+    this.$router.beforeEach((to, from, next) => {
+      this.get_pinned_tags()
+
+      next()
+    })
+
+    
+
+  },
+  methods: {
+    get_pinned_tags(){
+      const url = `${this.$config.apiUrl}/v1/tags/`
+      const params = { pinned: true }
+      this.$axios.get(url, {params})
+        .then( ({data}) => {
+          this.tags = data
+        })
+        .catch( error => {
+          console.error(error)
+        })
+    }
+  },
 
   async fetch (){
-    // Async data only allowed for pages
-    const url = `${this.$config.apiUrl}/v1/tags/`
-    const params = { pinned: true }
-
-    const {data} = await this.$axios.get(url, {params})
-
-    this.tags = data
 
   },
 
