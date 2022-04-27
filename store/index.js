@@ -1,5 +1,3 @@
-// import VueCookie from 'vue-cookie'
-
 export const state = () => ({
   current_user: null,
 })

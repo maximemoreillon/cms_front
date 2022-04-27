@@ -1,0 +1,2 @@
+the only actual layout is default.vue
+Have others as components maybe

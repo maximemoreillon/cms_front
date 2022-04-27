@@ -44,13 +44,17 @@ export default {
     Header
   },
   mounted(){
+
     this.$router.beforeEach((to, from, next) => {
+      this.get_current_user()
+      
       // Close Nav when link is clicked
-      next()
       this.aside_open = false
+
+      next()
     })
 
-    this.get_current_user()
+    
 
   },
   data(){
@@ -59,30 +63,30 @@ export default {
     }
   },
   methods: {
+    destroy_user(){
+      VueCookie.delete('jwt')
+      this.$store.commit('set_current_user', null)
+      delete this.axios.defaults.headers.common.Authorization
+    },
+
     get_current_user(){
       const jwt = VueCookie.get('jwt')
 
-      if(!jwt) {
-        this.$store.commit('set_current_user', null)
-        delete this.axios.defaults.headers.common.Authorization
-        return
-      }
+      if(!jwt) return this.destroy_user()
 
-      const url = `${this.$config.userManagerApiUrl}/v2/users/self`
-      const headers = { Authorization: `Bearer ${jwt}` }
+      // Configue headers for all future requesrs
+      this.$axios.defaults.headers.common.Authorization = `Bearer ${jwt}`
       
-      this.$axios.get(url, { headers })
+      const url = `${this.$config.userManagerApiUrl}/v2/users/self`
+      
+      this.$axios.get(url)
         .then( ({data: user}) => {
           this.$store.commit('set_current_user', user)
-          this.$axios.defaults.headers.common.Authorization = `Bearer ${jwt}`
+          
         })
         .catch( (error) => {
           console.error(error)
-
-          VueCookie.delete('jwt')
-          this.$store.commit('set_current_user', null)
-          delete this.axios.defaults.headers.common.Authorization
-
+          this.destroy_user()
         })
 
     }
