@@ -34,7 +34,7 @@ import Modal from '@moreillon/vue_modal'
 
 
 export default {
-  name: 'EditorToolBar',
+  name: 'ImageInsertModal',
   components: {
     Modal,
   },

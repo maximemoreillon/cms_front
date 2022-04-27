@@ -1,8 +1,20 @@
 <template>
   <div>
-      <template>
-        <h1 v-if="article">{{article.title}}</h1>
-        <button @click="update_article()">Save</button>
+      <template v-if="article">
+
+      <div class="top_toolbar">
+          
+          <div class="spacer" />
+        <button @click="update_article()">
+            <MaterialIconContentSave />
+        </button>
+
+      </div>
+
+        <ArticleEditor 
+            class="article_content editor_content"
+            v-model="article.content" />
+        
         <h2>Tags</h2>
         <div class="tags_wrapper">
            <Tag
@@ -33,29 +45,10 @@
         <h2>Summary</h2>
         <SummaryEditor v-model="article.summary" />
 
-        <h2>Thumbnail</h2>
+        <ThumbnailManagement :article="article"/>
 
-        <img 
-            v-if="article.thumbnail_src" 
-            :src="article.thumbnail_src"
-            :alt="`${article.title}_thumbnail`">
         
-        <span v-else>No thumbnail</span>
-
-        <form @submit.prevent="upload_thumbnail()">
-            <input 
-                type="file"
-                ref="new_thumbnail">
-            
-            <button type="submit">Upload</button>
-        </form>
-        
-
-
-        <h2>Content</h2>
-        <ArticleEditor 
-            class="article_content editor_content"
-            v-model="article.content" />
+                
       </template>
       
         
@@ -66,6 +59,7 @@
 <script>
 import ArticleEditor from '~/components/ArticleEditor.vue'
 import SummaryEditor from '~/components/SummaryEditor.vue'
+import ThumbnailManagement from '~/components/ThumbnailManagement.vue'
 
 import Tag from '~/components/Tag.vue'
 
@@ -74,43 +68,46 @@ export default {
   components: {
     ArticleEditor,
     SummaryEditor,
+    ThumbnailManagement,
     Tag,
   },
 
   data() {
     return {
         article: {
-            content: 'This article has no content'
+            title: 'Untitled article',
+            content: 'This article has no content',
+            summary: '',
         },
         existing_tags: [],
       loading: false,
     }
   },
   mounted(){
-      this.get_article()
+      if(this.article_id !== 'new') this.get_article()
       this.get_existing_tags()
   },
   methods: {
     get_article(){
-
-        this.loading = true;
+        this.loading = true
         const url = `${this.$config.apiUrl}/v1/articles/${this.article_id}`
         this.$axios.get(url)
         .then( ({data}) => {
             this.article = data
         })
         .catch(error => {
-            if(error.response) alert(error.response.data)
-            else alert(error)
+            if(error.response) console.error(error.response.data)
+            else console.error(error)
         })
-        .finally( () => { this.loading = false })
+        .finally( () => {
+            this.loading = false
+        })
     },
     get_existing_tags(){
-
       const url = `${this.$config.apiUrl}/v1/tags/`
       this.$axios.get(url)
         .then(({data: tags}) => { this.existing_tags = tags })
-        .catch(error => console.error(error))
+        .catch(error => { console.error(error) })
     },
 
     update_article(){
@@ -137,10 +134,10 @@ export default {
     },
     add_tag(){
         const name = this.$refs.tag_input.value
-      if(!name.length) return
-      const url = `${this.$config.apiUrl}/v1/tags`
-      const body = { name }
-      this.$axios.post(url, body)
+        if(!name.length) return
+        const url = `${this.$config.apiUrl}/v1/tags`
+        const body = { name }
+        this.$axios.post(url, body)
         .then(({data: tag}) => {
             this.article.tags.push(tag)
             this.$refs.tag_input.value = ""
@@ -151,27 +148,7 @@ export default {
         })
     },
 
-    upload_thumbnail(){
-        const image = this.$refs.new_thumbnail.files[0]
-        const formData = new FormData()
-        formData.append('image',image)
-
-        const url = `${this.$config.imageManagerApiUrl}/images`
-
-        this.$axios.post(url, formData)
-        .then( ({data}) => {
-            const {_id} = data
-            const thumbnail_src = `${this.$config.imageManagerApiUrl}/images/${_id}/thumbnail`
-            this.$set(this.article, 'thumbnail_src', thumbnail_src)
-        })
-        .catch(error => {
-
-            if(error.response) console.error(error.response.data)
-            else console.error(error)
-
-            alert(`Upload failed`)
-        })
-    }
+    
   },
   computed: {
       article_id(){
@@ -183,6 +160,10 @@ export default {
 </script>
 
 <style>
+.top_toolbar{
+    display: flex;
+    border-bottom: 1px solid #dddddd;
+}
 .tags_wrapper{
     display: flex;
     gap: 0.5em;

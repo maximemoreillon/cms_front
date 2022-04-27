@@ -5,22 +5,27 @@
     class="editor_menu_bar"
     v-if="editor">
 
+    TODO: Try floating / bubble menu
+
     <button 
       @click="editor.chain().focus().toggleBold().run()"
       :class="{ 'active': editor.isActive('bold') }">
       <MaterialIconFormatBold />
     </button>
+
     <button 
       @click="editor.chain().focus().toggleItalic().run()"
       :class="{ 'active': editor.isActive('italic') }">
       <MaterialIconFormatItalic />
     </button>
 
-    <button 
+
+    <!-- Not allowing to set H1 because reserved to titles -->
+    <!-- <button 
       @click="editor.commands.toggleHeading({ level: 1 })"
       :class="{ 'active': editor.isActive('heading', { level: 1 }) }">
       <MaterialIconFormatHeader1 />
-    </button>
+    </button> -->
 
     <button 
       @click="editor.commands.toggleHeading({ level: 2 })"
@@ -34,6 +39,15 @@
       <MaterialIconFormatHeader3 />
     </button>
 
+    <button >
+      <MaterialIconCodeBraces />
+    </button>
+
+    <button >
+      <MaterialIconCodeBracesBox />
+    </button>
+
+
     
     
 
@@ -45,6 +59,8 @@
       @click="prompt_for_link()">
       <MaterialIconLink />
     </button>
+
+    <div class="spacer" />
 
 
     <ImageInsertModal 
@@ -66,6 +82,7 @@ export default {
     ImageInsertModal,
   },
   props: {
+    article: Object,
     editor: Object
   },
   data(){
@@ -77,7 +94,7 @@ export default {
     prompt_for_link(){
       const href = prompt('URL:')
       if(href) this.editor.commands.setLink({ href, target: '_blank' })
-    }
+    },
   
   }
 
@@ -89,6 +106,7 @@ export default {
 .editor_menu_bar {
   border: 1px solid #dddddd;
   display: flex;
+  gap: 0.25em;
 }
 
 </style>
