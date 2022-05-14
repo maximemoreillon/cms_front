@@ -4,22 +4,24 @@ export default async (context) => {
 
     console.log("Auth middleware");
 
-    const { store, app, $axios, $config } = context
+    const { 
+        store,  
+        $axios, 
+        $config, 
+        app: { $cookies },
+    } = context
 
     const destroy_user = () => {
-        app.$cookies.remove('jwt')
+        $cookies.remove('jwt')
         store.commit('set_current_user', null)
-        delete $axios.defaults.headers.common.Authorization
+        $axios.setToken(false)
     }
 
-    const jwt = app.$cookies.get('jwt')
+    const jwt = $cookies.get('jwt')
 
     if(!jwt) return destroy_user()
 
-
-    $axios.defaults.headers.common.Authorization = `Bearer ${jwt}`
-
-    console.log($axios.defaults.headers.common.Authorization);
+    $axios.setToken(jwt, 'Bearer')
 
     const url = `${$config.userManagerApiUrl}/v2/users/self`
 

@@ -45,6 +45,7 @@
 
 <script>
 
+import Loader from '@moreillon/vue_loader'
 
 import Tag from '@/components/Tag.vue'
 
@@ -54,12 +55,9 @@ export default {
   modules: [
     '@nuxtjs/axios',
   ],
-
-  axios: {
-    // proxy: true
-  },
   components: {
     Tag,
+    Loader,
   },
   data () {
     return {

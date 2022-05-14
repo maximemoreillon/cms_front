@@ -111,10 +111,6 @@ export default {
   modules: [
     '@nuxtjs/axios',
   ],
-
-  axios: {
-    // proxy: true
-  },
   components: {
     Loader,
     // IconButton,
@@ -160,11 +156,6 @@ export default {
     this.$nextTick().then( () => {
       this.delete_all_and_get_articles()
     })
-  },
-  watch: {
-    authorization_header(){
-      console.log("Auth header changed");
-    }
   },
 
   methods: {
@@ -304,9 +295,6 @@ export default {
         && !this.articles_all_loaded
         && !this.loading_error
     },
-    authorization_header(){
-      return this.$axios.defaults.headers.common.Authorization
-    }
 
   }
 
