@@ -31,28 +31,15 @@
 import Aside from './Aside.vue'
 import Header from './Header.vue'
 
-import VueCookie from 'vue-cookie'
 
 export default {
   name: 'Layout',
-  modules: [
-    '@nuxtjs/axios',
-  ],
-  axios: {},
+
   components: {
     Aside,
     Header
   },
   mounted(){
-
-    this.$router.beforeEach((to, from, next) => {
-      this.get_current_user()
-      
-      // Close Nav when link is clicked
-      this.aside_open = false
-
-      next()
-    })
 
     
 
@@ -63,33 +50,7 @@ export default {
     }
   },
   methods: {
-    destroy_user(){
-      VueCookie.delete('jwt')
-      this.$store.commit('set_current_user', null)
-      delete this.$axios.defaults.headers.common.Authorization
-    },
 
-    get_current_user(){
-      const jwt = VueCookie.get('jwt')
-
-      if(!jwt) return this.destroy_user()
-
-      // Configue headers for all future requesrs
-      this.$axios.defaults.headers.common.Authorization = `Bearer ${jwt}`
-      
-      const url = `${this.$config.userManagerApiUrl}/v2/users/self`
-      
-      this.$axios.get(url)
-        .then( ({data: user}) => {
-          this.$store.commit('set_current_user', user)
-          
-        })
-        .catch( (error) => {
-          console.error(error)
-          this.destroy_user()
-        })
-
-    }
   }
 
 

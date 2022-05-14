@@ -22,7 +22,7 @@
 
 
     <router-link
-      v-for="(tag, index) in tags"
+      v-for="(tag, index) in $store.state.pinned_tags"
       :key="`nav_${index}`"
       :to="{name: 'index', query: {tag_id: tag._id} }">
       <MaterialIconTag />
@@ -71,32 +71,16 @@ export default {
   },
   data(){
     return {
-      tags: []
     }
   },
   mounted(){
 
-    this.$router.beforeEach((to, from, next) => {
-      this.get_pinned_tags()
-
-      next()
-    })
 
     
 
   },
   methods: {
-    get_pinned_tags(){
-      const url = `${this.$config.apiUrl}/v1/tags/`
-      const params = { pinned: true }
-      this.$axios.get(url, {params})
-        .then( ({data}) => {
-          this.tags = data
-        })
-        .catch( error => {
-          console.error(error)
-        })
-    }
+
   },
 
   async fetch (){

@@ -8,7 +8,7 @@ export default {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'An article management system' },
+      { hid: 'description', name: 'description', content: 'Article management system' },
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
@@ -38,8 +38,8 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    'cookie-universal-nuxt',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -61,8 +61,14 @@ export default {
     color: '#c00000',
   },
 
+  
+
+  router: {
+    middleware: ['auth', 'pinnedTags']
+  },
+
   serverMiddleware: [
-    '~/server-middleware/auth',
+    // '~/server-middleware/auth',
   ],
 
   publicRuntimeConfig: {
