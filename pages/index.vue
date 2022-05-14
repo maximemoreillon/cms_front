@@ -161,6 +161,11 @@ export default {
       this.delete_all_and_get_articles()
     })
   },
+  watch: {
+    authorization_header(){
+      console.log("Auth header changed");
+    }
+  },
 
   methods: {
 
@@ -175,6 +180,9 @@ export default {
 
 
     get_articles(){
+
+      console.log('Getting articles')
+
 
       this.articles_loading = true
 
@@ -295,6 +303,9 @@ export default {
       return !this.articles_loading
         && !this.articles_all_loaded
         && !this.loading_error
+    },
+    authorization_header(){
+      return this.$axios.defaults.headers.common.Authorization
     }
 
   }
@@ -328,9 +339,6 @@ export default {
 
 .query_tools > *+* {
   margin-top: .5em;
-}
-.query_tools_row {
-
 }
 
 .query_tools_row {

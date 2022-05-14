@@ -83,12 +83,13 @@
 <script>
 import IconButton from '@/components/IconButton.vue'
 import Loader from '@moreillon/vue_loader'
-import VueCookie from 'vue-cookie'
+// import VueCookie from 'vue-cookie'
 
 export default {
   name: 'Login',
   modules: [
     '@nuxtjs/axios',
+    'cookie-universal-nuxt',
   ],
   axios: { },
   components: {
@@ -121,18 +122,15 @@ export default {
         const cookie_options = {
           secure: location.protocol === 'https:',
           samesite: 'Strict',
-          expires: '1M',
         }
 
-        VueCookie.set('jwt',jwt, cookie_options)
+        this.$cookies.set('jwt',jwt, cookie_options)
 
         this.$axios.defaults.headers.common.Authorization = `Bearer ${jwt}`
 
         const url = `${this.$config.userManagerApiUrl}/v2/users/self`
-        // const headers = { Authorization: `Bearer ${jwt}` }
-        const headers = {}
 
-        return this.$axios.get(url, { headers })
+        return this.$axios.get(url)
       })
       .then( ({data: user}) => {
         this.$store.commit('set_current_user', user)
@@ -151,9 +149,9 @@ export default {
     },
     logout(){
 
-      VueCookie.delete('jwt')
+      this.$cookies.remove('jwt')
       this.$store.commit('set_current_user', null)
-      delete this.axios.defaults.headers.common.Authorization
+      delete this.$axios.defaults.headers.common.Authorization
     },
 
   },

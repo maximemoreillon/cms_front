@@ -16,7 +16,10 @@ export default async (context) => {
 
     if(!jwt) return destroy_user()
 
+
     $axios.defaults.headers.common.Authorization = `Bearer ${jwt}`
+
+    console.log($axios.defaults.headers.common.Authorization);
 
     const url = `${$config.userManagerApiUrl}/v2/users/self`
 
