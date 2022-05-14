@@ -2,6 +2,8 @@
 
 export default async (context) => {
 
+    console.log("Auth middleware");
+
     const { store, app, $axios, $config } = context
 
     const destroy_user = () => {

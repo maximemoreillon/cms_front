@@ -166,10 +166,10 @@ export default {
 
 
     delete_all_and_get_articles(){
-      this.get_tag()
-      this.get_author()
       this.articles = []
       this.articles_all_loaded = false
+      this.get_tag()
+      this.get_author()
       this.get_articles()
     },
 
@@ -200,25 +200,27 @@ export default {
       const url = `${this.$config.apiUrl}/v1/articles`
 
       this.$axios.get(url, { params })
-      .then( ({data}) => {
+        .then( ({data}) => {
 
-        this.article_count = data.article_count
+          this.article_count = data.article_count
 
-        // Add batch of articles to existing list
-        data.articles.forEach( (article) => { this.articles.push(article) })
+          // Add batch of articles to existing list
+          data.articles.forEach( (article) => { this.articles.push(article) })
 
 
-        // Check if all articles loaded (less than batch size)
-        if(this.articles.length >= this.article_count) this.articles_all_loaded = true
-        if(!this.load_more_observer) setTimeout(this.load_more_when_scroll_to_bottom,200)
+          // Check if all articles loaded (less than batch size)
+          if(this.articles.length >= this.article_count) this.articles_all_loaded = true
 
-      })
-      .catch(error => {
-        this.loading_error = true
-        if(error.response) console.error(error.response.data)
-        else console.error(error)
-      })
-      .finally(() => { this.articles_loading = false })
+          // Configure "load more" observer
+          if(!this.load_more_observer) setTimeout(this.load_more_when_scroll_to_bottom,200)
+
+        })
+        .catch(error => {
+          this.loading_error = true
+          if(error.response) console.error(error.response.data)
+          else console.error(error)
+        })
+        .finally(() => { this.articles_loading = false })
 
     },
 
@@ -284,11 +286,10 @@ export default {
   },
   computed: {
     user_is_admin(){
-      return false
-      // const {current_user} = this.$store.state
-      // if(!current_user) return false
-      // return current_user.isAdmin
-      //   || current_user.properties.isAdmin
+      const {current_user} = this.$store.state
+      if(!current_user) return false
+      return current_user.isAdmin
+        || current_user.properties.isAdmin
     },
     load_more_possible(){
       return !this.articles_loading

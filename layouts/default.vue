@@ -34,26 +34,15 @@ import Header from './Header.vue'
 
 export default {
   name: 'Layout',
-
   components: {
     Aside,
     Header
-  },
-  mounted(){
-
-    
-
   },
   data(){
     return {
       aside_open: false,
     }
   },
-  methods: {
-
-  }
-
-
 }
 </script>
 
