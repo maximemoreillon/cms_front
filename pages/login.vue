@@ -82,11 +82,7 @@ export default {
     },
 
   },
-  computed: {
-    current_user(){
-      return this.$store.state.current_user
-    }
-  }
+
 
 
 

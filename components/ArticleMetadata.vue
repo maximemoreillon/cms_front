@@ -114,7 +114,7 @@ export default {
   },
   computed: {
     user_is_author(){
-      const current_user = this.$store.state.current_user
+      const current_user = this.$auth.user
       if(!current_user) return false
       const current_user_id = current_user._id
       const author_id = this.article.author._id

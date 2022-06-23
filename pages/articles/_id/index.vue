@@ -182,7 +182,7 @@ export default {
       // If there is no article ID, then nothing to edit
       if(!article_id) return false
 
-      const current_user = this.$store.state.current_user
+      const current_user = this.$auth.user
 
       // If the user is not logged in, then unable to edit
       if(!current_user) return false

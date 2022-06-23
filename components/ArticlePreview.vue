@@ -38,7 +38,7 @@
           </span>
         </div>
 
-      <template v-if="$store.state.current_user">
+      <template v-if="$auth.user">
         <div
           class="metadata_item" >
           <MaterialIconEarth v-if="article.published"/>
