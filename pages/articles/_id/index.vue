@@ -1,7 +1,8 @@
 <template>
   <!-- Wrapping in a div so that modal is not affected by CSS -->
   <div class="article_wrapper">
-    <!-- Using schema.org -->
+
+    <!-- Using schema.org for SEO -->
     <article
       v-if="article && !article_loading"
       itemscope
@@ -63,7 +64,7 @@
       <img
         class="modal_image"
         :src="modal.image_src"
-        :alt="article.title"/>
+        :alt="article.title">
 
     </Modal>
 
@@ -77,7 +78,7 @@
 import ArticleMetadata from '@/components/ArticleMetadata.vue'
 
 // import Loader from '@moreillon/vue_loader'
-import Modal from '@moreillon/vue_modal'
+import Modal from '@/components/Modal.vue'
 
 
 
@@ -88,18 +89,24 @@ export default {
   modules: [
     '@nuxtjs/axios',
   ],
-
-  axios: {
-    // proxy: true
-  },
   components: {
     // Loader,
     Modal,
     ArticleMetadata,
   },
 
+  async asyncData ( {$axios, params, $config: { apiUrl }} ){
+    // Loading article server-side
+    console.log('Getting article sever-side')
+    const url = `${apiUrl}/v1/articles/${params.id}`
+    const {data: article} = await $axios.get(url)
+    return { article }
+  },
+
   data () {
     return {
+
+      // article is queried server-side
 
       article_loading: false,
       error: null,
@@ -110,16 +117,11 @@ export default {
         image_src: "",
       }
 
-
-
-
     }
   },
 
-  async asyncData ( {$axios, params, $config: { apiUrl }} ){
-    const {data: article} = await $axios.get(`${apiUrl}/v1/articles/${params.id}`)
-    return { article }
-  },
+  
+
   head(){
     return {
       title: this.article?.title,
@@ -140,7 +142,7 @@ export default {
     }
   },
   mounted(){
-    this.add_event_listeners_for_image_modals()
+    //this.add_event_listeners_for_image_modals()
   },
 
 

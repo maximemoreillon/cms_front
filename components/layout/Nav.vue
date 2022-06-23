@@ -1,9 +1,7 @@
 <template lang="html">
-  <nav >
+  <nav>
 
-    <router-link
-      v-if="$store.state.current_user"
-      :to="{ name: 'articles-id-edit', params: {id: 'new'}}">
+    <router-link v-if="$auth.user" :to="{ name: 'articles-id-edit', params: {id: 'new'}}">
       <MaterialIconPlus />
       <span>New article</span>
     </router-link>
@@ -13,17 +11,13 @@
       <span>All articles</span>
     </router-link>
 
-    <router-link
-      v-if="$store.state.current_user"
-      :to="{ name: 'index', query: {author_id: $store.state.current_user._id}}">
+    <router-link v-if="$auth.user" :to="{ name: 'index', query: { author_id: $auth.user._id}}">
       <MaterialIconAccount />
       <span>My articles</span>
     </router-link>
 
 
-    <router-link
-      v-for="(tag, index) in $store.state.pinned_tags"
-      :key="`nav_${index}`"
+    <router-link v-for="(tag, index) in $store.state.pinned_tags" :key="`nav_${index}`"
       :to="{name: 'index', query: {tag_id: tag._id} }">
       <MaterialIconTag />
       <span>{{tag.name}}</span>
@@ -35,15 +29,14 @@
     </router-link>
 
     <!-- Login / Logout -->
-    <router-link :to="{ name: 'login' }">
-      <template v-if="!$store.state.current_user">
-        <MaterialIconLogin />
-        <span>Login</span>
-      </template>
-      <template v-else>
-        <MaterialIconLogout />
-        <span>Logout</span>
-      </template>
+    <router-link :to="{ name: 'logout' }" v-if="$auth.user">
+      <MaterialIconLogout />
+      <span>Logout</span>
+    </router-link>
+
+    <router-link :to="{ name: 'login' }" v-else>
+      <MaterialIconLogin />
+      <span>Login</span>
     </router-link>
 
 
@@ -65,10 +58,6 @@ export default {
   modules: [
     '@nuxtjs/axios',
   ],
-
-  axios: {
-    // proxy: true
-  },
   data(){
     return {
     }

@@ -24,6 +24,7 @@ export default {
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
+    // '~/plugins/axios'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -40,6 +41,7 @@ export default {
   modules: [
     '@nuxtjs/axios',
     'cookie-universal-nuxt',
+    '@nuxtjs/auth-next'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -76,5 +78,27 @@ export default {
     userManagerApiUrl: process.env.NUXT_ENV_USER_MANAGER_API_URL,
     imageManagerApiUrl: process.env.NUXT_ENV_IMAGE_MANAGER_API_URL,
   },
+
+  auth: {
+    strategies: {
+      local: {
+        token: {
+          property: 'jwt',
+          global: true,
+          // required: true, // required by default
+          // type: 'Bearer' // bearer by default
+        },
+        user: {
+          property: false,
+          // autoFetch: true // true by default
+        },
+        endpoints: {
+          login: { url: `${process.env.NUXT_ENV_USER_MANAGER_API_URL}/v2/auth/login`, method: 'post' },
+          user: { url: `${ process.env.NUXT_ENV_USER_MANAGER_API_URL}/v2/users/self`, method: 'get' },
+          logout: false,
+        }
+      },
+    }
+  }
 
 }

@@ -28,8 +28,8 @@
 </template>
 
 <script>
-import Aside from './Aside.vue'
-import Header from './Header.vue'
+import Aside from '~/components/layout/Aside.vue'
+import Header from '~/components/layout/Header.vue'
 
 
 export default {

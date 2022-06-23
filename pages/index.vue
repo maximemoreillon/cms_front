@@ -1,15 +1,11 @@
 <template>
   <div>
 
+    <!-- Show tag if specified in query -->
     <template v-if="tag">
       <h1>Articles tagged with {{tag.name}}</h1>
 
-
-      <TagManagement
-        v-if="user_is_admin"
-        :tag="tag"
-        @tagUpdate="delete_all_and_get_articles()"/>
-
+      <TagManagement v-if="user_is_admin" :tag="tag" @tagUpdate="delete_all_and_get_articles()" />
 
     </template>
 
@@ -26,16 +22,16 @@
 
     <div class="query_tools">
 
-      <div class="">
+      <div>
         <ArticleSearch />
       </div>
 
       <div class="query_tools_row">
         <div class="counter">
-          <MaterialIconFileDocumentOutline/>
+          <MaterialIconFileDocumentOutline />
           <span>{{article_count}}</span>
         </div>
-        <div class="spacer" />
+        <div class="spacer"></div>
         <SortingTools />
 
       </div>
@@ -44,47 +40,31 @@
 
     </div>
 
-    <div
-      class="articles_container"
-      ref="articles_container"
-      v-if="!loading_error && articles.length">
+    <div class="articles_container" ref="articles_container" v-if="!loading_error && articles.length">
 
 
-      <ArticlePreview
-        v-for="(article, index) in articles"
-        :key="`article_${index}`"
-        :article="article"/>
+      <ArticlePreview v-for="(article, index) in articles" :key="`article_${index}`" :article="article" />
 
     </div>
 
     <!-- loader -->
-    <div
-      class="loader_container"
-      v-if="articles_loading">
+    <div class="loader_container" v-if="articles_loading">
       <Loader />
     </div>
 
     <!-- No articles indicator -->
-    <div
-      class=""
-      v-if="!articles.length && !articles_loading && !loading_error">
+    <div class="" v-if="!articles.length && !articles_loading && !loading_error">
       No articles
     </div>
 
     <!-- Error loading -->
-    <div class="error"
-      v-if="loading_error">
+    <div class="error" v-if="loading_error">
       Error loading articles
     </div>
 
     <!-- Load more -->
-    <div
-      class="load_more_wrapper"
-      :style="{display: load_more_possible ? 'block' : 'none'}">
-      <button
-        class="outlined"
-        ref="load_more"
-        v-on:click="get_articles()">
+    <div class="load_more_wrapper" :style="{display: load_more_possible ? 'block' : 'none'}">
+      <button class="outlined" ref="load_more" @click="get_articles()">
         <span>Load more</span>
       </button>
     </div>
@@ -122,7 +102,7 @@ export default {
     //Tag,
     //Author,
   },
-
+  auth: 'guest',
   data () {
     return {
 
@@ -139,7 +119,6 @@ export default {
 
       author: null,
 
-
       load_more_observer: null,
 
     }
@@ -147,6 +126,7 @@ export default {
 
   mounted() {
 
+    // This does not wait for middleware to run
     this.delete_all_and_get_articles()
 
   },
@@ -170,7 +150,7 @@ export default {
     },
 
 
-    get_articles(){
+    async get_articles(){
 
       console.log('Getting articles')
 
@@ -198,28 +178,32 @@ export default {
 
       const url = `${this.$config.apiUrl}/v1/articles`
 
-      this.$axios.get(url, { params })
-        .then( ({data}) => {
+      try {
 
-          this.article_count = data.article_count
+        const {article_count, articles} = await this.$axios.$get(url, { params })
 
-          // Add batch of articles to existing list
-          data.articles.forEach( (article) => { this.articles.push(article) })
+        this.article_count = article_count
+
+        // Add batch of articles to existing list
+        articles.forEach( (article) => { this.articles.push(article) })
 
 
-          // Check if all articles loaded (less than batch size)
-          if(this.articles.length >= this.article_count) this.articles_all_loaded = true
+        // Check if all articles loaded (less than batch size)
+        if(this.articles.length >= this.article_count) this.articles_all_loaded = true
 
-          // Configure "load more" observer
-          if(!this.load_more_observer) setTimeout(this.load_more_when_scroll_to_bottom,200)
+        // Configure "load more" observer
+        if(!this.load_more_observer) setTimeout(this.load_more_when_scroll_to_bottom,200)
+      } 
+      catch (error) {
+        this.loading_error = true
+        if(error.response) console.error(error.response.data)
+        else console.error(error)
+      }
+      finally {
+        this.articles_loading = false
+      }
 
-        })
-        .catch(error => {
-          this.loading_error = true
-          if(error.response) console.error(error.response.data)
-          else console.error(error)
-        })
-        .finally(() => { this.articles_loading = false })
+      
 
     },
 
@@ -295,6 +279,9 @@ export default {
         && !this.articles_all_loaded
         && !this.loading_error
     },
+    axios_from_context(){
+      return this.$axios.defaults.headers.common
+    }
 
   }
 

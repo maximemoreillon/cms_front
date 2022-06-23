@@ -1,35 +1,22 @@
 <template>
-  <div class="login">
+  <div class="logout">
 
-    <form class="container" v-if="!loading" @submit.prevent="login()">
-
-      <div class="">
-        <label for="username">
-          Username
-        </label>
-        <input id="username" type="text" v-model="credentials.username" placeholder="Username">
-      </div>
+    <div class="container" v-if="$auth.user">
 
       <div class="">
-        <label for="password">
-          Password
-        </label>
-        <input id="password" type="password" v-model="credentials.password" placeholder="Password">
+        Logged in as {{ $auth.user.display_name }}
       </div>
 
-      <div>
-        <IconButton type="submit" @click="login()">
-          <MaterialIconLogin />
-          <span>Login</span>
+
+      <div class="">
+        <IconButton @click="logout()">
+          <MaterialIconLogout />
+          <span>Logout</span>
         </IconButton>
+
       </div>
 
-      <div class="error_message" v-if="error">
-        {{error}}
-      </div>
-
-
-    </form>
+    </div>
 
     <div v-if="loading" class="loader_container">
       <Loader />
@@ -71,14 +58,12 @@ export default {
 
   },
   methods: {
-    async login() {
-      // Using nuxt auth
-      try {
-        const response = await this.$auth.loginWith('local', { data: this.credentials })
-        console.log(response)
-      } catch (err) {
-        console.log(err)
-      }
+    
+    logout_custom(){
+
+      this.$cookies.remove('jwt')
+      this.$store.commit('set_current_user', null)
+      delete this.$axios.defaults.headers.common.Authorization
     },
 
   },
