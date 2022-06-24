@@ -18,14 +18,14 @@
                 <div>
                     <input type="radio" id="private" :value="false" v-model="article.published">
                     <label for="private">
-                        <lock-icon />
+                        <MaterialIconLock />
                         <span>Private</span>
                     </label>
                 </div>
                 <div>
                     <input type="radio" id="public" :value="true" v-model="article.published">
                     <label for="public">
-                        <earth-icon />
+                        <MaterialIconEarth />
                         <span>Public</span>
                     </label>
                 </div>
@@ -53,8 +53,8 @@
             <ThumbnailManagement :article="article" />
 
         </template>
-      
-    
+
+
     </div>
 </template>
 
@@ -88,6 +88,11 @@ export default {
   mounted(){
       if(this.article_id !== 'new') this.get_article()
       this.get_existing_tags()
+      document.addEventListener("keydown", this.handle_keydown)
+
+  },
+  beforeDestroy() {
+    document.removeEventListener("keydown", this.handle_keydown)
   },
   methods: {
     get_article(){
@@ -149,6 +154,17 @@ export default {
             console.error(error);
         })
     },
+      handle_keydown(e) {
+          // Keyboard events
+
+          // CTRL S
+          if (e.key === 's' && e.ctrlKey) {
+              e.preventDefault()
+              this.update_article()
+          }
+
+      },
+
 
     
   },
