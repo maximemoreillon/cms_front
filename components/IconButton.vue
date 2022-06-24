@@ -1,4 +1,4 @@
-<!-- This is just a gloriofied wrapper for CSS so stop using it -->
+<!-- Currently just a glorified CSS wrapper so add features to make it worth it -->
 <template>
 
   <button

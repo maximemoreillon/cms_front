@@ -74,10 +74,11 @@ export default {
     async login() {
       // Using nuxt auth
       try {
-        const response = await this.$auth.loginWith('local', { data: this.credentials })
-        console.log(response)
-      } catch (err) {
-        console.log(err)
+        await this.$auth.loginWith('local', { data: this.credentials })
+      } 
+      catch (error) {
+        this.error = error
+        console.error(error)
       }
     },
 

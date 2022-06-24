@@ -8,13 +8,10 @@
       </div>
 
 
-      <div class="">
-        <IconButton @click="logout()">
-          <MaterialIconLogout />
-          <span>Logout</span>
-        </IconButton>
-
-      </div>
+      <button @click="logout()">
+        <MaterialIconLogout />
+        <span>Logout</span>
+      </button>
 
     </div>
 
@@ -27,9 +24,7 @@
 </template>
 
 <script>
-import IconButton from '@/components/IconButton.vue'
 import Loader from '@moreillon/vue_loader'
-// import VueCookie from 'vue-cookie'
 
 export default {
   name: 'Login',
@@ -39,7 +34,6 @@ export default {
   ],
   axios: { },
   components: {
-    IconButton,
     Loader
   },
 
@@ -59,18 +53,13 @@ export default {
   },
   methods: {
     
-    logout_custom(){
-
-      this.$cookies.remove('jwt')
-      this.$store.commit('set_current_user', null)
-      delete this.$axios.defaults.headers.common.Authorization
-    },
+    async logout(){
+      await this.$auth.logout()
+    }
 
   },
   computed: {
-    current_user(){
-      return this.$store.state.current_user
-    }
+
   }
 
 
@@ -89,10 +78,5 @@ export default {
 .container > * {
   margin: 1em 0;
 }
-
-label {
-  margin-right: 0.5em;
-}
-
 
 </style>
