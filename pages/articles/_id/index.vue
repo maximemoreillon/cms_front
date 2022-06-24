@@ -125,6 +125,14 @@ export default {
         { hid: 'twitter:image', name: 'twitter:image', content: 'https://articles.maximemoreillon.com/logo.png' },
         { hid: 'twitter:image:alt', name: 'twitter:image:alt', content: 'Maxime Moreillon logo' },
 
+        // OpenGraph
+        { hid: 'og:title', name: 'og:title', content: this.article?.title },
+        { hid: 'og:description', name: 'og:description', content: '@m_moreillon' },
+        { hid: 'og:image', name: 'og:image', content: 'https://articles.maximemoreillon.com/logo.png' },
+        { hid: 'og:url', name: 'og:url', content: 'https://articles.maximemoreillon.com' }, // might need a review
+        { hid: 'og:type', name: 'og:type', content: 'article' },
+        { hid: 'og:locale', name: 'og:locale', content: 'en_US' },
+
       ]
 
     }
