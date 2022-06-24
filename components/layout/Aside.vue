@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
   <aside :class="{open}">
 
     <!-- Would be forgiven to wrap stuff other than nav in its own div-->
@@ -21,7 +21,7 @@
         alt="Maxiime Moreillon logo">
     </a>
 
-    <Nav/>
+    <Nav />
 
   </aside>
 </template>
@@ -37,14 +37,95 @@ export default {
   props: {
     open: Boolean
   },
-  data(){
-    return {
-    }
-  },
 
 }
 </script>
 
-<style lang="css">
+<style>
 
+
+/* Note: media queries in main.css */
+
+aside {
+
+
+  grid-area: aside;
+  align-self: start;
+
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+
+  background-color: white;
+
+  /* Sticky because still needs to be in the document flow for grid */
+  position: sticky;
+  top: var(--grid-gap);
+  z-index: 11;
+
+  border-right: 1px solid var(--border-color);
+
+  transition: transform 0.25s;
+
+  max-height: calc(100vh - 2 * var(--grid-gap));
+}
+
+aside .nav_button_wrapper {
+  display: none;
+  background-color: white;
+  width: var(--header-height);
+  height: var(--header-height);
+
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 100%;
+  border-top-right-radius: 100%;
+  border-bottom-right-radius: 100%;
+  top: 0;
+  /* z-index: -1; */
+  font-size: 120%;
+}
+
+aside .navigation_button {
+  grid-area: navButton;
+  cursor: pointer;
+}
+
+aside .title {
+  grid-area: title;
+}
+
+
+aside .logo_wrapper {
+
+  grid-area: logo;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* height: 100%; */
+  /* outline: 1px solid red; */
+  padding: 1em;
+}
+
+aside .logo {
+  width: 7em;
+  height: 7em;
+  animation-name: one_minute_rotation;
+  animation-iteration-count: infinite;
+  animation-duration: 60s;
+  animation-timing-function: linear;
+}
+
+@keyframes one_minute_rotation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
 </style>

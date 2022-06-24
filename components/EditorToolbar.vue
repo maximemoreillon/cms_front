@@ -5,8 +5,6 @@
     class="editor_menu_bar"
     v-if="editor">
 
-    TODO: Try floating / bubble menu
-
     <button 
       @click="editor.chain().focus().toggleBold().run()"
       :class="{ 'active': editor.isActive('bold') }">

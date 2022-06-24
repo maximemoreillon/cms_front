@@ -18,7 +18,11 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    '~/assets/style/main.css',
+    '~/assets/style/buttons.css',
+    '~/assets/style/articles.css',
+    '~/assets/style/common.css',
+    '~/assets/style/toolbar.css',
+    '~/assets/style/utility.css',
     'vue-material-design-icons/styles.css'
   ],
 

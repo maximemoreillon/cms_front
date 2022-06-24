@@ -35,13 +35,6 @@
 
     </article>
 
-    <!-- Loaders and error messages -->
-    <!-- <div
-      class="loader_container"
-      v-else-if="article_loading">
-      <Loader />
-    </div> -->
-
     <div
       class="error"
       v-if="error">
@@ -77,11 +70,7 @@
 
 import ArticleMetadata from '@/components/ArticleMetadata.vue'
 
-// import Loader from '@moreillon/vue_loader'
 import Modal from '@/components/Modal.vue'
-
-
-
 
 
 export default {
@@ -89,17 +78,16 @@ export default {
   modules: [
     '@nuxtjs/axios',
   ],
+  auth: false,
   components: {
-    // Loader,
     Modal,
     ArticleMetadata,
   },
 
   async asyncData ( {$axios, params, $config: { apiUrl }} ){
     // Loading article server-side
-    console.log('Getting article sever-side')
     const url = `${apiUrl}/v1/articles/${params.id}`
-    const {data: article} = await $axios.get(url)
+    const article = await $axios.$get(url)
     return { article }
   },
 
@@ -107,7 +95,7 @@ export default {
     return {
 
       // article is queried server-side
-
+      article: null,
       article_loading: false,
       error: null,
 
@@ -142,7 +130,7 @@ export default {
     }
   },
   mounted(){
-    //this.add_event_listeners_for_image_modals()
+    this.add_event_listeners_for_image_modals()
   },
 
 
@@ -150,12 +138,13 @@ export default {
 
 
     add_event_listeners_for_image_modals(){
-      this.$refs.article_content
-        .querySelectorAll('img')
+      const {article_content} = this.$refs
+      if (!article_content) return
+      article_content.querySelectorAll('img')
         .forEach(img => {
           img.addEventListener("click", event => {
-            this.modal.open = true;
-            this.modal.image_src = event.target.src;
+            this.modal.open = true
+            this.modal.image_src = event.target.src
           }, false)
         })
     },
@@ -174,29 +163,20 @@ export default {
       return this.$route.params.id
     },
     editable(){
-      const article_id = this.$route.params.article_id
-        || this.$route.params.id
-        || this.$route.query.article_id
-        || this.$route.query.id
 
       // If there is no article ID, then nothing to edit
-      if(!article_id) return false
-
-      const current_user = this.$auth.user
+      if(!this.article_id) return false
 
       // If the user is not logged in, then unable to edit
-      if(!current_user) return false
+      if (!this.$auth.user) return false
 
-      if(current_user.isAdmin) return true
-
-      const current_user_id = this.get_id_of_item(current_user)
+      if (this.$auth.user.isAdmin) return true
 
       // If article does not have no author, then nothing to edit
       if(!this.article.author) return false
 
-      const author_id = this.get_id_of_item(this.article.author)
 
-      return (author_id === current_user_id)
+      return (this.article.author._id === this.$auth.user._id)
     }
   }
 

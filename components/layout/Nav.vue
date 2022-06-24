@@ -40,11 +40,12 @@
     </router-link>
 
 
-
     <router-link :to="{ name: 'about' }">
       <MaterialIconInformationOutline />
       <span>About</span>
     </router-link>
+
+    
 
 
 
@@ -58,32 +59,54 @@ export default {
   modules: [
     '@nuxtjs/axios',
   ],
-  data(){
-    return {
-    }
-  },
-  mounted(){
-
-
-    
-
-  },
-  methods: {
-
-  },
-
-  async fetch (){
-
-  },
-
-
 }
 </script>
 
-<style lang="css" scoped>
+<style>
+
+/* Note: media queries in main.css */
+
+nav {
+
+  font-size: 1.1em;
+
+  /* Re-applying background color for times where position fixed */
+  background-color: white;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow-y: auto;
+
+}
+
+nav a {
+  padding: 0.5em 1em;
+  text-decoration: none;
+  color: var(--nav-color);
+
+  display: flex;
+  align-items: stretch;
+  gap: 1em;
+  border-right: 3px solid transparent;
+
+  transition:
+    border-color 0.25s;
+}
+
+/* Ellipsis on nav items that are too long */
+nav a>*:last-child {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
 
+nav a:hover {
+  border-right-color: #666666;
+}
 
-
-
+nav a.router-link-exact-active {
+  border-right-color: var(--accent-color);
+}
 </style>

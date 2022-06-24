@@ -102,7 +102,7 @@ export default {
     //Tag,
     //Author,
   },
-  auth: 'guest',
+  auth: false,
   data () {
     return {
 
@@ -152,11 +152,7 @@ export default {
 
     async get_articles(){
 
-      console.log('Getting articles')
-
-
       this.articles_loading = true
-
 
       const {
         search,

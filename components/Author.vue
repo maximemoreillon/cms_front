@@ -46,11 +46,6 @@ export default {
   border-color:  #c00000;
 }
 
-img {
-  height: 1em;
-  width: 1em;
-  margin-right: 0.25em;
-}
 
 
 
