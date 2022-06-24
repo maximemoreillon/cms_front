@@ -45,7 +45,6 @@
           <span>Published</span>
         </div>
 
-        <!-- Privacy indicator -->
         <div
           class="metadata_element"
           title="Private"
@@ -54,6 +53,7 @@
           <span>Private</span>
         </div>
 
+        <!-- Link to editor -->
         <router-link
           :to="{ name: 'articles-id-edit', params: { id: article._id } }"
           class="metadata_element edit_button button">

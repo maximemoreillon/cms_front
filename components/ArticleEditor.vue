@@ -1,7 +1,7 @@
 <template>
   <div>
     <EditorToolbar :editor="editor" />
-    <editor-content :editor="editor" />
+    <editor-content :editor="editor" ref="editorContent"/>
   </div>
 </template>
 

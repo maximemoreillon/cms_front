@@ -11,7 +11,7 @@
 
             </div>
 
-            <ArticleEditor class="article_content editor_content" v-model="article.content" />
+            <ArticleEditor class="article_content editor_content" v-model="article.content" ref="articleEditor" />
 
             <h2>Visibility</h2>
             <div class="visibility_wrapper">
@@ -121,8 +121,12 @@ export default {
         this.updating = true
         const url = `${this.$config.apiUrl}/v1/articles/${this.article_id}`
 
+        const articleHFirst1 = this.$refs.articleEditor.$refs.editorContent.$el.querySelector('h1')
+        const title = articleHFirst1?.innerText || 'Untitled article'
+
         const body = {
             ...this.article,
+            title,
             tag_ids: this.article.tags.map( ({_id}) => _id),
         }
 

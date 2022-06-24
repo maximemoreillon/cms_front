@@ -18,12 +18,11 @@
     </button>
 
 
-    <!-- Not allowing to set H1 because reserved to titles -->
-    <!-- <button 
+    <button 
       @click="editor.commands.toggleHeading({ level: 1 })"
       :class="{ 'active': editor.isActive('heading', { level: 1 }) }">
       <MaterialIconFormatHeader1 />
-    </button> -->
+    </button>
 
     <button 
       @click="editor.commands.toggleHeading({ level: 2 })"
