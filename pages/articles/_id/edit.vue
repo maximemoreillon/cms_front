@@ -1,59 +1,61 @@
 <template>
-  <div>
-      <template v-if="article">
+    <div>
+        <template v-if="article">
 
-      <div class="top_toolbar">
-          
-          <div class="spacer" />
-        <button @click="update_article()">
-            <MaterialIconContentSave />
-        </button>
+            <div class="top_toolbar">
 
-      </div>
+                <div class="spacer" />
+                <button @click="update_article()">
+                    <MaterialIconContentSave />
+                </button>
 
-        <ArticleEditor 
-            class="article_content editor_content"
-            v-model="article.content" />
-        
-        <h2>Tags</h2>
-        <div class="tags_wrapper">
-           <Tag
-                v-for="(tag, index) in article.tags"
-                :key="`tag_${index}`"
-                :tag="tag"
-                removable
-                @remove="remove_tag(index)"/>
+            </div>
 
-            <input
-                id="tag_input"
-                type="search"
-                ref="tag_input"
-                list="existing_tag_list"
-                placeholder="New tag"
-                @keyup.enter="add_tag()">
-            
-            <datalist id="existing_tag_list">
-                <option
-                    v-for="(existing_tag, index) in existing_tags"
-                    :value="existing_tag.name"
-                    :key="`existing_tag_${index}`"/>
-            </datalist>
+            <ArticleEditor class="article_content editor_content" v-model="article.content" />
+
+            <h2>Visibility</h2>
+            <div class="visibility_wrapper">
+                <div>
+                    <input type="radio" id="private" :value="false" v-model="article.published">
+                    <label for="private">
+                        <lock-icon />
+                        <span>Private</span>
+                    </label>
+                </div>
+                <div>
+                    <input type="radio" id="public" :value="true" v-model="article.published">
+                    <label for="public">
+                        <earth-icon />
+                        <span>Public</span>
+                    </label>
+                </div>
+            </div>
 
 
 
-        </div>
-        <h2>Summary</h2>
-        <SummaryEditor v-model="article.summary" />
+            <h2>Tags</h2>
+            <div class="tags_wrapper">
+                <Tag v-for="(tag, index) in article.tags" :key="`tag_${index}`" :tag="tag" removable
+                    @remove="remove_tag(index)" />
 
-        <ThumbnailManagement :article="article"/>
+                <input id="tag_input" type="search" ref="tag_input" list="existing_tag_list" placeholder="New tag"
+                    @keyup.enter="add_tag()">
 
-        
-                
-      </template>
+                <datalist id="existing_tag_list">
+                    <option v-for="(existing_tag, index) in existing_tags" :value="existing_tag.name"
+                        :key="`existing_tag_${index}`" />
+                </datalist>
+
+            </div>
+            <h2>Summary</h2>
+            <SummaryEditor v-model="article.summary" />
+
+            <ThumbnailManagement :article="article" />
+
+        </template>
       
-        
     
-  </div>
+    </div>
 </template>
 
 <script>

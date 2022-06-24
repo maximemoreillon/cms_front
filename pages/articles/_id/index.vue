@@ -184,7 +184,9 @@ export default {
 </script>
 
 
-<style scoped>
+<style>
+/* CSS for articles is shared with editor, hence in ~/assets/article.css, loaded fron nuxt.config.js */
+
 
 .modal_image {
   max-width: calc(100vw - 8em);
