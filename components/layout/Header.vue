@@ -41,6 +41,7 @@ export default {
 </script>
 
 <style>
+
 header .navigation_button {
   grid-area: navButton;
   cursor: pointer;
@@ -81,6 +82,32 @@ header .logo {
   to {
     transform: rotate(360deg);
   }
+}
+
+
+/* responsivity */
+/* Not mobile first, I know it's bad practice */
+@media only screen and (max-width: 50rem) {
+
+  header {
+    display: flex;
+  }
+
+  header .navigation_button {
+    display: block;
+    margin-right: 1em;
+  }
+
+  header .logo_wrapper {
+    padding: 0;
+
+  }
+
+  header .logo {
+    height: 1.75em;
+    width: 1.75em;
+  }
+
 }
 
 </style>

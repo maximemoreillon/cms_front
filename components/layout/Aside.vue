@@ -41,10 +41,8 @@ export default {
 }
 </script>
 
+<!-- Could be scoped -->
 <style>
-
-
-/* Note: media queries in default layout */
 
 aside {
 
@@ -73,7 +71,8 @@ aside {
 
 aside .nav_button_wrapper {
   display: none;
-  background-color: white;
+
+  /* background-color: white;
   width: var(--header-height);
   height: var(--header-height);
 
@@ -84,8 +83,7 @@ aside .nav_button_wrapper {
   border-top-right-radius: 100%;
   border-bottom-right-radius: 100%;
   top: 0;
-  /* z-index: -1; */
-  font-size: 120%;
+  font-size: 120%; */
 }
 
 aside .navigation_button {
@@ -105,8 +103,6 @@ aside .logo_wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* height: 100%; */
-  /* outline: 1px solid red; */
   padding: 1em;
 }
 
@@ -127,5 +123,32 @@ aside .logo {
   to {
     transform: rotate(360deg);
   }
+}
+
+/* responsivity */
+/* Not mobile first, I know it's bad practice */
+@media only screen and (max-width: 50rem) {
+
+  aside {
+    font-size: 1.2rem;
+    position: fixed;
+    left: 0;
+    top: 0;
+
+    max-height: none;
+    height: 100%;
+    width: var(--nav-width);
+
+    transform: translateX(-100%);
+    border: none;
+
+    filter: drop-shadow(0em 0em 0.25em #44444444);
+  }
+
+  aside.open {
+    transform: translateX(0%);
+  }
+
+
 }
 </style>

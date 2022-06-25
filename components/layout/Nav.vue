@@ -64,6 +64,7 @@ export default {
 
 <style>
 
+
 /* Note: media queries in main.css */
 
 nav {
@@ -109,4 +110,6 @@ nav a:hover {
 nav a.router-link-exact-active {
   border-right-color: var(--accent-color);
 }
+
+
 </style>

@@ -19,7 +19,7 @@
     </footer>
 
     <!-- Overlay when the nav is open -->
-    <!-- TODO: Try to put in NAV -->
+    <!-- TODO: Try to put in aside -->
     <div
       @click="aside_open = false"
       class="nav_backround"
@@ -193,12 +193,12 @@ footer {
       '. . .';
   }
 
-  .app header {
+  header {
     display: flex;
   }
 
 
-  .app aside {
+  aside {
     font-size: 1.2rem;
     position: fixed;
     left: 0;
@@ -214,21 +214,21 @@ footer {
     filter: drop-shadow(0em 0em 0.25em #44444444);
   }
 
-  .app aside.open {
+  aside.open {
     transform: translateX(0%);
   }
 
-  .app header .navigation_button {
+  header .navigation_button {
     display: block;
     margin-right: 1em;
   }
 
-  .app header .logo_wrapper {
+  header .logo_wrapper {
     padding: 0;
 
   }
 
-  .app header .logo {
+  header .logo {
     height: 1.75em;
     width: 1.75em;
   }
