@@ -10,11 +10,14 @@
 
   color: var(--text-color);
 
-  transition: border-color 0.25s;
+  transition: 
+    border-color 0.25s, 
+    color 0.25s;
 }
 
 :is(button, .button):hover {
   border-color: var(--accent-color);
+  color: var(--accent-color)
 }
 
 :is(button, .button).active {

@@ -7,6 +7,7 @@ const icons = [
   'CalendarEdit',
   'Close',
   'ContentSave',
+  'Delete',
   'Eye',
   'FileDocumentOutline',
   'Earth',
