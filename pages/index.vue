@@ -32,7 +32,7 @@
           <span>{{article_count}}</span>
         </div>
         <div class="spacer"></div>
-        <SortingTools />
+        <ArticleSorting />
 
       </div>
 
@@ -77,13 +77,13 @@
 
 <script>
 
-import Loader from '@moreillon/vue_loader'
+import Loader from '@/components/Loader.vue'
 
-import SortingTools from '@/components/SortingTools.vue'
-import ArticleSearch from '@/components/ArticleSearch.vue'
+import ArticleSorting from '@/components/article_list/ArticleSorting.vue'
+import ArticleSearch from '@/components/article_list/ArticleSearch.vue'
+import ArticlePreview from '@/components/article_list/ArticlePreview.vue'
 
 import TagManagement from '@/components/TagManagement.vue'
-import ArticlePreview from '@/components/ArticlePreview.vue'
 
 
 export default {
@@ -95,9 +95,9 @@ export default {
     Loader,
     // IconButton,
     // Toolbar,
-    ArticlePreview,
     TagManagement,
-    SortingTools,
+    ArticlePreview,
+    ArticleSorting,
     ArticleSearch,
     //Tag,
     //Author,
@@ -110,7 +110,7 @@ export default {
       article_count: 0,
 
       // loading flags
-      articles_loading: false,
+      articles_loading: true,
       articles_all_loaded: false,
       loading_error: null,
 

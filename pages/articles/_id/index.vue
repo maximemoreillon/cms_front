@@ -4,7 +4,7 @@
 
     <!-- Using schema.org for SEO -->
     <article
-      v-if="article && !article_loading"
+      v-if="article"
       itemscope
       itemtype="http://schema.org/Article">
 
@@ -40,12 +40,6 @@
       v-if="error">
       An error occured while loading articles
     </div>
-
-    <!-- <div
-      class="error"
-      v-if="!article_loading && !error && !article">
-      Article {{article_id}} not found
-    </div> -->
 
 
     <!-- modal for images -->
@@ -96,7 +90,6 @@ export default {
 
       // article is queried server-side
       article: null,
-      article_loading: false,
       error: null,
 
 

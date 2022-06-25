@@ -38,7 +38,7 @@
 // import IconButton from '@/components/vue_icon_button/IconButton.vue'
 
 export default {
-  name: 'SortingTools',
+  name: 'ArticleSorting',
   components: {
     // IconButton
   },

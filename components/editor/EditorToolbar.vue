@@ -1,69 +1,57 @@
 
 
 <template>
-  <div 
-    class="editor_menu_bar"
-    v-if="editor">
+  <div class="editor_menu_bar" v-if="editor">
 
-    <button 
-      @click="editor.chain().focus().toggleBold().run()"
-      :class="{ 'active': editor.isActive('bold') }">
+    <button @click="editor.chain().focus().toggleBold().run()" :class="{ 'active': editor.isActive('bold') }">
       <MaterialIconFormatBold />
     </button>
 
-    <button 
-      @click="editor.chain().focus().toggleItalic().run()"
-      :class="{ 'active': editor.isActive('italic') }">
+    <button @click="editor.chain().focus().toggleItalic().run()" :class="{ 'active': editor.isActive('italic') }">
       <MaterialIconFormatItalic />
     </button>
 
+    <button @click="editor.chain().focus().toggleStrike().run()" :class="{ 'active': editor.isActive('strike') }">
+      <MaterialIconFormatStrikethrough />
+    </button>
 
-    <button 
-      @click="editor.commands.toggleHeading({ level: 1 })"
+
+    <button @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
       :class="{ 'active': editor.isActive('heading', { level: 1 }) }">
       <MaterialIconFormatHeader1 />
     </button>
 
-    <button 
-      @click="editor.commands.toggleHeading({ level: 2 })"
+    <button @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
       :class="{ 'active': editor.isActive('heading', { level: 2 }) }">
       <MaterialIconFormatHeader2 />
     </button>
 
-    <button 
-      @click="editor.commands.toggleHeading({ level: 3 })"
+    <button @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
       :class="{ 'active': editor.isActive('heading', { level: 3 }) }">
       <MaterialIconFormatHeader3 />
     </button>
 
-    <button >
+    <button>
       <MaterialIconCodeBraces />
     </button>
 
-    <button >
+    <button>
       <MaterialIconCodeBracesBox />
     </button>
 
 
-    
-    
-
-    <button 
-      @click="image_upload_modal = true">
+    <button @click="image_upload_modal = true">
       <MaterialIconImage />
     </button>
-    <button 
-      @click="prompt_for_link()">
+
+    <button @click="prompt_for_link()">
       <MaterialIconLink />
     </button>
 
     <div class="spacer" />
 
 
-    <ImageInsertModal 
-      :editor="editor"
-      :open="image_upload_modal"
-      @close="image_upload_modal = false" />
+    <ImageInsertModal :editor="editor" :open="image_upload_modal" @close="image_upload_modal = false" />
 
 
   </div>

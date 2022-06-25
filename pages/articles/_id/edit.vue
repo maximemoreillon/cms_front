@@ -59,8 +59,8 @@
 </template>
 
 <script>
-import ArticleEditor from '~/components/ArticleEditor.vue'
-import SummaryEditor from '~/components/SummaryEditor.vue'
+import ArticleEditor from '~/components/editor/ArticleEditor.vue'
+import SummaryEditor from '~/components/editor/SummaryEditor.vue'
 import ThumbnailManagement from '~/components/ThumbnailManagement.vue'
 
 import Tag from '~/components/Tag.vue'
