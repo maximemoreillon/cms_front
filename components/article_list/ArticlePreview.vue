@@ -1,47 +1,39 @@
 <template>
   <!-- The whole preview is a link to the article -->
-  <NuxtLink
-    class="article_preview"
-    :class="{article_with_thumbnail: !!article.thumbnail_src}"
+  <NuxtLink class="article_preview" :class="{article_with_thumbnail: !!article.thumbnail_src}"
     :to="{ name: 'articles-id', params: {id: article_id} }">
 
     <h2>{{article.title || 'Untitled article'}}</h2>
 
     <div class="metadata">
       <!-- date -->
-      <div
-        class="metadata_item"
-        v-if="article.authorship.creation_date">
-        <MaterialIconCalendar/>
-        <span class="article_date" >
+      <div class="metadata_item" v-if="article.authorship.creation_date">
+        <MaterialIconCalendar />
+        <span class="article_date">
           {{format_date(article.authorship.creation_date)}}
         </span>
       </div>
 
       <!-- Author -->
-      <div
-        class="metadata_item"
-        v-if="article.author">
+      <div class="metadata_item" v-if="article.author">
         <MaterialIconAccount />
         <span class="author">
           {{article.author.display_name || 'Unnnamed'}}
         </span>
       </div>
 
+
+
       <!-- Publishing status and views only visible to users logged in -->
-        <div
-          class="metadata_item"
-          v-if="article.views">
+      <template v-if="$auth.user">
+        <div class="metadata_item" v-if="article.views">
           <MaterialIconEye />
           <span>
             {{article.views}}
           </span>
         </div>
-
-      <template v-if="$auth.user">
-        <div
-          class="metadata_item" >
-          <MaterialIconEarth v-if="article.published"/>
+        <div class="metadata_item">
+          <MaterialIconEarth v-if="article.published" />
           <MaterialIconLock v-else />
         </div>
       </template>
@@ -49,40 +41,13 @@
     </div>
 
 
-    <img
-      class="thumbnail"
-      v-if="article.thumbnail_src"
-      :src="article.thumbnail_src"
-      alt="">
+    <img class="thumbnail" v-if="article.thumbnail_src" :src="article.thumbnail_src" alt="">
 
 
-    <!-- Summary -->
-    <div
-      class="summary"
-      v-html="article.summary || 'No summary available'"/>
+    <div class="summary" v-html="article.summary || 'No summary available'" />
 
 
-    <div class="tags">
-
-      <template v-if="article.tags && article.tags.length">
-        <MaterialIconTag />
-
-        <Tag
-          :clickable="false"
-          v-for="(tag, index) in article.tags.slice(0,max_tags)"
-          v-bind:key="`tag_${index}`"
-          v-bind:tag="tag"/>
-
-        <span v-if="article.tags.length > max_tags">
-          +{{article.tags.length - max_tags}}
-        </span>
-      </template>
-
-      <MaterialIconTagOff v-else/>
-
-
-
-    </div>
+    <TagList class="tags" :tags="article.tags" :truncate="5" />
 
 
   </NuxtLink>
@@ -93,7 +58,7 @@
 
 
 
-import Tag from '../Tag.vue'
+import TagList from '~/components/TagList.vue'
 
 
 export default {
@@ -102,7 +67,7 @@ export default {
     article: Object
   },
   components: {
-    Tag,
+    TagList,
   },
   data(){
     return {
@@ -255,16 +220,8 @@ h2 {
 
 .tags {
   grid-area: tags;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5em;
 }
 
-
-.tags > *{
-  color: #666666;
-}
 
 
 

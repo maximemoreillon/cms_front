@@ -24,6 +24,10 @@
     filter: drop-shadow(2.5px 2.5px 5px #44444444);
     max-height: 50vh;
     object-fit: contain;
+    
+}
+
+.article_content:not(.editor_content) img {
     cursor: pointer;
 }
 
@@ -34,7 +38,7 @@
 }
 
 
-article pre code {
+.article_content pre code {
     /* width: 80%; */
     display: block;
 

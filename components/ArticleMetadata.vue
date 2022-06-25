@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO: Consider a grid layout -->
   <div class="article_metadata">
 
     <div class="metadata_wrapper">
@@ -35,7 +36,7 @@
           <MaterialIconLock class="metadata_icon" />
           <span>Private</span>
         </div>
-        
+
         <div class="spacer"></div>
 
         <button @click="delete_article()">
@@ -53,8 +54,11 @@
     </div>
 
 
+    <TagList class="metadata_element" :tags="article.tags"/>
 
-    <div class="metadata_element tags_wrapper" v-if="article.tags.length">
+
+
+    <!-- <div class="metadata_element tags_wrapper" v-if="article.tags.length">
 
       <MaterialIconTag class="metadata_icon" />
 
@@ -63,7 +67,7 @@
       </div>
 
 
-    </div>
+    </div> -->
 
 
 
@@ -73,7 +77,8 @@
 <script>
 
 import Author from './Author.vue'
-import Tag from './Tag.vue'
+
+import TagList from './TagList.vue'
 
 export default {
   name: 'ArticleMetadata',
@@ -82,7 +87,7 @@ export default {
   },
   components: {
     Author,
-    Tag,
+    TagList,
   },
   methods: {
     format_date({day,month,year}){
@@ -102,7 +107,8 @@ export default {
       try {
         await this.$axios.delete(url)
         this.$router.push({ name: 'index' })
-      } catch (error) {
+      } 
+      catch (error) {
         if (error.response) alert(error.response.data)
         else alert(error)
       }
@@ -133,6 +139,9 @@ export default {
   margin-top: -1em;
   font-size: 85%;
   color: #666666;
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
 }
 
 .metadata_wrapper {
@@ -147,20 +156,6 @@ export default {
 .metadata_element {
   display: flex;
   align-items: center;
-}
-
-
-
-.tags_wrapper {
-  margin-top: 1em;
-}
-
-.tags_container {
-  color: #666666;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.25em;
 }
 
 

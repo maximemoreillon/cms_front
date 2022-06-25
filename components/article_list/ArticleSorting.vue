@@ -50,11 +50,8 @@ export default {
 
       const { name } = this.$route
 
-      // Unpack query
-      const query = {...this.$route.query}
-
-      // Add the new parameter
-      query[key] = value
+      // Unpack query and add new param
+      const query = { ...this.$route.query, [key]: value }
 
       this.$router.push({name, query})
 

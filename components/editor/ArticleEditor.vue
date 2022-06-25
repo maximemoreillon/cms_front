@@ -8,7 +8,7 @@
     </template>
 
     <!-- Ref is used by parent to access article content such as h1 -->
-    <EditorContent class="editor_content" :editor="editor" ref="editorContent" />
+    <EditorContent class="editor_content article_content" :editor="editor" ref="editorContent" />
 
   </div>
 </template>
@@ -59,9 +59,9 @@ export default {
 
   watch: {
     value(value) {
-      const isSame = this.editor.getHTML() === value
 
-      if (isSame) return
+      // Don't do anything if no change
+      if (this.editor.getHTML() === value) return
 
       this.editor.commands.setContent(value, false)
     },
@@ -104,7 +104,4 @@ export default {
 
 <style>
 
-.editor_content {
-  /* border: 1px solid #dddddd; */
-}
 </style>

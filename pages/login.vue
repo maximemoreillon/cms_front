@@ -18,10 +18,10 @@
       </div>
 
       <div>
-        <IconButton type="submit" @click="login()">
+        <button type="submit" @click="login()">
           <MaterialIconLogin />
           <span>Login</span>
-        </IconButton>
+        </button>
       </div>
 
       <div class="error_message" v-if="error">
@@ -40,9 +40,7 @@
 </template>
 
 <script>
-import IconButton from '@/components/IconButton.vue'
 import Loader from '@/components/Loader'
-// import VueCookie from 'vue-cookie'
 
 export default {
   name: 'Login',
@@ -52,7 +50,6 @@ export default {
   ],
   axios: { },
   components: {
-    IconButton,
     Loader
   },
 
