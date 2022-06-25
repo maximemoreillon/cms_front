@@ -44,7 +44,7 @@ export default {
 <style>
 
 
-/* Note: media queries in main.css */
+/* Note: media queries in default layout */
 
 aside {
 

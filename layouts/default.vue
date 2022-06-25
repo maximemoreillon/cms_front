@@ -52,6 +52,10 @@ export default {
 
 
 
+
+
+
+
 /* @font-face {
   font-family: lexend;
   src: url(./assets/LexendDeca-Regular.ttf);
@@ -78,10 +82,6 @@ export default {
     /* auto */
   ;
   grid-gap: var(--grid-gap);
-
-
-
-
 }
 
 header {
@@ -193,12 +193,12 @@ footer {
       '. . .';
   }
 
-  header {
+  .app header {
     display: flex;
   }
 
 
-  aside {
+  .app aside {
     font-size: 1.2rem;
     position: fixed;
     left: 0;
@@ -214,25 +214,21 @@ footer {
     filter: drop-shadow(0em 0em 0.25em #44444444);
   }
 
-  aside.open {
+  .app aside.open {
     transform: translateX(0%);
   }
 
-  aside .nav_button_wrapper {
-    /* display: flex; */
-  }
-
-  header .navigation_button {
+  .app header .navigation_button {
     display: block;
     margin-right: 1em;
   }
 
-  header .logo_wrapper {
+  .app header .logo_wrapper {
     padding: 0;
 
   }
 
-  header .logo {
+  .app header .logo {
     height: 1.75em;
     width: 1.75em;
   }
