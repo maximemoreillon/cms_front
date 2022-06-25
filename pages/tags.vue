@@ -59,6 +59,7 @@ export default {
     Tag,
     Loader,
   },
+  auth: false,
   data () {
     return {
       tags: [],
