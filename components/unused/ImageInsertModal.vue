@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import Modal from '@moreillon/vue_modal'
+import Modal from '~/components/Modal'
 
 
 export default {

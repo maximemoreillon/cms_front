@@ -32,6 +32,21 @@
       <MaterialIconFormatHeader3 />
     </button>
 
+    <button @click="editor.chain().focus().setTextAlign('left').run()"
+      :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }">
+      <MaterialIconFormatAlignLeft />
+    </button>
+
+    <button @click="editor.chain().focus().setTextAlign('center').run()"
+      :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }">
+      <MaterialIconFormatAlignCenter />
+    </button>
+
+    <button @click="editor.chain().focus().setTextAlign('right').run()"
+      :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }">
+      <MaterialIconFormatAlignRight />
+    </button>
+
     <button>
       <MaterialIconCodeBraces />
     </button>
@@ -81,7 +96,8 @@ export default {
 <style scoped>
 
 .editor_bubble_menu {
-  displaY: flex;
+  /* inline-flex needed otherwise overflow */
+  display: inline-flex;
   align-items: center;
   background-color: white;
   border: 1px solid #dddddd;

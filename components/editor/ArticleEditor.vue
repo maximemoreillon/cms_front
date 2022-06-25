@@ -1,14 +1,14 @@
 <template>
   <div>
     <EditorToolbar :editor="editor" v-if="false" />
-    <template v-else>
+    <template v-if="true">
 
       <EditorBubbleMenu :editor="editor" />
       <EditorFloatingMenu :editor="editor"/>
     </template>
 
     <!-- Ref is used by parent to access article content such as h1 -->
-    <EditorContent :editor="editor" ref="editorContent" />
+    <EditorContent class="editor_content" :editor="editor" ref="editorContent" />
 
   </div>
 </template>
@@ -30,6 +30,7 @@ import Image from '@tiptap/extension-image'
 import Bold from '@tiptap/extension-bold'
 import Italic from '@tiptap/extension-italic'
 import Strike from '@tiptap/extension-strike'
+import TextAlign from '@tiptap/extension-text-align'
 
 export default {
   name: 'ArticleEditor',
@@ -69,14 +70,10 @@ export default {
         Bold,
         Italic,
         Strike,
-        // Underline,
+        TextAlign.configure({ types: ['heading', 'paragraph', 'image'], }),
+        Heading.configure({ levels: [1, 2, 3], }),
         Link,
-        Heading.configure({
-          levels: [1, 2, 3],
-        }),
-        Image.configure({
-          inline: true,
-        }),
+        Image.configure({ inline: true, }), // TODO: Check what the other options are
         History.configure({})
       ],
       content: this.value,
@@ -91,3 +88,11 @@ export default {
   },
 }
 </script>
+
+
+<style>
+
+.editor_content {
+  /* border: 1px solid #dddddd; */
+}
+</style>

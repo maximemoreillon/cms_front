@@ -53,7 +53,7 @@ export default {
   justify-content: center;
   align-items: center;
 
-  background-color: #444444; /* fallback for ie */
+  background-color: #444444; /* fallback for legacy browsers */
   background-color: #444444aa;
 
   /* values which change when opening the modal */

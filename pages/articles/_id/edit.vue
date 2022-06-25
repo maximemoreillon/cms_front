@@ -11,7 +11,8 @@
 
             </div>
 
-            <ArticleEditor class="article_content editor_content" v-model="article.content" ref="articleEditor" />
+            <!-- Note: removed class here for default CSS in editor -->
+            <ArticleEditor  v-model="article.content" ref="articleEditor" />
 
             <h2>Visibility</h2>
             <div class="visibility_wrapper">

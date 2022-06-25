@@ -31,6 +31,21 @@
       <MaterialIconFormatHeader3 />
     </button>
 
+    <button @click="editor.chain().focus().setTextAlign('left').run()"
+      :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }">
+      <MaterialIconFormatAlignLeft />
+    </button>
+
+    <button @click="editor.chain().focus().setTextAlign('center').run()"
+      :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }">
+      <MaterialIconFormatAlignCenter />
+    </button>
+
+    <button @click="editor.chain().focus().setTextAlign('right').run()"
+      :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }">
+      <MaterialIconFormatAlignRight />
+    </button>
+
     <button>
       <MaterialIconCodeBraces />
     </button>
@@ -39,32 +54,26 @@
       <MaterialIconCodeBracesBox />
     </button>
 
-
-    <button @click="image_upload_modal = true">
-      <MaterialIconImage />
-    </button>
-
     <button @click="prompt_for_link()">
       <MaterialIconLink />
     </button>
 
-    <div class="spacer" />
+    <ImageInsertMenu :editor="editor" />
 
 
-    <ImageInsertModal :editor="editor" :open="image_upload_modal" @close="image_upload_modal = false" />
 
 
   </div>
 </template>
 
 <script>
-import ImageInsertModal from '~/components/ImageInsertModal.vue'
+import ImageInsertMenu from './ImageInsertMenu.vue'
 
 
 export default {
   name: 'EditorToolBar',
   components: {
-    ImageInsertModal,
+    ImageInsertMenu,
   },
   props: {
     article: Object,
@@ -72,7 +81,7 @@ export default {
   },
   data(){
     return {
-      image_upload_modal: false,
+      image_upload_menu: false,
     }
   },
   methods: {

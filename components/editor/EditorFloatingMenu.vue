@@ -3,20 +3,6 @@
 <template>
   <FloatingMenu class="editor_floating_menu" v-if="editor" :editor="editor" :tippy-options="{ duration: 100 }">
 
-
-    <button @click="editor.chain().focus().toggleBold().run()" :class="{ 'active': editor.isActive('bold') }">
-      <MaterialIconFormatBold />
-    </button>
-
-    <button @click="editor.chain().focus().toggleItalic().run()" :class="{ 'active': editor.isActive('italic') }">
-      <MaterialIconFormatItalic />
-    </button>
-
-    <button @click="editor.chain().focus().toggleStrike().run()" :class="{ 'active': editor.isActive('strike') }">
-      <MaterialIconFormatStrikethrough />
-    </button>
-
-
     <button @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
       :class="{ 'active': editor.isActive('heading', { level: 1 }) }">
       <MaterialIconFormatHeader1 />
@@ -44,6 +30,10 @@
       <MaterialIconLink />
     </button>
 
+    <ImageInsertMenu :editor="editor" />
+
+
+
 
 
   </FloatingMenu>
@@ -51,12 +41,16 @@
 
 <script>
 
+
 import { FloatingMenu } from '@tiptap/vue-2'
+import ImageInsertMenu from './ImageInsertMenu.vue'
 
 export default {
   name: 'EditorFloatingMenu',
   components: {
-    FloatingMenu
+    FloatingMenu,
+    ImageInsertMenu
+    
   },
   props: {
     article: Object,
@@ -82,7 +76,7 @@ export default {
 
 
 .editor_floating_menu {
-  displaY: flex;
+  display: flex;
   align-items: center;
   background-color: white;
   border: 1px solid #dddddd;
