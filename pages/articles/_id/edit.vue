@@ -3,9 +3,18 @@
         <template v-if="article">
 
             <div class="top_toolbar">
+
+                <router-link :to="{ name: 'articles-id', params: { id: article._id } }"
+                    class="metadata_element edit_button button">
+                    <MaterialIconArrowLeft class="metadata_icon" />
+                    <span>Return to particle</span>
+                </router-link>
+
+
                 <div class="spacer" />
                 <button @click="submit_article()">
                     <MaterialIconContentSave />
+                    <span>Save</span>
                 </button>
 
             </div>
@@ -220,12 +229,20 @@ export default {
 </script>
 
 <style>
+
 .top_toolbar{
     display: flex;
     border-bottom: 1px solid #dddddd;
 }
+
+/* This looks like it could be used in many places */
 .tags_wrapper{
     display: flex;
     gap: 0.5em;
+}
+
+.article_settings{
+    border: 1px solid #dddddd;
+    padding: 0.5em;
 }
 </style>

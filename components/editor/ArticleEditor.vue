@@ -78,7 +78,7 @@ export default {
         Strike,
         TextAlign.configure({ types: ['heading', 'paragraph', 'image'], }),
         Heading.configure({ levels: [1, 2, 3], }),
-        Link,
+        Link.configure({ openOnClick: false, }),
         Image.configure({ inline: true, }), // TODO: Check what the other options are
         History.configure({}),
         Code,

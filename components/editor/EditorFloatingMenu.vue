@@ -83,11 +83,13 @@ export default {
 <style scoped>
 
 
+
 .editor_floating_menu {
   display: flex;
   align-items: center;
   background-color: white;
   border: 1px solid #dddddd;
+  padding: 0.25em;
 }
 
 </style>

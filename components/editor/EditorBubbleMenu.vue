@@ -66,9 +66,12 @@
       <MaterialIconFormatListNumbered />
     </button>
 
-    <button @click="prompt_for_link()">
+    <!-- <button @click="prompt_for_link()" :class="{ 'active': editor.isActive('link') }">
       <MaterialIconLink />
-    </button>
+    </button> -->
+
+    <LinkMenu :editor="editor" />
+
 
 
 
@@ -78,12 +81,14 @@
 <script>
 
 import { BubbleMenu } from '@tiptap/vue-2'
+import LinkMenu from './LinkMenu.vue'
 
 export default {
   name: 'EditorBubbleMenu',
   components: {
-    BubbleMenu
-  },
+    BubbleMenu,
+    LinkMenu
+},
   props: {
     article: Object,
     editor: Object
@@ -112,6 +117,7 @@ export default {
   align-items: center;
   background-color: white;
   border: 1px solid #dddddd;
+  padding: 0.25em;
 }
 
 </style>

@@ -3,6 +3,7 @@ import { resolve } from 'path'
 const icons = [
   'Alphabetical',
   'Account',
+  'ArrowLeft',
   'Calendar',
   'CalendarEdit',
   'Close',
