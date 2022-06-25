@@ -36,6 +36,7 @@ import CodeBlock from '@tiptap/extension-code-block'
 import BulletList from '@tiptap/extension-bullet-list'
 import OrderedList from '@tiptap/extension-ordered-list'
 import ListItem from '@tiptap/extension-list-item'
+import Youtube from '@tiptap/extension-youtube'
 
 export default {
   name: 'ArticleEditor',
@@ -85,6 +86,7 @@ export default {
         BulletList,
         OrderedList,
         ListItem,
+        Youtube.configure({}),
       ],
       content: this.value,
       onUpdate: () => {

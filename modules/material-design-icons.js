@@ -26,6 +26,8 @@ const icons = [
   'Tag',
   'TagOff',
   'TagMultiple',
+  'Youtube',
+
   // Editor toolbar
   'CodeBracesBox',
   'CodeBraces',

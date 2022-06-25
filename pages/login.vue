@@ -97,14 +97,12 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 0.5em;
 }
 .container > * {
   margin: 1em 0;
 }
 
-label {
-  margin-right: 0.5em;
-}
 
 
 </style>

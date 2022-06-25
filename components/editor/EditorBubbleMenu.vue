@@ -66,7 +66,7 @@
       <MaterialIconFormatListNumbered />
     </button>
 
-    <button @click=" prompt_for_link()">
+    <button @click="prompt_for_link()">
       <MaterialIconLink />
     </button>
 

@@ -36,6 +36,10 @@
 
     <ImageInsertMenu :editor="editor" />
 
+    <button @click="prompt_for_youtube()">
+      <MaterialIconYoutube />
+    </button>
+
 
 
 
@@ -65,9 +69,9 @@ export default {
     }
   },
   methods: {
-    prompt_for_link() {
-      const href = prompt('URL:')
-      if (href) this.editor.commands.setLink({ href, target: '_blank' })
+    prompt_for_youtube() {
+      const src = prompt('URL:')
+      if (src) this.editor.commands.setYoutubeVideo({ src, width: 640, height: 480 })
     },
 
   }

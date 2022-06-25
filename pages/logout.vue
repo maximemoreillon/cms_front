@@ -41,11 +41,6 @@ export default {
     return {
       loading: false,
       error: null,
-      credentials: {
-        username: '',
-        password: '',
-      }
-      
     }
   },
   mounted(){
@@ -71,12 +66,12 @@ export default {
 <style scoped>
 
 .container {
+  margin-top: 1em;
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 1em;
 }
-.container > * {
-  margin: 1em 0;
-}
+
 
 </style>

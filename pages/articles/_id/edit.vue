@@ -3,7 +3,6 @@
         <template v-if="article">
 
             <div class="top_toolbar">
-
                 <div class="spacer" />
                 <button @click="submit_article()">
                     <MaterialIconContentSave />
