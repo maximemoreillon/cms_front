@@ -204,6 +204,7 @@ footer {
     left: 0;
     top: 0;
 
+    max-height: none;
     height: 100%;
     width: var(--nav-width);
 

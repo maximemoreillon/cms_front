@@ -18,17 +18,21 @@
       <MaterialIconFormatHeader3 />
     </button>
 
-    <button>
-      <MaterialIconCodeBraces />
-    </button>
-
-    <button>
+    <button @click="editor.chain().focus().toggleCodeBlock().run()" :class="{ 'active': editor.isActive('codeBlock') }">
       <MaterialIconCodeBracesBox />
     </button>
 
-    <button @click="prompt_for_link()">
-      <MaterialIconLink />
+    <button @click="editor.chain().focus().toggleBulletList().run()"
+      :class="{ 'active': editor.isActive('bulletList') }">
+      <MaterialIconFormatListBulleted />
     </button>
+
+    <button @click="editor.chain().focus().toggleOrderedList().run()"
+      :class="{ 'active': editor.isActive('orderedList') }">
+      <MaterialIconFormatListNumbered />
+    </button>
+
+
 
     <ImageInsertMenu :editor="editor" />
 

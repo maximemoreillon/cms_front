@@ -31,6 +31,11 @@ import Bold from '@tiptap/extension-bold'
 import Italic from '@tiptap/extension-italic'
 import Strike from '@tiptap/extension-strike'
 import TextAlign from '@tiptap/extension-text-align'
+import Code from '@tiptap/extension-code'
+import CodeBlock from '@tiptap/extension-code-block'
+import BulletList from '@tiptap/extension-bullet-list'
+import OrderedList from '@tiptap/extension-ordered-list'
+import ListItem from '@tiptap/extension-list-item'
 
 export default {
   name: 'ArticleEditor',
@@ -74,7 +79,12 @@ export default {
         Heading.configure({ levels: [1, 2, 3], }),
         Link,
         Image.configure({ inline: true, }), // TODO: Check what the other options are
-        History.configure({})
+        History.configure({}),
+        Code,
+        CodeBlock.configure({ languageClassPrefix: 'language-', }),
+        BulletList,
+        OrderedList,
+        ListItem,
       ],
       content: this.value,
       onUpdate: () => {

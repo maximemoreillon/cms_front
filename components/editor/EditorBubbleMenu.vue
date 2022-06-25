@@ -33,29 +33,40 @@
     </button>
 
     <button @click="editor.chain().focus().setTextAlign('left').run()"
-      :class="{ 'is-active': editor.isActive({ textAlign: 'left' }) }">
+      :class="{ 'active': editor.isActive({ textAlign: 'left' }) }">
+
       <MaterialIconFormatAlignLeft />
     </button>
 
     <button @click="editor.chain().focus().setTextAlign('center').run()"
-      :class="{ 'is-active': editor.isActive({ textAlign: 'center' }) }">
+      :class="{ 'active': editor.isActive({ textAlign: 'center' }) }">
       <MaterialIconFormatAlignCenter />
     </button>
 
     <button @click="editor.chain().focus().setTextAlign('right').run()"
-      :class="{ 'is-active': editor.isActive({ textAlign: 'right' }) }">
+      :class="{ 'active': editor.isActive({ textAlign: 'right' }) }">
       <MaterialIconFormatAlignRight />
     </button>
 
-    <button>
+    <button @click="editor.chain().focus().toggleCode().run()" :class="{ 'active': editor.isActive('code') }">
       <MaterialIconCodeBraces />
     </button>
 
-    <button>
+    <button @click="editor.chain().focus().toggleCodeBlock().run()" :class="{ 'active': editor.isActive('codeBlock') }">
       <MaterialIconCodeBracesBox />
     </button>
 
-    <button @click="prompt_for_link()">
+    <button @click="editor.chain().focus().toggleBulletList().run()"
+      :class="{ 'active': editor.isActive('bulletList') }">
+      <MaterialIconFormatListBulleted />
+    </button>
+
+    <button @click="editor.chain().focus().toggleOrderedList().run()"
+      :class="{ 'active': editor.isActive('orderedList') }">
+      <MaterialIconFormatListNumbered />
+    </button>
+
+    <button @click=" prompt_for_link()">
       <MaterialIconLink />
     </button>
 
