@@ -41,7 +41,7 @@
 
 <script>
 import IconButton from '@/components/IconButton.vue'
-import Loader from '@moreillon/vue_loader'
+import Loader from '@/components/Loader'
 // import VueCookie from 'vue-cookie'
 
 export default {

@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import Loader from '@moreillon/vue_loader'
+import Loader from '@/components/Loader'
 
 export default {
   name: 'Login',
