@@ -5,7 +5,7 @@
             <div class="top_toolbar">
 
                 <div class="spacer" />
-                <button @click="update_article()">
+                <button @click="submit_article()">
                     <MaterialIconContentSave />
                 </button>
 
@@ -79,7 +79,9 @@ export default {
         article: {
             title: 'Untitled article',
             content: 'This article has no content',
-            summary: '',
+            summary: 'This article has no summary',
+            tags: [],
+            published: false,
         },
         existing_tags: [],
       loading: false,
@@ -116,29 +118,59 @@ export default {
         .then(({data: tags}) => { this.existing_tags = tags })
         .catch(error => { console.error(error) })
     },
+    submit_article(){
+        if(this.article_id === 'new') {
+            this.create_article()
+        }
+        else {
+            this.update_article()
+        }
+    },
+    create_request_body(){
 
-    update_article(){
+        // Title is first H1 of the article
+        const articleFirstH1 = this.$refs.articleEditor.$refs.editorContent.$el.querySelector('h1')
+        const title = articleFirstH1?.innerText || 'Untitled article'
+
+        // Get IDs from tags
+        const tag_ids = this.article.tags.map(({ _id }) => _id)
+
+        return { ...this.article, title, tag_ids, }
+    },
+    async create_article(){
+        this.updating = true
+        const url = `${this.$config.apiUrl}/v1/articles`        
+
+        const body = this.create_request_body()
+
+        try {
+            const article = await this.$axios.$post(url, body)
+            this.$router.push({ name: 'articles-id-edit', params: { id: article._id } })
+        } catch (error) {
+            if (error.response) alert(error.response.data)
+            else alert(error)
+        }
+        finally {
+            this.updating = false
+        }
+    },
+    async update_article(){
         this.updating = true
         const url = `${this.$config.apiUrl}/v1/articles/${this.article_id}`
 
-        const articleHFirst1 = this.$refs.articleEditor.$refs.editorContent.$el.querySelector('h1')
-        const title = articleHFirst1?.innerText || 'Untitled article'
+        const body = this.create_request_body()
 
-        const body = {
-            ...this.article,
-            title,
-            tag_ids: this.article.tags.map( ({_id}) => _id),
-        }
-
-        this.$axios.patch(url, body)
-        .then( () => {
+        try {
+            await this.$axios.patch(url, body)
             alert('Article saved')
-        })
-        .catch(error => {
-            if(error.response) alert(error.response.data)
+        } catch (error) {
+            if (error.response) alert(error.response.data)
             else alert(error)
-        })
-        .finally( () => { this.updating = false })
+        }
+        finally {
+            this.updating = false
+        }
+        
     },
     remove_tag(index){
         this.article.tags.splice(index,1)
@@ -158,16 +190,16 @@ export default {
             console.error(error);
         })
     },
-      handle_keydown(e) {
-          // Keyboard events
+    handle_keydown(e) {
+        // Keyboard events
 
-          // CTRL S
-          if (e.key === 's' && e.ctrlKey) {
-              e.preventDefault()
-              this.update_article()
-          }
+        // CTRL S
+        if (e.key === 's' && e.ctrlKey) {
+            e.preventDefault()
+            this.submit_article()
+        }
 
-      },
+    },
 
 
     
