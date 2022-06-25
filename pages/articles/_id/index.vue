@@ -120,7 +120,7 @@ export default {
 
         // OpenGraph
         { hid: 'og:title', name: 'og:title', content: this.article?.title },
-        { hid: 'og:description', name: 'og:description', content: '@m_moreillon' },
+        { hid: 'og:description', name: 'og:description', content: this.article?.summary },
         { hid: 'og:image', name: 'og:image', content: 'https://articles.maximemoreillon.com/logo.png' },
         { hid: 'og:url', name: 'og:url', content: 'https://articles.maximemoreillon.com' }, // might need a review
         { hid: 'og:type', name: 'og:type', content: 'article' },

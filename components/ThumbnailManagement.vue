@@ -3,8 +3,6 @@
 <template>
   <div>
 
-    <h2>Thumbnail</h2>
-
     <img
       v-if="article.thumbnail_src" 
       :src="article.thumbnail_src"
@@ -48,7 +46,7 @@
 </template>
 
 <script>
-import Modal from '@moreillon/vue_modal'
+import Modal from '~/components/Modal'
 
 export default {
   name: 'ThumbnailManagement',

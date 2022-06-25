@@ -42,6 +42,7 @@ export default {
   components: {
 
   },
+  auth: false,
 
   data () {
     return {
