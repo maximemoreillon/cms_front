@@ -15,11 +15,11 @@
           <th>URL</th>
         </tr>
         <tr
-          v-for="(service, index) in services"
+          v-for="({name, version, url}, index) in services"
           :key="`service_${index}`">
-          <td>{{service.name}}</td>
-          <td>{{service.version}}</td>
-          <td>{{service.url}}</td>
+          <td>{{name}}</td>
+          <td>{{version}}</td>
+          <td>{{url}}</td>
 
         </tr>
       </table>
@@ -34,7 +34,7 @@
 
 <script>
 
-import pjson from '../package.json'
+import {version} from '../package.json'
 
 
 
@@ -49,8 +49,8 @@ export default {
       services: [
         {
           name: 'GUI',
-          url: window.location.origin,
-          version: pjson.version
+          url: '',
+          version
         },
         {
           name: 'API',
@@ -59,12 +59,12 @@ export default {
         },
         {
           name: 'User management API',
-          url: process.env.VUE_APP_USER_MANAGER_API_URL,
+          url: this.$config.userManagerApiUrl,
           version: null
         },
         {
           name: 'Image manager API',
-          url: process.env.VUE_APP_IMAGE_MANAGER_API_URL,
+          url: this.$config.imageManagerApiUrl,
           version: null
         },
       ],
@@ -78,8 +78,8 @@ export default {
       this.services.forEach((service) => {
         if (service.version) return
         service.version = 'Connecting...'
-        this.axios.get(service.url)
-          .then(({ data }) => { service.version = data.version })
+        this.$axios.$get(service.url)
+          .then(({ version }) => { service.version = version })
           .catch(() => { service.version = 'Unable to connect' })
       })
     }
