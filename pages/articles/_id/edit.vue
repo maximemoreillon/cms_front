@@ -24,36 +24,40 @@
 
             <!-- TODO: Make this its own component -->
             <div class="article_settings">
-                <h2>Article settings</h2>
-                <h3>Visibility</h3>
-                <div class="visibility_wrapper">
-                    <div>
-                        <input type="radio" id="private" :value="false" v-model="article.published">
-                        <label for="private">
-                            <MaterialIconLock />
-                            <span>Private</span>
-                        </label>
-                    </div>
-                    <div>
-                        <input type="radio" id="public" :value="true" v-model="article.published">
-                        <label for="public">
-                            <MaterialIconEarth />
-                            <span>Public</span>
-                        </label>
-                    </div>
-                </div>
 
-
-
-                <h3>Tags</h3>
-                <TagList :tags="article.tags" removable input @newTag="add_tag($event)" @tagRemoved="remove_tag($event)"/>
-
+                <TagList :tags="article.tags" removable input @newTag="add_tag($event)"
+                    @tagRemoved="remove_tag($event)" />
 
                 <h3>Summary</h3>
                 <SummaryEditor v-model="article.summary" />
 
-                <h3>Thumbnail</h3>
-                <ThumbnailManagement :article="article" />
+                <div class="flex">
+                    <div class="grow">
+                        <h3>Thumbnail</h3>
+                        <ThumbnailManagement :article="article" />
+                    </div>
+                    <div class="grow">
+                        <h3>Visibility</h3>
+                        <div class="visibility_wrapper">
+                            <div>
+                                <input type="radio" id="private" :value="false" v-model="article.published">
+                                <label for="private">
+                                    <MaterialIconLock />
+                                    <span>Private</span>
+                                </label>
+                            </div>
+                            <div>
+                                <input type="radio" id="public" :value="true" v-model="article.published">
+                                <label for="public">
+                                    <MaterialIconEarth />
+                                    <span>Public</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
 
 
@@ -67,7 +71,7 @@
 <script>
 import ArticleEditor from '~/components/editor/ArticleEditor.vue'
 import SummaryEditor from '~/components/editor/SummaryEditor.vue'
-import ThumbnailManagement from '~/components/ThumbnailManagement.vue'
+import ThumbnailManagement from '~/components/editor/ThumbnailManagement.vue'
 
 import TagList from '../../../components/TagList.vue'
 
@@ -222,7 +226,7 @@ export default {
 
 
 .article_settings{
-    border: 1px solid #dddddd;
-    padding: 0.5em;
+    border-top: 1px solid #dddddd;
+    padding-top: 1em;
 }
 </style>
