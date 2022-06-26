@@ -95,8 +95,8 @@ export default {
           // autoFetch: true // true by default
         },
         endpoints: {
-          login: { url: `${process.env.NUXT_ENV_USER_MANAGER_API_URL}/v2/auth/login`, method: 'post' },
-          user: { url: `${process.env.NUXT_ENV_USER_MANAGER_API_URL}/v2/users/self`, method: 'get' },
+          login: { url: `https://api.users.maximemoreillon.com/v2/auth/login`, method: 'post' },
+          user: { url: `https://api.users.maximemoreillon.com/v2/users/self`, method: 'get' },
           logout: false,
         }
       },
