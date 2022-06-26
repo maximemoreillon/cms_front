@@ -10,37 +10,37 @@
       </div>
       <!-- Creation date -->
       <div class="metadata_element" title="Created" v-if="article.authorship.creation_date">
-        <MaterialIconCalendar class="metadata_icon" />
+        <MaterialIconCalendar />
         <span>{{format_date(article.authorship.creation_date)}}</span>
       </div>
       <!-- Last edited date -->
       <div class="metadata_element" title="last edited" v-if="article.authorship.edition_date">
-        <MaterialIconCalendarEdit class="metadata_icon" />
+        <MaterialIconCalendarEdit />
         <span>{{format_date(article.authorship.edition_date)}}</span>
       </div>
 
       <!-- View count -->
       <div class="metadata_element" title="Views" v-if="article.views">
-        <MaterialIconEye class="metadata_icon" />
+        <MaterialIconEye />
         <span>{{article.views}}</span>
       </div>
 
       <!-- Published indicator -->
       <template v-if="user_is_author">
         <div class="metadata_element" title="Published" v-if="article.published">
-          <MaterialIconEarth class="metadata_icon" />
+          <MaterialIconEarth />
           <span>Published</span>
         </div>
 
         <div class="metadata_element" title="Private" v-if="!article.published">
-          <MaterialIconLock class="metadata_icon" />
+          <MaterialIconLock />
           <span>Private</span>
         </div>
 
         <div class="spacer"></div>
 
         <button @click="delete_article()">
-          <MaterialIconDelete class="metadata_icon" />
+          <MaterialIconDelete />
           <span>Delete</span>
         </button>
 
@@ -55,19 +55,6 @@
 
 
     <TagList class="metadata_element" :tags="article.tags"/>
-
-
-
-    <!-- <div class="metadata_element tags_wrapper" v-if="article.tags.length">
-
-      <MaterialIconTag class="metadata_icon" />
-
-      <div class="tags_container">
-        <Tag class="tag" v-for="(tag, index) in article.tags" v-bind:key="`tag_${index}`" v-bind:tag="tag" />
-      </div>
-
-
-    </div> -->
 
 
 
@@ -149,19 +136,17 @@ export default {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 1em 1em;
+  gap: 1em;
 }
 
 
 .metadata_element {
   display: flex;
   align-items: center;
+  gap: 0.25em;
 }
 
 
-.metadata_icon {
-  margin-right: 0.25em;
-}
 
 
 </style>

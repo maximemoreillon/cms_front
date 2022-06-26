@@ -36,8 +36,6 @@
 
       </div>
 
-
-
     </div>
 
     <div class="articles_container" ref="articles_container" v-if="!loading_error && articles.length">
@@ -303,14 +301,16 @@ export default {
 }
 
 .query_tools {
-  padding-bottom: 0.5em;
   margin-bottom: 1em;
-  border-bottom: 1px solid #dddddd;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.5em;
+  /* padding-bottom: 0.5em; */
+  /* border-bottom: 1px solid #dddddd; */
 }
 
-.query_tools > *+* {
-  margin-top: .5em;
-}
+
 
 .query_tools_row {
   display: flex;

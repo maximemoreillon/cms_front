@@ -2,12 +2,12 @@
     <div>
         <template v-if="article">
 
-            <div class="top_toolbar">
+            <div class="toolbar">
 
                 <router-link :to="{ name: 'articles-id', params: { id: article._id } }"
                     class="metadata_element button">
                     <MaterialIconArrowLeft class="metadata_icon" />
-                    <span>Return to particle</span>
+                    <span>Return to article</span>
                 </router-link>
 
 
@@ -182,7 +182,7 @@ export default {
         this.article.tags.splice(index,1)
     },
     add_tag(name){
-        
+
         if(!name.length) return
         const url = `${this.$config.apiUrl}/v1/tags`
         const body = { name }
@@ -220,16 +220,6 @@ export default {
 
 <style>
 
-.top_toolbar{
-    display: flex;
-    border-bottom: 1px solid #dddddd;
-}
-
-/* This looks like it could be used in many places */
-.tags_wrapper{
-    display: flex;
-    gap: 0.5em;
-}
 
 .article_settings{
     border: 1px solid #dddddd;

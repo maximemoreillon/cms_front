@@ -1,8 +1,11 @@
 /* Providing the .button class for non-button items (links, inputs) */
 :is(button, .button) {
+
+  /* Overwriting defaults */
   background-color: transparent;
   border: none;
   cursor: pointer;
+  padding: 0;
 
   text-decoration: none;
 

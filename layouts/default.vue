@@ -56,6 +56,8 @@ export default {
 
 
 
+
+
 /* @font-face {
   font-family: lexend;
   src: url(./assets/LexendDeca-Regular.ttf);
@@ -114,6 +116,10 @@ main {
   /* background-color: lightgreen; */
 
 
+}
+
+main a {
+  color: var(--accent-color);
 }
 
 

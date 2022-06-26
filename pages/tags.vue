@@ -116,6 +116,7 @@ export default {
 <style scoped>
 
 .tag_container{
+  margin-top: 1em;
   display: flex;
   flex-wrap: wrap;
   gap: 0.5em;

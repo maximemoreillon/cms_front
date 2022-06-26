@@ -44,7 +44,7 @@
     <img class="thumbnail" v-if="article.thumbnail_src" :src="article.thumbnail_src" alt="">
 
 
-    <div class="summary" v-html="article.summary || 'No summary available'" />
+    <div class="summary article_content" v-html="article.summary || 'No summary available'" />
 
 
     <TagList class="tags" :tags="article.tags" :truncate="5" :clickable="false"/>
@@ -190,11 +190,6 @@ h2 {
   /* Height is set using grid so height 100% here allows working overflows */
   max-height: 10em;
   overflow-y: hidden;
-
-
-  line-height: var(--line-height);
-
-
 
   /* Position relative for shadow below */
   position: relative;

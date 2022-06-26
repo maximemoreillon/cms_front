@@ -1,5 +1,6 @@
 <template>
   <router-link
+    class="author"
     :to="{ name: 'index', query: {author_id} }">
     {{author.display_name}}
   </router-link>
@@ -33,18 +34,7 @@ export default {
 <style scoped>
 
 
-.author {
-  font-weight: bold;
-  cursor: pointer;
-  transition: color 0.25s, border-color 0.25s;
-  display: inline-flex;
-  align-items: center;
-}
 
-.author:hover {
-  color:  #c00000;
-  border-color:  #c00000;
-}
 
 
 

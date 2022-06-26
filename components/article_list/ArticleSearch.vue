@@ -51,7 +51,6 @@ export default {
 
 .search_bar {
   flex-grow: 1;
-  padding: 0.5em;
 }
 
 

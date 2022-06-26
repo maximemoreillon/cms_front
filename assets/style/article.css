@@ -7,9 +7,7 @@
     line-height: var(--line-height);
 }
 
-.article_content a {
-    color: var(--accent-color);
-}
+
 
 /* .article_content :is(img, iframe) { */
 .article_content :is( iframe) {

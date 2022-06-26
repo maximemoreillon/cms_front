@@ -1,4 +1,4 @@
-
+/* This content could have been in default layout */
 .material-design-icon__svg {
   bottom: 0 !important;
 }
@@ -63,3 +63,6 @@ h1,h2,h3 {
   gap: 0.25em;
 }
 
+input[type="search"] {
+  padding: 0.5em;
+}
