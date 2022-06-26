@@ -1,5 +1,6 @@
 # CMS Front
 This is the GUI of my Neo4J and Express based CMS.
+This branch contains the code as it was before switching over to Nuxt. 
 
 The CMS is currently deployed at https://articles.maximemoreillon.com/
 
