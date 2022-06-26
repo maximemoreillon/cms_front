@@ -22,6 +22,7 @@
             <!-- Note: removed class here for default CSS in editor -->
             <ArticleEditor v-model="article.content" ref="articleEditor" />
 
+            <!-- TODO: Make this its own component -->
             <div class="article_settings">
                 <h2>Article settings</h2>
                 <h3>Visibility</h3>
@@ -45,8 +46,7 @@
 
 
                 <h3>Tags</h3>
-
-                <TagList :tags="article.tags" input @newTag="add_tag($event)"/>
+                <TagList :tags="article.tags" removable input @newTag="add_tag($event)" @tagRemoved="remove_tag($event)"/>
 
 
                 <h3>Summary</h3>

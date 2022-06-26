@@ -4,7 +4,8 @@
     <template v-if="tags && tags.length">
       <MaterialIconTag />
 
-      <Tag :clickable="clickable" v-for="(tag, index) in tag_list" v-bind:key="`tag_${index}`" :tag="tag" />
+      <Tag :clickable="clickable" :removable="removable" v-for="(tag, index) in tag_list" v-bind:key="`tag_${index}`"
+        :tag="tag" @remove="$emit('tagRemoved', index)"/>
 
       <span v-if="this.truncate && tags.length > this.truncate">
         +{{ tags.length - truncate }}
@@ -14,8 +15,8 @@
     <MaterialIconTagOff v-else />
 
     <!-- Input of new tags -->
-    <input v-if="input" id="tag_input" v-model="new_tag_name" type="search" ref="tag_input" list="existing_tag_list" placeholder="New tag"
-      @keyup.enter="add_tag()">
+    <input v-if="input" id="tag_input" v-model="new_tag_name" type="search" ref="tag_input" list="existing_tag_list"
+      placeholder="New tag" @keyup.enter="add_tag()">
 
     <datalist id="existing_tag_list">
       <option v-for="(existing_tag, index) in existing_tags" :value="existing_tag.name"
