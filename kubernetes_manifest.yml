@@ -37,7 +37,7 @@ spec:
   selector:
     app: ${APPLICATION_NAME}
   ports:
-  - port: 8080
+  - port: 80
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
@@ -45,17 +45,26 @@ metadata:
   name: ${APPLICATION_NAME} # Name of the ingress, named after the application
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod" # Connect to the cert issuser
+    cert-manager.io/cluster-issuer: "letsencrypt-prod" # This is necessary, no idea why
 spec:
   tls:
   - hosts:
-    - ${K8S_INGRESS_HOST}
+    - cms.maximemoreillon.com
+    - articles.maximemoreillon.com
     secretName: ${APPLICATION_NAME} # Name of the secret, i.e. the certificates
   rules:
-  - host: ${K8S_INGRESS_HOST}
+  - host: cms.maximemoreillon.com
     http:
       paths:
       - path: /
         backend:
           serviceName: ${APPLICATION_NAME} # Name of the service, named after the app
-          servicePort: 8080
+          servicePort: 80
+  - host: articles.maximemoreillon.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: ${APPLICATION_NAME} # Name of the service, named after the app
+          servicePort: 80
+

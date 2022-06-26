@@ -10,8 +10,6 @@ variables:
   CONTAINER_TAG: ${CI_COMMIT_SHORT_SHA}
   CONTAINER_IMAGE_TAGGED: ${CONTAINER_IMAGE}:${CONTAINER_TAG}
 
-  K8S_INGRESS_HOST: cms.maximemoreillon.com
-
 
 image: moreillon/ci-dind
 services:
