@@ -18,7 +18,7 @@
       </div>
 
       <div>
-        <button type="submit" @click="login()">
+        <button type="submit" @click="login()" class="outlined">
           <MaterialIconLogin />
           <span>Login</span>
         </button>

@@ -14,6 +14,7 @@
     </button>
 
     <button
+      v-if="$auth.user"
       :class="{ active: this.$route.query.sort === 'views' }"
       @click="sort('views')">
       <MaterialIconEye/>

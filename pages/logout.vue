@@ -8,7 +8,7 @@
       </div>
 
 
-      <button @click="logout()">
+      <button @click="logout()" class="outlined">
         <MaterialIconLogout />
         <span>Logout</span>
       </button>
