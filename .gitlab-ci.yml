@@ -25,7 +25,5 @@ build:
   script:
     # Building the container image
     - docker build -t ${CONTAINER_IMAGE_TAGGED} .
-    # Tagging
-    - docker tag ${CONTAINER_IMAGE} ${CONTAINER_IMAGE_TAGGED}
     # Pushing
     - docker push ${CONTAINER_IMAGE_TAGGED}
