@@ -1,13 +1,11 @@
 stages:
   - build
-  - deploy
 
 variables:
   APPLICATION_NAME: cms-front
   CONTAINER_REGISTRY: ${DOCKER_HUB_USERNAME}
-  CONTAINER_IMAGE: ${CONTAINER_REGISTRY}/${APPLICATION_NAME}
-  CONTAINER_IMAGE_LATEST: ${CONTAINER_IMAGE}:latest
-  CONTAINER_IMAGE_TAGGED: ${CONTAINER_IMAGE}:${CI_COMMIT_SHORT_SHA}
+  CONTAINER_TAG: no-nuxt-${CI_COMMIT_SHORT_SHA}
+  CONTAINER_IMAGE_TAGGED: ${CONTAINER_IMAGE}:${CONTAINER_TAG}
 
 
 image: moreillon/ci-dind
@@ -26,24 +24,8 @@ build:
     - echo "${DOCKER_HUB_PASSWORD}" | docker login --username ${DOCKER_HUB_USERNAME} --password-stdin
   script:
     # Building the container image
-    - docker build -t ${CONTAINER_IMAGE} .
+    - docker build -t ${CONTAINER_IMAGE_TAGGED} .
     # Tagging
     - docker tag ${CONTAINER_IMAGE} ${CONTAINER_IMAGE_TAGGED}
-    - docker tag ${CONTAINER_IMAGE} ${CONTAINER_IMAGE_LATEST}
     # Pushing
     - docker push ${CONTAINER_IMAGE_TAGGED}
-    - docker push ${CONTAINER_IMAGE_LATEST}
-
-
-deploy:
-  stage: deploy
-  tags:
-    - dind
-  only:
-    - master
-  script:
-    - envsubst < kubernetes/deployment.yml | kubectl apply -f -
-  environment:
-    name: production
-    kubernetes:
-      namespace: ${KUBERNETES_NAMESPACE}
