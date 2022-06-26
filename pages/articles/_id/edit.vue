@@ -5,7 +5,7 @@
             <div class="top_toolbar">
 
                 <router-link :to="{ name: 'articles-id', params: { id: article._id } }"
-                    class="metadata_element edit_button button">
+                    class="metadata_element button">
                     <MaterialIconArrowLeft class="metadata_icon" />
                     <span>Return to particle</span>
                 </router-link>
@@ -45,19 +45,10 @@
 
 
                 <h3>Tags</h3>
-                <div class="tags_wrapper">
-                    <Tag v-for="(tag, index) in article.tags" :key="`tag_${index}`" :tag="tag" removable
-                        @remove="remove_tag(index)" />
 
-                    <input id="tag_input" type="search" ref="tag_input" list="existing_tag_list" placeholder="New tag"
-                        @keyup.enter="add_tag()">
+                <TagList :tags="article.tags" input @newTag="add_tag($event)"/>
 
-                    <datalist id="existing_tag_list">
-                        <option v-for="(existing_tag, index) in existing_tags" :value="existing_tag.name"
-                            :key="`existing_tag_${index}`" />
-                    </datalist>
 
-                </div>
                 <h3>Summary</h3>
                 <SummaryEditor v-model="article.summary" />
 
@@ -78,7 +69,7 @@ import ArticleEditor from '~/components/editor/ArticleEditor.vue'
 import SummaryEditor from '~/components/editor/SummaryEditor.vue'
 import ThumbnailManagement from '~/components/ThumbnailManagement.vue'
 
-import Tag from '~/components/Tag.vue'
+import TagList from '../../../components/TagList.vue'
 
 
 export default {
@@ -86,8 +77,8 @@ export default {
     ArticleEditor,
     SummaryEditor,
     ThumbnailManagement,
-    Tag,
-  },
+    TagList
+},
 
   data() {
     return {
@@ -99,7 +90,7 @@ export default {
             published: false,
         },
         existing_tags: [],
-      loading: false,
+        loading: false,
     }
   },
   mounted(){
@@ -190,18 +181,17 @@ export default {
     remove_tag(index){
         this.article.tags.splice(index,1)
     },
-    add_tag(){
-        const name = this.$refs.tag_input.value
+    add_tag(name){
+        
         if(!name.length) return
         const url = `${this.$config.apiUrl}/v1/tags`
         const body = { name }
         this.$axios.post(url, body)
         .then(({data: tag}) => {
             this.article.tags.push(tag)
-            this.$refs.tag_input.value = ""
         })
         .catch(error => {
-            alert(`Failed t oadd tag, see console for details`)
+            alert(`Failed to add tag, see console for details`)
             console.error(error);
         })
     },

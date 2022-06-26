@@ -116,12 +116,6 @@ main {
 
 }
 
-/* WARNING: Affects stuff like the edit button */
-main a {
-  text-decoration: none;
-  color: var(--accent-color);
-  font-weight: bold;
-}
 
 footer {
   grid-area: footer;

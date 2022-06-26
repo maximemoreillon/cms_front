@@ -10,6 +10,7 @@
       @click="open = true">
     
     <button 
+      class="outlined"
       v-else
       @click="open = true">
       Set thumbnail

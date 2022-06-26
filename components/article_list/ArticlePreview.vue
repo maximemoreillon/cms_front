@@ -47,7 +47,7 @@
     <div class="summary" v-html="article.summary || 'No summary available'" />
 
 
-    <TagList class="tags" :tags="article.tags" :truncate="5" />
+    <TagList class="tags" :tags="article.tags" :truncate="5" :clickable="false"/>
 
 
   </NuxtLink>

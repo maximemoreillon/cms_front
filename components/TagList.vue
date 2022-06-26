@@ -4,7 +4,7 @@
     <template v-if="tags && tags.length">
       <MaterialIconTag />
 
-      <Tag :clickable="false" v-for="(tag, index) in tag_list" v-bind:key="`tag_${index}`" :tag="tag" />
+      <Tag :clickable="clickable" v-for="(tag, index) in tag_list" v-bind:key="`tag_${index}`" :tag="tag" />
 
       <span v-if="this.truncate && tags.length > this.truncate">
         +{{ tags.length - truncate }}
@@ -13,12 +13,22 @@
 
     <MaterialIconTagOff v-else />
 
+    <!-- Input of new tags -->
+    <input v-if="input" id="tag_input" v-model="new_tag_name" type="search" ref="tag_input" list="existing_tag_list" placeholder="New tag"
+      @keyup.enter="add_tag()">
+
+    <datalist id="existing_tag_list">
+      <option v-for="(existing_tag, index) in existing_tags" :value="existing_tag.name"
+        :key="`existing_tag_${index}`" />
+    </datalist>
+
 
 
   </div>
 </template>
 
 <script>
+import Tag from '~/components/Tag.vue'
 
 export default {
   name: 'TagList',
@@ -31,6 +41,19 @@ export default {
       type: Boolean,
       default: () => true
     },
+    input: Boolean,
+  },
+  components: {
+    Tag
+  },
+  data(){
+    return {
+      existing_tags: [],
+      new_tag_name: '',
+    }
+  },
+  mounted(){
+    if (this.input) this.get_existing_tags()
   },
 
   methods: {
@@ -41,6 +64,18 @@ export default {
         this.$router.push({ name: 'index', query: { tag_id } })
       }
 
+    },
+    async get_existing_tags() {
+      try {
+        const url = `${this.$config.apiUrl}/v1/tags/`
+        this.existing_tags = await this.$axios.$get(url)
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    add_tag(){
+      this.$emit('newTag', this.new_tag_name)
+      this.new_tag_name = ''
     }
   },
   computed:{
