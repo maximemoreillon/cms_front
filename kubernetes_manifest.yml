@@ -16,7 +16,7 @@ spec:
       - name: ${APPLICATION_NAME}
         image: ${CONTAINER_IMAGE_TAGGED}
         ports:
-        - containerPort: 80
+        - containerPort: 8080
         env:
         - name: NUXT_ENV_CMS_API_URL
           value: https://api.cms.maximemoreillon.com
