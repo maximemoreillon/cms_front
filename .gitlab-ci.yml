@@ -21,6 +21,8 @@ build:
   stage: build
   tags:
     - dind
+  only:
+    - nuxt
   before_script:
     # Docker hub login
     - echo "${DOCKER_HUB_PASSWORD}" | docker login --username ${DOCKER_HUB_USERNAME} --password-stdin
@@ -35,6 +37,8 @@ deploy:
   stage: deploy
   tags:
     - dind
+  only:
+    - nuxt
   script:
     - envsubst < kubernetes_manifest.yml | kubectl apply -f -
   environment:
