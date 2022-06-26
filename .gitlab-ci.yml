@@ -3,14 +3,14 @@ stages:
   - deploy
 
 variables:
-  APPLICATION_NAME: cms-front-nuxt
+  APPLICATION_NAME: cms-front
 
   CONTAINER_REGISTRY: ${DOCKER_HUB_USERNAME}
   CONTAINER_IMAGE: ${CONTAINER_REGISTRY}/${APPLICATION_NAME}
   CONTAINER_TAG: ${CI_COMMIT_SHORT_SHA}
   CONTAINER_IMAGE_TAGGED: ${CONTAINER_IMAGE}:${CONTAINER_TAG}
 
-  K8S_INGRESS_HOST: nuxt.cms.maximemoreillon.com
+  K8S_INGRESS_HOST: cms.maximemoreillon.com
 
 
 image: moreillon/ci-dind
@@ -22,7 +22,7 @@ build:
   tags:
     - dind
   only:
-    - nuxt
+    - master
   before_script:
     # Docker hub login
     - echo "${DOCKER_HUB_PASSWORD}" | docker login --username ${DOCKER_HUB_USERNAME} --password-stdin
@@ -38,7 +38,7 @@ deploy:
   tags:
     - dind
   only:
-    - nuxt
+    - master
   script:
     - envsubst < kubernetes_manifest.yml | kubectl apply -f -
   environment:
