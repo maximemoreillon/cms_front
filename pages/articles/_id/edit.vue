@@ -4,7 +4,7 @@
 
             <div class="toolbar">
 
-                <router-link :to="{ name: 'articles-id', params: { id: article._id } }"
+                <router-link v-if="article_id !== 'new'" :to="{ name: 'articles-id', params: { id: article._id } }"
                     class="metadata_element button">
                     <MaterialIconArrowLeft class="metadata_icon" />
                     <span>Return to article</span>
