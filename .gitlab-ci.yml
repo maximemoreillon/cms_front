@@ -3,36 +3,34 @@ stages:
   - deploy
 
 variables:
-  APPLICATION_NAME: cms-front
+  APPLICATION_NAME: cms-front-nuxt
+
   CONTAINER_REGISTRY: ${DOCKER_HUB_USERNAME}
   CONTAINER_IMAGE: ${CONTAINER_REGISTRY}/${APPLICATION_NAME}
-  CONTAINER_IMAGE_LATEST: ${CONTAINER_IMAGE}:latest
-  CONTAINER_IMAGE_TAGGED: ${CONTAINER_IMAGE}:${CI_COMMIT_SHORT_SHA}
+  CONTAINER_TAG: ${CI_COMMIT_SHORT_SHA}
+  CONTAINER_IMAGE_TAGGED: ${CONTAINER_IMAGE}:${CONTAINER_TAG}
+
+  K8S_INGRESS_HOST: nuxt.cms.maximemoreillon.com
 
 
 image: moreillon/ci-dind
 services:
   - name: docker:19.03.12-dind
 
-
 build:
   stage: build
   tags:
     - dind
   only:
-    - master
+    - nuxt
   before_script:
     # Docker hub login
     - echo "${DOCKER_HUB_PASSWORD}" | docker login --username ${DOCKER_HUB_USERNAME} --password-stdin
   script:
     # Building the container image
-    - docker build -t ${CONTAINER_IMAGE} .
-    # Tagging
-    - docker tag ${CONTAINER_IMAGE} ${CONTAINER_IMAGE_TAGGED}
-    - docker tag ${CONTAINER_IMAGE} ${CONTAINER_IMAGE_LATEST}
+    - docker build -t ${CONTAINER_IMAGE_TAGGED} .
     # Pushing
     - docker push ${CONTAINER_IMAGE_TAGGED}
-    - docker push ${CONTAINER_IMAGE_LATEST}
 
 
 deploy:
@@ -40,9 +38,9 @@ deploy:
   tags:
     - dind
   only:
-    - master
+    - nuxt
   script:
-    - envsubst < kubernetes/deployment.yml | kubectl apply -f -
+    - envsubst < kubernetes_manifest.yml | kubectl apply -f -
   environment:
     name: production
     kubernetes:

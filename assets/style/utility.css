@@ -1,0 +1,26 @@
+.error {
+  color: var(--error-color);
+}
+
+.spacer {
+  flex-grow: 1;
+}
+
+.separator {
+  border-left: 1px solid #dddddd;
+}
+
+.loader_container {
+  padding: 1em;
+  text-align: center;
+  font-size: 200%;
+}
+
+
+.flex {
+  display: flex;
+}
+
+.grow {
+  flex-grow: 1;
+}

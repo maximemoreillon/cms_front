@@ -1,3 +1,0 @@
-[submodule "src/components/vue_modal"]
-	path = src/components/vue_modal
-	url = https://github.com/maximemoreillon/vue_modal.git

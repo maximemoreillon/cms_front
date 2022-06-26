@@ -1,19 +1,31 @@
-# Build the Vue app
-FROM node:14 as build-stage
+FROM node:16 as builder
+
 WORKDIR /app
-COPY package*.json ./
 
-RUN npm install
-COPY ./ .
-RUN npm run build
+COPY . .
 
-# Put the built app in an NGINX contaier
-FROM nginx as production-stage
-RUN mkdir /app
-COPY --from=build-stage /app/dist /app
-COPY nginx.conf /etc/nginx/nginx.conf
+RUN yarn install \
+  --prefer-offline \
+  --frozen-lockfile \
+  --non-interactive \
+  --production=false
 
-# Custom stuff
-COPY ./entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
-ENTRYPOINT ["/entrypoint.sh"]
+RUN yarn build
+
+RUN rm -rf node_modules && \
+  NODE_ENV=production yarn install \
+  --prefer-offline \
+  --pure-lockfile \
+  --non-interactive \
+  --production=true
+
+FROM node:lts
+
+WORKDIR /app
+
+COPY --from=builder /app  .
+
+ENV HOST 0.0.0.0
+EXPOSE 8080
+
+CMD [ "yarn", "start" ]
