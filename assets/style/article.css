@@ -3,6 +3,12 @@
     display: none;
 }
 
+article h1 {
+    /* h1 in articles are resized by the browser by default */
+    font-size: 2em;
+}
+
+
 .article_content {
     line-height: var(--line-height);
 }

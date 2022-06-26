@@ -19,6 +19,8 @@
       <MaterialIconEye/>
     </button>
 
+    <div class="separator"></div>
+
     <button
       :class="{ active: this.$route.query.order !== 'ASC' }"
       @click="order('DESC')">
@@ -66,6 +68,13 @@ export default {
 }
 </script>
 
-<style lang="css" scoped>
+<style >
+
+
+.sort_and_order {
+  display: flex;
+  gap: 0.5em;
+}
+
 
 </style>

@@ -2,12 +2,49 @@
   <!-- TODO: Consider a grid layout -->
   <div class="article_metadata">
 
+    <div class="metadata_wrapper" v-if="user_is_author">
+
+      <!-- Published indicator -->
+      <div class="metadata_element">
+        <template v-if="article.published">
+          <MaterialIconEarth v-if="article.published" />
+          <span>Published</span>
+        </template>
+        <template v-else>
+          <MaterialIconLock />
+          <span>Private</span>
+        </template>
+      </div>
+
+      <!-- View count -->
+      <div class="metadata_element" title="Views" v-if="article.views">
+        <MaterialIconEye />
+        <span>{{article.views}}</span>
+      </div>
+
+      <div class="spacer"></div>
+
+      <!-- Delete -->
+      <button class="outlined" @click="delete_article()">
+        <MaterialIconDelete />
+        <span>Delete</span>
+      </button>
+
+      <!-- Link to editor -->
+      <router-link :to="{ name: 'articles-id-edit', params: { id: article._id } }"
+        class="metadata_element edit_button button outlined">
+        <MaterialIconPencil class="metadata_icon" />
+        <span>Edit</span>
+      </router-link>
+    </div>
+
     <div class="metadata_wrapper">
       <!-- Author -->
       <div class="metadata_element" title="Author">
         <MaterialIconAccount class="metadata_icon" />
         <Author v-bind:author="article.author" />
       </div>
+
       <!-- Creation date -->
       <div class="metadata_element" title="Created" v-if="article.authorship.creation_date">
         <MaterialIconCalendar />
@@ -19,42 +56,17 @@
         <span>{{format_date(article.authorship.edition_date)}}</span>
       </div>
 
-      <!-- View count -->
-      <div class="metadata_element" title="Views" v-if="article.views">
-        <MaterialIconEye />
-        <span>{{article.views}}</span>
-      </div>
 
-      <!-- Published indicator -->
-      <template v-if="user_is_author">
-        <div class="metadata_element" title="Published" v-if="article.published">
-          <MaterialIconEarth />
-          <span>Published</span>
-        </div>
 
-        <div class="metadata_element" title="Private" v-if="!article.published">
-          <MaterialIconLock />
-          <span>Private</span>
-        </div>
+    </div>
 
-        <div class="spacer"></div>
-
-        <button @click="delete_article()">
-          <MaterialIconDelete />
-          <span>Delete</span>
-        </button>
-
-        <!-- Link to editor -->
-        <router-link :to="{ name: 'articles-id-edit', params: { id: article._id } }"
-          class="metadata_element edit_button button">
-          <MaterialIconPencil class="metadata_icon" />
-          <span>Edit</span>
-        </router-link>
-      </template>
+    <div class="metadata_wrapper">
+      <TagList class="metadata_element" :tags="article.tags" />
     </div>
 
 
-    <TagList class="metadata_element" :tags="article.tags"/>
+
+
 
 
 

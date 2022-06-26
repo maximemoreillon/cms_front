@@ -18,6 +18,7 @@
         itemprop="dateModified"
         :content="format_date_for_meta(article.authorship.edition_date)">
 
+      <!-- Article title -->
       <h1
         itemprop="name headline"
         :content="article.title">

@@ -46,6 +46,8 @@ export default {
 .search_wrapper {
   display: flex;
   align-items: stretch;
+  gap: 0.25em;
+  /* For button size */
   font-size: 120%;
 }
 

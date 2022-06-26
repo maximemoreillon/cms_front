@@ -6,6 +6,10 @@
   flex-grow: 1;
 }
 
+.separator {
+  border-left: 1px solid #dddddd;
+}
+
 .loader_container {
   padding: 1em;
   text-align: center;
