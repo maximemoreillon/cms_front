@@ -4,7 +4,7 @@
 
             <div class="toolbar">
 
-                <router-link v-if="article_id !== 'new'" :to="{ name: 'articles-id', params: { id: article._id } }"
+                <router-link v-if="article_id !== 'new'" :to="{ name: 'articles-id', params: { id: article_id } }"
                     class="metadata_element button">
                     <MaterialIconArrowLeft class="metadata_icon" />
                     <span>Return to article</span>
@@ -88,7 +88,7 @@ export default {
     return {
         article: {
             title: 'Untitled article',
-            content: 'This article has no content',
+            content: '<h1>New article</h1><p>This article has no content</p>',
             summary: 'This article has no summary',
             tags: [],
             published: false,
