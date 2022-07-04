@@ -1,5 +1,6 @@
 <template>
     <div>
+        <!-- TODO: Loader -->
         <template v-if="article">
 
             <div class="toolbar">
@@ -101,7 +102,11 @@ export default {
       if(this.article_id !== 'new') this.get_article()
       this.get_existing_tags()
       document.addEventListener("keydown", this.handle_keydown)
-
+  },
+  watch: {
+    article_id(){
+        if (this.article_id !== 'new') this.get_article()
+    }
   },
   beforeDestroy() {
     document.removeEventListener("keydown", this.handle_keydown)
@@ -155,6 +160,7 @@ export default {
 
         try {
             const article = await this.$axios.$post(url, body)
+            // This resets the article content
             this.$router.push({ name: 'articles-id-edit', params: { id: article._id } })
         } catch (error) {
             if (error.response) alert(error.response.data)
