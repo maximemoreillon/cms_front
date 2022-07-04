@@ -1,7 +1,7 @@
 
 
 <template>
-  <BubbleMenu class="editor_bubble_menu" v-if="editor" :tippy-options="{ duration: 100 }" :editor="editor">
+  <BubbleMenu class="editor_menu" v-if="editor" :tippy-options="{ duration: 100 }" :editor="editor">
 
 
     <button @click="editor.chain().focus().toggleBold().run()" :class="{ 'active': editor.isActive('bold') }">
@@ -111,13 +111,10 @@ export default {
 
 <style scoped>
 
-.editor_bubble_menu {
-  /* inline-flex needed otherwise overflow */
-  display: inline-flex;
-  align-items: center;
-  background-color: white;
-  border: 1px solid #dddddd;
-  padding: 0.25em;
-}
+
+
+
+
+
 
 </style>

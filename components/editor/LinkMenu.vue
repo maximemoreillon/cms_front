@@ -1,19 +1,16 @@
 
 
 <template>
-    <div class="menu_wrapper">
-        <button :class="{ 'active': editor.isActive('link') }" @click="open = !open">
-            <MaterialIconLink />
-        </button>
-        <div class="menu_content" v-if="open">
+    <button class="menu_wrapper" :class="{ active: editor.isActive('link'), open}" @click="open = !open">
+        <MaterialIconLink />
+        <div class="menu_content" v-if="open" @click.stop>
             <form @submit.prevent="set_link()">
                 <input type="text" v-model="url">
                 <input type="submit">
                 <button @click="clear_link()">Remove</button>
             </form>
         </div>
-
-    </div>
+    </button>
 </template>
 
 <script>
@@ -65,16 +62,23 @@ export default {
 <style scoped>
 .menu_wrapper{
     position: relative;
+    display: inline-flex;
+    align-items: center;
 }
 .menu_content {
+    /* Setting back cursor because button */
+    cursor: initial;
     z-index: 3;
     background-color: white;
     border: 1px solid #dddddd;
-    right: 0;
+    padding: 1em;
     
     position: absolute;
-    padding: 1em;
+    right: 0;
+    top: calc(100% + 10px);
 }
+
+
 
 form {
     display: flex;

@@ -105,6 +105,7 @@ export default {
   },
   watch: {
     article_id(){
+        // Prevents getting an empty article after saving a new one
         if (this.article_id !== 'new') this.get_article()
     }
   },

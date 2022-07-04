@@ -1,7 +1,7 @@
 
 
 <template>
-  <FloatingMenu class="editor_floating_menu" v-if="editor" :editor="editor" :tippy-options="{ duration: 100 }">
+  <FloatingMenu class="editor_menu" v-if="editor" :editor="editor" :tippy-options="{ duration: 100 }">
 
     <button @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
       :class="{ 'active': editor.isActive('heading', { level: 1 }) }">
@@ -83,13 +83,8 @@ export default {
 <style scoped>
 
 
-
-.editor_floating_menu {
-  display: flex;
-  align-items: center;
-  background-color: white;
-  border: 1px solid #dddddd;
-  padding: 0.25em;
+.editor_menu {
+  transform: translateX(10%);
 }
 
 </style>

@@ -104,4 +104,16 @@ export default {
 
 <style>
 
+.editor_menu {
+  /* inline-flex needed otherwise overflow */
+  display: inline-flex;
+  align-items: center;
+  background-color: white;
+  border: 1px solid #dddddd;
+}
+
+.editor_menu>* {
+  /* Using pading and not gap to facilitate clicking items */
+  padding: 0.5em;
+}
 </style>

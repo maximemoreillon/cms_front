@@ -1,10 +1,8 @@
 
 
 <template>
-    <div class="menu_wrapper">
-        <button @click="open = !open">
-            <MaterialIconImage />
-        </button>
+    <button class="menu_wrapper" @click="open = !open">
+        <MaterialIconImage />
         <div class="menu_content" v-if="open">
             <h2>Image insert</h2>
             <template v-if="$config.imageManagerApiUrl">
@@ -20,8 +18,9 @@
                 <input type="submit" name="">
             </form>
         </div>
+    </button>
 
-    </div>
+
 </template>
 
 <script>
@@ -82,15 +81,20 @@ export default {
 <style scoped>
 .menu_wrapper{
     position: relative;
+    display: inline-flex;
+    align-items: center;
 }
 .menu_content {
+    /* Setting back cursor because button */
+    cursor: initial;
     z-index: 3;
     background-color: white;
     border: 1px solid #dddddd;
-    right: 0;
+    padding: 1em;
     
     position: absolute;
-    padding: 1em;
+    right: 0;
+    top: calc(100% + 10px);
 }
 
 form {
