@@ -65,7 +65,7 @@
 
         </template>
 
-
+        <Snackbar v-model="snackbar.show" :text="snackbar.text" color="green"/>
     </div>
 </template>
 
@@ -73,17 +73,19 @@
 import ArticleEditor from '~/components/editor/ArticleEditor.vue'
 import SummaryEditor from '~/components/editor/SummaryEditor.vue'
 import ThumbnailManagement from '~/components/editor/ThumbnailManagement.vue'
-
+import Snackbar from '~/components/Snackbar.vue'
 import TagList from '../../../components/TagList.vue'
 
 
 export default {
-  components: {
-    ArticleEditor,
-    SummaryEditor,
-    ThumbnailManagement,
-    TagList
-},
+    name: 'ArticleEdit',
+    components: {
+        ArticleEditor,
+        SummaryEditor,
+        ThumbnailManagement,
+        TagList,
+        Snackbar
+    },
 
   data() {
     return {
@@ -93,6 +95,10 @@ export default {
             summary: 'This article has no summary',
             tags: [],
             published: false,
+        },
+        snackbar: {
+            show: false,
+            text: '',
         },
         existing_tags: [],
         loading: false,
@@ -179,7 +185,8 @@ export default {
 
         try {
             await this.$axios.patch(url, body)
-            alert('Article saved')
+            this.snackbar.show = true
+            this.snackbar.text = 'Article saved'
         } catch (error) {
             if (error.response) alert(error.response.data)
             else alert(error)
