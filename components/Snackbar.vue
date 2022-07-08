@@ -1,7 +1,11 @@
 <template>
-    <div v-if="show" class="snackbar" :style="snackbar_style">
-        {{text}}
+    <div>
+        <!-- Wrapping because Not a good idea to have v-if at top level element -->
+        <div v-if="show" class="snackbar" :style="snackbar_style">
+            {{text}}
+        </div>
     </div>
+
 </template>
 <script>
 export default {

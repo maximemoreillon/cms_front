@@ -1,32 +1,32 @@
 <template lang="html">
-<div class="tag_management">
+  <div class="tag_management">
 
-  <button
-    type="button"
-    class="button"
-    @click="prompt_for_rename()">
-    <pencil-icon/>
-    <span>Rename tag</span>
-  </button>
+    <button
+      type="button"
+      class="button"
+      @click="prompt_for_rename()">
+      <pencil-icon/>
+      <span>Rename tag</span>
+    </button>
 
-  <button
-    type="button"
-    class="button"
-    @click="delete_tag()">
-    <delete-icon/>
-    <span>Delete tag</span>
-  </button>
+    <button
+      type="button"
+      class="button"
+      @click="delete_tag()">
+      <delete-icon/>
+      <span>Delete tag</span>
+    </button>
 
-  <button
-    type="button"
-    class="button"
-    :class="{active:tag.navigation_item}"
-    @click="pin_to_navbar()">
-    <pin-icon/>
-    <span>Pin to nav</span>
-  </button>
+    <button
+      type="button"
+      class="button"
+      :class="{active:tag.navigation_item}"
+      @click="pin_to_navbar()">
+      <pin-icon/>
+      <span>Pin to nav</span>
+    </button>
 
-</div>
+  </div>
 </template>
 
 <script>
@@ -52,7 +52,8 @@ export default {
       this.axios.put(url, body)
       .then( ({data}) => {
 
-        this.tag = data
+        // Cannot mutate props!
+        // this.tag = data
 
         this.$store.commit('update_categories')
 
@@ -70,12 +71,12 @@ export default {
     prompt_for_rename(){
       const new_name = prompt("New tag name", this.tag.name)
       if(!new_name) return
-      this.tag.name = new_name
+      //this.tag.name = new_name
       this.update_tag()
     },
 
     pin_to_navbar(){
-      this.tag.navigation_item = !this.tag.navigation_item
+      //this.tag.navigation_item = !this.tag.navigation_item
       this.update_tag()
     },
 
