@@ -3,7 +3,7 @@
 <template>
     <button class="menu_wrapper" @click="open = !open">
         <MaterialIconImage />
-        <div class="menu_content" v-if="open">
+        <div class="menu_content" v-if="open" @click.stop>
             <h2>Image insert</h2>
             <template v-if="$config.imageManagerApiUrl">
                 <h3>Via upload</h3>
