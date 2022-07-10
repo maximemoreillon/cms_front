@@ -68,7 +68,15 @@ export default {
   
 
   router: {
-    middleware: ['auth', 'pinnedTags']
+    middleware: ['auth', 'pinnedTags'],
+    extendRoutes(routes, resolve) {
+      routes.push({
+        name: 'articles',
+        path: '/',
+        alias: '/articles',
+        component: resolve(__dirname, 'pages/index.vue')
+      })
+    }
   },
 
   serverMiddleware: [
