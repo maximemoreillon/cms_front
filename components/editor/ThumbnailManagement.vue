@@ -22,7 +22,7 @@
           </form>
         </template>
         <h3>via URL</h3>
-        <form class="" v-on:submit.prevent="set_thumbnail_url()">
+        <form class="" v-on:submit.prevent="set_thumbnail_src()">
           <input type="text" v-model="image_url">
           <input type="submit" name="">
         </form>
@@ -68,6 +68,7 @@ export default {
       this.$axios.post(url, formData)
       .then( ({data: {_id}}) => {
           const src = `${this.$config.imageManagerApiUrl}/images/${_id}/thumbnail`
+          // Not cool to modify props
           this.$set(this.article, 'thumbnail_src', src)
           this.open = false
       })
