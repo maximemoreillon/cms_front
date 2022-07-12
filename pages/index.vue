@@ -1,6 +1,6 @@
 <template>
   <div>
-    <no-ssr>
+    <client-only>
       <!-- Show tag if specified in query -->
       <template v-if="tag">
         <h1>Articles tagged with {{ tag.name }}</h1>
@@ -58,7 +58,7 @@
           <span>Load more</span>
         </button>
       </div>
-    </no-ssr>
+    </client-only>
   </div>
 </template>
 
