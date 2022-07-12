@@ -17,7 +17,7 @@
 
 
         <!-- The content of the modal goes here -->
-        <slot ></slot>
+        <slot />
       </div>
     </div>
   </div>

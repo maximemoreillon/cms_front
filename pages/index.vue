@@ -182,7 +182,6 @@ export default {
         // Add batch of articles to existing list
         articles.forEach( (article) => { this.articles.push(article) })
 
-
         // Check if all articles loaded (less than batch size)
         if(this.articles.length >= this.article_count) this.articles_all_loaded = true
 
