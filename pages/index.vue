@@ -1,62 +1,64 @@
 <template>
   <div>
-    <!-- Show tag if specified in query -->
-    <template v-if="tag">
-      <h1>Articles tagged with {{ tag.name }}</h1>
+    <no-ssr>
+      <!-- Show tag if specified in query -->
+      <template v-if="tag">
+        <h1>Articles tagged with {{ tag.name }}</h1>
 
-      <TagManagement v-if="user_is_admin" :tag="tag" @tagUpdate="delete_all_and_get_articles()" />
-    </template>
+        <TagManagement v-if="user_is_admin" :tag="tag" @tagUpdate="delete_all_and_get_articles()" />
+      </template>
 
-    <template v-else-if="author">
-      <h1>Articles written by {{ author.display_name }}</h1>
-    </template>
+      <template v-else-if="author">
+        <h1>Articles written by {{ author.display_name }}</h1>
+      </template>
 
-    <template v-else>
-      <h1>Articles</h1>
-    </template>
+      <template v-else>
+        <h1>Articles</h1>
+      </template>
 
 
-    <!-- Toolbar for sorting and new article -->
-    <div class="query_tools">
-      <div>
-        <ArticleSearch />
-      </div>
-
-      <div class="query_tools_row">
-        <div class="counter">
-          <MaterialIconFileDocumentOutline />
-          <span>{{ article_count }}</span>
+      <!-- Toolbar for sorting and new article -->
+      <div class="query_tools">
+        <div>
+          <ArticleSearch />
         </div>
-        <div class="spacer" />
-        <ArticleSorting />
+
+        <div class="query_tools_row">
+          <div class="counter">
+            <MaterialIconFileDocumentOutline />
+            <span>{{ article_count }}</span>
+          </div>
+          <div class="spacer" />
+          <ArticleSorting />
+        </div>
       </div>
-    </div>
 
-    <div v-if="!loading_error && articles.length" ref="articles_container" class="articles_container">
-      <ArticlePreview v-for="(article, index) in articles" :key="`article_${index}`" :article="article" />
-    </div>
+      <div v-if="!loading_error && articles.length" ref="articles_container" class="articles_container">
+        <ArticlePreview v-for="(article, index) in articles" :key="`article_${index}`" :article="article" />
+      </div>
 
-    <!-- loader -->
-    <div v-if="articles_loading" class="loader_container">
-      <Loader />
-    </div>
+      <!-- loader -->
+      <div v-if="articles_loading" class="loader_container">
+        <Loader />
+      </div>
 
-    <!-- No articles indicator -->
-    <div v-if="!articles.length && !articles_loading && !loading_error">
-      No articles
-    </div>
+      <!-- No articles indicator -->
+      <div v-if="!articles.length && !articles_loading && !loading_error">
+        No articles
+      </div>
 
-    <!-- Error loading -->
-    <div v-if="loading_error" class="error">
-      Error loading articles
-    </div>
+      <!-- Error loading -->
+      <div v-if="loading_error" class="error">
+        Error loading articles
+      </div>
 
-    <!-- Load more -->
-    <div class="load_more_wrapper" :style="{display: load_more_possible ? 'block' : 'none'}">
-      <button ref="load_more" class="outlined" @click="get_articles()">
-        <span>Load more</span>
-      </button>
-    </div>
+      <!-- Load more -->
+      <div class="load_more_wrapper" :style="{display: load_more_possible ? 'block' : 'none'}">
+        <button ref="load_more" class="outlined" @click="get_articles()">
+          <span>Load more</span>
+        </button>
+      </div>
+    </no-ssr>
   </div>
 </template>
 
