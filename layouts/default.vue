@@ -1,13 +1,14 @@
 <template>
   <div class="app">
-
     <Header
-      @navToggle="aside_open = !aside_open" />
+      @navToggle="aside_open = !aside_open"
+    />
 
     <!-- NAV management is a bit tedious -->
     <Aside
       :open="aside_open"
-      @navToggle="aside_open = !aside_open" />
+      @navToggle="aside_open = !aside_open"
+    />
 
     <main>
       <router-view />
@@ -21,11 +22,10 @@
     <!-- Overlay when the nav is open -->
     <!-- TODO: Try to put in aside -->
     <div
-      @click="aside_open = false"
       class="nav_backround"
-      :class="{visible: aside_open}"/>
-
-
+      :class="{visible: aside_open}"
+      @click="aside_open = false"
+    />
   </div>
 </template>
 

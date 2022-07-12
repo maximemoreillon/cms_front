@@ -1,15 +1,13 @@
 <template>
   <div>
-    <EditorToolbar :editor="editor" v-if="false" />
+    <EditorToolbar v-if="false" :editor="editor" />
     <template v-if="true">
-
       <EditorBubbleMenu :editor="editor" />
-      <EditorFloatingMenu :editor="editor"/>
+      <EditorFloatingMenu :editor="editor" />
     </template>
 
     <!-- Ref is used by parent to access article content such as h1 -->
-    <EditorContent class="editor_content article_content" :editor="editor" ref="editorContent" />
-
+    <EditorContent ref="editorContent" class="editor_content article_content" :editor="editor" />
   </div>
 </template>
 

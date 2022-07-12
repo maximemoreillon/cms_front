@@ -1,26 +1,24 @@
 
 
 <template>
-    <button class="menu_wrapper" @click="open = !open">
-        <MaterialIconImage />
-        <div class="menu_content" v-if="open" @click.stop>
-            <h2>Image insert</h2>
-            <template v-if="$config.imageManagerApiUrl">
-                <h3>Via upload</h3>
-                <form class="" @submit.prevent="image_upload()">
-                    <input type="file" accept="image/*" ref="image_input" name="image">
-                    <input type="submit" name="">
-                </form>
-            </template>
-            <h3>via URL</h3>
-            <form class="" v-on:submit.prevent="submit_image_link()">
-                <input type="text" ref="image_url_input">
-                <input type="submit" name="">
-            </form>
-        </div>
-    </button>
-
-
+  <button class="menu_wrapper" @click="open = !open">
+    <MaterialIconImage />
+    <div v-if="open" class="menu_content" @click.stop>
+      <h2>Image insert</h2>
+      <template v-if="$config.imageManagerApiUrl">
+        <h3>Via upload</h3>
+        <form class="" @submit.prevent="image_upload()">
+          <input ref="image_input" type="file" accept="image/*" name="image">
+          <input type="submit" name="">
+        </form>
+      </template>
+      <h3>via URL</h3>
+      <form class="" @submit.prevent="submit_image_link()">
+        <input ref="image_url_input" type="text">
+        <input type="submit" name="">
+      </form>
+    </div>
+  </button>
 </template>
 
 <script>

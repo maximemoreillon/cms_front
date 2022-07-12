@@ -1,44 +1,48 @@
 <template>
   <!-- Wrapping in a div so that modal is not affected by CSS -->
   <div class="article_wrapper">
-
     <!-- Using schema.org for SEO -->
     <article
       v-if="article"
       itemscope
-      itemtype="http://schema.org/Article">
-
+      itemtype="http://schema.org/Article"
+    >
       <!-- Meta tags for SEO -->
       <meta itemprop="publisher" content="Maxime Moreillon">
       <meta itemprop="image" content="/logo.png">
       <meta
         itemprop="datePublished"
-        :content="format_date_for_meta(article.authorship.creation_date)">
+        :content="format_date_for_meta(article.authorship.creation_date)"
+      >
       <meta
         itemprop="dateModified"
-        :content="format_date_for_meta(article.authorship.edition_date)">
+        :content="format_date_for_meta(article.authorship.edition_date)"
+      >
 
       <!-- Article title -->
       <h1
         itemprop="name headline"
-        :content="article.title">
-        {{article.title || 'Untitled article'}}
+        :content="article.title"
+      >
+        {{ article.title || 'Untitled article' }}
       </h1>
 
       <ArticleMetadata
-        :article="article" />
+        :article="article"
+      />
 
       <!-- the article content -->
       <div
         ref="article_content"
         class="article_content"
-        v-html="article.content"/>
-
+        v-html="article.content"
+      />
     </article>
 
     <div
+      v-if="error"
       class="error"
-      v-if="error">
+    >
       An error occured while loading articles
     </div>
 
@@ -47,17 +51,15 @@
     <Modal
       v-if="article"
       :open="modal.open"
-      @close="modal.open = false">
-
+      @close="modal.open = false"
+    >
       <img
         class="modal_image"
         :src="modal.image_src"
-        :alt="article.title">
-
+        :alt="article.title"
+      >
     </Modal>
-
   </div>
-
 </template>
 
 <script>
@@ -131,6 +133,27 @@ export default {
 
     }
   },
+  computed: {
+    article_id(){
+      return this.$route.params.id
+    },
+    editable(){
+
+      // If there is no article ID, then nothing to edit
+      if(!this.article_id) return false
+
+      // If the user is not logged in, then unable to edit
+      if (!this.$auth.user) return false
+
+      if (this.$auth.user.isAdmin) return true
+
+      // If article does not have no author, then nothing to edit
+      if(!this.article.author) return false
+
+
+      return (this.article.author._id === this.$auth.user._id)
+    }
+  },
   mounted(){
     this.add_event_listeners_for_image_modals()
   },
@@ -158,27 +181,6 @@ export default {
         day.toString().padStart(2,'0'),
       ].join('-');
 
-    }
-  },
-  computed: {
-    article_id(){
-      return this.$route.params.id
-    },
-    editable(){
-
-      // If there is no article ID, then nothing to edit
-      if(!this.article_id) return false
-
-      // If the user is not logged in, then unable to edit
-      if (!this.$auth.user) return false
-
-      if (this.$auth.user.isAdmin) return true
-
-      // If article does not have no author, then nothing to edit
-      if(!this.article.author) return false
-
-
-      return (this.article.author._id === this.$auth.user._id)
     }
   }
 

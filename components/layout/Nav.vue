@@ -1,6 +1,5 @@
 <template lang="html">
   <nav>
-
     <router-link v-if="$auth.user" :to="{ name: 'articles-id-edit', params: {id: 'new'}}">
       <MaterialIconPlus />
       <span>New article</span>
@@ -17,10 +16,12 @@
     </router-link>
 
 
-    <router-link v-for="(tag, index) in $store.state.pinned_tags" :key="`nav_${index}`"
-      :to="{name: 'index', query: {tag_id: tag._id} }">
+    <router-link
+      v-for="(tag, index) in $store.state.pinned_tags" :key="`nav_${index}`"
+      :to="{name: 'index', query: {tag_id: tag._id} }"
+    >
       <MaterialIconTag />
-      <span>{{tag.name}}</span>
+      <span>{{ tag.name }}</span>
     </router-link>
 
     <router-link :to="{ name: 'tags'}">
@@ -29,12 +30,12 @@
     </router-link>
 
     <!-- Login / Logout -->
-    <router-link :to="{ name: 'logout' }" v-if="$auth.user">
+    <router-link v-if="$auth.user" :to="{ name: 'logout' }">
       <MaterialIconLogout />
       <span>Logout</span>
     </router-link>
 
-    <router-link :to="{ name: 'login' }" v-else>
+    <router-link v-else :to="{ name: 'login' }">
       <MaterialIconLogin />
       <span>Login</span>
     </router-link>
@@ -44,11 +45,6 @@
       <MaterialIconInformationOutline />
       <span>About</span>
     </router-link>
-
-    
-
-
-
   </nav>
 </template>
 

@@ -1,16 +1,14 @@
 <template>
   <div>
-
     <!-- Show tag if specified in query -->
     <template v-if="tag">
-      <h1>Articles tagged with {{tag.name}}</h1>
+      <h1>Articles tagged with {{ tag.name }}</h1>
 
       <TagManagement v-if="user_is_admin" :tag="tag" @tagUpdate="delete_all_and_get_articles()" />
-
     </template>
 
     <template v-else-if="author">
-      <h1>Articles written by {{author.display_name}}</h1>
+      <h1>Articles written by {{ author.display_name }}</h1>
     </template>
 
     <template v-else>
@@ -19,9 +17,7 @@
 
 
     <!-- Toolbar for sorting and new article -->
-
     <div class="query_tools">
-
       <div>
         <ArticleSearch />
       </div>
@@ -29,47 +25,38 @@
       <div class="query_tools_row">
         <div class="counter">
           <MaterialIconFileDocumentOutline />
-          <span>{{article_count}}</span>
+          <span>{{ article_count }}</span>
         </div>
-        <div class="spacer"></div>
+        <div class="spacer" />
         <ArticleSorting />
-
       </div>
-
     </div>
 
-    <div class="articles_container" ref="articles_container" v-if="!loading_error && articles.length">
-
-
+    <div v-if="!loading_error && articles.length" ref="articles_container" class="articles_container">
       <ArticlePreview v-for="(article, index) in articles" :key="`article_${index}`" :article="article" />
-
     </div>
 
     <!-- loader -->
-    <div class="loader_container" v-if="articles_loading">
+    <div v-if="articles_loading" class="loader_container">
       <Loader />
     </div>
 
     <!-- No articles indicator -->
-    <div class="" v-if="!articles.length && !articles_loading && !loading_error">
+    <div v-if="!articles.length && !articles_loading && !loading_error">
       No articles
     </div>
 
     <!-- Error loading -->
-    <div class="error" v-if="loading_error">
+    <div v-if="loading_error" class="error">
       Error loading articles
     </div>
 
     <!-- Load more -->
     <div class="load_more_wrapper" :style="{display: load_more_possible ? 'block' : 'none'}">
-      <button class="outlined" ref="load_more" @click="get_articles()">
+      <button ref="load_more" class="outlined" @click="get_articles()">
         <span>Load more</span>
       </button>
     </div>
-
-
-
-
   </div>
 </template>
 
@@ -101,6 +88,13 @@ export default {
     //Author,
   },
   auth: false,
+  beforeRouteUpdate (to, from, next) {
+    next()
+
+    this.$nextTick().then( () => {
+      this.delete_all_and_get_articles()
+    })
+  },
   data () {
     return {
 
@@ -108,7 +102,7 @@ export default {
       article_count: 0,
 
       // loading flags
-      articles_loading: true,
+      articles_loading: false,
       articles_all_loaded: false,
       loading_error: null,
 
@@ -121,19 +115,26 @@ export default {
 
     }
   },
-
-  mounted() {
-
-    // This does not wait for middleware to run
-    this.delete_all_and_get_articles()
+  computed: {
+    user_is_admin(){
+      const {current_user} = this.$store.state
+      if(!current_user) return false
+      return current_user.isAdmin
+        || current_user.properties.isAdmin
+    },
+    load_more_possible(){
+      return !this.articles_loading
+        && !this.articles_all_loaded
+        && !this.loading_error
+    },
+    axios_from_context(){
+      return this.$axios.defaults.headers.common
+    }
 
   },
-  beforeRouteUpdate (to, from, next) {
-    next()
 
-    this.$nextTick().then( () => {
-      this.delete_all_and_get_articles()
-    })
+  mounted() {
+    this.delete_all_and_get_articles()
   },
 
   methods: {
@@ -259,23 +260,6 @@ export default {
 
 
 
-
-  },
-  computed: {
-    user_is_admin(){
-      const {current_user} = this.$store.state
-      if(!current_user) return false
-      return current_user.isAdmin
-        || current_user.properties.isAdmin
-    },
-    load_more_possible(){
-      return !this.articles_loading
-        && !this.articles_all_loaded
-        && !this.loading_error
-    },
-    axios_from_context(){
-      return this.$axios.defaults.headers.common
-    }
 
   }
 

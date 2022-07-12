@@ -1,19 +1,20 @@
 <template lang="html">
   <div class="tag_management">
-
     <button
       type="button"
       class="button"
-      @click="prompt_for_rename()">
-      <pencil-icon/>
+      @click="prompt_for_rename()"
+    >
+      <pencil-icon />
       <span>Rename tag</span>
     </button>
 
     <button
       type="button"
       class="button"
-      @click="delete_tag()">
-      <delete-icon/>
+      @click="delete_tag()"
+    >
+      <delete-icon />
       <span>Delete tag</span>
     </button>
 
@@ -21,11 +22,11 @@
       type="button"
       class="button"
       :class="{active:tag.navigation_item}"
-      @click="pin_to_navbar()">
-      <pin-icon/>
+      @click="pin_to_navbar()"
+    >
+      <pin-icon />
       <span>Pin to nav</span>
     </button>
-
   </div>
 </template>
 

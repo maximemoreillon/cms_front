@@ -1,17 +1,13 @@
 <template>
-    <div class="loader_wrapper">
+  <div class="loader_wrapper">
+    <!-- the spinner -->
+    <div class="spinner" />
 
-        <!-- the spinner -->
-        <div class="spinner" />
-
-        <!-- message -->
-        <div v-if="$slots.default" v-bind:class="{ blinking: blinking }">
-            <slot />
-        </div>
-
-
-
+    <!-- message -->
+    <div v-if="$slots.default" :class="{ blinking: blinking }">
+      <slot />
     </div>
+  </div>
 </template>
 
 <script>

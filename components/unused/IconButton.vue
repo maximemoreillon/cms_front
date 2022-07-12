@@ -1,17 +1,14 @@
 <!-- Currently just a glorified CSS wrapper so add features to make it worth it -->
 <template>
-
   <button
     class="icon_button"
     :style="{ fontSize: size}"
     :class="{ active }"
+    type="button"
     @click="button_clicked()"
-    type="button">
-
+  >
     <slot />
-
   </button>
-
 </template>
 
 <script>

@@ -1,32 +1,32 @@
 
 
 <template>
-    <Modal
-      :open="open"
-      @close="$emit('close')">
-
-      <div class="image_upload_modal_content">
-        <h2>Image insert</h2>
-        <template v-if="$config.imageManagerApiUrl">
-          <h3>Via upload</h3>
-          <form
-            class=""
-            @submit.prevent="image_upload()">
-            <input type="file" accept="image/*" ref="image_input" name="image">
-            <input type="submit" name="">
-          </form>
-        </template>
-        <h3>via URL</h3>
+  <Modal
+    :open="open"
+    @close="$emit('close')"
+  >
+    <div class="image_upload_modal_content">
+      <h2>Image insert</h2>
+      <template v-if="$config.imageManagerApiUrl">
+        <h3>Via upload</h3>
         <form
           class=""
-          v-on:submit.prevent="submit_image_link()">
-          <input type="text" ref="image_url_input">
+          @submit.prevent="image_upload()"
+        >
+          <input ref="image_input" type="file" accept="image/*" name="image">
           <input type="submit" name="">
         </form>
-        
-        
-      </div>
-    </Modal>
+      </template>
+      <h3>via URL</h3>
+      <form
+        class=""
+        @submit.prevent="submit_image_link()"
+      >
+        <input ref="image_url_input" type="text">
+        <input type="submit" name="">
+      </form>
+    </div>
+  </Modal>
 </template>
 
 <script>

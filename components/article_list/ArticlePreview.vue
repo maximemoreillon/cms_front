@@ -1,24 +1,25 @@
 <template>
   <!-- The whole preview is a link to the article -->
-  <NuxtLink class="article_preview" :class="{article_with_thumbnail: !!article.thumbnail_src}"
-    :to="{ name: 'articles-id', params: {id: article_id} }">
-
-    <h2>{{article.title || 'Untitled article'}}</h2>
+  <NuxtLink
+    class="article_preview" :class="{article_with_thumbnail: !!article.thumbnail_src}"
+    :to="{ name: 'articles-id', params: {id: article_id} }"
+  >
+    <h2>{{ article.title || 'Untitled article' }}</h2>
 
     <div class="metadata">
       <!-- date -->
-      <div class="metadata_item" v-if="article.authorship.creation_date">
+      <div v-if="article.authorship.creation_date" class="metadata_item">
         <MaterialIconCalendar />
         <span class="article_date">
-          {{format_date(article.authorship.creation_date)}}
+          {{ format_date(article.authorship.creation_date) }}
         </span>
       </div>
 
       <!-- Author -->
-      <div class="metadata_item" v-if="article.author">
+      <div v-if="article.author" class="metadata_item">
         <MaterialIconAccount />
         <span class="author">
-          {{article.author.display_name || 'Unnnamed'}}
+          {{ article.author.display_name || 'Unnnamed' }}
         </span>
       </div>
 
@@ -26,10 +27,10 @@
 
       <!-- Publishing status and views only visible to users logged in -->
       <template v-if="$auth.user">
-        <div class="metadata_item" v-if="article.views">
+        <div v-if="article.views" class="metadata_item">
           <MaterialIconEye />
           <span>
-            {{article.views}}
+            {{ article.views }}
           </span>
         </div>
         <div class="metadata_item">
@@ -37,21 +38,17 @@
           <MaterialIconLock v-else />
         </div>
       </template>
-
     </div>
 
 
-    <img class="thumbnail" v-if="article.thumbnail_src" :src="article.thumbnail_src" alt="">
+    <img v-if="article.thumbnail_src" class="thumbnail" :src="article.thumbnail_src" alt="">
 
 
     <div class="summary article_content" v-html="article.summary || 'No summary available'" />
 
 
-    <TagList class="tags" :tags="article.tags" :truncate="5" :clickable="false"/>
-
-
+    <TagList class="tags" :tags="article.tags" :truncate="5" :clickable="false" />
   </NuxtLink>
-
 </template>
 
 <script>
@@ -63,15 +60,20 @@ import TagList from '~/components/TagList.vue'
 
 export default {
   name: 'ArticlePreview',
-  props: {
-    article: Object
-  },
   components: {
     TagList,
+  },
+  props: {
+    article: Object
   },
   data(){
     return {
       max_tags: 5,
+    }
+  },
+  computed:{
+    article_id(){
+      return this.article._id
     }
   },
   methods: {
@@ -83,11 +85,6 @@ export default {
         month.toString().padStart(2,'0'),
         day.toString().padStart(2,'0'),
       ].join('/');
-    }
-  },
-  computed:{
-    article_id(){
-      return this.article._id
     }
   }
 

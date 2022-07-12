@@ -1,39 +1,42 @@
 <template lang="html">
   <div class="sort_and_order">
-
     <button
-      :class="{ active: this.$route.query.sort !== 'title' && this.$route.query.sort !== 'views' }"
-      @click="sort('date')">
-      <MaterialIconCalendar/>
+      :class="{ active: $route.query.sort !== 'title' && $route.query.sort !== 'views' }"
+      @click="sort('date')"
+    >
+      <MaterialIconCalendar />
     </button>
 
     <button
-      :class="{ active: this.$route.query.sort === 'title' }"
-      @click="sort('title')">
-      <MaterialIconAlphabetical/>
+      :class="{ active: $route.query.sort === 'title' }"
+      @click="sort('title')"
+    >
+      <MaterialIconAlphabetical />
     </button>
 
     <button
       v-if="$auth.user"
-      :class="{ active: this.$route.query.sort === 'views' }"
-      @click="sort('views')">
-      <MaterialIconEye/>
+      :class="{ active: $route.query.sort === 'views' }"
+      @click="sort('views')"
+    >
+      <MaterialIconEye />
     </button>
 
-    <div class="separator"></div>
+    <div class="separator" />
 
     <button
-      :class="{ active: this.$route.query.order !== 'ASC' }"
-      @click="order('DESC')">
-      <MaterialIconSortAscending/>
+      :class="{ active: $route.query.order !== 'ASC' }"
+      @click="order('DESC')"
+    >
+      <MaterialIconSortAscending />
     </button>
 
     <button
-      :class="{ active: this.$route.query.order === 'ASC' }"
-      @click="order('ASC')">
-      <MaterialIconSortDescending/>
+      :class="{ active: $route.query.order === 'ASC' }"
+      @click="order('ASC')"
+    >
+      <MaterialIconSortDescending />
     </button>
-
   </div>
 </template>
 

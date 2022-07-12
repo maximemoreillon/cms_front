@@ -1,72 +1,67 @@
 <template>
-    <div>
-        <!-- TODO: Loader -->
-        <template v-if="article">
+  <div>
+    <!-- TODO: Loader -->
+    <template v-if="article">
+      <div class="toolbar">
+        <router-link
+          v-if="article_id !== 'new'" :to="{ name: 'articles-id', params: { id: article_id } }"
+          class="metadata_element button"
+        >
+          <MaterialIconArrowLeft class="metadata_icon" />
+          <span>Return to article</span>
+        </router-link>
 
-            <div class="toolbar">
 
-                <router-link v-if="article_id !== 'new'" :to="{ name: 'articles-id', params: { id: article_id } }"
-                    class="metadata_element button">
-                    <MaterialIconArrowLeft class="metadata_icon" />
-                    <span>Return to article</span>
-                </router-link>
+        <div class="spacer" />
+        <button @click="submit_article()">
+          <MaterialIconContentSave />
+          <span>Save</span>
+        </button>
+      </div>
 
+      <!-- Note: removed class here for default CSS in editor -->
+      <ArticleEditor ref="articleEditor" v-model="article.content" />
 
-                <div class="spacer" />
-                <button @click="submit_article()">
-                    <MaterialIconContentSave />
-                    <span>Save</span>
-                </button>
+      <!-- TODO: Make this its own component -->
+      <div class="article_settings">
+        <TagList
+          :tags="article.tags" removable input @newTag="add_tag($event)"
+          @tagRemoved="remove_tag($event)"
+        />
 
+        <h3>Summary</h3>
+        <SummaryEditor v-model="article.summary" />
+
+        <div class="flex">
+          <div class="grow">
+            <h3>Thumbnail</h3>
+            <ThumbnailManagement :article="article" />
+          </div>
+          <div class="grow">
+            <h3>Visibility</h3>
+            <div class="visibility_wrapper">
+              <div>
+                <input id="private" v-model="article.published" type="radio" :value="false">
+                <label for="private">
+                  <MaterialIconLock />
+                  <span>Private</span>
+                </label>
+              </div>
+              <div>
+                <input id="public" v-model="article.published" type="radio" :value="true">
+                <label for="public">
+                  <MaterialIconEarth />
+                  <span>Public</span>
+                </label>
+              </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </template>
 
-            <!-- Note: removed class here for default CSS in editor -->
-            <ArticleEditor v-model="article.content" ref="articleEditor" />
-
-            <!-- TODO: Make this its own component -->
-            <div class="article_settings">
-
-                <TagList :tags="article.tags" removable input @newTag="add_tag($event)"
-                    @tagRemoved="remove_tag($event)" />
-
-                <h3>Summary</h3>
-                <SummaryEditor v-model="article.summary" />
-
-                <div class="flex">
-                    <div class="grow">
-                        <h3>Thumbnail</h3>
-                        <ThumbnailManagement :article="article" />
-                    </div>
-                    <div class="grow">
-                        <h3>Visibility</h3>
-                        <div class="visibility_wrapper">
-                            <div>
-                                <input type="radio" id="private" :value="false" v-model="article.published">
-                                <label for="private">
-                                    <MaterialIconLock />
-                                    <span>Private</span>
-                                </label>
-                            </div>
-                            <div>
-                                <input type="radio" id="public" :value="true" v-model="article.published">
-                                <label for="public">
-                                    <MaterialIconEarth />
-                                    <span>Public</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-            </div>
-
-
-
-        </template>
-
-        <Snackbar v-model="snackbar.show" :text="snackbar.text" color="green"/>
-    </div>
+    <Snackbar v-model="snackbar.show" :text="snackbar.text" color="green" />
+  </div>
 </template>
 
 <script>
@@ -104,16 +99,21 @@ export default {
         loading: false,
     }
   },
-  mounted(){
-      if(this.article_id !== 'new') this.get_article()
-      this.get_existing_tags()
-      document.addEventListener("keydown", this.handle_keydown)
+  computed: {
+      article_id(){
+          return this.$route.params.id
+      }
   },
   watch: {
     article_id(){
         // Prevents getting an empty article after saving a new one
         if (this.article_id !== 'new') this.get_article()
     }
+  },
+  mounted(){
+      if(this.article_id !== 'new') this.get_article()
+      this.get_existing_tags()
+      document.addEventListener("keydown", this.handle_keydown)
   },
   beforeDestroy() {
     document.removeEventListener("keydown", this.handle_keydown)
@@ -226,11 +226,6 @@ export default {
 
 
     
-  },
-  computed: {
-      article_id(){
-          return this.$route.params.id
-      }
   }
 
 }

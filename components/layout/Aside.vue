@@ -1,28 +1,29 @@
 <template>
   <aside :class="{open}">
-
     <!-- Would be forgiven to wrap stuff other than nav in its own div-->
 
     <!-- Open/close navigation -->
     <div class="nav_button_wrapper">
       <MaterialIconMenu
         class="navigation_button"
-        @click="$emit('navToggle')"/>
+        @click="$emit('navToggle')"
+      />
     </div>
 
 
     <!-- Logo as link to homepage -->
     <a
       class="logo_wrapper"
-      href="https://maximemoreillon.com">
+      href="https://maximemoreillon.com"
+    >
       <img
         class="logo"
         src="~/assets/images/logo/logo.svg"
-        alt="Maxiime Moreillon logo">
+        alt="Maxiime Moreillon logo"
+      >
     </a>
 
     <Nav />
-
   </aside>
 </template>
 

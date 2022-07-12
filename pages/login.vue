@@ -1,41 +1,35 @@
 <template>
   <div class="login">
-
-    <form class="container" v-if="!loading" @submit.prevent="login()">
-
+    <form v-if="!loading" class="container" @submit.prevent="login()">
       <div class="">
         <label for="username">
           Username
         </label>
-        <input id="username" type="text" v-model="credentials.username" placeholder="Username">
+        <input id="username" v-model="credentials.username" type="text" placeholder="Username">
       </div>
 
       <div class="">
         <label for="password">
           Password
         </label>
-        <input id="password" type="password" v-model="credentials.password" placeholder="Password">
+        <input id="password" v-model="credentials.password" type="password" placeholder="Password">
       </div>
 
       <div>
-        <button type="submit" @click="login()" class="outlined">
+        <button type="submit" class="outlined" @click="login()">
           <MaterialIconLogin />
           <span>Login</span>
         </button>
       </div>
 
-      <div class="error_message" v-if="error">
-        {{error}}
+      <div v-if="error" class="error_message">
+        {{ error }}
       </div>
-
-
     </form>
 
     <div v-if="loading" class="loader_container">
       <Loader />
     </div>
-
-
   </div>
 </template>
 

@@ -2,16 +2,16 @@
   <div
     class="modal"
     :class="{open}"
-    @click.self="$emit('close')" >
-
+    @click.self="$emit('close')"
+  >
     <div class="modal_window_outer">
       <div class="modal_window_inner">
-
         <!-- CLose button -->
         <span
           v-if="close_button"
           class="modal_close_button"
-          @click="$emit('close')">
+          @click="$emit('close')"
+        >
           ✖
         </span>
 
@@ -20,7 +20,6 @@
         <slot />
       </div>
     </div>
-
   </div>
 </template>
 

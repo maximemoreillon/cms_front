@@ -1,34 +1,32 @@
 <template>
   <div class="tag_list">
-
     <h1>Tags</h1>
 
     <div class="toolbar">
-
       <!-- Class should have a better name -->
       <div class="counter">
-        <MaterialIconTag/>
-        <span>{{tags.length}}</span>
+        <MaterialIconTag />
+        <span>{{ tags.length }}</span>
       </div>
 
-      <div class="spacer"/>
+      <div class="spacer" />
 
 
-        <!-- search -->
-        <input
-          type="search"
-          class="search_bar"
-          v-model="filter"
-          placeholder="Search tags">
+      <!-- search -->
+      <input
+        v-model="filter"
+        type="search"
+        class="search_bar"
+        placeholder="Search tags"
+      >
 
-        <MaterialIconMagnify />
-
-
+      <MaterialIconMagnify />
     </div>
 
     <div
+      v-if="loading"
       class="loader_container"
-      v-if="loading">
+    >
       <Loader />
     </div>
 
@@ -36,10 +34,9 @@
       <Tag
         v-for="(tag, index) in filtered_tags"
         :key="`tag_${index}`"
-        :tag="tag"/>
+        :tag="tag"
+      />
     </div>
-
-
   </div>
 </template>
 
@@ -69,6 +66,13 @@ export default {
 
     }
   },
+  computed: {
+    filtered_tags(){
+      if(this.filter === '') return this.tags
+      return this.tags.filter(t => t.name.toLowerCase().includes(this.filter.toLowerCase()))
+    }
+
+  },
 
   mounted() {
     this.get_tags()
@@ -97,13 +101,6 @@ export default {
 
     },
 
-
-  },
-  computed: {
-    filtered_tags(){
-      if(this.filter === '') return this.tags
-      return this.tags.filter(t => t.name.toLowerCase().includes(this.filter.toLowerCase()))
-    }
 
   }
 

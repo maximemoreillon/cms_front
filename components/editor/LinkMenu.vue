@@ -1,16 +1,18 @@
 
 
 <template>
-    <button class="menu_wrapper" :class="{ active: editor.isActive('link'), open}" @click="open = !open">
-        <MaterialIconLink />
-        <div class="menu_content" v-if="open" @click.stop>
-            <form @submit.prevent="set_link()">
-                <input type="text" v-model="url">
-                <input type="submit">
-                <button @click="clear_link()">Remove</button>
-            </form>
-        </div>
-    </button>
+  <button class="menu_wrapper" :class="{ active: editor.isActive('link'), open}" @click="open = !open">
+    <MaterialIconLink />
+    <div v-if="open" class="menu_content" @click.stop>
+      <form @submit.prevent="set_link()">
+        <input v-model="url" type="text">
+        <input type="submit">
+        <button @click="clear_link()">
+          Remove
+        </button>
+      </form>
+    </div>
+  </button>
 </template>
 
 <script>

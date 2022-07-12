@@ -1,8 +1,9 @@
 <template>
-  <div class="about" >
+  <div class="about">
     <h1>About</h1>
     <p>A simple article management web application built using Node.js, Vue.js, Express and Neo4J</p>
-    <p>Author:
+    <p>
+      Author:
       <a href="https://maximemoreillon/com">Maxime MOREILLON</a>
     </p>
     <h2>Services</h2>
@@ -16,19 +17,14 @@
         </tr>
         <tr
           v-for="({name, version, url}, index) in services"
-          :key="`service_${index}`">
-          <td>{{name}}</td>
-          <td>{{version}}</td>
-          <td>{{url}}</td>
-
+          :key="`service_${index}`"
+        >
+          <td>{{ name }}</td>
+          <td>{{ version }}</td>
+          <td>{{ url }}</td>
         </tr>
       </table>
     </div>
-
-
-
-
-
   </div>
 </template>
 

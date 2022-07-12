@@ -1,34 +1,43 @@
 
 
 <template>
-  <FloatingMenu class="editor_menu" v-if="editor" :editor="editor" :tippy-options="{ duration: 100 }">
-
-    <button @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
-      :class="{ 'active': editor.isActive('heading', { level: 1 }) }">
+  <FloatingMenu v-if="editor" class="editor_menu" :editor="editor" :tippy-options="{ duration: 100 }">
+    <button
+      :class="{ 'active': editor.isActive('heading', { level: 1 }) }"
+      @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
+    >
       <MaterialIconFormatHeader1 />
     </button>
 
-    <button @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
-      :class="{ 'active': editor.isActive('heading', { level: 2 }) }">
+    <button
+      :class="{ 'active': editor.isActive('heading', { level: 2 }) }"
+      @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
+    >
       <MaterialIconFormatHeader2 />
     </button>
 
-    <button @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
-      :class="{ 'active': editor.isActive('heading', { level: 3 }) }">
+    <button
+      :class="{ 'active': editor.isActive('heading', { level: 3 }) }"
+      @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
+    >
       <MaterialIconFormatHeader3 />
     </button>
 
-    <button @click="editor.chain().focus().toggleCodeBlock().run()" :class="{ 'active': editor.isActive('codeBlock') }">
+    <button :class="{ 'active': editor.isActive('codeBlock') }" @click="editor.chain().focus().toggleCodeBlock().run()">
       <MaterialIconCodeBracesBox />
     </button>
 
-    <button @click="editor.chain().focus().toggleBulletList().run()"
-      :class="{ 'active': editor.isActive('bulletList') }">
+    <button
+      :class="{ 'active': editor.isActive('bulletList') }"
+      @click="editor.chain().focus().toggleBulletList().run()"
+    >
       <MaterialIconFormatListBulleted />
     </button>
 
-    <button @click="editor.chain().focus().toggleOrderedList().run()"
-      :class="{ 'active': editor.isActive('orderedList') }">
+    <button
+      :class="{ 'active': editor.isActive('orderedList') }"
+      @click="editor.chain().focus().toggleOrderedList().run()"
+    >
       <MaterialIconFormatListNumbered />
     </button>
 
@@ -39,11 +48,6 @@
     <button @click="prompt_for_youtube()">
       <MaterialIconYoutube />
     </button>
-
-
-
-
-
   </FloatingMenu>
 </template>
 

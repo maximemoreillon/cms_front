@@ -1,13 +1,14 @@
 <template>
   <div class="tag_list">
-
     <template v-if="tags && tags.length">
       <MaterialIconTag />
 
-      <Tag :clickable="clickable" :removable="removable" v-for="(tag, index) in tag_list" v-bind:key="`tag_${index}`"
-        :tag="tag" @remove="$emit('tagRemoved', index)"/>
+      <Tag
+        v-for="(tag, index) in tag_list" :key="`tag_${index}`" :clickable="clickable" :removable="removable"
+        :tag="tag" @remove="$emit('tagRemoved', index)"
+      />
 
-      <span v-if="this.truncate && tags.length > this.truncate">
+      <span v-if="truncate && tags.length > truncate">
         +{{ tags.length - truncate }}
       </span>
     </template>
@@ -15,16 +16,17 @@
     <MaterialIconTagOff v-else />
 
     <!-- Input of new tags -->
-    <input v-if="input" id="tag_input" v-model="new_tag_name" type="search" ref="tag_input" list="existing_tag_list"
-      placeholder="New tag" @keyup.enter="add_tag()">
+    <input
+      v-if="input" id="tag_input" ref="tag_input" v-model="new_tag_name" type="search" list="existing_tag_list"
+      placeholder="New tag" @keyup.enter="add_tag()"
+    >
 
     <datalist id="existing_tag_list">
-      <option v-for="(existing_tag, index) in existing_tags" :value="existing_tag.name"
-        :key="`existing_tag_${index}`" />
+      <option
+        v-for="(existing_tag, index) in existing_tags" :key="`existing_tag_${index}`"
+        :value="existing_tag.name"
+      />
     </datalist>
-
-
-
   </div>
 </template>
 
@@ -33,6 +35,9 @@ import Tag from '~/components/Tag.vue'
 
 export default {
   name: 'TagList',
+  components: {
+    Tag
+  },
 
   props: {
     tags: Array,
@@ -44,13 +49,16 @@ export default {
     },
     input: Boolean,
   },
-  components: {
-    Tag
-  },
   data(){
     return {
       existing_tags: [],
       new_tag_name: '',
+    }
+  },
+  computed:{
+    tag_list(){
+      if (this.truncate) return this.tags.slice(0, this.truncate)
+      else return this.tags
     }
   },
   mounted(){
@@ -77,12 +85,6 @@ export default {
     add_tag(){
       this.$emit('newTag', this.new_tag_name)
       this.new_tag_name = ''
-    }
-  },
-  computed:{
-    tag_list(){
-      if (this.truncate) return this.tags.slice(0, this.truncate)
-      else return this.tags
     }
   }
 }

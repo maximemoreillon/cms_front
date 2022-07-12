@@ -1,25 +1,20 @@
 <template>
   <div class="logout">
-
-    <div class="container" v-if="$auth.user">
-
+    <div v-if="$auth.user" class="container">
       <div class="">
         Logged in as {{ $auth.user.display_name }}
       </div>
 
 
-      <button @click="logout()" class="outlined">
+      <button class="outlined" @click="logout()">
         <MaterialIconLogout />
         <span>Logout</span>
       </button>
-
     </div>
 
     <div v-if="loading" class="loader_container">
       <Loader />
     </div>
-
-
   </div>
 </template>
 
@@ -43,6 +38,9 @@ export default {
       error: null,
     }
   },
+  computed: {
+
+  },
   mounted(){
 
   },
@@ -51,9 +49,6 @@ export default {
     async logout(){
       await this.$auth.logout()
     }
-
-  },
-  computed: {
 
   }
 
