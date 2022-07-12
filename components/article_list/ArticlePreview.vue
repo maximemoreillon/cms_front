@@ -44,7 +44,7 @@
     <img v-if="article.thumbnail_src" class="thumbnail" :src="article.thumbnail_src" alt="">
 
 
-    <div class="summary article_content" v-html="article.summary || 'No summary available'" />
+    <div class="summary article_content" v-html="article.summary || 'No summary available'" ></div>
 
 
     <TagList class="tags" :tags="article.tags" :truncate="5" :clickable="false" />

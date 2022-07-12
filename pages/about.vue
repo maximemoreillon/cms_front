@@ -2,10 +2,7 @@
   <div class="about">
     <h1>About</h1>
     <p>A simple article management web application built using Node.js, Vue.js, Express and Neo4J</p>
-    <p>
-      Author:
-      <a href="https://maximemoreillon/com">Maxime MOREILLON</a>
-    </p>
+    <p>Author: <a href="https://maximemoreillon/com">Maxime MOREILLON</a></p>
     <h2>Services</h2>
 
     <div class="table_wrapper">

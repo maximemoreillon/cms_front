@@ -25,7 +25,7 @@
       <option
         v-for="(existing_tag, index) in existing_tags" :key="`existing_tag_${index}`"
         :value="existing_tag.name"
-      />
+      ></option>
     </datalist>
   </div>
 </template>

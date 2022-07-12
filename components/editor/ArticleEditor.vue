@@ -1,18 +1,13 @@
 <template>
   <div>
-    <EditorToolbar v-if="false" :editor="editor" />
-    <template v-if="true">
-      <EditorBubbleMenu :editor="editor" />
-      <EditorFloatingMenu :editor="editor" />
-    </template>
-
+    <EditorBubbleMenu :editor="editor" />
+    <EditorFloatingMenu :editor="editor" />
     <!-- Ref is used by parent to access article content such as h1 -->
     <EditorContent ref="editorContent" class="editor_content article_content" :editor="editor" />
   </div>
 </template>
 
 <script>
-import EditorToolbar from './EditorToolbar.vue'
 import EditorBubbleMenu from './EditorBubbleMenu.vue'
 import EditorFloatingMenu from './EditorFloatingMenu.vue'
 
@@ -40,7 +35,6 @@ export default {
   name: 'ArticleEditor',
   components: {
     EditorContent,
-    EditorToolbar,
     EditorBubbleMenu,
     EditorFloatingMenu,
   },

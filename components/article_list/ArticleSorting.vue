@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
   <div class="sort_and_order">
     <button
       :class="{ active: $route.query.sort !== 'title' && $route.query.sort !== 'views' }"

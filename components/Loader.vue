@@ -1,11 +1,11 @@
 <template>
   <div class="loader_wrapper">
     <!-- the spinner -->
-    <div class="spinner" />
+    <div class="spinner" ></div>
 
     <!-- message -->
     <div v-if="$slots.default" :class="{ blinking: blinking }">
-      <slot />
+      <slot></slot>
     </div>
   </div>
 </template>

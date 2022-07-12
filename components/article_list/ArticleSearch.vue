@@ -1,4 +1,4 @@
-<template lang="html">
+<template>
   <form
     class="search_wrapper"
     @submit.prevent="search()"
