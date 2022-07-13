@@ -39,7 +39,7 @@ export default {
     methods: {
 
         add_image(src) {
-            this.editor.chain().focus().setImage({ src }).run()
+            this.editor.chain().focus().setImage({ src, alt: 'Article image' }).run()
             this.$refs.image_url_input.value = ""
             this.$refs.image_input.value = null
             this.open = false

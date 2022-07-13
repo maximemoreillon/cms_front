@@ -71,7 +71,7 @@ export default {
         TextAlign.configure({ types: ['heading', 'paragraph', 'image'], }),
         Heading.configure({ levels: [1, 2, 3], }),
         Link.configure({ openOnClick: false, }),
-        Image.configure({ inline: true, }), // TODO: Check what the other options are
+        Image.configure({ inline: true }), 
         History.configure({}),
         Code,
         CodeBlock.configure({ languageClassPrefix: 'language-', }),
