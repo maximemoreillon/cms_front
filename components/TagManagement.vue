@@ -1,31 +1,15 @@
-<template lang="html">
+<template>
   <div class="tag_management">
-    <button
-      type="button"
-      class="button"
-      @click="prompt_for_rename()"
-    >
-      <pencil-icon />
-      <span>Rename tag</span>
+    <button type="button" class="button" @click="prompt_for_rename()">
+      <MaterialIconPencil />
     </button>
 
-    <button
-      type="button"
-      class="button"
-      @click="delete_tag()"
-    >
-      <delete-icon />
-      <span>Delete tag</span>
+    <button type="button" class="button" @click="delete_tag()">
+      <MaterialIconDelete />
     </button>
 
-    <button
-      type="button"
-      class="button"
-      :class="{active:tag.navigation_item}"
-      @click="pin_to_navbar()"
-    >
-      <pin-icon />
-      <span>Pin to nav</span>
+    <button type="button" class="button" :class="{active:tag.navigation_item}" @click="pin_to_navbar()">
+      <MaterialIconPin />
     </button>
   </div>
 </template>
@@ -50,8 +34,8 @@ export default {
       const url = `${process.env.VUE_APP_CMS_API_URL}/v1/tags/${tag_id}`
       const body = this.tag
 
-      this.axios.put(url, body)
-      .then( ({data}) => {
+      this.$axios.put(url, body)
+      .then( () => {
 
         // Cannot mutate props!
         // this.tag = data
@@ -87,7 +71,7 @@ export default {
 
       const tag_id = this.get_id_of_item(this.tag)
 
-      this.axios.delete(`${process.env.VUE_APP_CMS_API_URL}/v1/tags/${tag_id}`)
+      this.$axios.delete(`${process.env.VUE_APP_CMS_API_URL}/v1/tags/${tag_id}`)
       .then( () => {
         this.$router.push({ name: 'article_list' })
       })

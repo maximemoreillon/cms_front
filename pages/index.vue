@@ -1,38 +1,47 @@
 <template>
+
   <div>
-    <client-only>
-      <!-- Show tag if specified in query -->
-      <template v-if="tag">
-        <h1>Articles tagged with {{ tag.name }}</h1>
 
-        <TagManagement v-if="user_is_admin" :tag="tag" @tagUpdate="delete_all_and_get_articles()" />
-      </template>
+    <h1>Articles</h1>
 
-      <template v-else-if="author">
-        <h1>Articles written by {{ author.display_name }}</h1>
-      </template>
+    <div class="query_tools">
 
-      <template v-else>
-        <h1>Articles</h1>
-      </template>
-
-
-      <!-- Toolbar for sorting and new article -->
-      <div class="query_tools">
-        <div>
-          <ArticleSearch />
-        </div>
-
-        <div class="query_tools_row">
-          <div class="counter">
-            <MaterialIconFileDocumentOutline />
-            <span>{{ article_count }}</span>
+      <client-only>
+        <template v-if="tag || author">
+          <!-- Show tag if specified in query -->
+          <div v-if="tag" class="filter">
+            <MaterialIconTag />
+            <Tag :tag="tag" :clickable="false" />
+            <button class="remove_button" @click="$router.push({ name: 'index' })">
+              <MaterialIconClose />
+            </button>
+            <!-- <TagManagement v-if=" user_is_admin" :tag="tag" @tagUpdate="delete_all_and_get_articles()" /> -->
           </div>
-          <div class="spacer" />
-          <ArticleSorting />
-        </div>
+
+          <div v-if="author" class="filter">
+            <MaterialIconAccount class="metadata_icon" />
+            <span>{{ author.display_name }}</span>
+            <button class="remove_button" @click="$router.push({ name: 'index' })">
+              <MaterialIconClose />
+            </button>
+          </div>
+        </template>
+      </client-only>
+
+      <div>
+        <ArticleSearch />
       </div>
 
+      <div class="query_tools_row">
+        <div class="counter">
+          <MaterialIconFileDocumentOutline />
+          <span>{{ article_count }}</span>
+        </div>
+        <div class="spacer"></div>
+        <ArticleSorting />
+      </div>
+    </div>
+    <client-only>
       <div v-if="!loading_error && articles.length" ref="articles_container" class="articles_container">
         <ArticlePreview v-for="(article, index) in articles" :key="`article_${index}`" :article="article" />
       </div>
@@ -60,6 +69,7 @@
       </div>
     </client-only>
   </div>
+
 </template>
 
 <script>
@@ -70,7 +80,8 @@ import ArticleSorting from '@/components/article_list/ArticleSorting.vue'
 import ArticleSearch from '@/components/article_list/ArticleSearch.vue'
 import ArticlePreview from '@/components/article_list/ArticlePreview.vue'
 
-import TagManagement from '@/components/TagManagement.vue'
+// import TagManagement from '@/components/TagManagement.vue'
+import Tag from '~/components/Tag.vue'
 
 
 export default {
@@ -80,13 +91,11 @@ export default {
   ],
   components: {
     Loader,
-    // IconButton,
-    // Toolbar,
-    TagManagement,
+    // TagManagement,
     ArticlePreview,
     ArticleSorting,
     ArticleSearch,
-    //Tag,
+    Tag,
     //Author,
   },
   auth: false,
@@ -118,20 +127,17 @@ export default {
     }
   },
   computed: {
-    user_is_admin(){
-      const {current_user} = this.$store.state
-      if(!current_user) return false
-      return current_user.isAdmin
-        || current_user.properties.isAdmin
+    user_is_admin() {
+      const { user } = this.$auth
+      if (!user) return false
+      return user.isAdmin
     },
-    load_more_possible(){
+    load_more_possible() {
       return !this.articles_loading
         && !this.articles_all_loaded
         && !this.loading_error
     },
-    axios_from_context(){
-      return this.$axios.defaults.headers.common
-    }
+
 
   },
 
@@ -149,6 +155,7 @@ export default {
       this.get_author()
       this.get_articles()
     },
+
 
 
     async get_articles(){
@@ -296,10 +303,15 @@ export default {
 }
 
 
-
 .query_tools_row {
   display: flex;
   flex-direction: row;
+}
+
+.filter {
+  gap: 0.5em;
+  display: flex;
+  align-items: center;
 }
 
 </style>

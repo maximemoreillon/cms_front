@@ -36,7 +36,7 @@
         ref="article_content"
         class="article_content"
         v-html="article.content"
-      />
+      ></div>
     </article>
 
     <div
