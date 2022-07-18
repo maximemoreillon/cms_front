@@ -4,36 +4,26 @@
 
     <!-- Open/close navigation -->
     <div class="nav_button_wrapper">
-      <MaterialIconMenu
-        class="navigation_button"
-        @click="$emit('navToggle')"
-      />
+      <MaterialIconMenu class="navigation_button" @click="$emit('navToggle')" />
     </div>
 
 
     <!-- Logo as link to homepage -->
-    <a
-      class="logo_wrapper"
-      href="https://maximemoreillon.com"
-    >
-      <img
-        class="logo"
-        src="~/assets/images/logo/logo.svg"
-        alt="Maxiime Moreillon logo"
-      >
+    <a class="logo_wrapper" href="https://maximemoreillon.com">
+      <img class="logo" src="~/assets/images/logo/logo.svg" alt="Maxiime Moreillon logo">
     </a>
 
-    <Nav />
+    <Navigation></Navigation>
   </aside>
 </template>
 
 <script>
-import Nav from './Nav.vue'
+import Navigation from './Nav.vue'
 
 export default {
   name: 'Aside',
   components: {
-    Nav,
+    Navigation,
   },
   props: {
     open: Boolean

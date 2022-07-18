@@ -18,7 +18,6 @@
         <span>My articles</span>
       </router-link>
 
-
       <router-link v-for="(tag, index) in $store.state.pinned_tags" :key="`nav_${index}`"
         :to="{name: 'index', query: {tag_id: tag._id} }">
         <MaterialIconTag />
@@ -56,9 +55,6 @@
 
 export default {
   name: 'Nav',
-  modules: [
-    '@nuxtjs/axios',
-  ],
 }
 </script>
 

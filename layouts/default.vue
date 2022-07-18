@@ -1,14 +1,14 @@
 <template>
   <div class="app">
     <Header
-      @navToggle="aside_open = !aside_open"
-    />
+      @navToggle="aside_open = !aside_open">
+    </Header>
 
     <!-- NAV management is a bit tedious -->
     <Aside
       :open="aside_open"
-      @navToggle="aside_open = !aside_open"
-    />
+      @navToggle="aside_open = !aside_open">
+    </Aside>
 
     <main>
       <router-view />
@@ -24,8 +24,8 @@
     <div
       class="nav_backround"
       :class="{visible: aside_open}"
-      @click="aside_open = false"
-    />
+      @click="aside_open = false">
+    </div>
   </div>
 </template>
 
@@ -50,20 +50,10 @@ export default {
 
 <style>
 
-
-
-
-
-
-
-
-
 /* @font-face {
   font-family: lexend;
   src: url(./assets/LexendDeca-Regular.ttf);
 } */
-
-
 
 
 .app {

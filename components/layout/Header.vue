@@ -25,14 +25,8 @@
 <script>
 export default {
   name: 'Header',
-  components: {
-  },
   props: {
     nav: Boolean
-  },
-  data(){
-    return {
-    }
   },
 
 }

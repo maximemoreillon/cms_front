@@ -95,7 +95,6 @@ export default {
       article: null,
       error: null,
 
-
       modal: {
         open: false,
         image_src: "",

@@ -41,6 +41,7 @@
         <ArticleSorting />
       </div>
     </div>
+    
     <client-only>
       <div v-if="!loading_error && articles.length" ref="articles_container" class="articles_container">
         <ArticlePreview v-for="(article, index) in articles" :key="`article_${index}`" :article="article" />
@@ -99,12 +100,10 @@ export default {
     //Author,
   },
   auth: false,
-  beforeRouteUpdate (to, from, next) {
-    next()
-
-    this.$nextTick().then( () => {
+  watch: {
+    query(){
       this.delete_all_and_get_articles()
-    })
+    }
   },
   data () {
     return {
@@ -137,6 +136,9 @@ export default {
         && !this.articles_all_loaded
         && !this.loading_error
     },
+    query(){
+      return this.$route.query
+    }
 
 
   },
@@ -264,22 +266,40 @@ export default {
       this.observer.observe(target)
 
     },
+  },
+  head() {
+    return {
+      title: this.article?.title,
 
+      meta: [
+        { hid: 'description', name: 'description', content: 'An article management system' },
 
+        // Twitter
+        { hid: 'twitter:card', name: 'twitter:card', content: 'summary' },
+        { hid: 'twitter:site', name: 'twitter:site', content: '@m_moreillon' },
+        { hid: 'twitter:title', name: 'twitter:title', content: 'Articles | Maxime Moreillon' },
+        { hid: 'twitter:description', name: 'twitter:description', content: 'An article management system' },
+        { hid: 'twitter:image', name: 'twitter:image', content: 'https://articles.maximemoreillon.com/logo.png' },
+        { hid: 'twitter:image:alt', name: 'twitter:image:alt', content: 'Maxime Moreillon logo' },
 
+        // OpenGraph
+        { hid: 'og:title', name: 'og:title', content: 'summary' },
+        { hid: 'og:description', name: 'og:description', content: 'An article management system' },
+        { hid: 'og:image', name: 'og:image', content: 'https://articles.maximemoreillon.com/logo.png' },
+        { hid: 'og:url', name: 'og:url', content: 'https://articles.maximemoreillon.com' },
+        { hid: 'og:type', name: 'og:type', content: 'article' },
+        { hid: 'og:locale', name: 'og:locale', content: 'en_US' },
 
+      ]
 
-  }
-
-
+    }
+  },
 
 }
 </script>
 
 
 <style scoped>
-
-
 
 .articles_container > *+* {
   margin-top: 1em;
@@ -298,8 +318,6 @@ export default {
   flex-direction: column;
   align-items: stretch;
   gap: 0.5em;
-  /* padding-bottom: 0.5em; */
-  /* border-bottom: 1px solid #dddddd; */
 }
 
 
