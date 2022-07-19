@@ -1,9 +1,7 @@
 <template>
   <!-- The whole preview is a link to the article -->
-  <NuxtLink
-    class="article_preview" :class="{article_with_thumbnail: !!article.thumbnail_src}"
-    :to="{ name: 'articles-id', params: {id: article_id} }"
-  >
+  <NuxtLink class="article_preview" :class="{article_with_thumbnail: !!article.thumbnail_src}"
+    :to="{ name: 'articles-id', params: {id: article_id} }">
     <h2>{{ article.title || 'Untitled article' }}</h2>
 
     <div class="metadata">
@@ -44,7 +42,9 @@
     <img v-if="article.thumbnail_src" class="thumbnail" :src="article.thumbnail_src" alt="">
 
 
-    <div class="summary article_content" v-html="article.summary || 'No summary available'" />
+    <div class="summary article_content">
+      {{ article_summary_cleanedup }}
+    </div>
 
 
     <TagList class="tags" :tags="article.tags" :truncate="5" :clickable="false" />
@@ -74,6 +74,10 @@ export default {
   computed:{
     article_id(){
       return this.article._id
+    },
+    article_summary_cleanedup(){
+      if (!this.article.summary) return 'No summary available'
+      return this.article.summary.replace(/<\/?[^>]+(>|$)/g, "")
     }
   },
   methods: {
