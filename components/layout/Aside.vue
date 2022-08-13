@@ -10,7 +10,7 @@
 
     <!-- Logo as link to homepage -->
     <a class="logo_wrapper" href="https://maximemoreillon.com">
-      <img class="logo" src="~/assets/images/logo/logo.svg" alt="Maxiime Moreillon logo">
+      <img class="logo" src="~/assets/images/logo/logo.svg" alt="Maxime Moreillon logo">
     </a>
 
     <Navigation></Navigation>

@@ -1,11 +1,13 @@
 <template>
   <!-- TODO: Consider a grid layout -->
   <div class="article_metadata">
+
     <div v-if="user_is_author" class="metadata_wrapper">
+
       <!-- Published indicator -->
       <div class="metadata_element">
         <template v-if="article.published">
-          <MaterialIconEarth v-if="article.published" />
+          <MaterialIconEarth />
           <span>Published</span>
         </template>
         <template v-else>
