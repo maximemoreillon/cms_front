@@ -38,6 +38,6 @@ deploy:
   tags:
     - dind
   before_script:
-    - kubectl config use-context moreillon_ci/moreillon_k8s_home/kubernetes-agent:home
+    - kubectl config use-context moreillon_ci/moreillon_k8s/kubernetes-agent:cloud
   script:
     - envsubst < kubernetes_manifest.yml | kubectl apply -n ${KUBERNETES_NAMESPACE} -f -
