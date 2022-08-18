@@ -1,4 +1,8 @@
 # CMS GUI
 
+![Docker Pulls](https://img.shields.io/docker/pulls/moreillon/cms-front)
+
 This is the GUI for the Neo4J-based CMS.
-In this branch, the GUI is built using Nuxt.js.
+It is built using Nuxt.js so as to leverage SSR functionalities for SEO.
+
+
