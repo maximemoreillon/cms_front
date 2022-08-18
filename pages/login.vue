@@ -65,11 +65,16 @@ export default {
     async login() {
       // Using nuxt auth
       try {
+        this.loading = true
         await this.$auth.loginWith('local', { data: this.credentials })
+        this.$router.back()
       } 
       catch (error) {
         this.error = error
         console.error(error)
+      }
+      finally {
+        this.loading = false
       }
     },
 

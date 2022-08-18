@@ -38,16 +38,22 @@ export default {
       error: null,
     }
   },
-  computed: {
 
-  },
-  mounted(){
-
-  },
   methods: {
     
     async logout(){
-      await this.$auth.logout()
+      try {
+        this.loading = true
+        await this.$auth.logout()
+        this.$router.back()
+      } catch (error) {
+        console.error(error)
+        this.error = error
+      }
+      finally {
+        this.loading = false
+      }
+      
     }
 
   }

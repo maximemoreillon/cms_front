@@ -14,8 +14,5 @@ export default async (context) => {
         console.error(`Failed to get pinned tags`)
     }
 
-    
-
-
 
 }

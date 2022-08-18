@@ -69,6 +69,7 @@ export default {
 
   router: {
     middleware: ['auth', 'pinnedTags'],
+    // Forgot what this is for
     extendRoutes(routes, resolve) {
       routes.push({
         name: 'articles',
@@ -79,9 +80,6 @@ export default {
     }
   },
 
-  serverMiddleware: [
-    // '~/server-middleware/auth',
-  ],
 
   publicRuntimeConfig: {
     apiUrl: process.env.NUXT_ENV_CMS_API_URL,
@@ -90,6 +88,7 @@ export default {
   },
 
   auth: {
+    redirect: false,
     strategies: {
       local: {
         token: {
