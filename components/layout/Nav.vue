@@ -17,13 +17,14 @@
         <MaterialIconAccount />
         <span>My articles</span>
       </router-link>
-
-      <router-link v-for="(tag, index) in $store.state.pinned_tags" :key="`nav_${index}`"
-        :to="{name: 'index', query: {tag_id: tag._id} }">
-        <MaterialIconTag />
-        <span>{{ tag.name }}</span>
-      </router-link>
     </client-only>
+
+    <router-link v-for="(tag, index) in pinned_tags" :key="`nav_${index}`"
+      :to="{name: 'index', query: {tag_id: tag._id} }">
+      <MaterialIconTag />
+      <span>{{ tag.name }}</span>
+    </router-link>
+
 
     <router-link :to="{ name: 'tags'}">
       <MaterialIconTagMultiple />
@@ -55,6 +56,24 @@
 
 export default {
   name: 'Nav',
+  data() {
+    return {
+      pinned_tags: []
+    }
+  },
+  async fetch() {
+
+    try {
+      const url = `${this.$config.apiUrl}/v1/tags`
+      const params = { pinned: true }
+      this.pinned_tags = await this.$axios.$get(url, { params })
+    }
+    catch (error) {
+      console.error(`Failed to get pinned tags`)
+    }
+  },
+
+  
 }
 </script>
 

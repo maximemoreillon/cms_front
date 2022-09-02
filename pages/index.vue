@@ -158,8 +158,6 @@ export default {
       this.get_articles()
     },
 
-
-
     async get_articles(){
 
       this.articles_loading = true

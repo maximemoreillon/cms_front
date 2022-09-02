@@ -68,7 +68,8 @@ export default {
   
 
   router: {
-    middleware: ['auth', 'pinnedTags'],
+    //middleware: ['auth', 'pinnedTags'],
+    middleware: ['auth'],
     // Forgot what this is for
     extendRoutes(routes, resolve) {
       routes.push({
