@@ -6,7 +6,6 @@
 
     <div class="query_tools">
 
-      <client-only>
         <template v-if="tag || author">
           <!-- Show tag if specified in query -->
           <div v-if="tag" class="filter">
@@ -26,7 +25,6 @@
             </button>
           </div>
         </template>
-      </client-only>
 
       <div>
         <ArticleSearch />
@@ -42,7 +40,6 @@
       </div>
     </div>
     
-    <client-only>
       <div v-if="!loading_error && articles.length" ref="articles_container" class="articles_container">
         <ArticlePreview v-for="(article, index) in articles" :key="`article_${index}`" :article="article" />
       </div>
@@ -68,7 +65,6 @@
           <span>Load more</span>
         </button>
       </div>
-    </client-only>
   </div>
 
 </template>
@@ -159,6 +155,8 @@ export default {
     },
 
     async get_articles(){
+
+      console.log('Querying articles')
 
       this.articles_loading = true
 
