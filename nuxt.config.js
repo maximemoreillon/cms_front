@@ -68,9 +68,11 @@ export default {
   
 
   router: {
-    //middleware: ['auth', 'pinnedTags'],
-    middleware: ['auth'],
-    // Forgot what this is for
+    middleware: [
+      'auth',
+      //'pinnedTags'
+    ],
+    // Alias for / so that /articles can be used too
     extendRoutes(routes, resolve) {
       routes.push({
         name: 'articles',
@@ -95,15 +97,16 @@ export default {
         token: {
           property: 'jwt',
           global: true,
+          maxAge: 1209600 ,
           // required: true, // required by default
           // type: 'Bearer' // bearer by default
-          maxAge: 1209600 ,
         },
         user: {
           property: false,
           // autoFetch: true // true by default
         },
         endpoints: {
+          // TODO: use env vars here
           login: { url: `https://api.users.maximemoreillon.com/v2/auth/login`, method: 'post' },
           user: { url: `https://api.users.maximemoreillon.com/v2/users/self`, method: 'get' },
           logout: false,

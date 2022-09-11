@@ -24,18 +24,22 @@
 
 
       <!-- Publishing status and views only visible to users logged in -->
-      <template v-if="$auth.user">
-        <div v-if="article.views" class="metadata_item">
-          <MaterialIconEye />
-          <span>
-            {{ article.views }}
-          </span>
-        </div>
-        <div class="metadata_item">
-          <MaterialIconEarth v-if="article.published" />
-          <MaterialIconLock v-else />
-        </div>
-      </template>
+      <!-- Client only: https://github.com/nuxt/nuxt.js/issues/5800 -->
+      <client-only>
+        <template v-if="$auth.user">
+          <div v-if="article.views" class="metadata_item">
+            <MaterialIconEye />
+            <span>
+              {{ article.views }}
+            </span>
+          </div>
+          <div class="metadata_item">
+            <MaterialIconEarth v-if="article.published" />
+            <MaterialIconLock v-else />
+          </div>
+        </template>
+      </client-only>
+
     </div>
 
 
