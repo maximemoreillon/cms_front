@@ -1,29 +1,29 @@
 <template>
   <nav>
-    <client-only>
+    <!-- <client-only>
       <router-link v-if="$auth.user" :to="{ name: 'articles-id-edit', params: {id: 'new'}}">
         <MaterialIconPlus />
         <span>New article</span>
       </router-link>
-    </client-only>
+    </client-only> -->
 
     <router-link :to="{ name: 'index'}">
       <MaterialIconNewspaperVariantMultipleOutline />
-      <span>All articles</span>
+      <span>Articles</span>
     </router-link>
 
-    <client-only>
+    <!-- <client-only>
       <router-link v-if="$auth.user" :to="{ name: 'index', query: { author_id: $auth.user._id}}">
         <MaterialIconAccount />
         <span>My articles</span>
       </router-link>
-    </client-only>
+    </client-only> -->
 
-    <router-link v-for="(tag, index) in pinned_tags" :key="`nav_${index}`"
+    <!-- <router-link v-for="(tag, index) in pinned_tags" :key="`nav_${index}`"
       :to="{name: 'index', query: {tag_id: tag._id} }">
       <MaterialIconTag />
       <span>{{ tag.name }}</span>
-    </router-link>
+    </router-link> -->
 
 
     <router-link :to="{ name: 'tags'}">
@@ -31,8 +31,7 @@
       <span>Tags</span>
     </router-link>
 
-    <client-only>
-      <!-- Login / Logout -->
+    <!-- <client-only>
       <router-link v-if="$auth.user" :to="{ name: 'logout' }">
         <MaterialIconLogout />
         <span>Logout</span>
@@ -42,7 +41,7 @@
         <MaterialIconLogin />
         <span>Login</span>
       </router-link>
-    </client-only>
+    </client-only> -->
 
     <router-link :to="{ name: 'about' }">
       <MaterialIconInformationOutline />
@@ -58,20 +57,20 @@ export default {
   name: 'Nav',
   data() {
     return {
-      pinned_tags: []
+      // pinned_tags: []
     }
   },
-  async fetch() {
+  // async fetch() {
 
-    try {
-      const url = `${this.$config.apiUrl}/v1/tags`
-      const params = { pinned: true }
-      this.pinned_tags = await this.$axios.$get(url, { params })
-    }
-    catch (error) {
-      console.error(`Failed to get pinned tags`)
-    }
-  },
+  //   try {
+  //     const url = `${this.$config.apiUrl}/v1/tags`
+  //     const params = { pinned: true }
+  //     this.pinned_tags = await this.$axios.$get(url, { params })
+  //   }
+  //   catch (error) {
+  //     console.error(`Failed to get pinned tags`)
+  //   }
+  // },
 
   
 }
