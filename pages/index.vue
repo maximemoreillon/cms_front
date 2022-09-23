@@ -4,42 +4,45 @@
 
     <h1>Articles</h1>
 
+    <!-- Could have this in its own component -->
     <div class="query_tools">
 
-        <template v-if="tag || author">
-          <!-- Show tag if specified in query -->
-          <div v-if="tag" class="filter">
-            <MaterialIconTag />
-            <Tag :tag="tag" :clickable="false" />
-            <button class="remove_button" @click="$router.push({ name: 'index' })">
-              <MaterialIconClose />
-            </button>
-            <!-- <TagManagement v-if=" user_is_admin" :tag="tag" @tagUpdate="delete_all_and_get_articles()" /> -->
-          </div>
-
-          <div v-if="author" class="filter">
-            <MaterialIconAccount class="metadata_icon" />
-            <span>{{ author.display_name }}</span>
-            <button class="remove_button" @click="$router.push({ name: 'index' })">
-              <MaterialIconClose />
-            </button>
-          </div>
-        </template>
-
-      <div>
-        <ArticleSearch />
+      <!-- Show tag if specified in query -->
+      <div v-if="tag" class="filter">
+        <MaterialIconTag />
+        <Tag :tag="tag" :clickable="false" />
+        <button class="remove_button" @click="$router.push({ name: 'index' })">
+          <MaterialIconClose />
+        </button>
+        <!-- <TagManagement v-if=" user_is_admin" :tag="tag" @tagUpdate="delete_all_and_get_articles()" /> -->
       </div>
+
+      <!-- Show author if specified in the query -->
+      <div v-if="author" class="filter">
+        <MaterialIconAccount class="metadata_icon" />
+        <span>{{ author.display_name }}</span>
+        <button class="remove_button" @click="$router.push({ name: 'index' })">
+          <MaterialIconClose />
+        </button>
+      </div>
+
+      <ArticleSearch />
 
       <div class="query_tools_row">
         <div class="counter">
           <MaterialIconFileDocumentOutline />
           <span>{{ article_count }}</span>
         </div>
-        <div class="spacer"></div>
+        <div class="spacer" />
         <ArticleSorting />
       </div>
+
     </div>
+    <!-- End of query tools -->
     
+    <!-- List of articles 
+      queried client-side -->
+    <client-only>
       <div v-if="!loading_error && articles.length" ref="articles_container" class="articles_container">
         <ArticlePreview v-for="(article, index) in articles" :key="`article_${index}`" :article="article" />
       </div>
@@ -59,14 +62,16 @@
         Error loading articles
       </div>
 
-      <!-- Load more -->
+      <!-- Load more button -->
       <div class="load_more_wrapper" :style="{display: load_more_possible ? 'block' : 'none'}">
         <button ref="load_more" class="outlined" @click="get_articles()">
           <span>Load more</span>
         </button>
       </div>
-  </div>
+    </client-only>
+      
 
+  </div>
 </template>
 
 <script>
@@ -96,12 +101,7 @@ export default {
     //Author,
   },
   auth: false,
-  watch: {
-    query(){
-      this.delete_all_and_get_articles()
-    }
-  },
-  data () {
+  data() {
     return {
 
       articles: [],
@@ -116,8 +116,37 @@ export default {
       tag_loading: false,
 
       author: null,
+      author_loading: false,
 
       load_more_observer: null,
+
+    }
+  },
+  head() {
+    return {
+      // THIS MIGHT HAVE BEEN THE PROBLEM ALL ALONG
+      title: 'Articles | Maxime Moreillon',
+
+      meta: [
+        { hid: 'description', name: 'description', content: 'An article management system' },
+
+        // Twitter
+        { hid: 'twitter:card', name: 'twitter:card', content: 'summary' },
+        { hid: 'twitter:site', name: 'twitter:site', content: '@m_moreillon' },
+        { hid: 'twitter:title', name: 'twitter:title', content: 'Articles | Maxime Moreillon' },
+        { hid: 'twitter:description', name: 'twitter:description', content: 'An article management system' },
+        { hid: 'twitter:image', name: 'twitter:image', content: 'https://articles.maximemoreillon.com/logo.png' },
+        { hid: 'twitter:image:alt', name: 'twitter:image:alt', content: 'Maxime Moreillon logo' },
+
+        // OpenGraph
+        { hid: 'og:title', name: 'og:title', content: 'summary' },
+        { hid: 'og:description', name: 'og:description', content: 'An article management system' },
+        { hid: 'og:image', name: 'og:image', content: 'https://articles.maximemoreillon.com/logo.png' },
+        { hid: 'og:url', name: 'og:url', content: 'https://articles.maximemoreillon.com' },
+        { hid: 'og:type', name: 'og:type', content: 'article' },
+        { hid: 'og:locale', name: 'og:locale', content: 'en_US' },
+
+      ]
 
     }
   },
@@ -132,20 +161,23 @@ export default {
         && !this.articles_all_loaded
         && !this.loading_error
     },
-    query(){
+    query() {
       return this.$route.query
     }
 
 
   },
-
+  watch: {
+    query(){
+      this.delete_all_and_get_articles()
+    }
+  },
+  
   mounted() {
     this.delete_all_and_get_articles()
   },
 
   methods: {
-
-
     delete_all_and_get_articles(){
       this.articles = []
       this.articles_all_loaded = false
@@ -156,7 +188,7 @@ export default {
 
     async get_articles(){
 
-      console.log('Querying articles')
+      console.debug('Querying articles')
 
       this.articles_loading = true
 
@@ -208,41 +240,49 @@ export default {
 
     },
 
-    get_tag(){
+    async get_tag(){
+
       this.tag = null
-
-      const tag_id = this.$route.query.tag_id
-
+      const {tag_id} = this.$route.query
       if(!tag_id) return
+      this.tag_loading = true
 
-      this.tag_loading = true;
-      this.$axios.get(`${this.$config.apiUrl}/v1/tags/${tag_id}`)
-      .then( ({data}) => {
-        this.tag = data
-       })
-      .catch(error => {
-        if(error.response) alert(error.response.data)
+      try {
+        const url = `${this.$config.apiUrl}/v1/tags/${tag_id}`
+        this.tags = await this.$axios.$get(url)
+      }
+      catch (error) {
+        console.error(error)
+        if (error.response) alert(error.response.data)
         else alert(error)
-      })
-      .finally( () => {this.tag_loading = false})
+      }
+      finally {
+        this.tag_loading = false
+      }
+      
+
     },
 
-    get_author(){
+    async get_author(){
 
       this.author = null
-
-      const author_id = this.$route.query.author_id
-
+      const {author_id} = this.$route.query
       if(!author_id) return
-
-      this.$axios.get(`${this.$config.apiUrl}/v1/authors/${author_id}`)
-      .then(response => { this.author = response.data })
-      .catch(error => {
-        // Dirty
-        this.$set(this.author,'error', 'Error getting author')
-        if(error.response) alert(error.response.data)
+      this.author_loading = true
+      try {
+        const url = `${this.$config.apiUrl}/v1/authors/${author_id}`
+        this.author = await this.$axios.$get(url)
+        
+      }
+      catch (error) {
+        console.error(error)
+        if (error.response) alert(error.response.data)
         else alert(error)
-      })
+      }
+      finally {
+        this.author_loading = false
+      }
+
 
     },
 
@@ -263,33 +303,7 @@ export default {
 
     },
   },
-  head() {
-    return {
-      title: this.article?.title,
-
-      meta: [
-        { hid: 'description', name: 'description', content: 'An article management system' },
-
-        // Twitter
-        { hid: 'twitter:card', name: 'twitter:card', content: 'summary' },
-        { hid: 'twitter:site', name: 'twitter:site', content: '@m_moreillon' },
-        { hid: 'twitter:title', name: 'twitter:title', content: 'Articles | Maxime Moreillon' },
-        { hid: 'twitter:description', name: 'twitter:description', content: 'An article management system' },
-        { hid: 'twitter:image', name: 'twitter:image', content: 'https://articles.maximemoreillon.com/logo.png' },
-        { hid: 'twitter:image:alt', name: 'twitter:image:alt', content: 'Maxime Moreillon logo' },
-
-        // OpenGraph
-        { hid: 'og:title', name: 'og:title', content: 'summary' },
-        { hid: 'og:description', name: 'og:description', content: 'An article management system' },
-        { hid: 'og:image', name: 'og:image', content: 'https://articles.maximemoreillon.com/logo.png' },
-        { hid: 'og:url', name: 'og:url', content: 'https://articles.maximemoreillon.com' },
-        { hid: 'og:type', name: 'og:type', content: 'article' },
-        { hid: 'og:locale', name: 'og:locale', content: 'en_US' },
-
-      ]
-
-    }
-  },
+  
 
 }
 </script>

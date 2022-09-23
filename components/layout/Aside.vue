@@ -13,7 +13,7 @@
       <img class="logo" src="~/assets/images/logo/logo.svg" alt="Maxime Moreillon logo">
     </a>
 
-    <Navigation></Navigation>
+    <Navigation />
   </aside>
 </template>
 

@@ -1,19 +1,15 @@
 <template>
   <form
     class="search_wrapper"
-    @submit.prevent="search()"
-  >
+    @submit.prevent="search()">
     <input
       ref="search"
       v-model="search_string"
       type="search"
       class="search_bar"
-      placeholder="Search articles"
-    >
+      placeholder="Search articles">
 
-    <button
-      type="submit"
-    >
+    <button type="submit">
       <MaterialIconMagnify />
     </button>
   </form>

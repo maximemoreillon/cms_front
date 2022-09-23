@@ -14,8 +14,7 @@
         </tr>
         <tr
           v-for="({name, version, url}, index) in services"
-          :key="`service_${index}`"
-        >
+          :key="`service_${index}`">
           <td>{{ name }}</td>
           <td>{{ version }}</td>
           <td>{{ url }}</td>
