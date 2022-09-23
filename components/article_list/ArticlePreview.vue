@@ -17,7 +17,7 @@
       <div v-if="article.author" class="metadata_item">
         <MaterialIconAccount />
         <span class="author">
-          {{ article.author.display_name || 'Unnnamed' }}
+          {{ article.author.display_name || 'Unnnamed author' }}
         </span>
       </div>
 
