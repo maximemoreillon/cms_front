@@ -1,48 +1,48 @@
 <template>
-
   <div>
 
     <h1>Articles</h1>
 
-    <!-- Could have this in its own component -->
-    <div class="query_tools">
-
-      <!-- Show tag if specified in query -->
-      <div v-if="tag" class="filter">
-        <MaterialIconTag />
-        <Tag :tag="tag" :clickable="false" />
-        <button class="remove_button" @click="$router.push({ name: 'index' })">
-          <MaterialIconClose />
-        </button>
-        <!-- <TagManagement v-if=" user_is_admin" :tag="tag" @tagUpdate="delete_all_and_get_articles()" /> -->
-      </div>
-
-      <!-- Show author if specified in the query -->
-      <div v-if="author" class="filter">
-        <MaterialIconAccount class="metadata_icon" />
-        <span>{{ author.display_name }}</span>
-        <button class="remove_button" @click="$router.push({ name: 'index' })">
-          <MaterialIconClose />
-        </button>
-      </div>
-
-      <ArticleSearch />
-
-      <div class="query_tools_row">
-        <div class="counter">
-          <MaterialIconFileDocumentOutline />
-          <span>{{ article_count }}</span>
-        </div>
-        <div class="spacer" />
-        <ArticleSorting />
-      </div>
-
-    </div>
-    <!-- End of query tools -->
-    
-    <!-- List of articles 
-      queried client-side -->
+    <!-- Wrappeing in client-only because following content handled client-side -->
     <client-only>
+
+      <!-- Could have this in its own component -->
+      <div class="query_tools">
+
+        <!-- Show tag if specified in query -->
+        <div v-if="tag" class="filter">
+          <MaterialIconTag />
+          <Tag :tag="tag" :clickable="false" />
+          <button class="remove_button" @click="$router.push({ name: 'index' })">
+            <MaterialIconClose />
+          </button>
+          <!-- <TagManagement v-if=" user_is_admin" :tag="tag" @tagUpdate="delete_all_and_get_articles()" /> -->
+        </div>
+
+        <!-- Show author if specified in the query -->
+        <div v-if="author" class="filter">
+          <MaterialIconAccount class="metadata_icon" />
+          <span>{{ author.display_name }}</span>
+          <button class="remove_button" @click="$router.push({ name: 'index' })">
+            <MaterialIconClose />
+          </button>
+        </div>
+
+        <ArticleSearch />
+
+        <div class="query_tools_row">
+          <div class="counter">
+            <MaterialIconFileDocumentOutline />
+            <span>{{ article_count }}</span>
+          </div>
+          <div class="spacer" />
+          <ArticleSorting />
+        </div>
+
+      </div>
+      <!-- End of query tools -->
+    
+    <!-- List of articles -->
       <div v-if="!loading_error && articles.length" ref="articles_container" class="articles_container">
         <ArticlePreview v-for="(article, index) in articles" :key="`article_${index}`" :article="article" />
       </div>
@@ -69,8 +69,6 @@
         </button>
       </div>
     </client-only>
-      
-
   </div>
 </template>
 
@@ -124,7 +122,6 @@ export default {
   },
   head() {
     return {
-      // THIS MIGHT HAVE BEEN THE PROBLEM ALL ALONG
       title: 'Articles | Maxime Moreillon',
 
       meta: [
@@ -188,7 +185,7 @@ export default {
 
     async get_articles(){
 
-      console.debug('Querying articles')
+      console.log('Querying articles')
 
       this.articles_loading = true
 
