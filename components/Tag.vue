@@ -3,8 +3,7 @@
   <span
     class="tag"
     :class="{clickable}"
-    @click.stop="tag_clicked()"
-  >
+    @click.stop="tag_clicked()" >
 
     <span class="tag_name">{{ tag.name || 'Untitled' }}</span>
 
@@ -12,8 +11,7 @@
     <button
       v-if="removable"
       class="remove_button"
-      @click.stop="$emit('remove')"
-    >
+      @click.stop="$emit('remove')" >
       <MaterialIconClose />
     </button>
 

@@ -12,10 +12,7 @@
         <!-- Show tag if specified in query -->
         <div v-if="tag" class="filter">
           <MaterialIconTag />
-          <Tag :tag="tag" :clickable="false" />
-          <button class="remove_button" @click="$router.push({ name: 'index' })">
-            <MaterialIconClose />
-          </button>
+          <Tag :tag="tag" :clickable="false" removable @remove="$router.push({ name: 'index' })"/>
           <!-- <TagManagement v-if=" user_is_admin" :tag="tag" @tagUpdate="delete_all_and_get_articles()" /> -->
         </div>
 
