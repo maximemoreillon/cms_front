@@ -17,8 +17,7 @@
         v-model="filter"
         type="search"
         class="search_bar"
-        placeholder="Search tags"
-      >
+        placeholder="Search tags" >
 
       <MaterialIconMagnify />
     </div>

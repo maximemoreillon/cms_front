@@ -5,9 +5,9 @@
 
       <Tag
         v-for="(tag, index) in tag_list" :key="`tag_${index}`" :clickable="clickable" :removable="removable"
-        :tag="tag" @remove="$emit('tagRemoved', index)"
-      />
-
+        :tag="tag" @remove="$emit('tagRemoved', index)" />
+      
+      <!-- Showing how many remainign tags after truncation -->
       <span v-if="truncate && tags.length > truncate">
         +{{ tags.length - truncate }}
       </span>
@@ -18,14 +18,12 @@
     <!-- Input of new tags -->
     <input
       v-if="input" id="tag_input" ref="tag_input" v-model="new_tag_name" type="search" list="existing_tag_list"
-      placeholder="New tag" @keyup.enter="add_tag()"
-    >
+      placeholder="New tag" @keyup.enter="add_tag()" >
 
     <datalist id="existing_tag_list">
       <option
         v-for="(existing_tag, index) in existing_tags" :key="`existing_tag_${index}`"
-        :value="existing_tag.name"
-      />
+        :value="existing_tag.name" />
     </datalist>
   </div>
 </template>

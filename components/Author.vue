@@ -1,8 +1,7 @@
 <template>
   <router-link
     class="author"
-    :to="{ name: 'index', query: {author_id} }"
-  >
+    :to="{ name: 'index', query: {author_id} }" >
     {{ author.display_name }}
   </router-link>
 </template>
@@ -14,7 +13,6 @@ export default {
   props: {
     author: Object
   },
-
   computed: {
     author_id(){
       return this.author._id

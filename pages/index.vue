@@ -12,7 +12,7 @@
         <!-- Show tag if specified in query -->
         <div v-if="tag" class="filter">
           <MaterialIconTag />
-          <Tag :tag="tag" :clickable="false" removable @remove="$router.push({ name: 'index' })"/>
+          <Tag :tag="tag" :clickable="false" removable @remove="remove_query('tag_id')"/>
           <!-- <TagManagement v-if=" user_is_admin" :tag="tag" @tagUpdate="delete_all_and_get_articles()" /> -->
         </div>
 
@@ -20,7 +20,7 @@
         <div v-if="author" class="filter">
           <MaterialIconAccount class="metadata_icon" />
           <span>{{ author.display_name }}</span>
-          <button class="remove_button" @click="$router.push({ name: 'index' })">
+          <button class="remove_button" @click="remove_query('author_id')">
             <MaterialIconClose />
           </button>
         </div>
@@ -182,8 +182,6 @@ export default {
 
     async get_articles(){
 
-      console.log('Querying articles')
-
       this.articles_loading = true
 
       const {
@@ -279,6 +277,13 @@ export default {
       }
 
 
+    },
+
+    remove_query(item){
+      // Making a copy so as to reassign it
+      const query = {...this.$route.query}
+      delete query[item]
+      this.$router.push({ name: 'index', query })
     },
 
     load_more_when_scroll_to_bottom(){
