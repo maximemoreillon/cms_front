@@ -29,6 +29,7 @@ const icons = [
   'FormatItalic',
   'Image',
   'InformationOutline',
+  'Key',
   'Lock',
   'Login',
   'Logout',

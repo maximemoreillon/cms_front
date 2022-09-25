@@ -321,6 +321,8 @@ export default {
 }
 
 .query_tools {
+  /* Could have been grid */
+  margin-top: -0.5em;
   margin-bottom: 1em;
   display: flex;
   flex-direction: column;

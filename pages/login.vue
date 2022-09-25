@@ -1,35 +1,36 @@
 <template>
-  <div class="login">
-    <form v-if="!loading" class="container" @submit.prevent="login()">
-      <div class="">
-        <label for="username">
-          Username
-        </label>
-        <input id="username" v-model="credentials.username" type="text" placeholder="Username">
-      </div>
+  <div class="wrapper">
 
-      <div class="">
-        <label for="password">
-          Password
-        </label>
-        <input id="password" v-model="credentials.password" type="password" placeholder="Password">
-      </div>
+    <client-only>
+      <form v-if="!loading" class="container" @submit.prevent="login()">
 
-      <div>
-        <button type="submit" class="outlined" @click="login()">
-          <MaterialIconLogin />
-          <span>Login</span>
-        </button>
-      </div>
+        <div>
+          <MaterialIconAccount />
+          <input id="username" v-model="credentials.username" type="text" placeholder="Username">
+        </div>
 
-      <div v-if="error" class="error_message">
-        {{ error }}
-      </div>
-    </form>
+        <div>
+          <MaterialIconKey />
+          <input id="password" v-model="credentials.password" type="password" placeholder="Password">
+        </div>
 
-    <div v-if="loading" class="loader_container">
-      <Loader />
-    </div>
+        <div>
+          <button type="submit" class="outlined" @click="login()">
+            <MaterialIconLogin />
+            <span>Login</span>
+          </button>
+        </div>
+
+        <div v-if="error" class="error_message">
+          {{ error }}
+        </div>
+      </form>
+
+      <div v-if="loading" class="loader_container">
+        <Loader />
+      </div>
+    </client-only>
+    
   </div>
 </template>
 
@@ -90,15 +91,15 @@ export default {
 <style scoped>
 
 .container {
+  margin-top: 1em;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5em;
 }
-.container > * {
-  margin: 1em 0;
+
+.container > div {
+  display: flex;
+  gap: 0.5em;
 }
-
-
-
 </style>

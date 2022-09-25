@@ -1,20 +1,22 @@
 <template>
-  <div class="logout">
-    <div v-if="$auth.user" class="container">
-      <div class="">
-        Logged in as {{ $auth.user.display_name }}
+  <div>
+    <client-only>
+      <div v-if="$auth.user" class="container">
+        <div>
+          Logged in as {{ $auth.user.display_name }}
+        </div>
+      
+      
+        <button class="outlined" @click="logout()">
+          <MaterialIconLogout />
+          <span>Logout</span>
+        </button>
       </div>
-
-
-      <button class="outlined" @click="logout()">
-        <MaterialIconLogout />
-        <span>Logout</span>
-      </button>
-    </div>
-
-    <div v-if="loading" class="loader_container">
-      <Loader />
-    </div>
+      
+      <div v-if="loading" class="loader_container">
+        <Loader />
+      </div>
+    </client-only>
   </div>
 </template>
 
@@ -71,7 +73,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1em;
+  gap: 0.5em;
 }
 
 

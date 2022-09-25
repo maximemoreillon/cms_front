@@ -42,8 +42,8 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     '@nuxtjs/axios',
-    // 'cookie-universal-nuxt',
     '@nuxtjs/auth-next'
+    // 'cookie-universal-nuxt',
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -70,7 +70,7 @@ export default {
   router: {
     middleware: [
       'auth',
-      //'pinnedTags'
+      'pinnedTags'
     ],
     // Alias for / so that /articles can be used too
     extendRoutes(routes, resolve) {
