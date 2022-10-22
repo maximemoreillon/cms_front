@@ -41,9 +41,8 @@
 
     <div
       v-if="error"
-      class="error"
-    >
-      An error occured while loading articles
+      class="error">
+      An error occured while loading the article
     </div>
 
 
@@ -87,9 +86,17 @@ export default {
 
   async asyncData ( {$axios, params } ){
     // Loading article server-side
-    const url = `articles/${params.id}`
-    const article = await $axios.$get(url)
-    return { article }
+    
+    try {
+      const url = `articles/${params.id}`
+      const article = await $axios.$get(url)
+      return { article }
+    } catch (error) {
+      console.error(error)
+      return { error }
+    }
+    
+    
   },
 
   data () {
@@ -148,6 +155,7 @@ export default {
       // If the user is not logged in, then unable to edit
       if (!this.$auth.user) return false
 
+      // Admins can edit anything
       if (this.$auth.user.isAdmin) return true
 
       // If article does not have no author, then nothing to edit
@@ -169,7 +177,9 @@ export default {
       // Attaching modals to images
       const {article_content} = this.$refs
       if (!article_content) return
-      article_content.querySelectorAll('img')
+
+      article_content
+        .querySelectorAll('img')
         .forEach(img => {
           img.addEventListener("click", event => {
             this.modal.open = true
