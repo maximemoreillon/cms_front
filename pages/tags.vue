@@ -85,9 +85,7 @@ export default {
 
       this.loading = true
 
-      const url = `${this.$config.apiUrl}/v1/tags`
-
-      this.$axios.get(url)
+      this.$axios.get('/tags')
       .then( ({data}) => {
         this.tags = data
       })

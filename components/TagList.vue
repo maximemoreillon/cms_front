@@ -1,3 +1,4 @@
+<!-- TODO: Modifying props is bad practice so use computed with custom getter and setter instead-->
 <template>
   <div class="tag_list">
     <template v-if="tags && tags.length">
@@ -74,8 +75,7 @@ export default {
     },
     async get_existing_tags() {
       try {
-        const url = `${this.$config.apiUrl}/v1/tags/`
-        this.existing_tags = await this.$axios.$get(url)
+        this.existing_tags = await this.$axios.$get('/tags')
       } catch (error) {
         console.error(error)
       }

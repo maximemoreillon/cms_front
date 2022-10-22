@@ -12,11 +12,11 @@
       <meta itemprop="image" content="/logo.png">
       <meta
         itemprop="datePublished"
-        :content="format_date_for_meta(article.authorship.creation_date)"
+        :content="format_neo4j_date(article.authorship.creation_date, '-')"
       >
       <meta
         itemprop="dateModified"
-        :content="format_date_for_meta(article.authorship.edition_date)"
+        :content="format_neo4j_date(article.authorship.edition_date, '-')"
       >
 
       <!-- Article title -->
@@ -66,8 +66,9 @@
 
 
 import ArticleMetadata from '@/components/ArticleMetadata.vue'
-
 import Modal from '@/components/Modal.vue'
+
+import dateUtils from '@/mixins/dateUtils'
 
 
 export default {
@@ -80,10 +81,13 @@ export default {
     Modal,
     ArticleMetadata,
   },
+  mixins: [
+    dateUtils
+  ],
 
-  async asyncData ( {$axios, params, $config: { apiUrl }} ){
+  async asyncData ( {$axios, params } ){
     // Loading article server-side
-    const url = `${apiUrl}/v1/articles/${params.id}`
+    const url = `articles/${params.id}`
     const article = await $axios.$get(url)
     return { article }
   },
@@ -150,7 +154,7 @@ export default {
       if(!this.article.author) return false
 
 
-      return (this.article.author._id === this.$auth.user._id)
+      return this.article.author._id === this.$auth.user._id
     }
   },
   mounted(){
@@ -162,6 +166,7 @@ export default {
 
 
     add_event_listeners_for_image_modals(){
+      // Attaching modals to images
       const {article_content} = this.$refs
       if (!article_content) return
       article_content.querySelectorAll('img')
@@ -173,14 +178,6 @@ export default {
         })
     },
 
-    format_date_for_meta({day,month,year}){
-      return [
-        year,
-        month.toString().padStart(2,'0'),
-        day.toString().padStart(2,'0'),
-      ].join('-');
-
-    }
   }
 
 }

@@ -31,7 +31,7 @@ export default {
 
       const tag_id = this.tag._id
 
-      const url = `${process.env.VUE_APP_CMS_API_URL}/v1/tags/${tag_id}`
+      const url = `/v1/tags/${tag_id}`
       const body = this.tag
 
       this.$axios.put(url, body)

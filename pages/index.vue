@@ -202,11 +202,9 @@ export default {
         author_id,
       }
 
-      const url = `${this.$config.apiUrl}/v1/articles`
-
       try {
 
-        const { article_count, articles } = await this.$axios.$get(url, { params })
+        const { article_count, articles } = await this.$axios.$get('/articles', { params })
 
         this.article_count = article_count
 
@@ -241,8 +239,7 @@ export default {
       this.tag_loading = true
 
       try {
-        const url = `${this.$config.apiUrl}/v1/tags/${tag_id}`
-        this.tag = await this.$axios.$get(url)
+        this.tag = await this.$axios.$get(`/tags/${tag_id}`)
       }
       catch (error) {
         console.error(error)

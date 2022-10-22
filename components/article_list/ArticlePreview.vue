@@ -9,7 +9,7 @@
       <div v-if="article.authorship.creation_date" class="metadata_item">
         <MaterialIconCalendar />
         <span class="article_date">
-          {{ format_date(article.authorship.creation_date) }}
+          {{ format_neo4j_date(article.authorship.creation_date) }}
         </span>
       </div>
 
@@ -58,7 +58,7 @@
 <script>
 
 
-
+import dateUtils from '@/mixins/dateUtils'
 import TagList from '~/components/TagList.vue'
 
 
@@ -67,6 +67,9 @@ export default {
   components: {
     TagList,
   },
+  mixins: [
+    dateUtils
+  ],
   props: {
     article: Object
   },
@@ -85,15 +88,7 @@ export default {
     }
   },
   methods: {
-    format_date({day,month,year}){
-      // Dates are Neo4J formatted
-      // i.e. {day, month, year}
-      return [
-        year,
-        month.toString().padStart(2,'0'),
-        day.toString().padStart(2,'0'),
-      ].join('/');
-    }
+
   }
 
 }

@@ -50,12 +50,12 @@
       <!-- Creation date -->
       <div v-if="article.authorship.creation_date" class="metadata_element" title="Created">
         <MaterialIconCalendar />
-        <span>{{ format_date(article.authorship.creation_date) }}</span>
+        <span>{{ format_neo4j_date(article.authorship.creation_date) }}</span>
       </div>
       <!-- Last edited date -->
       <div v-if="article.authorship.edition_date" class="metadata_element" title="last edited">
         <MaterialIconCalendarEdit />
-        <span>{{ format_date(article.authorship.edition_date) }}</span>
+        <span>{{ format_neo4j_date(article.authorship.edition_date) }}</span>
       </div>
     </div>
 
@@ -68,8 +68,9 @@
 <script>
 
 import Author from './Author.vue'
-
 import TagList from './TagList.vue'
+
+import dateUtils from '@/mixins/dateUtils'
 
 export default {
   name: 'ArticleMetadata',
@@ -77,6 +78,9 @@ export default {
     Author,
     TagList,
   },
+  mixins: [
+    dateUtils
+  ],
   props: {
     article: Object,
   },
@@ -95,18 +99,10 @@ export default {
 
   },
   methods: {
-    format_date({day,month,year}){
-      // Dates are Neo4J formatted
-      // i.e. {day, month, year}
-      return [
-        year,
-        month.toString().padStart(2,'0'),
-        day.toString().padStart(2,'0'),
-      ].join('/');
-    },
+
     async delete_article() {
       if(!confirm(`Delete article?`)) return
-      const url = `${this.$config.apiUrl}/v1/articles/${this.article_id}`
+      const url = `/v1/articles/${this.article_id}`
 
 
       try {
