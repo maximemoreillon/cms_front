@@ -153,9 +153,6 @@ export default {
   overflow-x: auto;
 }
 
-.article_images_wrapper::after {
-  content: 'aa'
-}
 
 .thumbnail_from_article_image {
   width: 200px;
