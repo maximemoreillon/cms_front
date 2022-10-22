@@ -5,8 +5,7 @@
       <div class="toolbar">
         <router-link
           v-if="article_id !== 'new'" :to="{ name: 'articles-id', params: { id: article_id } }"
-          class="metadata_element button"
-        >
+          class="metadata_element button">
           <MaterialIconArrowLeft class="metadata_icon" />
           <span>Return to article</span>
         </router-link>
@@ -141,12 +140,8 @@ export default {
         .catch(error => { console.error(error) })
     },
     submit_article(){
-        if(this.article_id === 'new') {
-            this.create_article()
-        }
-        else {
-            this.update_article()
-        }
+        if(this.article_id === 'new') this.create_article()
+        else this.update_article()
     },
     create_request_body(){
 
