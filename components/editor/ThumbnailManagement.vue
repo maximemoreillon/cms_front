@@ -1,12 +1,17 @@
 
 
 <template>
-  <div>
+  <div class="thumbnail_management">
 
     <!-- Current thumbnail -->
-    <img
-      v-if="article.thumbnail_src" class="thumbnail" :src="article.thumbnail_src" :alt="`${article.title}_thumbnail`"
-      @click="open = true">
+    <div class="current_thumbnail_wrapper" v-if="article.thumbnail_src">
+      <img  
+        class="thumbnail_preview" 
+        :src="article.thumbnail_src" 
+        :alt="`${article.title}_thumbnail`"
+        @click="open = true">
+    </div>
+    
 
     <!-- Modal activator -->
     <button v-else class="outlined" @click="open = true">
@@ -17,12 +22,24 @@
       <div class="modal_content">
         <h2>Thumbnail setting</h2>
 
+        <!-- Removing thumbnail -->
+        <template v-if="article.thumbnail_src">
+          <button @click="remove_thumbnail()">
+            <MaterialIconDelete />
+            <span>Remove Thumbnail</span>
+          </button>
+        </template>
+
         <template v-if="article_images.length">
           <h3>From article</h3>
 
           <div class="article_images_wrapper">
-            <div class="article_image_wrapper" v-for="(image, index) in article_images" :key="`article_image_${index}`" :class="{selected: image === article.thumbnail_src}">
-              <img @click="set_thumbnail_src(image)" class="thumbnail_from_article_image" :src="image" alt=""  >
+            <div class="article_image_wrapper" 
+              v-for="(image, index) in article_images" 
+              :key="`article_image_${index}`" 
+              :class="{selected: image === article.thumbnail_src}"
+              @click="set_thumbnail_src(image)">
+              <img class="thumbnail_preview" :src="image" alt=""  >
             </div>
             
 
@@ -46,13 +63,7 @@
           <input type="submit" name="">
         </form>
 
-        <template v-if="article.thumbnail_src">
-          <h3>Remove thumbnail</h3>
-          <button @click="remove_thumbnail()">
-            <MaterialIconDelete />
-            <span>Remove Thumbnail</span>
-          </button>
-        </template>
+        
         
       </div>
     </Modal>
@@ -132,12 +143,33 @@ export default {
 </script>
 
 <style scoped>
-/* TODO: Share with ArticlePreview's */
-.thumbnail {
+.thumbnail_management{
+  display: flex;
+}
+.current_thumbnail_wrapper {
+  position: relative;
+  cursor: pointer;
+}
+
+.current_thumbnail_wrapper:hover::after {
+  content: '✎';
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  width: 2em;
+  height: 2em;
+  background-color: #c00000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  border-radius: 100%;
+}
+
+.thumbnail_preview {
   height: 10em;
   width: 10em;
   object-fit: cover;
-  cursor: pointer;
 }
 
 .modal_content {
@@ -154,24 +186,20 @@ export default {
 }
 
 
-.thumbnail_from_article_image {
-  width: 200px;
-  height: 200px;
-  object-fit: contain;
-  cursor: pointer;
 
-}
 
 .article_image_wrapper {
   position: relative;
+  cursor: pointer;
+  border: 1px solid #dddddd;
+  display: flex;
 }
 
 .article_image_wrapper.selected::after {
   content: '✔';
   position: absolute;
-  z-index: 1000;
-  top: 0;
-  right: 0;
+  top: 0.5em;
+  right: 0.5em;
   width: 2em;
   height: 2em;
   background-color: #c00000;
@@ -180,7 +208,5 @@ export default {
   align-items: center;
   color: white;
   border-radius: 100%;
-
-
 }
 </style>

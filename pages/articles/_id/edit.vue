@@ -120,8 +120,7 @@ export default {
   methods: {
     get_article(){
         this.loading = true
-        const url = `${this.$config.apiUrl}/v1/articles/${this.article_id}`
-        this.$axios.get(url)
+        this.$axios.get(`/articles/${this.article_id}`)
         .then( ({data}) => {
             this.article = data
         })
@@ -134,10 +133,9 @@ export default {
         })
     },
     get_existing_tags(){
-      const url = `${this.$config.apiUrl}/v1/tags/`
-      this.$axios.get(url)
-        .then(({data: tags}) => { this.existing_tags = tags })
-        .catch(error => { console.error(error) })
+      this.$axios.get(`/tags`)
+      .then(({data: tags}) => { this.existing_tags = tags })
+      .catch(error => { console.error(error) })
     },
     submit_article(){
         if(this.article_id === 'new') this.create_article()
@@ -197,9 +195,8 @@ export default {
     add_tag(name){
 
         if(!name.length) return
-        const url = `${this.$config.apiUrl}/v1/tags`
-        const body = { name }
-        this.$axios.post(url, body)
+
+        this.$axios.post(`/tags`, { name })
         .then(({data: tag}) => {
             this.article.tags.push(tag)
         })
