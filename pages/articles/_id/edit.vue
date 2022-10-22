@@ -231,6 +231,6 @@ export default {
 
 .article_settings{
     border-top: 1px solid #dddddd;
-    padding-top: 1em;
+    padding: 1em 0;
 }
 </style>
