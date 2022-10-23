@@ -18,7 +18,7 @@
         <span>My articles</span>
       </router-link>
       
-      <router-link v-for="(tag, index) in $store.state.pinned_tags" :key="`nav_${index}`"
+      <router-link v-for="(tag, index) in sortedTags" :key="`nav_${index}`"
         :to="{name: 'index', query: {tag_id: tag._id} }">
         <MaterialIconTag />
         <span>{{ tag.name }}</span>
@@ -55,6 +55,17 @@
 
 export default {
   name: 'Nav',
+  computed: {
+    sortedTags(){
+      return this.$store.state.pinned_tags.slice().sort( (a, b) => {
+        const x = a.name.toLowerCase()
+        const y = b.name.toLowerCase()
+        if (x < y) { return -1; }
+        if (x > y) { return 1; }
+        return 0;
+      })
+    }
+  }
  
 }
 </script>

@@ -13,7 +13,7 @@
         <div v-if="tag" class="filter">
           <MaterialIconTag />
           <Tag :tag="tag" :clickable="false" removable @remove="remove_query('tag_id')"/>
-          <!-- <TagManagement v-if=" user_is_admin" :tag="tag" @tagUpdate="delete_all_and_get_articles()" /> -->
+          <TagManagement v-if=" user_is_admin" v-model="tag"/>
         </div>
 
         <!-- Show author if specified in the query -->

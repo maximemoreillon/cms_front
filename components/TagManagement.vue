@@ -20,7 +20,7 @@
 export default {
   name: 'TagManagement',
   props: {
-    tag: Object,
+    value: Object,
   },
 
   methods:{
@@ -31,19 +31,12 @@ export default {
 
       const tag_id = this.tag._id
 
-      const url = `/v1/tags/${tag_id}`
+      const url = `/tags/${tag_id}`
       const body = this.tag
 
       this.$axios.put(url, body)
       .then( () => {
-
-        // Cannot mutate props!
-        // this.tag = data
-
-        this.$store.commit('update_categories')
-
-        this.$emit('tagUpdate')
-
+        this.refresh_pinned_tags()
 
       })
       .catch(error => alert(error))
@@ -52,16 +45,27 @@ export default {
       })
 
     },
+    async refresh_pinned_tags(){
+      const url = `/tags`
+      const params = { pinned: true }
+      try {
+        const { data: tags } = await this.$axios.get(url, { params })
+        this.$store.commit('set_pinned_tags', tags)
+      }
+      catch (error) {
+        console.error(`Failed to get pinned tags`)
+      }
+    },
 
     prompt_for_rename(){
       const new_name = prompt("New tag name", this.tag.name)
       if(!new_name) return
-      //this.tag.name = new_name
+      this.tag.name = new_name
       this.update_tag()
     },
 
     pin_to_navbar(){
-      //this.tag.navigation_item = !this.tag.navigation_item
+      this.tag.navigation_item = !this.tag.navigation_item
       this.update_tag()
     },
 
@@ -69,16 +73,27 @@ export default {
       if(!confirm('Delete tag?')) return
       this.article_loading = true;
 
-      const tag_id = this.get_id_of_item(this.tag)
+      const tag_id = this.tag._id
 
-      this.$axios.delete(`${process.env.VUE_APP_CMS_API_URL}/v1/tags/${tag_id}`)
+      this.$axios.delete(`tags/${tag_id}`)
       .then( () => {
-        this.$router.push({ name: 'article_list' })
+        this.$router.push({ name: 'articles' })
       })
       .catch(error => alert(error))
 
     },
+  },
+  computed: {
+    tag: {
+      get() {
+        return this.value
+      },
+      set(newVal){
+        this.$emit('input', newVal)
+      }
+    }
   }
+
 
 }
 </script>
