@@ -7,6 +7,7 @@ const icons = [
   'Calendar',
   'CalendarEdit',
   'Close',
+  'Check',
   'ContentSave',
   'CodeBraces',
   'CodeBracesBox',

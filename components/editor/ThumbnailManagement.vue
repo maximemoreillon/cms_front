@@ -10,6 +10,13 @@
         :src="article.thumbnail_src" 
         :alt="`${article.title}_thumbnail`"
         @click="open = true">
+
+      <div class="current_thumbnail_edit_badge badge" >
+        <MaterialIconPencil />
+      </div>
+      
+       
+      
     </div>
     
 
@@ -40,6 +47,10 @@
               :class="{selected: image === article.thumbnail_src}"
               @click="set_thumbnail_src(image)">
               <img class="thumbnail_preview" :src="image" alt=""  >
+
+              <div class="badge">
+                <MaterialIconCheck />
+              </div>
             </div>
             
 
@@ -151,20 +162,35 @@ export default {
   cursor: pointer;
 }
 
-.current_thumbnail_wrapper:hover::after {
-  content: '✎';
+.badge {
   position: absolute;
   top: 0.5em;
   right: 0.5em;
-  width: 2em;
-  height: 2em;
+
   background-color: #c00000;
+
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
+
+  padding: 0.2em;
   border-radius: 100%;
+
+  color: white;
 }
+
+.current_thumbnail_wrapper .current_thumbnail_edit_badge {
+  opacity: 0;
+  
+  transition: 0.25s;
+}
+
+.current_thumbnail_wrapper:hover  .current_thumbnail_edit_badge{
+  
+  opacity: 1;
+}
+
+
 
 .thumbnail_preview {
   height: 10em;
@@ -195,18 +221,11 @@ export default {
   display: flex;
 }
 
-.article_image_wrapper.selected::after {
-  content: '✔';
-  position: absolute;
-  top: 0.5em;
-  right: 0.5em;
-  width: 2em;
-  height: 2em;
-  background-color: #c00000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  border-radius: 100%;
+
+.article_image_wrapper .badge {
+  opacity: 0;
+}
+.article_image_wrapper.selected .badge {
+  opacity: 1;
 }
 </style>
