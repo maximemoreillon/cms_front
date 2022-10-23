@@ -48,8 +48,8 @@ export default {
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
-    //baseURL: '/'
-    baseUrl: process.env.NUXT_ENV_CMS_API_URL,
+    baseURL: '/'
+    // baseUrl: process.env.NUXT_ENV_CMS_API_URL,
   },
 
   server: {
@@ -85,6 +85,9 @@ export default {
 
 
   publicRuntimeConfig: {
+    axios: {
+      browserBaseURL: process.env.NUXT_ENV_CMS_API_URL
+    },
     apiUrl: process.env.NUXT_ENV_CMS_API_URL,
     userManagerApiUrl: process.env.NUXT_ENV_USER_MANAGER_API_URL,
     imageManagerApiUrl: process.env.NUXT_ENV_IMAGE_MANAGER_API_URL,
