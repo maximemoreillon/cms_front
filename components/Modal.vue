@@ -6,14 +6,14 @@
   >
     <div class="modal_window_outer">
       <div class="modal_window_inner">
+
         <!-- CLose button -->
-        <span
+        <MaterialIconClose 
           v-if="close_button"
           class="modal_close_button"
-          @click="$emit('close')"
-        >
-          ✖
-        </span>
+          @click="$emit('close')"/>
+
+
 
 
         <!-- The content of the modal goes here -->
@@ -125,7 +125,7 @@ export default {
 /* close button */
 .modal_close_button{
   position: absolute;
-  top: 0.2em;
+  top: 0.4em;
   right: 0.4em;
   font-size: 150%;
   font-weight: bold;

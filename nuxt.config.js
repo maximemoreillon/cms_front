@@ -72,6 +72,7 @@ export default {
       'auth',
       'pinnedTags'
     ],
+
     // Alias for / so that /articles can be used too
     extendRoutes(routes, resolve) {
       routes.push({
@@ -81,6 +82,7 @@ export default {
         component: resolve(__dirname, 'pages/index.vue')
       })
     }
+    
   },
 
 
