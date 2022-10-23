@@ -84,11 +84,11 @@ export default {
     dateUtils
   ],
 
-  async asyncData ( {$axios, params } ){
+  async asyncData({ $axios, params, $config } ){
     // Loading article server-side
     
     try {
-      const url = `articles/${params.id}`
+      const url = `${$config.apiUrl}/articles/${params.id}`
       const article = await $axios.$get(url)
       return { article }
     } catch (error) {
