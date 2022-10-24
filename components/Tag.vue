@@ -61,7 +61,7 @@ export default {
   max-width: 9em;
 
 
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   gap: 0.5em;

@@ -225,7 +225,9 @@ export default {
 .article_image_wrapper .badge {
   opacity: 0;
 }
+
 .article_image_wrapper.selected .badge {
   opacity: 1;
 }
+
 </style>

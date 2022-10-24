@@ -80,6 +80,7 @@ import ArticlePreview from '@/components/article_list/ArticlePreview.vue'
 // import TagManagement from '@/components/TagManagement.vue'
 import Tag from '~/components/Tag.vue'
 
+import userUtils from '@/mixins/userUtils'
 
 export default {
   name: 'Articles',
@@ -95,6 +96,9 @@ export default {
     Tag,
     //Author,
   },
+  mixins: [
+    userUtils
+  ],
   auth: false,
   data() {
     return {
@@ -145,11 +149,7 @@ export default {
     }
   },
   computed: {
-    user_is_admin() {
-      const { user } = this.$auth
-      if (!user) return false
-      return user.isAdmin
-    },
+    
     load_more_possible() {
       return !this.articles_loading
         && !this.articles_all_loaded

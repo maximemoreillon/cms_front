@@ -1,4 +1,3 @@
-// Using these functions because ID have changed multiple times over the course of time
 export default {
     methods: {
         format_neo4j_date({ day, month, year }, separator = '/') {
