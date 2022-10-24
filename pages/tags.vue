@@ -1,41 +1,57 @@
 <template>
   <div class="tag_list">
     <h1>Tags</h1>
+    <client-only>
 
-    <div class="toolbar">
-      <!-- Class should have a better name -->
-      <div class="counter">
-        <MaterialIconTag />
-        <span>{{ tags.length }}</span>
+      <div
+        v-if="loading"
+        class="loader_container" >
+        <Loader />
       </div>
 
-      <div class="spacer" />
+      <!-- <div class="tag_container">
+        <Tag
+          v-for="(tag, index) in filtered_tags"
+          :key="`tag_${index}`"
+          :tag="tag"
+        />
+      </div> -->
 
+      <table v-if="!loading && filtered_tags.length">
+        <tr>
+          <th class="tag_column_header">
+            <div class="counter">
+              <MaterialIconTag />
+              <span>{{ filtered_tags.length }}</span>
+            </div>
+            <div class="tag_search_wrapper">
+              <input v-model="filter" type="search" class="search_bar" placeholder="Search tags">
+              <MaterialIconMagnify />
+            </div>
+            
+          </th>
+          <th>
+            <MaterialIconFileDocumentOutline />
+          </th>
+          <th v-if="user_is_admin">
+            <MaterialIconPencil />
+          </th>
+        </tr>
+        <tr v-for="(tag, index) in filtered_tags"
+          :key="`tag_${index}`">
+          <td>
+            <Tag :key="`tag_${index}`" :tag="tag" />
+          </td>
+          <td>
+            {{tag.article_count}}
+          </td>
+          <td v-if="user_is_admin">
+            <TagMangement v-model="filtered_tags[index]" />
+          </td>
+        </tr>
+      </table>
+    </client-only>
 
-      <!-- search -->
-      <input
-        v-model="filter"
-        type="search"
-        class="search_bar"
-        placeholder="Search tags" >
-
-      <MaterialIconMagnify />
-    </div>
-
-    <div
-      v-if="loading"
-      class="loader_container"
-    >
-      <Loader />
-    </div>
-
-    <div class="tag_container">
-      <Tag
-        v-for="(tag, index) in filtered_tags"
-        :key="`tag_${index}`"
-        :tag="tag"
-      />
-    </div>
   </div>
 </template>
 
@@ -44,7 +60,9 @@
 import Loader from '@/components/Loader'
 
 import Tag from '@/components/Tag.vue'
+import TagMangement from '@/components/TagManagement.vue' 
 
+import userUtils from '@/mixins/userUtils'
 
 export default {
   name: 'Tags',
@@ -54,6 +72,7 @@ export default {
   components: {
     Tag,
     Loader,
+    TagMangement
   },
   auth: false,
   data () {
@@ -65,10 +84,17 @@ export default {
 
     }
   },
+  mixins: [
+    userUtils
+  ],
   computed: {
     filtered_tags(){
-      if(this.filter === '') return this.tags
-      return this.tags.filter(t => t.name.toLowerCase().includes(this.filter.toLowerCase()))
+      const sorted_tags = this.tags.slice().sort((a, b) => b.article_count - a.article_count)
+
+
+      if (this.filter === '') return sorted_tags
+      return sorted_tags
+        .filter(t => t.name.toLowerCase().includes(this.filter.toLowerCase()))
     }
 
   },
@@ -108,13 +134,32 @@ export default {
 
 
 <style scoped>
-
-.tag_container{
-  margin-top: 1em;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5em;
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
 }
 
+tr:first-child {
+  border-bottom: 1px solid #dddddd;
+}
 
+th {
+  text-align: left;
+}
+
+td, th{
+  padding: 0.25em;
+}
+
+.tag_column_header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+.tag_search_wrapper {
+  display: flex;
+  gap: 0.5em;
+}
 </style>
