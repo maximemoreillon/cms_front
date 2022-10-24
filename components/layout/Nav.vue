@@ -2,13 +2,13 @@
   <nav>
     <client-only>
       <router-link v-if="$auth.user" :to="{ name: 'articles-id-edit', params: {id: 'new'}}">
-        <MaterialIconPlus />
+        <MaterialIconFileDocumentPlusOutline />
         <span>New article</span>
       </router-link>
     </client-only>
 
     <router-link :to="{ name: 'index'}">
-      <MaterialIconNewspaperVariantMultipleOutline />
+      <MaterialIconFileDocumentMultipleOutline />
       <span>Articles</span>
     </router-link>
 

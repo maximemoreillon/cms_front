@@ -15,6 +15,7 @@ const icons = [
   'Eye',
   'Earth',
   'FileDocumentOutline',
+  'FileDocumentPlusOutline',
   'FileDocumentMultipleOutline',
   'FormatListNumbered',
   'FormatListBulleted',

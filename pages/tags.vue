@@ -22,7 +22,6 @@
           <th class="tag_column_header">
             <div class="counter">
               <MaterialIconTag />
-              <span>{{ filtered_tags.length }}</span>
             </div>
             <div class="tag_search_wrapper">
               <input v-model="filter" type="search" class="search_bar" placeholder="Search tags">
@@ -31,7 +30,7 @@
             
           </th>
           <th>
-            <MaterialIconFileDocumentOutline />
+            <MaterialIconFileDocumentMultipleOutline />
           </th>
           <th v-if="user_is_admin">
             <MaterialIconPencil />
