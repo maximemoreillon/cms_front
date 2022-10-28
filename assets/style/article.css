@@ -18,8 +18,8 @@ article h1 {
 
 .article_content img {
     max-width: 80%;
-    filter: drop-shadow(2.5px 2.5px 5px #44444444);
     max-height: 50vh;
+    filter: drop-shadow(2.5px 2.5px 5px #44444444);
     object-fit: contain;
     
 }

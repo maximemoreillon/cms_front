@@ -68,6 +68,7 @@ import ArticleMetadata from '@/components/ArticleMetadata.vue'
 import Modal from '@/components/Modal.vue'
 
 import dateUtils from '@/mixins/dateUtils'
+import seoUtils from '@/mixins/seoUtils'
 
 
 export default {
@@ -81,7 +82,8 @@ export default {
     ArticleMetadata,
   },
   mixins: [
-    dateUtils
+    dateUtils,
+    seoUtils
   ],
 
   async asyncData({ $axios, params, $config } ){
@@ -116,33 +118,6 @@ export default {
 
   
 
-  head(){
-    return {
-      title: this.article?.title,
-
-      meta: [
-        { hid: 'description', name: 'description', content: this.article?.summary },
-        
-        // Twitter
-        { hid: 'twitter:card', name: 'twitter:card', content: 'summary' },
-        { hid: 'twitter:site', name: 'twitter:site', content: '@m_moreillon' },
-        { hid: 'twitter:title', name: 'twitter:title', content: this.article?.title },
-        { hid: 'twitter:description', name: 'twitter:description', content: this.article?.summary },
-        { hid: 'twitter:image', name: 'twitter:image', content: 'https://articles.maximemoreillon.com/logo.png' },
-        { hid: 'twitter:image:alt', name: 'twitter:image:alt', content: 'Maxime Moreillon logo' },
-
-        // OpenGraph
-        { hid: 'og:title', name: 'og:title', content: this.article?.title },
-        { hid: 'og:description', name: 'og:description', content: this.article?.summary },
-        { hid: 'og:image', name: 'og:image', content: 'https://articles.maximemoreillon.com/logo.png' },
-        { hid: 'og:url', name: 'og:url', content: 'https://articles.maximemoreillon.com' }, // might need a review
-        { hid: 'og:type', name: 'og:type', content: 'article' },
-        { hid: 'og:locale', name: 'og:locale', content: 'en_US' },
-
-      ]
-
-    }
-  },
   computed: {
     article_id(){
       return this.$route.params.id

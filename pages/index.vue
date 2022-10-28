@@ -81,6 +81,7 @@ import ArticlePreview from '@/components/article_list/ArticlePreview.vue'
 import Tag from '~/components/Tag.vue'
 
 import userUtils from '@/mixins/userUtils'
+import seoUtils from '@/mixins/seoUtils'
 
 export default {
   name: 'Articles',
@@ -97,7 +98,8 @@ export default {
     //Author,
   },
   mixins: [
-    userUtils
+    userUtils,
+    seoUtils
   ],
   auth: false,
   data() {
@@ -121,33 +123,7 @@ export default {
 
     }
   },
-  head() {
-    return {
-      title: 'Articles | Maxime Moreillon',
-
-      meta: [
-        { hid: 'description', name: 'description', content: 'An article management system' },
-
-        // Twitter
-        { hid: 'twitter:card', name: 'twitter:card', content: 'summary' },
-        { hid: 'twitter:site', name: 'twitter:site', content: '@m_moreillon' },
-        { hid: 'twitter:title', name: 'twitter:title', content: 'Articles | Maxime Moreillon' },
-        { hid: 'twitter:description', name: 'twitter:description', content: 'An article management system' },
-        { hid: 'twitter:image', name: 'twitter:image', content: 'https://articles.maximemoreillon.com/logo.png' },
-        { hid: 'twitter:image:alt', name: 'twitter:image:alt', content: 'Maxime Moreillon logo' },
-
-        // OpenGraph
-        { hid: 'og:title', name: 'og:title', content: 'summary' },
-        { hid: 'og:description', name: 'og:description', content: 'An article management system' },
-        { hid: 'og:image', name: 'og:image', content: 'https://articles.maximemoreillon.com/logo.png' },
-        { hid: 'og:url', name: 'og:url', content: 'https://articles.maximemoreillon.com' },
-        { hid: 'og:type', name: 'og:type', content: 'article' },
-        { hid: 'og:locale', name: 'og:locale', content: 'en_US' },
-
-      ]
-
-    }
-  },
+  
   computed: {
     
     load_more_possible() {

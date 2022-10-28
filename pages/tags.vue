@@ -62,6 +62,7 @@ import Tag from '@/components/Tag.vue'
 import TagMangement from '@/components/TagManagement.vue' 
 
 import userUtils from '@/mixins/userUtils'
+import seoUtils from '@/mixins/seoUtils'
 
 export default {
   name: 'Tags',
@@ -84,7 +85,8 @@ export default {
     }
   },
   mixins: [
-    userUtils
+    userUtils,
+    seoUtils
   ],
   computed: {
     filtered_tags(){

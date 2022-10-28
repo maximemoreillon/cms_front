@@ -28,12 +28,15 @@
 
 import {version} from '../package.json'
 
-
+import seoUtils from '@/mixins/seoUtils'
 
 export default {
   components: {
 
   },
+  mixins: [
+    seoUtils
+  ],
   auth: false,
 
   data () {
