@@ -2,7 +2,14 @@
     <h2>Articles</h2>
     <p>Here will be a list of articles</p>
 
-    <ArticlePreviewVue />
+    <div class="articles_container">
+        <ArticlePreviewVue 
+            v-for="article in articles" 
+            :key="article._id" 
+            :article="article"/>
+    </div>
+
+
 
 </template>
 
@@ -10,7 +17,17 @@
 
 import ArticlePreviewVue from '~~/components/articles/ArticlePreview.vue';
 
-// const url = 'https://api.articles.maximemoreillon.com/articles'
-// const response = await useFetch(url)
-// console.log(response)
+const url = 'https://api.articles.maximemoreillon.com/articles'
+const { data, error} = await useFetch(url)
+
+const articles = ref([])
+
+if (data.value) articles.value = data.value.articles
 </script>
+
+<style>
+.articles_container {
+    display: flex;
+    flex-direction: column;
+}
+</style>
