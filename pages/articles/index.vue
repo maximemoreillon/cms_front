@@ -1,6 +1,5 @@
 <template>
     <h2>Articles</h2>
-    <p>Here will be a list of articles</p>
 
     <div class="articles_container">
         <ArticlePreviewVue 
@@ -21,8 +20,8 @@ const url = 'https://api.articles.maximemoreillon.com/articles'
 const { data, error} = await useFetch(url)
 
 const articles = ref([])
-
 if (data.value) articles.value = data.value.articles
+
 </script>
 
 <style>

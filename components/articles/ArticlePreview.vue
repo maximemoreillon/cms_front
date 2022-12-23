@@ -1,6 +1,7 @@
 <template>
-    <NuxtLink :to="{ name: 'articles-_id', params: { _id: article._id }}">
-        {{ article.title }}
+    <NuxtLink :to="{ name: 'articles-_id', params: { _id: article._id }}" class="articlePreview">
+        <h3>{{ article.title }}</h3>
+        <p v-html="article.summary" />
     </NuxtLink>
 </template>
 
@@ -14,3 +15,9 @@ defineProps({
 
 
 </script>
+
+<style>
+.articlePreview {
+    display: grid;
+}
+</style>
