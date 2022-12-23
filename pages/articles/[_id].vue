@@ -1,5 +1,6 @@
 <template>
     <p v-if="error">{{ error }}</p>
+    <!-- TODO: Typing  -->
     <article v-else v-html="article.content" />
 </template>
 
