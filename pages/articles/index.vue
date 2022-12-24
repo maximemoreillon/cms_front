@@ -19,9 +19,11 @@
 import ArticlePreviewVue from '~~/components/articles/ArticlePreview.vue';
 import ArticleSearch from '~~/components/articles/ArticleSearch.vue';
 
+// TODO: environment variables
 const url = 'https://api.articles.maximemoreillon.com/articles'
-const { data, error} = await useFetch(url)
 
+// TODO: types
+const {data, error} = await useFetch<any>(url)
 const articles = ref([])
 if (data.value) articles.value = data.value.articles
 
