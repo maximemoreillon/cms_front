@@ -1,15 +1,19 @@
 <template>
-    <editor-content :editor="editor" />
+    <EditorBubbleMenu :editor="editor" v-if="editor"/>
+    <EditorFloatingMenu :editor="editor" v-if="editor"/>
+    <EditorContent :editor="editor" />
 </template>
 
 <script setup>
+
+import EditorBubbleMenu from '~~/components/articles/article/EditorBubbleMenu.vue';
+import EditorFloatingMenu from '~~/components/articles/article/EditorFloatingMenu.vue';
+
 import { watch, computed } from 'vue';
 
-// TipTap basics
+// TipTap and its extensions
 import { useEditor, EditorContent } from '@tiptap/vue-3'
-// import StarterKit from '@tiptap/starter-kit'
 
-// TipTap extensions
 import Document from '@tiptap/extension-document'
 import History from '@tiptap/extension-history'
 import Paragraph from '@tiptap/extension-paragraph'
@@ -66,7 +70,7 @@ const editor = useEditor({
     editorProps: {
         attributes: {
             // Can put tailwind styles in here
-            class: 'editorContent',
+            class: 'editor_content',
         },
     },
     onUpdate: () => {
@@ -77,8 +81,22 @@ const editor = useEditor({
 </script>
 
 <style>
-.editorContent {
+.editor_content {
     /* Take some space from the outline when the editor is focused */
     padding-inline: 0.5em;
 }
+
+.editor_menu {
+    /* inline-flex needed otherwise overflow */
+    display: inline-flex;
+    align-items: center;
+    background-color: white;
+    border: 1px solid #dddddd;
+}
+
+.editor_menu > * {
+    /* Using pading and not gap to facilitate clicking items */
+    padding: 0.5em;
+}
 </style>
+

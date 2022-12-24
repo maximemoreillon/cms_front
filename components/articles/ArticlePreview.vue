@@ -15,6 +15,7 @@
 import { ref } from 'vue';
 import { formatNeo4jDate } from '~~/utils'
 
+// TODO: Typing
 defineProps({
     article: Object,
 })

@@ -7,7 +7,7 @@ export default defineNuxtConfig({
     },
     modules: [
         'nuxt-icon',
-        // '@sidebase/nuxt-auth',
+        '@sidebase/nuxt-auth',
 
     ]
 })

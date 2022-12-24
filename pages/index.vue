@@ -27,7 +27,7 @@ import { computed, watch } from 'vue';
 
 const runtimeConfig = useRuntimeConfig()
 const route = useRoute()
-const query = computed(() => route.query)
+const query = computed<any>(() => route.query)
 
 watch(query, () => { refresh() })
 
