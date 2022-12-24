@@ -13,13 +13,14 @@
 
 <script lang="ts" setup>
 
-import { ref } from 'vue';
-import { useRoute, useRouter} from 'vue-router';
+import { ref, onMounted} from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute()
 const router = useRouter()
 
-const searchString = ref('')
+// TODO: find right typing
+const searchString = ref<any>('')
 
 const updateSearchQuery = () => {
     const query = { ...route.query, search: searchString.value }
@@ -27,5 +28,7 @@ const updateSearchQuery = () => {
     if (!searchString.value) delete query.search
     router.push({ query })
 }
+
+onMounted(() => { searchString.value = route.query.search })
 
 </script>

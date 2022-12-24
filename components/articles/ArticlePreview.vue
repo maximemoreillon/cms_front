@@ -2,6 +2,7 @@
     
     <NuxtLink :to="{ name: 'articles-_id', params: { _id: article._id }}" class="articlePreview" v-if="article._id">
         <h3>{{ article.title }}</h3>
+        <div>{{ formatNeo4jDate(article.authorship.creation_date) }}</div>
         <!-- PROBLEM: if summary contains links, causes hydration problems -->
         <!-- <p v-html="article.summary" /> -->
     </NuxtLink>
@@ -10,10 +11,13 @@
 <script lang="ts" setup>
 
 import { ref } from 'vue';
+import { formatNeo4jDate } from '~~/utils'
 
 defineProps({
     article: Object,
 })
+
+
 
 
 </script>

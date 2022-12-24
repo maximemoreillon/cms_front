@@ -3,6 +3,8 @@
 
     <ArticleSearch />
 
+    <ArticleSorting />
+
     <p><Icon name="mdi:file-document-outline" />{{ data.article_count }}</p>
 
     <div class="articles_container">
@@ -20,6 +22,7 @@
 
 import ArticlePreviewVue from '~~/components/articles/ArticlePreview.vue';
 import ArticleSearch from '~~/components/articles/ArticleSearch.vue';
+import ArticleSorting from '~~/components/articles/ArticleSorting.vue';
 
 import { useRoute } from 'vue-router';
 import { computed, watch } from 'vue';
