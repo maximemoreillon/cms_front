@@ -1,6 +1,7 @@
 <template>
     <div class="pagination">
         <!-- TODO: Do not show all pages -->
+        <!-- IDEA: Could just use previous and next buttons -->
         <NuxtLink 
             :class="{ current: currentPage === page }"
             v-for="page in pageCount" 

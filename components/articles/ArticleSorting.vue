@@ -1,28 +1,19 @@
 <template>
-    <button
+    <NuxtLink
         v-for="{value, icon} in sortingOptions"
         :key="value"
         :class="{ active: route.query.sort === value }"
-        @click="setQuery('sort', value)">
+        :to="{ query: {...route.query, sort: value}}">
         <Icon :name="icon" />
-    </button>
+    </NuxtLink>
 </template>
 
 <script lang="ts" setup>
 
 import { ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRoute } from 'vue-router';
 
 const route = useRoute()
-const router = useRouter()
-
-const setQuery = (key: string, value: string) => {
-    // Do nothing if already the right query
-    if (route.query[key] === value) return
-    // Unpack query and add new param
-    const query = { ...route.query, [key]: value }
-    router.push({ query })
-}
 
 const sortingOptions = ref([
     { icon: 'mdi:calendar', value: 'date' },

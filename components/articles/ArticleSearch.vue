@@ -1,5 +1,5 @@
 <template>
-    <form class="search_wrapper" @submit.prevent="updateSearchQuery()">
+    <form class="search_wrapper" @submit.prevent="setQuery()">
         <input 
             v-model="searchString" 
             type="search" 
@@ -22,8 +22,11 @@ const router = useRouter()
 // TODO: find right typing
 const searchString = ref<any>('')
 
-const updateSearchQuery = () => {
-    const query = { ...route.query, search: searchString.value }
+const setQuery = () => {
+    const query = { 
+        // ...route.query, 
+        search: searchString.value
+    }
     if (route.query.search === query.search) return
     if (!searchString.value) delete query.search
     router.push({ query })

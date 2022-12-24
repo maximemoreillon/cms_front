@@ -12,11 +12,14 @@
 
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
+
 const route = useRoute()
+const runtimeConfig = useRuntimeConfig()
 
 const articleId = computed(() => route.params._id)
-// Typing is going to be a pain
-const url = `https://api.articles.maximemoreillon.com/articles/${articleId.value}`
-const { data: article, error } = await useFetch(url)
+
+const url = `articles/${articleId.value}`
+const fetchOpts = { baseURL: runtimeConfig.public.apiBase }
+const { data: article, error } = await useFetch(url, fetchOpts)
 
 </script>
