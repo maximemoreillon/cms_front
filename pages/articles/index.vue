@@ -3,9 +3,11 @@
 
     <ArticleSearch />
 
+    <p><Icon name="mdi:file-document-outline" />{{ data.article_count }}</p>
+
     <div class="articles_container">
         <ArticlePreviewVue 
-            v-for="article in articles" 
+            v-for="article in data.articles" 
             :key="article._id" 
             :article="article"/>
     </div>
@@ -19,13 +21,22 @@
 import ArticlePreviewVue from '~~/components/articles/ArticlePreview.vue';
 import ArticleSearch from '~~/components/articles/ArticleSearch.vue';
 
-// TODO: environment variables
-const url = 'https://api.articles.maximemoreillon.com/articles'
+import { useRoute } from 'vue-router';
+import { computed, watch } from 'vue';
+
+const runtimeConfig = useRuntimeConfig()
+const route = useRoute()
+const query = computed(() => route.query)
+
+watch(query, () => { refresh() })
 
 // TODO: types
-const {data, error} = await useFetch<any>(url)
-const articles = ref([])
-if (data.value) articles.value = data.value.articles
+const fetchFnc = () => {
+    const search = new URLSearchParams(query.value).toString()
+    return `/articles?${search}`
+}
+const fetchOpts = { baseURL: runtimeConfig.public.apiBase }
+const { data , error, refresh } = await useFetch<any>(fetchFnc, fetchOpts)
 
 </script>
 
