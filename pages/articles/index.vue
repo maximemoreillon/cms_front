@@ -14,6 +14,8 @@
             :article="article"/>
     </div>
 
+    <ArticlesPagination :articleCount="data.article_count"/>
+
 
 
 </template>
@@ -23,7 +25,7 @@
 import ArticlePreviewVue from '~~/components/articles/ArticlePreview.vue';
 import ArticleSearch from '~~/components/articles/ArticleSearch.vue';
 import ArticleSorting from '~~/components/articles/ArticleSorting.vue';
-
+import ArticlesPagination from '~~/components/articles/ArticlesPagination.vue';
 import { useRoute } from 'vue-router';
 import { computed, watch } from 'vue';
 
