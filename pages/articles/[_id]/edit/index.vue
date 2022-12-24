@@ -1,8 +1,10 @@
 <template>
     <h1>Article editing</h1>
-    <p>Editor comes here</p>
+    <ClientOnly>
+        <ArticleEditor />
+    </ClientOnly>
 </template>
 
-<script lang="ts">
-
+<script lang="ts" setup>
+import ArticleEditor from '~~/components/articles/article/ArticleEditor.vue';
 </script>
