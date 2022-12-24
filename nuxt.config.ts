@@ -5,5 +5,9 @@ export default defineNuxtConfig({
             apiBase: 'https://api.articles.maximemoreillon.com'
         }
     },
-    modules: ['nuxt-icon']
+    modules: [
+        'nuxt-icon',
+        // '@sidebase/nuxt-auth',
+
+    ]
 })

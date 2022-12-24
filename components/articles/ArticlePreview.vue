@@ -1,5 +1,5 @@
 <template>
-    <NuxtLink :to="{ name: 'articles-_id', params: { _id: article._id }}" class="articlePreview" v-if="article._id">
+    <NuxtLink :to="{ name: 'articles-id', params: { id: article._id }}" class="articlePreview">
         <h3>{{ article.title }}</h3>
         <div>{{ formatNeo4jDate(article.authorship.creation_date) }}</div>
         <div>{{ formatNeo4jDate(article.authorship.edition_date) }}</div>

@@ -4,7 +4,7 @@
     </header>
     
     <nav>
-        <NuxtLink :to="{name: 'articles'}">Articles</NuxtLink>
+        <NuxtLink to="/">Articles</NuxtLink>
     </nav>
     
     <main>
