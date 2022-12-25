@@ -22,8 +22,6 @@
 <script lang="ts" setup>
 import type Article from '~~/types/Article'
 
-import { formatNeo4jDate } from '~~/utils'
-
 
 defineProps<{
     article: Article
