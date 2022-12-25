@@ -1,7 +1,7 @@
 <template>
     <h2>Login</h2>
     
-    <form @submit.prevent="signIn('credentials', credentials)">
+    <form @submit.prevent="login()">
         <input type="text" v-model="credentials.username">
         <input type="password" v-model="credentials.password">
         <button type="submit">login</button>
@@ -10,13 +10,16 @@
 
 <script lang="ts" setup>
 
-definePageMeta({ auth: false })
-const { signIn } = useSession()
+
 
 const credentials = reactive({
     username: '',
     password: ''
 })
+
+const login = () => {
+    alert('Not implemented')
+}
 
 
 </script>

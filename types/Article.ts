@@ -8,6 +8,7 @@ type Article = {
     title: string,
     content: string,
     summary: string,
+    thumbnail_src: string,
 
     tags: Tag[],
 

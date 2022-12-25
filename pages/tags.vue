@@ -8,11 +8,12 @@
 </template>
 
 <script lang="ts" setup>
+import type Tag from '~~/types/Tag'
 
 const runtimeConfig = useRuntimeConfig()
 
 const url = `/tags`
 const fetchOpts = { baseURL: runtimeConfig.public.apiBase }
-const { data: tags, error } = await useFetch(url, fetchOpts)
+const { data: tags, error } = await useFetch<Tag[]>(url, fetchOpts)
 
 </script>

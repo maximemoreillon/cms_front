@@ -5,21 +5,33 @@
 
     <ArticlesSorting />
 
-    <p>
-        <Icon name="mdi:file-document-outline" />{{ data.article_count }}
-    </p>
+    <template v-if="data">
+        <p>
+            <Icon name="mdi:file-document-outline" />{{ data.article_count }}
+        </p>
+        
+        <div class="articles_container">
+            <ArticlePreview v-for="article in data.articles" :key="article._id" :article="article" />
+        </div>
+        
+        <ArticlesPagination :articleCount="data.article_count" />
+    </template>
 
-    <div class="articles_container">
-        <ArticlePreview v-for="article in data.articles" :key="article._id" :article="article" />
-    </div>
-
-    <ArticlesPagination :articleCount="data.article_count" />
+    
 </template>
 
 <script lang="ts" setup>
+import type Article from '~~/types/Article'
+
+type FetchBody = {
+    article_count: number,
+    articles: Article[]
+}
 
 const runtimeConfig = useRuntimeConfig()
 const route = useRoute()
+
+// TODO: find type
 const query = computed<any>(() => route.query)
 
 watch(query, () => { refresh() })
@@ -30,7 +42,7 @@ const fetchFnc = () => {
     return `/articles?${search}`
 }
 const fetchOpts = { baseURL: runtimeConfig.public.apiBase }
-const { data, error, refresh } = await useFetch<any>(fetchFnc, fetchOpts)
+const { data, error, refresh } = await useFetch<FetchBody>(fetchFnc, fetchOpts)
 
 </script>
 

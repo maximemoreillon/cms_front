@@ -1,6 +1,6 @@
 <template>
-    <div>
-
+    <!-- v-if not really nice -->
+    <div v-if="article">
         <div>
             <Icon name="mdi:calendar" />
             <span>{{ formatNeo4jDate(article.authorship.creation_date) }}</span>
@@ -15,7 +15,6 @@
             <Icon name="mdi:tag" />
             <Tag v-for="tag in article.tags" :key="tag._id" :tag="tag" />
         </div>
-
     </div>
 </template>
 
@@ -24,7 +23,7 @@ import type Article from '~~/types/Article'
 
 
 defineProps<{
-    article: Article
+    article: Article | null
 }>()
 
 </script>
