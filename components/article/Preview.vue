@@ -34,8 +34,7 @@
 <script lang="ts" setup>
 
 import type Article from '~~/types/Article'
-import Tag from '~~/components/Tag.vue';
-import Author from '~~/components/Author.vue';
+
 import { formatNeo4jDate } from '~~/utils'
 
 defineProps<{

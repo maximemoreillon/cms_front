@@ -9,7 +9,6 @@
 
 <script lang="ts" setup>
 
-import Tag from '~~/components/Tag.vue';
 const runtimeConfig = useRuntimeConfig()
 
 const url = `/tags`
