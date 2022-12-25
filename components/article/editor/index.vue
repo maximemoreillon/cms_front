@@ -6,10 +6,6 @@
 
 <script setup>
 
-
-
-import { watch, computed } from 'vue';
-
 // TipTap and its extensions
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 

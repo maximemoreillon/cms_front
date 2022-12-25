@@ -24,9 +24,6 @@
 
 <script lang="ts" setup>
 
-import { computed } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-
 const route = useRoute()
 const props = defineProps({
     articleCount: {type: Number, default: 0},

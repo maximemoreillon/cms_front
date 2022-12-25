@@ -10,8 +10,6 @@
 
 <script lang="ts" setup>
 
-import { reactive } from 'vue';
-
 definePageMeta({ auth: false })
 const { signIn } = useSession()
 

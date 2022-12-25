@@ -11,10 +11,6 @@
 
 <script lang="ts" setup>
 
-import { ref, onMounted, onBeforeMount } from 'vue';
-import { useRoute } from 'vue-router';
-
-
 const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
 const saving = ref(false)

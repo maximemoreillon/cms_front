@@ -18,9 +18,6 @@
 
 <script lang="ts" setup>
 
-import { useRoute } from 'vue-router';
-import { computed, watch } from 'vue';
-
 const runtimeConfig = useRuntimeConfig()
 const route = useRoute()
 const query = computed<any>(() => route.query)
