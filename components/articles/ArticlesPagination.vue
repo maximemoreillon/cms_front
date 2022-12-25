@@ -2,13 +2,23 @@
     <div class="pagination">
         <!-- TODO: Do not show all pages -->
         <!-- IDEA: Could just use previous and next buttons -->
-        <NuxtLink 
+        <NuxtLink :to="{ query: pageQuery(currentPage - 1)}">
+            <Icon name="mdi:arrow-left"/>
+        </NuxtLink>
+
+        <span>{{ currentPage }} / {{ pageCount }}</span>
+
+        <NuxtLink :to="{ query: pageQuery(currentPage + 1)}">
+            <Icon name="mdi:arrow-right" />
+        </NuxtLink>
+
+        <!-- <NuxtLink 
             :class="{ current: currentPage === page }"
             v-for="page in pageCount" 
             :key="page" 
             :to="{ query: pageQuery(page)}">
             {{ page }}
-        </NuxtLink>
+        </NuxtLink> -->
     </div>
 </template>
 

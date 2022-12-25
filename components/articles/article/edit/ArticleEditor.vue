@@ -6,8 +6,8 @@
 
 <script setup>
 
-import EditorBubbleMenu from '~~/components/articles/article/EditorBubbleMenu.vue';
-import EditorFloatingMenu from '~~/components/articles/article/EditorFloatingMenu.vue';
+import EditorBubbleMenu from '~~/components/articles/article/edit/EditorBubbleMenu.vue';
+import EditorFloatingMenu from '~~/components/articles/article/edit/EditorFloatingMenu.vue';
 
 import { watch, computed } from 'vue';
 

@@ -18,9 +18,10 @@ const route = useRoute()
 const sortingOptions = ref([
     { icon: 'mdi:calendar', value: 'date' },
     { icon: 'mdi:order-alphabetical-ascending', value: 'title'},
+    // Todo: only if logged-in
+    { icon: 'mdi:eye', value: 'views' },
 ])
 
-// TODO: Add sorting by views if user is logged in
 
 
 </script>

@@ -1,6 +1,6 @@
 <template>
     <h2>Articles</h2>
-    <p>Wrong component</p>
+    <p>See /</p>
 </template>
 
 <script lang="ts" setup>
