@@ -1,16 +1,16 @@
 <template>
     <h2>Articles</h2>
 
-    <ArticleSearch />
+    <ArticlesSearch />
 
-    <ArticleSorting />
+    <ArticlesSorting />
 
     <p>
         <Icon name="mdi:file-document-outline" />{{ data.article_count }}
     </p>
 
     <div class="articles_container">
-        <ArticlePreviewVue v-for="article in data.articles" :key="article._id" :article="article" />
+        <ArticlePreview v-for="article in data.articles" :key="article._id" :article="article" />
     </div>
 
     <ArticlesPagination :articleCount="data.article_count" />
@@ -18,10 +18,6 @@
 
 <script lang="ts" setup>
 
-import ArticlePreviewVue from '~~/components/articles/ArticlePreview.vue';
-import ArticleSearch from '~~/components/articles/ArticleSearch.vue';
-import ArticleSorting from '~~/components/articles/ArticleSorting.vue';
-import ArticlesPagination from '~~/components/articles/ArticlesPagination.vue';
 import { useRoute } from 'vue-router';
 import { computed, watch } from 'vue';
 

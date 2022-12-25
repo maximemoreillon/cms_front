@@ -15,7 +15,6 @@
 </template>
 
 <script lang="ts" setup>
-import ArticleMetadata from '~~/components/articles/article/ArticleMetadata.vue';
 
 import { useRoute } from 'vue-router';
 

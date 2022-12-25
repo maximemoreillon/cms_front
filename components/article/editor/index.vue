@@ -1,13 +1,12 @@
 <template>
-    <EditorBubbleMenu :editor="editor" v-if="editor"/>
-    <EditorFloatingMenu :editor="editor" v-if="editor"/>
+    <ArticleEditorBubbleMenu :editor="editor" v-if="editor"/>
+    <ArticleEditorFloatingMenu :editor="editor" v-if="editor"/>
     <EditorContent :editor="editor" />
 </template>
 
 <script setup>
 
-import EditorBubbleMenu from '~~/components/articles/article/edit/EditorBubbleMenu.vue';
-import EditorFloatingMenu from '~~/components/articles/article/edit/EditorFloatingMenu.vue';
+
 
 import { watch, computed } from 'vue';
 

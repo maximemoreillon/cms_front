@@ -11,25 +11,52 @@
 
 <script lang="ts" setup>
 
-import { ref } from 'vue';
+import { ref, onMounted, onBeforeMount } from 'vue';
 import { useRoute } from 'vue-router';
 
-import ArticleEditor from '~~/components/articles/article/edit/ArticleEditor.vue';
 
 const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
-
-const articleId = computed(() => route.params.id)
+const saving = ref(false)
+const url = `articles/${route.params.id}`
 
 // TODO: Typing
-const url = `articles/${articleId.value}`
 const fetchOpts = { baseURL: runtimeConfig.public.apiBase }
 const { data: article, error } = await useFetch(url, fetchOpts)
 
 const saveArticle = async () => {
-    alert('Not implemented')
+
+    const options = {
+        method: 'PATCH',
+        body: article.value,
+        baseURL: runtimeConfig.public.apiBase
+    }
+
+    saving.value = true
+
+    try {
+        await $fetch(url, options);
+    } catch (error) {
+        console.error(error)
+    } finally {
+        saving.value = false
+    }
+
 }
 
-// TODO: Save on ctrl-s
+const keydownHandler = (e) => {
+    if (e.key === 's' && e.ctrlKey) {
+        e.preventDefault()
+        saveArticle()
+    }
+}
+
+onMounted(() => {
+    document.addEventListener("keydown", keydownHandler)
+})
+
+onBeforeMount(() => {
+    document.removeEventListener("keydown", keydownHandler)
+})
 
 </script>
