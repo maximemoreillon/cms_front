@@ -1,16 +1,24 @@
 <template>
     <h2>Login</h2>
     
-    <form @submit.prevent="login()">
+    <form @submit.prevent="login()" v-if="!cookie">
         <input type="text" v-model="credentials.username">
         <input type="password" v-model="credentials.password">
-        <button type="submit">login</button>
+        <button type="submit">
+            <Icon name="mdi:login"/>
+            <span>Login</span>
+        </button>
     </form>
+
+    <button v-else @click="logout()">
+        <Icon name="mdi:logout" />
+        <span>Logout</span>
+    </button>
+    
 </template>
 
 <script lang="ts" setup>
 
-const runtimeConfig = useRuntimeConfig()
 const cookie = useCookie('jwt')
 
 const loggingIn = ref(false)
@@ -37,6 +45,10 @@ const login = async () => {
     } finally {
         loggingIn.value = false
     }
+}
+
+const logout = () => {
+    cookie.value = null
 }
 
 

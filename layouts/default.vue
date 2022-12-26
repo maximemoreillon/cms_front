@@ -4,7 +4,7 @@
             Maxime Moreillon
         </h1>
 
-        <span>{{user.display_name}}</span>
+        <span>{{user?.display_name}}</span>
     </header>
     
     <nav>
