@@ -9,6 +9,7 @@ type Article = {
     content: string,
     summary: string,
     thumbnail_src: string,
+    views: number,
 
     tags: Tag[],
 

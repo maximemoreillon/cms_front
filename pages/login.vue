@@ -1,6 +1,7 @@
 <template>
     <h2>Login</h2>
-    
+
+    <!-- TODO: Checking for user would be more appropriate -->
     <form @submit.prevent="login()" v-if="!cookie">
 
         <Icon name="mdi:account" />
@@ -8,7 +9,7 @@
 
         <Icon name="mdi:key" />
         <input type="password" v-model="credentials.password">
-        
+
         <button type="submit">
             <Icon name="mdi:login"/>
             <span>Login</span>

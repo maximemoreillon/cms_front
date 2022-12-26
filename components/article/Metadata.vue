@@ -13,7 +13,7 @@
 
         <div class="tags_container">
             <Icon name="mdi:tag" />
-            <Tag v-for="tag in article.tags" :key="tag._id" :tag="tag" />
+            <Tag v-for="tag in article.tags" :key="tag._id" :tag="tag" link/>
         </div>
     </div>
 </template>

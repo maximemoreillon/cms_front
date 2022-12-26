@@ -1,11 +1,15 @@
 <template>
     <template v-if="article">
+        <NuxtLink :to="`/articles/${route.params.id}`">
+            <Icon name="mdi:arrow-left"></Icon>
+        </NuxtLink>
         <button @click="saveArticle()">
             <Icon name="mdi:content-save" />
         </button>
         <button>
             <Icon name="mdi:delete" />
         </button>
+
         <ArticleEditor v-model="article.content"/>
     </template>
 </template>

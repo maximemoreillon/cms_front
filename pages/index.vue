@@ -55,10 +55,6 @@ const { data, error, refresh } = await useFetch<FetchBody>(fetchFnc, fetchOpts)
 </script>
 
 <style>
-.articles_container {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-}
+
 
 </style>

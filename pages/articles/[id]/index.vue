@@ -2,16 +2,14 @@
     <template v-if="article">
         <h2>{{ article.title }}</h2>
         
-        <!-- TODO: metadata -->
         <ArticleMetadata :article="article" />
         
         <!-- PROBLEM: Error when navigating to /: Missing required param "id"-->
         <!-- <NuxtLink :to="{ name: 'articles-id-edit', params: { id: route.params.id }}"> -->
-        <NuxtLink :to="`/articles/${route.params.id}/edit`">
+        <NuxtLink :to="`/articles/${route.params.id}/edit`" v-if="userIsAuthor">
             <Icon name="mdi:pencil" />
         </NuxtLink>
         
-        <!-- TODO: Typing  -->
         <article v-html="article?.content" />
     </template>
 </template>
@@ -26,6 +24,9 @@ definePageMeta({
 
 const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
+const user = userUser()
+
+const userIsAuthor = computed(() => article.value?.author._id === user.value?._id)
 
 const url = `/articles/${route.params.id}`
 const fetchOpts = { 

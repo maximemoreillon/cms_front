@@ -8,15 +8,22 @@
             <span>{{ formatNeo4jDate(article.authorship.creation_date) }}</span>
         </div>
 
-        <div>
+        
+        <div v-if="userIsAuthor">
             <Icon name="mdi:calendar-edit" />
             <span>{{ formatNeo4jDate(article.authorship.edition_date) }}</span>
         </div>
+        
 
         <!-- PROBLEM: Author can be a link -->
         <div>
             <Icon name="mdi:account"/>
             <Author :author="article.author" />
+        </div>
+
+        <div v-if="userIsAuthor">
+            <Icon name="mdi:eye" />
+            <span>{{article.views}}</span>
         </div>
 
         <!-- PROBLEM: if summary contains links, causes hydration problems -->
@@ -26,7 +33,7 @@
         <!-- PROBLEM: Tags can be links -->
         <div class="tags_container">
             <Icon name="mdi:tag" />
-            <Tag v-for="tag in article.tags" :key="tag._id" :tag="tag" />
+            <Tag v-for="tag in article.tags" :key="tag._id" :tag="tag" :link="false"/>
         </div>
     </NuxtLink>
 </template>
@@ -35,18 +42,17 @@
 
 import type Article from '~~/types/Article'
 
-defineProps<{
+const props = defineProps<{
     article: Article
 }>()
 
+const user = userUser()
+const userIsAuthor = computed(() => props.article?.author._id === user.value?._id)
 
 
 
 </script>
 
 <style>
-.articlePreview {
-    border: 1px solid #dddddd;
-    display: grid;
-}
+
 </style>
