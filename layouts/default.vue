@@ -1,6 +1,10 @@
 <template>
     <header>
-        Maxime Moreillon
+        <h1>
+            Maxime Moreillon
+        </h1>
+
+        <span>{{user.display_name}}</span>
     </header>
     
     <nav>
@@ -13,3 +17,8 @@
         <NuxtPage />
     </main>
 </template>
+
+<script lang="ts" setup>
+const user = userUser()
+
+</script>

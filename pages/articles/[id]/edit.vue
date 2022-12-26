@@ -19,15 +19,18 @@ const saving = ref(false)
 const url = `articles/${route.params.id}`
 
 // TODO: Typing
-const fetchOpts = { baseURL: runtimeConfig.public.apiBase }
+const fetchOpts = { 
+    baseURL: runtimeConfig.public.apiBase,
+    headers: { authorization: `Bearer ${useCookie('jwt').value}` }
+}
 const { data: article, error } = await useFetch <Article>(url, fetchOpts)
 
 const saveArticle = async () => {
 
     const options = {
+        ...fetchOpts,
         method: 'PATCH',
         body: article.value,
-        baseURL: runtimeConfig.public.apiBase
     }
 
     saving.value = true

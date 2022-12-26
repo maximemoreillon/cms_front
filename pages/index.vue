@@ -23,6 +23,11 @@
 <script lang="ts" setup>
 import type Article from '~~/types/Article'
 
+definePageMeta({
+  middleware: ["auth"]
+})
+
+
 type FetchBody = {
     article_count: number,
     articles: Article[]
@@ -41,7 +46,10 @@ const fetchFnc = () => {
     const search = new URLSearchParams(query.value).toString()
     return `/articles?${search}`
 }
-const fetchOpts = { baseURL: runtimeConfig.public.apiBase }
+const fetchOpts = { 
+    baseURL: runtimeConfig.public.apiBase,
+    headers: { authorization: `Bearer ${useCookie('jwt').value}` }
+}
 const { data, error, refresh } = await useFetch<FetchBody>(fetchFnc, fetchOpts)
 
 </script>

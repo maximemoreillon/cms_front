@@ -20,11 +20,18 @@
 
 import Article from '~~/types/Article';
 
+definePageMeta({
+    middleware: ["auth"]
+})
+
 const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
 
 const url = `/articles/${route.params.id}`
-const fetchOpts = { baseURL: runtimeConfig.public.apiBase }
+const fetchOpts = { 
+    baseURL: runtimeConfig.public.apiBase,
+    headers: { authorization: `Bearer ${useCookie('jwt').value}` }
+}
 const { data: article, error } = await useFetch<Article>(url, fetchOpts)
 
 const imageAlt = `${article.value?.title} thumbnail`
