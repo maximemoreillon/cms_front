@@ -2,8 +2,13 @@
     <h2>Login</h2>
     
     <form @submit.prevent="login()" v-if="!cookie">
+
+        <Icon name="mdi:account" />
         <input type="text" v-model="credentials.username">
+
+        <Icon name="mdi:key" />
         <input type="password" v-model="credentials.password">
+        
         <button type="submit">
             <Icon name="mdi:login"/>
             <span>Login</span>
