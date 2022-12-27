@@ -11,9 +11,9 @@
     </NuxtLink>
 
     <template v-if="data">
-        <p>
+        <div>
             <Icon name="mdi:file-document-outline" />{{ data.article_count }}
-        </p>
+        </div>
         
         <div class="articles_container">
             <ArticlePreview v-for="article in data.articles" :key="article._id" :article="article" />
@@ -27,7 +27,6 @@
 
 <script lang="ts" setup>
 import type Article from '~~/types/Article'
-
 const user = userUser()
 
 definePageMeta({
@@ -41,16 +40,13 @@ type FetchBody = {
 
 const runtimeConfig = useRuntimeConfig()
 const route = useRoute()
-
-// TODO: find type
-const query = computed<any>(() => route.query)
+const query = computed(() => route.query)
 
 watch(query, () => { refresh() })
 
-// TODO: types
 const fetchFnc = () => {
-    const search = new URLSearchParams(query.value).toString()
-    return `/articles?${search}`
+    const searchParams = new URLSearchParams(String(query.value)).toString()
+    return `/articles?${searchParams}`
 }
 const fetchOpts = { 
     baseURL: runtimeConfig.public.apiBase,

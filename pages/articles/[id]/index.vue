@@ -10,13 +10,16 @@
             <Icon name="mdi:pencil" />
         </NuxtLink>
         
-        <article v-html="article?.content" />
+        <article v-html="article?.content" ref="articleContent"/>
     </template>
 
+    <!-- TODO: JUST A TEST REMOVE WHEN DONE -->
     <button @click="modalOpen = true">Open me!</button>
 
     <!-- Image Modal -->
-    <Modal v-model="modalOpen"/>
+    <Modal v-model="modalOpen">
+        <img :src="modalImageSrc" alt="" class="modalImage">
+    </Modal>
 </template>
 
 <script lang="ts" setup>
@@ -33,6 +36,8 @@ const user = userUser()
 
 const userIsAuthor = computed(() => article.value?.author._id === user.value?._id)
 const modalOpen = ref(false)
+const modalImageSrc = ref('')
+const articleContent = ref(null)
 
 const url = `/articles/${route.params.id}`
 const fetchOpts = { 
@@ -40,6 +45,28 @@ const fetchOpts = {
     headers: { authorization: `Bearer ${useCookie('jwt').value}` }
 }
 const { data: article, error } = await useFetch<Article>(url, fetchOpts)
+
+
+
+onMounted(() => {
+    addEventListenerForImageModals()
+})
+
+const addEventListenerForImageModals = () => {
+    // How to access refs in Vue3 composition API?
+    console.log(articleContent.value)
+
+    articleContent.value
+        .querySelectorAll('img')
+        .forEach( (img:any) => {
+            img.addEventListener("click", (event: any) => {
+                modalOpen.value = true
+                modalImageSrc.value = event.target.src
+            }, false)
+        })
+
+    
+}
 
 useHead({
     title: article.value?.title,
@@ -67,3 +94,12 @@ useHead({
 
 
 </script>
+
+<style>
+article img {
+    max-width: 80vw;
+}
+.modalImage {
+    max-width: 100%;
+}
+</style>

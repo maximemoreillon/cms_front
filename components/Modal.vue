@@ -1,7 +1,11 @@
 <template>
-    <div class="modal_background" v-if="open">
+    <div 
+    class="modal_background" 
+    v-if="open"
+    @click.self="open = false">
+
         <div class="modal_container">
-            <button @click="open = false">
+            <button @click="open = false" class="modal_close_button">
                 <Icon name="mdi:close" />
             </button>
             <slot />
@@ -45,5 +49,12 @@ const open = computed({
 
 .modal_container {
     max-width: 95vw;
+    position: relative;
+}
+
+.modal_close_button {
+    position: absolute;
+    top: 1em;
+    right: 1em;
 }
 </style>
