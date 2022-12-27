@@ -5,6 +5,11 @@
 
     <ArticlesSorting />
 
+    <NuxtLink to="/articles/new" v-if="user">
+        <Icon name="mdi:add" />
+        <span>New article</span>
+    </NuxtLink>
+
     <template v-if="data">
         <p>
             <Icon name="mdi:file-document-outline" />{{ data.article_count }}
@@ -23,10 +28,11 @@
 <script lang="ts" setup>
 import type Article from '~~/types/Article'
 
+const user = userUser()
+
 definePageMeta({
   middleware: ["auth"]
 })
-
 
 type FetchBody = {
     article_count: number,

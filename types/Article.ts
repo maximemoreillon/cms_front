@@ -11,6 +11,8 @@ type Article = {
     thumbnail_src: string,
     views: number,
 
+    published: boolean,
+
     tags: Tag[],
 
     author: Author,

@@ -12,6 +12,11 @@
         
         <article v-html="article?.content" />
     </template>
+
+    <button @click="modalOpen = true">Open me!</button>
+
+    <!-- Image Modal -->
+    <Modal v-model="modalOpen"/>
 </template>
 
 <script lang="ts" setup>
@@ -27,6 +32,7 @@ const runtimeConfig = useRuntimeConfig()
 const user = userUser()
 
 const userIsAuthor = computed(() => article.value?.author._id === user.value?._id)
+const modalOpen = ref(false)
 
 const url = `/articles/${route.params.id}`
 const fetchOpts = { 
@@ -35,7 +41,6 @@ const fetchOpts = {
 }
 const { data: article, error } = await useFetch<Article>(url, fetchOpts)
 
-const imageAlt = `${article.value?.title} thumbnail`
 useHead({
     title: article.value?.title,
     meta: [
@@ -47,13 +52,13 @@ useHead({
         { name: 'twitter:title', content: article.value?.title },
         { name: 'twitter:description', content: article.value?.summary },
         { name: 'twitter:image', content: article.value?.thumbnail_src },
-        { name: 'twitter:image:alt', content: imageAlt },
+        { name: 'twitter:image:alt', content: `${article.value?.title} thumbnail` },
 
         // OpenGraph
         { name: 'og:title', content: article.value?.title },
         { name: 'og:description', content: article.value?.summary },
         { name: 'og:image', content: article.value?.thumbnail_src },
-        { name: 'og:url', content: imageAlt },
+        { name: 'og:url', content: `${article.value?.title} thumbnail` },
         { name: 'og:type', content: 'article' },
         { name: 'og:locale', content: 'en_US' },
         

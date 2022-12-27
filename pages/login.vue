@@ -1,8 +1,7 @@
 <template>
     <h2>Login</h2>
 
-    <!-- TODO: Checking for user would be more appropriate -->
-    <form @submit.prevent="login()" v-if="!cookie">
+    <form @submit.prevent="login()" v-if="!user">
 
         <Icon name="mdi:account" />
         <input type="text" v-model="credentials.username">
@@ -16,36 +15,40 @@
         </button>
     </form>
 
-    <button v-else @click="logout()">
-        <Icon name="mdi:logout" />
-        <span>Logout</span>
-    </button>
+    <div v-else>
+        Already logged in. Click <NuxtLink to="/logout">here</NuxtLink> to log out.
+    </div>
     
 </template>
 
 <script lang="ts" setup>
 
 const cookie = useCookie('jwt')
-
+const router = useRouter()
+const runtimeConfig = useRuntimeConfig()
+const user = userUser()
 const loggingIn = ref(false)
 const credentials = reactive({
     username: '',
     password: ''
 })
 
+
 const login = async () => {
+
     const options = {
         method: 'POST',
         body: credentials,
-        // baseURL: runtimeConfig.public.apiBase
     }
+
+    const { loginUrl } = runtimeConfig.public
 
     loggingIn.value = true
 
     try {
-        const url = 'https://api.users.maximemoreillon.com/v2/auth/login'
-        const { jwt } = await $fetch<{jwt: string}>(url, options)
+        const { jwt } = await $fetch<{ jwt: string }>(loginUrl, options)
         cookie.value = jwt
+        router.back()
     } catch (error) {
         console.error(error)
     } finally {
@@ -53,9 +56,6 @@ const login = async () => {
     }
 }
 
-const logout = () => {
-    cookie.value = null
-}
 
 
 </script>

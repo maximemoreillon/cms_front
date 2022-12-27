@@ -1,7 +1,9 @@
 <template>
     <!-- WARNING: links in links cause hydration issues -->
     <NuxtLink :to="{ name: 'articles-id', params: { id: article._id }}" class="articlePreview">
-        <h3>{{ article.title }}</h3>
+        <h3 class="title">{{ article.title }}</h3>
+
+        <!-- TODO: Thumbnail -->
         
         <div>
             <Icon name="mdi:calendar" />
@@ -15,10 +17,10 @@
         </div>
         
 
-        <!-- PROBLEM: Author can be a link -->
+        <!-- WARNING: Author can be a link -->
         <div>
             <Icon name="mdi:account"/>
-            <Author :author="article.author" />
+            <Author :author="article.author" :link="false"/>
         </div>
 
         <div v-if="userIsAuthor">
@@ -26,13 +28,20 @@
             <span>{{article.views}}</span>
         </div>
 
-        <!-- PROBLEM: if summary contains links, causes hydration problems -->
-        <!-- <p v-html="article.summary" /> -->
-        <p>{{ article.summary }}</p>
+        <div v-if="userIsAuthor">
+            <Icon name="mdi:earth" v-if="article.published"/>
+            <Icon name="mdi:lock" v-else />
+        </div>
 
-        <!-- PROBLEM: Tags can be links -->
-        <div class="tags_container">
+        <!-- PROBLEM: if summary contains tags, especially links, causes hydration problems -->
+        <!-- <p v-html="article.summary" /> -->
+        <!-- TOOD: respect white spaces -->
+        <div class="summary">{{ article.summary }}</div>
+
+        <!-- WARNING: Tags can be links -->
+        <div class="tags">
             <Icon name="mdi:tag" />
+            <!-- TODO: use TagList component -->
             <Tag v-for="tag in article.tags" :key="tag._id" :tag="tag" :link="false"/>
         </div>
     </NuxtLink>
@@ -54,5 +63,7 @@ const userIsAuthor = computed(() => props.article?.author._id === user.value?._i
 </script>
 
 <style>
-
+.summary {
+    white-space: pre-line;
+}
 </style>

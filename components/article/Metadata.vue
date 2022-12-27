@@ -8,7 +8,7 @@
 
         <div class="tags_container">
             <Icon name="mdi:account" />
-            <Author :author="article.author" />
+            <Author :author="article.author" :link="true"/>
         </div>
 
         <div class="tags_container">

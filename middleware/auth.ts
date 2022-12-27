@@ -6,12 +6,13 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
     if(!jwt) return 
 
+    const runtimeConfig = useRuntimeConfig()
+    const {idenfiticationUrl} = runtimeConfig.public
+
     const headers = { authorization: `Bearer ${jwt}` }
 
-    const url = 'https://api.users.maximemoreillon.com/v2/users/self'
-
     try {
-        userUser().value = await $fetch<Author>(url, {headers});
+        userUser().value = await $fetch<Author>(idenfiticationUrl, {headers})
     } catch (error) {
         console.error(error)
         userUser().value = null

@@ -2,7 +2,7 @@
     <h1>Tags</h1>
 
     <div class="tags">
-        <Tag v-for="tag in tags" :key="tag._id" :tag="tag"/>
+        <Tag v-for="tag in tags" :key="tag._id" :tag="tag" :link="true"/>
     </div>
 
 </template>
@@ -17,3 +17,4 @@ const fetchOpts = { baseURL: runtimeConfig.public.apiBase }
 const { data: tags, error } = await useFetch<Tag[]>(url, fetchOpts)
 
 </script>
+

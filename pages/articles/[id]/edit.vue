@@ -6,11 +6,15 @@
         <button @click="saveArticle()">
             <Icon name="mdi:content-save" />
         </button>
-        <button>
+        <button @click="deleteArticle()">
             <Icon name="mdi:delete" />
         </button>
 
         <ArticleEditor v-model="article.content"/>
+
+        <!-- TODO: Tags, summary, thumbnail -->
+
+        <textarea v-model="article.summary"/>
     </template>
 </template>
 
@@ -18,8 +22,11 @@
 import type Article from '~~/types/Article'
 
 const route = useRoute()
+const router = useRouter()
 const runtimeConfig = useRuntimeConfig()
 const saving = ref(false)
+const deleting = ref(false)
+
 const url = `articles/${route.params.id}`
 
 // TODO: Typing
@@ -40,13 +47,38 @@ const saveArticle = async () => {
     saving.value = true
 
     try {
-        await $fetch(url, options);
+        await $fetch(url, options)
+        alert('Article saved')
     } catch (error) {
+        // TODO: Nicer notification
+        alert('Failed to update article')
         console.error(error)
     } finally {
         saving.value = false
     }
 
+}
+
+const deleteArticle = async () => {
+
+    if(!confirm(`Delete this article?`)) return
+    const options = {
+        ...fetchOpts,
+        method: 'DELETE',
+    }
+
+    deleting.value = true
+
+    try {
+        await $fetch(url, options)
+        router.push('/')
+    } catch (error) {
+        // TODO: Nicer notification
+        alert('Failed to delete article')
+        console.error(error)
+    } finally {
+        deleting.value = false
+    }
 }
 
 const keydownHandler = (e: KeyboardEvent) => {
