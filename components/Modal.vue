@@ -1,16 +1,21 @@
 <template>
-    <div 
-    class="modal_background" 
-    v-if="open"
-    @click.self="open = false">
+    <Transition>
+        <div 
+            class="modal_background" 
+            v-if="open"
+            @click.self="open = false">
 
-        <div class="modal_container">
-            <button @click="open = false" class="modal_close_button">
-                <Icon name="mdi:close" />
-            </button>
-            <slot />
+            <!-- TODO: consider having an innder div for fancier animation -->
+            <div class="modal_container">
+                <!-- TODO: Consider some padding so that the button is easier to see -->
+                <button @click="open = false" class="modal_close_button">
+                    <Icon name="mdi:close" />
+                </button>
+                <slot />
+            </div>
+
         </div>
-    </div>
+    </Transition>
 </template>
 
 <script lang="ts" setup>
@@ -32,6 +37,16 @@ const open = computed({
 </script>
 
 <style scoped>
+.v-enter-active,
+.v-leave-active {
+    transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+    opacity: 0;
+}
+
 .modal_background {
     position: fixed;
     top: 0;

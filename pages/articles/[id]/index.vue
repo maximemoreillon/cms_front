@@ -17,13 +17,15 @@
 
     <!-- Image Modal -->
     <Modal v-model="modalOpen">
-        <img :src="modalImageSrc" alt="" class="modalImage">
+        <img :src="modalImageSrc" alt="" class="modal_image">
     </Modal>
 </template>
 
 <script lang="ts" setup>
 
 import Article from '~~/types/Article';
+import { lowlight } from 'lowlight'
+import { toHtml } from 'hast-util-to-html'
 
 definePageMeta({
     middleware: ["auth"]
@@ -51,19 +53,28 @@ const { data: article, error } = await useFetch<Article>(url, fetchOpts)
 
 onMounted(() => {
     addEventListenerForImageModals()
+    // applyCodeStyling()
 })
 
-const addEventListenerForImageModals = () => {
+const applyCodeStyling = () => {
     
+    articleContent.value?.querySelectorAll('code')
+        .forEach((code: HTMLElement) => {
+            // TODO: Would be better to get the language from class of <code>
+            const tree = lowlight.highlightAuto(code.innerHTML)
+            code.innerHTML = toHtml(tree)
+        })
+}
+
+const addEventListenerForImageModals = () => {
+
     articleContent.value?.querySelectorAll('img')
-        .forEach( (img:any) => {
+        .forEach((img: HTMLElement) => {
             img.addEventListener("click", (event: any) => {
                 modalOpen.value = true
                 modalImageSrc.value = event.target.src
             }, false)
         })
-
-    
 }
 
 useHead({
@@ -100,7 +111,10 @@ article h1 {
 article img {
     max-width: 80%;
 }
-.modalImage {
-    max-width: 100%;
+
+.modal_image {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
 }
 </style>

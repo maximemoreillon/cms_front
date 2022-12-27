@@ -2,7 +2,9 @@
     <button class="menu_wrapper" @click="open = !open">
         <Icon name="mdi:image-plus" />
 
+        <!-- TODO: Consider using a modal instead -->
         <div v-if="open" class="menu_content" @click.stop>
+            <!-- Could have this content as a component because also used for article thumbnail -->
             <template v-if="runtimeConfig.imageManagerApiUrl">
                 <h3>Via upload</h3>
                 <form @submit.prevent="imageUpload()">
