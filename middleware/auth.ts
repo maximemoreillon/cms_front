@@ -4,7 +4,10 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
     const jwt = useCookie('jwt').value
 
-    if(!jwt) return 
+    if(!jwt) {
+        userUser().value = null
+        return 
+    }
 
     const runtimeConfig = useRuntimeConfig()
     const {idenfiticationUrl} = runtimeConfig.public

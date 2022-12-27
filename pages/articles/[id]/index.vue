@@ -1,6 +1,6 @@
 <template>
     <template v-if="article">
-        <h2>{{ article.title }}</h2>
+        <h1>{{ article.title }}</h1>
         
         <ArticleMetadata :article="article" />
         
@@ -37,7 +37,7 @@ const user = userUser()
 const userIsAuthor = computed(() => article.value?.author._id === user.value?._id)
 const modalOpen = ref(false)
 const modalImageSrc = ref('')
-const articleContent = ref(null)
+const articleContent = ref<HTMLElement>()
 
 const url = `/articles/${route.params.id}`
 const fetchOpts = { 
@@ -53,11 +53,8 @@ onMounted(() => {
 })
 
 const addEventListenerForImageModals = () => {
-    // How to access refs in Vue3 composition API?
-    console.log(articleContent.value)
-
-    articleContent.value
-        .querySelectorAll('img')
+    
+    articleContent.value?.querySelectorAll('img')
         .forEach( (img:any) => {
             img.addEventListener("click", (event: any) => {
                 modalOpen.value = true
@@ -96,6 +93,9 @@ useHead({
 </script>
 
 <style>
+article h1 {
+    display: none;
+}
 article img {
     max-width: 80vw;
 }

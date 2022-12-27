@@ -17,6 +17,10 @@
             <Icon name="mdi:format-strikethrough" />
         </button>
 
+        <button :class="{ 'active': editor.isActive('code') }" @click="editor.chain().focus().toggleCode().run()">
+            <Icon name="mdi:code-braces" />
+        </button>
+
 
         <button 
             v-for="level in 3" :key="level"
@@ -40,32 +44,30 @@
             <Icon name="mdi:format-align-right" />
         </button>
 
-        <button :class="{ 'active': editor.isActive('code') }" @click="editor.chain().focus().toggleCode().run()">
-            <Icon name="mdi:calendar" />
-        </button>
-
         <button :class="{ 'active': editor.isActive('codeBlock') }"
             @click="editor.chain().focus().toggleCodeBlock().run()">
-            <Icon name="mdi:calendar" />
+            <Icon name="mdi:code-braces-box" />
         </button>
 
         <button :class="{ 'active': editor.isActive('bulletList') }"
             @click="editor.chain().focus().toggleBulletList().run()">
-            <Icon name="mdi:calendar" />
+            <Icon name="mdi:format-list-bulleted" />
         </button>
 
         <button :class="{ 'active': editor.isActive('orderedList') }"
             @click="editor.chain().focus().toggleOrderedList().run()">
-            <Icon name="mdi:calendar" />
+            <Icon name="mdi:format-list-numbered" />
         </button>
 
-        <!-- <LinkMenu :editor="editor" /> -->
+        <ArticleEditorLinkMenu :editor="editor" />
+        
     </BubbleMenu>
 </template>
 
 <script lang="ts" setup>
 import { BubbleMenu } from '@tiptap/vue-3'
 
+// TODO: typing
 defineProps({
     editor: { type: Object },
 })

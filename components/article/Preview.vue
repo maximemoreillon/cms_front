@@ -6,32 +6,33 @@
         <!-- TODO: Thumbnail -->
         
         <div>
-            <Icon name="mdi:calendar" />
+            <Icon name="mdi:calendar-plus" />
             <span>{{ formatNeo4jDate(article.authorship.creation_date) }}</span>
         </div>
 
         
-        <div v-if="userIsAuthor">
+        <div>
             <Icon name="mdi:calendar-edit" />
             <span>{{ formatNeo4jDate(article.authorship.edition_date) }}</span>
         </div>
         
-
         <!-- WARNING: Author can be a link -->
         <div>
             <Icon name="mdi:account"/>
             <Author :author="article.author" :link="false"/>
         </div>
 
-        <div v-if="userIsAuthor">
-            <Icon name="mdi:eye" />
-            <span>{{article.views}}</span>
-        </div>
-
-        <div v-if="userIsAuthor">
-            <Icon name="mdi:earth" v-if="article.published"/>
-            <Icon name="mdi:lock" v-else />
-        </div>
+        <template v-if="userIsAuthor">
+            <div>
+                <Icon name="mdi:eye" />
+                <span>{{article.views}}</span>
+            </div>
+            
+            <div v-if="userIsAuthor">
+                <Icon :name="article.published? 'mdi:earth' : 'mdi:lock'" />
+            </div>
+        </template>
+        
 
         <!-- PROBLEM: if summary contains tags, especially links, causes hydration problems -->
         <!-- <p v-html="article.summary" /> -->
@@ -40,7 +41,7 @@
 
         <!-- WARNING: Tags can be links -->
         <div class="tags">
-            <Icon name="mdi:tag" />
+            <Icon :name="article.tags.length ? 'mdi:tag' : 'mdi:tag-off'" />
             <!-- TODO: use TagList component -->
             <Tag v-for="tag in article.tags" :key="tag._id" :tag="tag" :link="false"/>
         </div>

@@ -1,16 +1,32 @@
 <template>
     <header>
-        <h1>
-            Maxime Moreillon
-        </h1>
-
-        <span>{{user?.display_name}}</span>
+        <span class="title">Maxime Moreillon</span>
     </header>
     
     <nav>
-        <NuxtLink to="/">Articles</NuxtLink>
-        <NuxtLink to="/tags">Tags</NuxtLink>
-        <NuxtLink to="/login">Login</NuxtLink>
+        <NuxtLink to="/">
+            <!-- TODO: find icon -->
+            <Icon name="mdi:document"/>
+            <span>Articles</span>
+        </NuxtLink>
+        <NuxtLink to="/tags">
+            <Icon name="mdi:tag" />
+            <span>Tags</span>
+        </NuxtLink>
+        <NuxtLink to="/authors">
+            <Icon name="mdi:account" />
+            <span>Auhtors</span>
+        </NuxtLink>
+
+        <NuxtLink v-if="user" to="/logout">
+            <Icon name="mdi:logout" />
+            <span>Logout</span>
+        </NuxtLink>
+        <NuxtLink v-else to="/login">
+            <Icon name="mdi:login" />
+            <span>Login</span>
+        </NuxtLink>
+
     </nav>
     
     <main>

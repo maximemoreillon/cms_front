@@ -1,4 +1,5 @@
 <template>
+    <!-- TODO: use a NuxtLink instead -->
     <component 
         class="author" 
         :is="link ? 'a' : 'span'" :href="`/?author=${author._id}`">

@@ -1,4 +1,5 @@
 <template>
+    <!-- TODO: Consider wrapping in a template with v-if -->
     <ArticleEditorBubbleMenu :editor="editor" v-if="editor"/>
     <ArticleEditorFloatingMenu :editor="editor" v-if="editor"/>
     <EditorContent :editor="editor" />
@@ -85,8 +86,6 @@ const editor = useEditor({
     /* inline-flex needed otherwise overflow */
     display: inline-flex;
     align-items: center;
-    background-color: white;
-    border: 1px solid #dddddd;
 }
 
 .editor_menu > * {
