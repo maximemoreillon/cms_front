@@ -1,6 +1,10 @@
 <template>
     <h1>Tags</h1>
 
+    <!-- TODO: Show as a table -->
+
+    <!-- TODO: Search -->
+
     <div class="tags">
         <Tag v-for="tag in tags" :key="tag._id" :tag="tag" :link="true" :removable="false"/>
     </div>

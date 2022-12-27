@@ -1,12 +1,9 @@
 <template>
     <h2>Articles</h2>
 
-    <!-- TODO: Show tag if ffiltering by tag -->
-
-    <!-- TODO: Shot author if filtering by author -->
-
+    <ArticlesTagFilter v-if="route.query.tag_id"/>
+    <ArticlesAuthorFilter v-if="route.query.author" />
     <ArticlesSearch />
-
     <ArticlesSorting />
 
     <NuxtLink to="/articles/new" v-if="user">
@@ -60,6 +57,7 @@ const fetchOpts = {
 }
 const { data, error, refresh } = await useFetch<FetchBody>(fetchFnc, fetchOpts)
 // TODO: error handling
+
 </script>
 
 <style>

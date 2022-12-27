@@ -3,8 +3,6 @@
         <Icon name="mdi:image-plus" />
 
         <div v-if="open" class="menu_content" @click.stop>
-            <h2>Image insert</h2>
-
             <template v-if="runtimeConfig.imageManagerApiUrl">
                 <h3>Via upload</h3>
                 <form @submit.prevent="imageUpload()">
@@ -15,7 +13,7 @@
                 </form>
             </template>
 
-            <h3>via URL</h3>
+            <h3>Via URL</h3>
             <form class="" @submit.prevent="insertImage(imageUrl)">
                 <input v-model="imageUrl" type="text">
                 <button type="submit">
@@ -82,6 +80,21 @@ const imageUpload = async () => {
 
 .menu_content {
     position: absolute;
+    left: 0;
+    bottom: 100%;
     background-color: white;
+    text-align: initial;
+    border: 1px solid #dddddd;
+    padding: 0.5em;
+}
+
+form {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.5em;
+}
+
+form input {
+    flex-grow: 1;
 }
 </style>

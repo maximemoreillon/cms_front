@@ -3,6 +3,7 @@
     <!-- TODO: use a NuxtLink instead -->
     <!-- TODO: check if no better query parameter available -->
     <component 
+        v-if="tag"
         class="tag"
         :is="link ? 'a' : 'span'"
         :href="`/?tag_id=${tag._id}`">
@@ -21,7 +22,7 @@ import type Tag from '~~/types/Tag'
 const emit = defineEmits(['remove'])
 
 defineProps<{
-    tag: Tag,
+    tag: Tag | null,
     link: boolean,
     removable: boolean,
 }>()

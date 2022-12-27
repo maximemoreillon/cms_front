@@ -1,6 +1,7 @@
 <template>
     <!-- TODO: use a NuxtLink instead -->
     <component 
+        v-if="author"
         class="author" 
         :is="link ? 'a' : 'span'" :href="`/?author=${author._id}`">
         {{ author.display_name }}
@@ -10,7 +11,7 @@
 <script lang="ts" setup>
 import type Author from '~~/types/Author'
 defineProps<{
-    author: Author
+    author: Author | null,
     link: boolean
 }>()
 </script>
