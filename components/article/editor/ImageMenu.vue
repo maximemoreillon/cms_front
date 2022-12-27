@@ -39,7 +39,7 @@ const imageToUpload = ref()
 const imageUrl = ref('')
 
 const insertImage = (src: string) => {
-    props.editor.chain().focus().setImage({ src, alt: 'Article image' }).run()
+    props.editor?.chain().focus().setImage({ src, alt: 'Article image' }).run()
     imageToUpload.value = null
 }
 

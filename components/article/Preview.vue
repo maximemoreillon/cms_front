@@ -1,7 +1,7 @@
 <template>
     <!-- WARNING: links in links cause hydration issues -->
     <NuxtLink :to="{ name: 'articles-id', params: { id: article._id }}" class="articlePreview">
-        <h3 class="title">{{ article.title }}</h3>
+        <h2 class="title">{{ article.title }}</h2>
 
         <!-- TODO: Thumbnail -->
         
@@ -34,17 +34,17 @@
         </template>
         
 
-        <!-- PROBLEM: if summary contains tags, especially links, causes hydration problems -->
-        <!-- <p v-html="article.summary" /> -->
-        <!-- TOOD: respect white spaces -->
+        <!-- NOTE: if summary contains tags, especially links, causes hydration problems -->
+        <!-- <div v-html="article.summary" /> -->
         <div class="summary">{{ article.summary }}</div>
 
-        <!-- WARNING: Tags can be links -->
-        <div class="tags">
-            <Icon :name="article.tags.length ? 'mdi:tag' : 'mdi:tag-off'" />
-            <!-- TODO: use TagList component -->
-            <Tag v-for="tag in article.tags" :key="tag._id" :tag="tag" :link="false"/>
-        </div>
+        <!-- NOTE: Ensure tags are not links to prevent hydration problems -->
+        <TagList 
+            v-model="article.tags" 
+            :link="false" 
+            :input="false" 
+            :truncate="5" 
+            :removable="false"/>
     </NuxtLink>
 </template>
 
@@ -63,7 +63,7 @@ const userIsAuthor = computed(() => props.article?.author._id === user.value?._i
 
 </script>
 
-<style>
+<style scoped>
 .summary {
     white-space: pre-line;
 }

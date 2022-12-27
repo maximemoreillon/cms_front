@@ -13,14 +13,12 @@
         <ArticleEditor v-model="article.content"/>
 
         <ArticleMetadataEditor v-model="article" />
-
-
-        
     </template>
 </template>
 
 <script lang="ts" setup>
 import type Article from '~~/types/Article'
+import type Tag from '~~/types/Tag'
 
 const route = useRoute()
 const router = useRouter()
@@ -38,10 +36,17 @@ const { data: article, error } = await useFetch <Article>(url, fetchOpts)
 
 const saveArticle = async () => {
 
+    const body = {
+        ...article.value,
+        tag_ids: article.value?.tags.map((t:Tag) => t._id)
+    }
+
+    console.log(body.tags)
+
     const options = {
         ...fetchOpts,
         method: 'PATCH',
-        body: article.value,
+        body,
     }
 
     saving.value = true
@@ -62,6 +67,7 @@ const saveArticle = async () => {
 const deleteArticle = async () => {
 
     if(!confirm(`Delete this article?`)) return
+
     const options = {
         ...fetchOpts,
         method: 'DELETE',

@@ -20,6 +20,13 @@
         </label>
     </div>
 
+    <TagList 
+        v-model="article.tags" 
+        :link="false" 
+        :input="true" 
+        :truncate="null" 
+        :removable="true"/>
+
 </template>
 
 <script lang="ts" setup>
@@ -27,12 +34,14 @@ import type Article from '~~/types/Article'
 
 const props = defineProps<{ modelValue: Article }>()
 
-const emits = defineEmits(['update:modelValue'])
+const emit = defineEmits(['update:modelValue'])
 
 const article = computed({
     get: () => props.modelValue,
-    set: newVal => emits('update:modelValue', newVal)
+    set: newVal => emit('update:modelValue', newVal)
 })
+
+
 
 </script>
 

@@ -98,7 +98,7 @@ article h1 {
     display: none;
 }
 article img {
-    max-width: 80vw;
+    max-width: 80%;
 }
 .modalImage {
     max-width: 100%;

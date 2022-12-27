@@ -28,12 +28,12 @@
             </div>
         </template>
 
-        
-
-        <div class="tags_container">
-            <Icon :name="article.tags.length ? 'mdi:tag' : 'mdi:tag-off'" />
-            <Tag v-for="tag in article.tags" :key="tag._id" :tag="tag" link/>
-        </div>
+        <TagList 
+            v-model="article.tags" 
+            :link="true" 
+            :input="false" 
+            :truncate="5" 
+            :removable="false"/>
     </div>
 </template>
 
