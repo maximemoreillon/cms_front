@@ -30,7 +30,6 @@ const deleting = ref(false)
 
 const url = `articles/${route.params.id}`
 
-// TODO: Typing
 const fetchOpts = { 
     baseURL: runtimeConfig.public.apiBase,
     headers: { authorization: `Bearer ${useCookie('jwt').value}` }

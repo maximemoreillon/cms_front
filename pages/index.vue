@@ -42,9 +42,7 @@ const query = computed(() => route.query)
 watch(query, () => { refresh() })
 
 const fetchFnc = () => {
-    console.log('FETCHING')
     const searchParams = new URLSearchParams(query.value).toString()
-    console.log(query.value)
     return `/articles?${searchParams}`
 }
 const fetchOpts = { 

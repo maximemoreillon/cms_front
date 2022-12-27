@@ -5,7 +5,8 @@ export default defineNuxtConfig({
         public: {
             apiBase: 'https://api.articles.maximemoreillon.com',
             loginUrl: 'https://api.users.maximemoreillon.com/v2/auth/login',
-            idenfiticationUrl: 'https://api.users.maximemoreillon.com/v2/users/self'
+            idenfiticationUrl: 'https://api.users.maximemoreillon.com/v2/users/self',
+            imageManagerApiUrl: 'https://img.maximemoreillon.com'
         }
     },
     modules: [

@@ -24,7 +24,7 @@
             <Icon name="mdi:format-list-numbered" />
         </button>
 
-        <!-- <ImageInsertMenu :editor="editor" /> -->
+        <ArticleEditorImageMenu :editor="editor" />
 
         <button @click="prompt_for_youtube()">
             <Icon name="mdi:youtube" />
