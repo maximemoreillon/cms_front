@@ -13,8 +13,7 @@
         <article v-html="article?.content" ref="articleContent"/>
     </template>
 
-    <!-- TODO: JUST A TEST REMOVE WHEN DONE -->
-    <button @click="modalOpen = true">Open me!</button>
+    <!-- TODO: Error display -->
 
     <!-- Image Modal -->
     <Modal v-model="modalOpen">
@@ -44,6 +43,8 @@ const fetchOpts = {
     baseURL: runtimeConfig.public.apiBase,
     headers: { authorization: `Bearer ${useCookie('jwt').value}` }
 }
+
+// TODO: Error handling
 const { data: article, error } = await useFetch<Article>(url, fetchOpts)
 
 

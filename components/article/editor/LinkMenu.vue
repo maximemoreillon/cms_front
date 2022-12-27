@@ -1,5 +1,4 @@
 <template>
-    <!-- TODO: active-->
     <button 
         :class="{ active: editor.isActive('link'), open}"
         @click="open = !open">
@@ -20,9 +19,6 @@
 
         </form>
     </button>
-
-    
-
 </template>
 
 <script lang="ts" setup>
@@ -31,7 +27,7 @@
 const url = ref('')
 const open = ref(false)
 const props = defineProps({editor: Object})
-const currentLink = computed(() => props.editor.getAttributes('link').href)
+const currentLink = computed(() => props.editor?.getAttributes('link').href)
 
 watch(currentLink, () => { url.value = currentLink.value })
 

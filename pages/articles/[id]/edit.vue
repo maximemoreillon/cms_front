@@ -12,9 +12,10 @@
 
         <ArticleEditor v-model="article.content"/>
 
-        <!-- TODO: Tags, summary, thumbnail -->
+        <ArticleMetadataEditor v-model="article" />
 
-        <textarea v-model="article.summary"/>
+
+        
     </template>
 </template>
 

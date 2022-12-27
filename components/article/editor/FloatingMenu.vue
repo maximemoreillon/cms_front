@@ -24,19 +24,25 @@
             <Icon name="mdi:format-list-numbered" />
         </button>
 
-        <!-- <ImageInsertMenu :editor="editor" />
+        <!-- <ImageInsertMenu :editor="editor" /> -->
 
         <button @click="prompt_for_youtube()">
-            <MaterialIconYoutube />
-        </button> -->
+            <Icon name="mdi:youtube" />
+        </button>
     </FloatingMenu>
 </template>
 
 <script lang="ts" setup>
 import { FloatingMenu } from '@tiptap/vue-3'
 
-defineProps({
+const props = defineProps({
     editor: { type: Object },
 })
+
+// TODO: Have a nicer propmt, such as a dialog
+const prompt_for_youtube = () => {
+    const src = prompt('URL:')
+    if (src) props.editor.commands.setYoutubeVideo({ src, width: 640, height: 480 })
+}
 
 </script>

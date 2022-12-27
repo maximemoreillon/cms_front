@@ -44,7 +44,7 @@
             <Icon name="mdi:format-align-right" />
         </button>
 
-        <button :class="{ 'active': editor.isActive('codeBlock') }"
+        <!-- <button :class="{ 'active': editor.isActive('codeBlock') }"
             @click="editor.chain().focus().toggleCodeBlock().run()">
             <Icon name="mdi:code-braces-box" />
         </button>
@@ -57,10 +57,10 @@
         <button :class="{ 'active': editor.isActive('orderedList') }"
             @click="editor.chain().focus().toggleOrderedList().run()">
             <Icon name="mdi:format-list-numbered" />
-        </button>
+        </button> --->
 
         <ArticleEditorLinkMenu :editor="editor" />
-        
+
     </BubbleMenu>
 </template>
 
