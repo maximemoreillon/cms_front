@@ -6,7 +6,7 @@
     <nav>
         <NuxtLink to="/">
             <!-- TODO: find icon -->
-            <Icon name="mdi:document"/>
+            <Icon name="mdi:file-document-outline"/>
             <span>Articles</span>
         </NuxtLink>
         <NuxtLink to="/tags">

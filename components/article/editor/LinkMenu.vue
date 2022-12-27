@@ -1,5 +1,6 @@
 <template>
     <button 
+        v-if="editor"
         :class="{ active: editor.isActive('link'), open}"
         @click="open = !open">
         <Icon name="mdi:link" />

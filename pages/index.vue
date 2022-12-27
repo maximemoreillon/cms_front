@@ -11,9 +11,6 @@
     </NuxtLink>
 
     <template v-if="data">
-        <div>
-            <Icon name="mdi:file-document-outline" />{{ data.article_count }}
-        </div>
         
         <div class="articles_container">
             <ArticlePreview v-for="article in data.articles" :key="article._id" :article="article" />
@@ -45,7 +42,9 @@ const query = computed(() => route.query)
 watch(query, () => { refresh() })
 
 const fetchFnc = () => {
-    const searchParams = new URLSearchParams(String(query.value)).toString()
+    console.log('FETCHING')
+    const searchParams = new URLSearchParams(query.value).toString()
+    console.log(query.value)
     return `/articles?${searchParams}`
 }
 const fetchOpts = { 

@@ -1,6 +1,8 @@
 <template>
 
-    <textarea v-model="article.summary" />
+    <textarea class="summary" v-model="article.summary" />
+
+    <!-- TODO: Thumbnail -->
 
     <!-- Visibility -->
     <div>
@@ -17,15 +19,13 @@
             <span>Public</span>
         </label>
     </div>
-    
+
 </template>
 
 <script lang="ts" setup>
 import type Article from '~~/types/Article'
 
-const props = defineProps<{
-    modelValue: Article
-}>()
+const props = defineProps<{ modelValue: Article }>()
 
 const emits = defineEmits(['update:modelValue'])
 
@@ -37,8 +37,7 @@ const article = computed({
 </script>
 
 <style>
-
-textarea {
+.summary {
     width: 100%;
 }
 </style>

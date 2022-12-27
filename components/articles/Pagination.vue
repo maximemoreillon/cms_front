@@ -1,24 +1,18 @@
 <template>
     <div class="pagination">
-        <!-- TODO: Do not show all pages -->
-        <!-- IDEA: Could just use previous and next buttons -->
+
+        <!-- TODO: Buttons for first and last -->
+        
         <NuxtLink :to="{ query: pageQuery(currentPage - 1)}">
             <Icon name="mdi:arrow-left"/>
         </NuxtLink>
 
-        <span>{{ currentPage }} / {{ pageCount }}</span>
+        <span>{{ startIndex }} - {{ startIndex + pageSize }} / {{ articleCount }}</span>
 
         <NuxtLink :to="{ query: pageQuery(currentPage + 1)}">
             <Icon name="mdi:arrow-right" />
         </NuxtLink>
 
-        <!-- <NuxtLink 
-            :class="{ current: currentPage === page }"
-            v-for="page in pageCount" 
-            :key="page" 
-            :to="{ query: pageQuery(page)}">
-            {{ page }}
-        </NuxtLink> -->
     </div>
 </template>
 
@@ -30,16 +24,13 @@ const props = defineProps({
 })
 
 // query parameters to use: batch_size, start_index
-// default page size: 10
+// default page size in back-end: 10
 
 const pageSize = 10
 
 const pageCount = computed(() => Math.ceil(props.articleCount / pageSize))
-
-const currentPage = computed(() => {
-    const start_index = Number(route.query.start_index || 0)
-    return 1 + start_index / pageSize
-})
+const startIndex = computed(() => Number(route.query.start_index || 0) )
+const currentPage = computed(() => 1 + startIndex.value / pageSize )
 
 const pageQuery = (page: number) => {
     return { ...route.query, start_index: (page - 1) * pageSize }
