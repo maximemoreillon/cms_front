@@ -4,6 +4,12 @@
         <h2 class="title">{{ article.title }}</h2>
 
         <!-- TODO: Thumbnail -->
+
+        <img 
+            v-if="article.thumbnail_src"
+            class="thumbnail" 
+            :src="article.thumbnail_src" 
+            :alt="`${article.title} thumbnail`">
         
         <div>
             <Icon name="mdi:calendar-plus" />
@@ -16,7 +22,7 @@
             <span>{{ formatNeo4jDate(article.authorship.edition_date) }}</span>
         </div>
         
-        <!-- WARNING: Author can be a link -->
+        <!-- WARNING: Author should not be a link -->
         <div>
             <Icon name="mdi:account"/>
             <Author :author="article.author" :link="false"/>
@@ -34,11 +40,11 @@
         </template>
         
 
-        <!-- NOTE: if summary contains tags, especially links, causes hydration problems -->
+        <!-- WARNING: if summary contains tags, especially links, causes hydration problems -->
         <!-- <div v-html="article.summary" /> -->
         <div class="summary">{{ article.summary }}</div>
 
-        <!-- NOTE: Ensure tags are not links to prevent hydration problems -->
+        <!-- WARNING: Ensure tags are not links to prevent hydration problems -->
         <TagList 
             v-model="article.tags" 
             :link="false" 
@@ -66,5 +72,9 @@ const userIsAuthor = computed(() => props.article?.author._id === user.value?._i
 <style scoped>
 .summary {
     white-space: pre-line;
+}
+
+.thumbnail {
+    max-width: 5em;
 }
 </style>

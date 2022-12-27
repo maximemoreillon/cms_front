@@ -1,6 +1,10 @@
 <template>
     <h2>Articles</h2>
 
+    <!-- TODO: Show tag if ffiltering by tag -->
+
+    <!-- TODO: Shot author if filtering by author -->
+
     <ArticlesSearch />
 
     <ArticlesSorting />
@@ -19,11 +23,15 @@
         <ArticlesPagination :articleCount="data.article_count" />
     </template>
 
+    <!-- TODO: Deal with data fetching errors -->
+
     
 </template>
 
 <script lang="ts" setup>
+
 import type Article from '~~/types/Article'
+
 const user = userUser()
 
 definePageMeta({
@@ -42,6 +50,7 @@ const query = computed(() => route.query)
 watch(query, () => { refresh() })
 
 const fetchFnc = () => {
+    // TODO: Fix this typing error
     const searchParams = new URLSearchParams(query.value).toString()
     return `/articles?${searchParams}`
 }
@@ -50,7 +59,7 @@ const fetchOpts = {
     headers: { authorization: `Bearer ${useCookie('jwt').value}` }
 }
 const { data, error, refresh } = await useFetch<FetchBody>(fetchFnc, fetchOpts)
-
+// TODO: error handling
 </script>
 
 <style>

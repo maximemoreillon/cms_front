@@ -28,8 +28,5 @@ defineProps<{
 </script>
 
 <style>
-.tag {
-    border: 1px solid #dddddd;
-    padding: 0.25em 0.5em;
-}
+
 </style>

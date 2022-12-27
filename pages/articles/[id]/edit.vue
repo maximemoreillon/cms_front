@@ -36,17 +36,14 @@ const { data: article, error } = await useFetch <Article>(url, fetchOpts)
 
 const saveArticle = async () => {
 
-    const body = {
-        ...article.value,
-        tag_ids: article.value?.tags.map((t:Tag) => t._id)
-    }
-
-    console.log(body.tags)
 
     const options = {
         ...fetchOpts,
         method: 'PATCH',
-        body,
+        body: {
+            ...article.value,
+            tag_ids: article.value?.tags.map((t: Tag) => t._id)
+        },
     }
 
     saving.value = true
