@@ -1,6 +1,9 @@
 <template>
     <!-- WARNING: links in links cause hydration issues -->
-    <NuxtLink :to="{ name: 'articles-id', params: { id: article._id }}" class="article_preview">
+    <NuxtLink 
+        :to="{ name: 'articles-id', params: { id: article._id }}" 
+        class="article_preview"
+        :class="{ with_thumbnail: !!article.thumbnail_src }">
         <h2 class="title">{{ article.title }}</h2>
 
         <img 
@@ -9,6 +12,7 @@
             :src="article.thumbnail_src" 
             :alt="`${article.title} thumbnail`">
 
+        <!-- TODO: Consider using grid for everything -->
         <div class="metadata">
             <div class="metadata_item">
                 <Icon name="mdi:calendar-plus" />
@@ -82,13 +86,26 @@ const userIsAuthor = computed(() => props.article?.author._id === user.value?._i
 
     display: grid;
     gap: 1.5rem;
-    /* TODO: deal with articles without thumbnails */
+    /* PROBLEM: Some articles do not have thumbnails */ 
+    /* PROBLEM 2: Some articles do not have tags */
+    /* IDEA: Use flex instead */
     grid-template-areas: 
+        'title'
+        'metadata'
+        'summary'
+        'tags';
+    grid-template-columns: 1fr;
+}
+
+.article_preview.with_thumbnail {
+    grid-template-areas:
         'title title'
         'metadata metadata'
         'thumbnail summary'
         'tags tags';
+    grid-template-columns: auto 1fr;
 }
+
 
 .title {
     grid-area: title;
@@ -103,6 +120,8 @@ const userIsAuthor = computed(() => props.article?.author._id === user.value?._i
 .thumbnail {
     grid-area: thumbnail;
     max-width: 5rem;
+    max-height: 5rem;
+    object-fit: contain;
 }
 
 .tags {

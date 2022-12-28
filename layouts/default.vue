@@ -85,6 +85,10 @@ h3 {
     color: var(--headers-color)
 }
 
+.spacer {
+    flex-grow: 1;
+}
+
 
 .layout {
     /* Spacing  (padding) achieved using grid */

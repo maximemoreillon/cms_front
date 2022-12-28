@@ -3,8 +3,10 @@
 
     <ArticlesTagFilter v-if="route.query.tag_id"/>
     <ArticlesAuthorFilter v-if="route.query.author" />
+    
     <ArticlesSearch />
     <ArticlesSorting />
+    <ArticlesOrdering />
 
     <NuxtLink to="/articles/new" v-if="user">
         <Icon name="mdi:add" />
