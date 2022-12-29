@@ -1,0 +1,19 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25em;
+
+  color: inherit;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 100%;
+
+  transition: color 0.25s;
+}
+
+.button:hover {
+  color: var(--accent-color);
+}

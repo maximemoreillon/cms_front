@@ -5,6 +5,7 @@
     :class="{
       active: route.query.sort === value || (isDefault && !route.query.sort),
     }"
+    class="button"
     :to="{ query: { ...route.query, sort: value } }"
   >
     <Icon :name="icon" />
@@ -13,12 +14,11 @@
 
 <script lang="ts" setup>
 const route = useRoute()
-
-// TODO: defaults
+const user = userUser()
 const sortingOptions = ref([
   { icon: "mdi:calendar", value: "date", isDefault: true },
   { icon: "mdi:order-alphabetical-ascending", value: "title" },
-  // TODO: only if logged-in
-  { icon: "mdi:eye", value: "views" },
 ])
+
+if (user) sortingOptions.value.push({ icon: "mdi:eye", value: "views" })
 </script>

@@ -9,10 +9,10 @@
       <Icon name="mdi:tag" />
       <span>Tags</span>
     </NuxtLink>
-    <NuxtLink to="/authors">
+    <!-- <NuxtLink to="/authors">
       <Icon name="mdi:account" />
       <span>Auhtors</span>
-    </NuxtLink>
+    </NuxtLink> -->
     <NuxtLink v-if="user" to="/logout">
       <Icon name="mdi:logout" />
       <span>Logout</span>

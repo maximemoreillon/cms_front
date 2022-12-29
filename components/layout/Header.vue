@@ -1,7 +1,7 @@
 <template>
   <header>
     <!-- Open/close navigation -->
-    <button class="navigation_button" @click="emit('navToggle')">
+    <button class="navigation_button button" @click="emit('navToggle')">
       <Icon name="mdi:menu" />
     </button>
 

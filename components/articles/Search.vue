@@ -6,7 +6,7 @@
       class="search_bar"
       placeholder="Search articles"
     />
-    <button type="submit">
+    <button type="submit" class="button">
       <Icon name="material-symbols:search" />
     </button>
   </form>

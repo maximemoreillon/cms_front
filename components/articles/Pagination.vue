@@ -1,53 +1,53 @@
 <template>
-    <div class="pagination">
+  <div class="pagination">
+    <!-- TODO: Buttons for first and last -->
 
-        <!-- TODO: Buttons for first and last -->
-        
-        <NuxtLink :to="{ query: pageQuery(currentPage - 1)}">
-            <Icon name="mdi:arrow-left"/>
-        </NuxtLink>
+    <NuxtLink :to="{ query: { start_index: 0 } }">
+      <Icon name="mdi:page-first" />
+    </NuxtLink>
 
-        <span>{{ startIndex }} - {{ startIndex + pageSize }} / {{ articleCount }}</span>
+    <NuxtLink :to="{ query: pageQuery(currentPage - 1) }">
+      <Icon name="mdi:chevron-left" />
+    </NuxtLink>
 
-        <NuxtLink :to="{ query: pageQuery(currentPage + 1)}">
-            <Icon name="mdi:arrow-right" />
-        </NuxtLink>
+    <span
+      >{{ startIndex }} - {{ startIndex + pageSize }} / {{ articleCount }}</span
+    >
 
-    </div>
+    <NuxtLink :to="{ query: pageQuery(currentPage + 1) }">
+      <Icon name="mdi:chevron-right" />
+    </NuxtLink>
+
+    <NuxtLink :to="{ query: { start_index: articleCount - pageSize } }">
+      <Icon name="mdi:page-last" />
+    </NuxtLink>
+  </div>
 </template>
 
 <script lang="ts" setup>
-
 const route = useRoute()
 const props = defineProps({
-    articleCount: {type: Number, default: 0},
+  articleCount: { type: Number, default: 0 },
 })
 
 // query parameters to use: batch_size, start_index
 // default page size in back-end: 10
 
-const pageSize = 10
+const pageSize = ref(10)
 
-const pageCount = computed(() => Math.ceil(props.articleCount / pageSize))
-const startIndex = computed(() => Number(route.query.start_index || 0) )
-const currentPage = computed(() => 1 + startIndex.value / pageSize )
+const pageCount = computed(() => Math.ceil(props.articleCount / pageSize.value))
+const startIndex = computed(() => Number(route.query.start_index || 0))
+const currentPage = computed(() => 1 + startIndex.value / pageSize.value)
 
 const pageQuery = (page: number) => {
-    return { ...route.query, start_index: (page - 1) * pageSize }
+  return { ...route.query, start_index: (page - 1) * pageSize.value }
 }
-
 </script>
 
 <style>
-
 .pagination {
-    display: flex;
-    gap: 0.5em;
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
 }
-
-.current {
-    color: red;
-}
-
-
 </style>

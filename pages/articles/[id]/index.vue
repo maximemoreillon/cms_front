@@ -1,19 +1,22 @@
 <template>
   <article v-if="article">
-    <h1 class="article_title">{{ article.title }}</h1>
-
-    <ArticleMetadata :article="article" />
+    <h1 class="title">{{ article.title }}</h1>
 
     <NuxtLink
       v-if="userIsAuthor"
-      class="edit_button"
+      class="edit_button button"
       :to="`/articles/${route.params.id}/edit`"
     >
       <Icon name="mdi:pencil" />
+      <span>Edit</span>
     </NuxtLink>
 
+    <div class="metadata">
+      <ArticleMetadata :article="article" link />
+    </div>
+
     <TagList
-      class="article_tags"
+      class="tags"
       v-model="article.tags"
       :link="true"
       :input="false"
@@ -22,11 +25,7 @@
     />
 
     <!-- Ref used for applying image modals and code highlighting -->
-    <div
-      class="article_content"
-      v-html="article?.content"
-      ref="articleContent"
-    />
+    <div class="content" v-html="article?.content" ref="articleContent" />
   </article>
 
   <!-- TODO: Error display -->
@@ -68,11 +67,12 @@ const { data: article, error } = await useFetch<Article>(url, fetchOpts)
 
 onMounted(() => {
   addEventListenerForImageModals()
-  applyCodeStyling()
+  // applyCodeStyling()
 })
 
 const applyCodeStyling = () => {
   // Replaces characters in a weird way, e.g. &lt
+  // probably because parent of <code> is <pre>
 
   articleContent.value
     ?.querySelectorAll("code")
@@ -80,6 +80,7 @@ const applyCodeStyling = () => {
       // TODO: Would be better to get the language from class of <code>
       const tree = lowlight.highlightAuto(code.innerHTML)
       code.innerHTML = toHtml(tree)
+      console.log(toHtml(tree))
     })
 }
 
@@ -121,16 +122,7 @@ useHead({
 </script>
 
 <!-- If scoped, cannot access v-html -->
-<style>
-.article_content h1 {
-  /* h1 of the article content, show article.title as h1 */
-  display: none;
-}
-
-.article_content img {
-  max-width: 80%;
-}
-
+<style style>
 .modal_image {
   max-width: 90vw;
   max-height: 90vh;
@@ -139,16 +131,40 @@ useHead({
 
 article {
   display: grid;
+  gap: 0.5em;
+  /* PROBLEM: Edit button not necessarily shown */
+  /* IDEA: use flex */
   grid-template-areas:
-    "title title"
+    "title edit"
+    "metadata metadata"
+    "tags tags"
     "content content";
+  grid-template-columns: 1fr auto;
 }
 
-.article_title {
+article title {
   grid-area: title;
 }
 
-.article_content {
+article .content {
   grid-area: content;
+}
+
+article .content h1 {
+  /* h1 of the article content, show article.title as h1 */
+  display: none;
+}
+
+article .content img {
+  max-width: 80%;
+}
+
+article .tags {
+  grid-area: tags;
+}
+
+article .edit_button {
+  grid-area: edit;
+  align-self: center;
 }
 </style>

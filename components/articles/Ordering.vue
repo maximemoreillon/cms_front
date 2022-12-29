@@ -5,6 +5,7 @@
     :class="{
       active: route.query.order === value || (isDefault && !route.query.order),
     }"
+    class="button"
     :to="{ query: { ...route.query, order: value } }"
   >
     <Icon :name="icon" />
