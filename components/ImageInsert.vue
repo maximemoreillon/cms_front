@@ -3,7 +3,7 @@
     <h3>Via upload</h3>
     <form @submit.prevent="imageUpload()">
       <input ref="imageToUpload" type="file" accept="image/*" />
-      <button type="submit">
+      <button type="submit" class="button">
         <Icon name="mdi:upload" />
       </button>
     </form>
@@ -11,8 +11,13 @@
 
   <h3>Via URL</h3>
   <form class="" @submit.prevent="insertImage(imageUrl)">
-    <input v-model="imageUrl" type="text" />
-    <button type="submit">
+    <input
+      v-model="imageUrl"
+      type="text"
+      class="text_input"
+      placeholder="URL"
+    />
+    <button type="submit" class="button">
       <Icon name="mdi:link-plus" />
     </button>
   </form>
@@ -58,3 +63,15 @@ const insertImage = (url: string) => {
   imageUrl.value = ""
 }
 </script>
+
+<style>
+form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+input {
+  flex-grow: 1;
+}
+</style>

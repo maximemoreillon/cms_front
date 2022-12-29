@@ -22,6 +22,7 @@
 import "~~/assets/styles/codeBlock.css"
 import "~~/assets/styles/button.css"
 import "~~/assets/styles/textInput.css"
+import "~~/assets/styles/fab.css"
 
 const aside_open = ref(false)
 </script>
@@ -44,7 +45,7 @@ const aside_open = ref(false)
   --text-color: #444444;
   --headers-color: #222222;
   --nav-color: #222222;
-  --text-light-color: #888888;
+  --text-light-color: #666666;
 
   --error-color: #c00000;
   --success-color: #00c000;
@@ -95,6 +96,11 @@ h3 {
   color: var(--headers-color);
 }
 
+h1 {
+  /* Margin to zero because otherwise inconsistent gap at top of pages */
+  margin: 0;
+}
+
 .spacer {
   flex-grow: 1;
 }
@@ -107,10 +113,14 @@ h3 {
   /* Padding achieved using grid */
   min-height: 100vh;
   display: grid;
-  grid-template-areas: ". aside main .";
+  grid-template-areas:
+    ". . . ."
+    ". aside main ."
+    ". . . .";
   grid-template-columns:
     1fr var(--aside-width) minmax(auto, var(--main-max-width))
     1fr;
+  grid-template-rows: 0 1fr 0;
   grid-gap: var(--grid-gap);
 }
 
@@ -150,6 +160,9 @@ main {
   /* If not set like that, pre code overflows */
   /* This is absolute horseshit */
   overflow-x: auto;
+
+  /* Position relaive for FABs */
+  position: relative;
 }
 
 nav {
@@ -163,6 +176,10 @@ nav {
 
 main a {
   color: var(--accent-color);
+}
+
+.content img {
+  max-width: 80%;
 }
 
 /* responsivity */

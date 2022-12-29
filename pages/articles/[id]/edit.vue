@@ -1,12 +1,14 @@
 <template>
   <div class="edit" v-if="article">
-    <!-- TODO: Find where to put those buttons -->
-    <div class="controller">
-      <button @click="saveArticle()" class="button">
-        <Icon name="mdi:content-save" />
-      </button>
+    <!-- TODO: Fix margin with page top -->
+    <div class="controls">
       <button @click="deleteArticle()" class="button">
         <Icon name="mdi:delete" />
+        <span>Delete article</span>
+      </button>
+      <button @click="saveArticle()" class="button">
+        <Icon name="mdi:content-save" />
+        <span>Save</span>
       </button>
     </div>
 
@@ -100,12 +102,12 @@ onBeforeMount(() => {
 .edit {
   display: grid;
   grid-template-areas:
-    "controller controller"
+    "controls controls"
     "content content"
     "tags tags"
     "summary summary"
     "thumbnail visibility";
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
 .edit .controller {
@@ -131,5 +133,12 @@ onBeforeMount(() => {
 
 .edit:deep() .thumbnail {
   grid-area: thumbnail;
+}
+
+.controls {
+  grid-area: controls;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
 }
 </style>

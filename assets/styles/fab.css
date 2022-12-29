@@ -1,0 +1,24 @@
+.fab {
+  position: fixed;
+  bottom: 2rem;
+  /* right: calc(100vw - var(--main-max-width)); */
+  right: 2rem;
+
+  font-size: 150%;
+
+  width: 2em;
+  height: 2em;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: white;
+  background-color: var(--accent-color);
+  border: none;
+  border-radius: 100%;
+
+  cursor: pointer;
+
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}

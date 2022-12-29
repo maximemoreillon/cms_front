@@ -13,18 +13,18 @@
       :removable="false"
     />
 
-    <!-- TODO: find where to put this button -->
-    <NuxtLink
-      v-if="userIsAuthor"
-      class="edit_button button"
-      :to="`/articles/${route.params.id}/edit`"
-    >
-      <Icon name="mdi:pencil" />
-      <span>Edit</span>
-    </NuxtLink>
-
     <!-- Ref used for applying image modals and code highlighting -->
     <div class="content" v-html="article?.content" ref="articleContent" />
+
+    <!-- Edit button -->
+    <!-- TODO: Consider in metadata -->
+    <NuxtLink
+      v-if="userIsAuthor"
+      class="fab"
+      :to="`/articles/${route.params.id}/edit`"
+    >
+      <Icon name="mdi:file-document-edit" />
+    </NuxtLink>
   </article>
 
   <!-- TODO: Error display -->
@@ -122,35 +122,26 @@ useHead({
 
 <style style>
 article {
-  position: relative;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
+h1 {
+  /* <article> h1 have a different style than normal h1 */
+  font-size: 2em;
+}
+
 .modal_image {
-  max-width: 90vw;
+  border-radius: var(--border-radius);
+  max-width: 100%;
   max-height: 90vh;
   object-fit: contain;
+  display: flex;
 }
 
 .content h1 {
   /* hide h1 of article.content, show article.title as h1 instead */
   display: none;
-}
-
-.content img {
-  max-width: 80%;
-}
-
-.metadata {
-  margin-top: -1.5rem;
-}
-
-.edit_button {
-  /* TODO: find better location */
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
 }
 </style>

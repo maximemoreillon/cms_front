@@ -78,7 +78,7 @@ const editor = useEditor({
   editorProps: {
     attributes: {
       // Can put tailwind styles in here
-      class: "text_input",
+      class: "text_input content",
     },
   },
   onUpdate: () => {

@@ -3,7 +3,7 @@
     <input
       v-model="searchString"
       type="search"
-      class="search_bar"
+      class="search_bar text_input"
       placeholder="Search articles"
     />
     <button type="submit" class="button">

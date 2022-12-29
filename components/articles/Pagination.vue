@@ -47,7 +47,7 @@ const pageQuery = (page: number) => {
 <style>
 .pagination {
   display: flex;
-  align-items: center;
+  justify-content: center;
   gap: 0.5em;
 }
 </style>

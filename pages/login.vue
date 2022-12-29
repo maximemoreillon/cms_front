@@ -1,12 +1,13 @@
 <template>
-  <h2>Login</h2>
+  <h1>Login</h1>
 
   <form @submit.prevent="login()" v-if="!user">
-    <div>
+    <div class="field">
       <label for="username">
         <Icon name="mdi:account" />
       </label>
       <input
+        class="text_input"
         id="username"
         type="text"
         v-model="credentials.username"
@@ -14,11 +15,12 @@
       />
     </div>
 
-    <div>
+    <div class="field">
       <label for="password">
         <Icon name="mdi:key" />
       </label>
       <input
+        class="text_input"
         id="password"
         type="password"
         v-model="credentials.password"
@@ -74,13 +76,15 @@ const login = async () => {
 form {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 0.5em;
 }
 
 /* TODO: Improve selector */
-form > div {
+.field {
   display: flex;
   gap: 0.5em;
+  align-items: center;
 }
 
 input {

@@ -1,6 +1,6 @@
 <template>
   <div class="tag_list">
-    <Icon :name="tags.length ? 'mdi:tag' : 'mdi:tag-off'" />
+    <!-- <Icon :name="tags.length ? 'mdi:tag' : 'mdi:tag-off'" /> -->
 
     <Tag
       v-for="(tag, index) in tags"

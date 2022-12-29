@@ -3,8 +3,7 @@
     <div class="modal_background" v-if="open" @click.self="open = false">
       <!-- TODO: consider having an innder div for fancier animation -->
       <div class="modal_container">
-        <!-- TODO: Consider some padding so that the button is easier to see -->
-        <button @click="open = false" class="modal_close_button">
+        <button @click="open = false" class="modal_close_button button">
           <Icon name="mdi:close" />
         </button>
         <slot />
@@ -59,12 +58,18 @@ const open = computed({
 .modal_container {
   max-width: 95vw;
   position: relative;
+
   background-color: white;
+  border-radius: var(--border-radius);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+
+  /* padding: 1rem; */
 }
 
 .modal_close_button {
   position: absolute;
-  top: 1em;
-  right: 1em;
+  top: 0.5em;
+  right: 0.5em;
+  font-size: 150%;
 }
 </style>

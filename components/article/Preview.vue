@@ -51,7 +51,7 @@ defineProps<{ article: Article }>()
   border-radius: var(--border-radius);
   padding: 1.5rem;
 
-  color: initial;
+  color: inherit;
   text-decoration: none;
 
   display: flex;
@@ -81,7 +81,6 @@ defineProps<{ article: Article }>()
 .thumbnail_summary {
   display: flex;
   gap: 2rem;
-  color: var(--text-color);
 }
 
 .summary {
