@@ -80,6 +80,8 @@ defineProps<{ article: Article }>()
 
 .thumbnail_summary {
   display: flex;
+  /* WARNING: flex wrap results in constant wrapped state */
+  /* flex-wrap: wrap; */
   gap: 2rem;
 }
 
