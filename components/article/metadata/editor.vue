@@ -1,7 +1,7 @@
 <template>
   <!-- TODO: Would benefit from having section titles -->
   <textarea
-    class="summary"
+    class="summary text_input"
     v-model="article.summary"
     placeholder="Article summary"
   />
@@ -67,8 +67,5 @@ const article = computed({
 .summary {
   resize: vertical;
   display: flex;
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-  padding: 0.5em;
 }
 </style>

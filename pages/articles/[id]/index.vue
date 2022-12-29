@@ -2,18 +2,7 @@
   <article v-if="article">
     <h1 class="title">{{ article.title }}</h1>
 
-    <NuxtLink
-      v-if="userIsAuthor"
-      class="edit_button button"
-      :to="`/articles/${route.params.id}/edit`"
-    >
-      <Icon name="mdi:pencil" />
-      <span>Edit</span>
-    </NuxtLink>
-
-    <div class="metadata">
-      <ArticleMetadata :article="article" link />
-    </div>
+    <ArticleMetadata :article="article" link />
 
     <TagList
       class="tags"
@@ -23,6 +12,16 @@
       :truncate="5"
       :removable="false"
     />
+
+    <!-- TODO: find where to put this button -->
+    <NuxtLink
+      v-if="userIsAuthor"
+      class="edit_button button"
+      :to="`/articles/${route.params.id}/edit`"
+    >
+      <Icon name="mdi:pencil" />
+      <span>Edit</span>
+    </NuxtLink>
 
     <!-- Ref used for applying image modals and code highlighting -->
     <div class="content" v-html="article?.content" ref="articleContent" />
@@ -121,50 +120,37 @@ useHead({
 })
 </script>
 
-<!-- If scoped, cannot access v-html -->
 <style style>
+article {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .modal_image {
   max-width: 90vw;
   max-height: 90vh;
   object-fit: contain;
 }
 
-article {
-  display: grid;
-  gap: 0.5em;
-  /* PROBLEM: Edit button not necessarily shown */
-  /* IDEA: use flex */
-  grid-template-areas:
-    "title edit"
-    "metadata metadata"
-    "tags tags"
-    "content content";
-  grid-template-columns: 1fr auto;
-}
-
-article title {
-  grid-area: title;
-}
-
-article .content {
-  grid-area: content;
-}
-
-article .content h1 {
-  /* h1 of the article content, show article.title as h1 */
+.content h1 {
+  /* hide h1 of article.content, show article.title as h1 instead */
   display: none;
 }
 
-article .content img {
+.content img {
   max-width: 80%;
 }
 
-article .tags {
-  grid-area: tags;
+.metadata {
+  margin-top: -1.5rem;
 }
 
-article .edit_button {
-  grid-area: edit;
-  align-self: center;
+.edit_button {
+  /* TODO: find better location */
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
 }
 </style>

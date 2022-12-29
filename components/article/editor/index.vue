@@ -78,7 +78,7 @@ const editor = useEditor({
   editorProps: {
     attributes: {
       // Can put tailwind styles in here
-      class: "content",
+      class: "text_input",
     },
   },
   onUpdate: () => {
@@ -88,11 +88,4 @@ const editor = useEditor({
 </script>
 
 <!-- Not scoped because selecting classes inside editor -->
-<style scoped>
-.editor:deep().content {
-  /* Take some space from the outline when the editor is focused */
-  padding: 0 0.5em;
-  border: 1px solid var(--border-color);
-  border-radius: var(--border-radius);
-}
-</style>
+<style scoped></style>

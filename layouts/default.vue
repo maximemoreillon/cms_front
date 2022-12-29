@@ -21,6 +21,7 @@
 <script lang="ts" setup>
 import "~~/assets/styles/codeBlock.css"
 import "~~/assets/styles/button.css"
+import "~~/assets/styles/textInput.css"
 
 const aside_open = ref(false)
 </script>

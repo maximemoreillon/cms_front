@@ -8,6 +8,7 @@
   <ArticlesSorting />
   <ArticlesOrdering />
 
+  <!-- TODO: Find where to put this -->
   <NuxtLink to="/articles/new" v-if="user">
     <Icon name="mdi:add" />
     <span>New article</span>

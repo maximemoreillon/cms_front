@@ -1,5 +1,6 @@
 <template>
   <div class="edit" v-if="article">
+    <!-- TODO: Find where to put those buttons -->
     <div class="controller">
       <button @click="saveArticle()" class="button">
         <Icon name="mdi:content-save" />
@@ -112,23 +113,23 @@ onBeforeMount(() => {
   justify-self: end;
 }
 
-.edit /deep/ .editor {
+.edit:deep() .editor {
   grid-area: content;
 }
 
-.edit /deep/ .summary {
+.edit:deep() .summary {
   grid-area: summary;
 }
 
-.edit /deep/ .visibility {
+.edit:deep() .visibility {
   grid-area: visibility;
 }
 
-.edit /deep/ .tags {
+.edit:deep() .tags {
   grid-area: tags;
 }
 
-.edit /deep/ .thumbnail {
+.edit:deep() .thumbnail {
   grid-area: thumbnail;
 }
 </style>

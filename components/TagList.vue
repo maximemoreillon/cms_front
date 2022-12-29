@@ -13,10 +13,12 @@
 
     <input
       v-if="input"
+      class="text_input"
       type="text"
       v-model="newTagName"
       list="existingTags"
       @keyup.enter="addTag()"
+      placeholder="New tag"
     />
 
     <datalist id="existingTags">
@@ -30,33 +32,33 @@
 </template>
 
 <script lang="ts" setup>
-import type Tag from "~~/types/Tag";
+import type Tag from "~~/types/Tag"
 
-const runtimeConfig = useRuntimeConfig();
+const runtimeConfig = useRuntimeConfig()
 const props = defineProps<{
-  modelValue: Tag[];
-  input: boolean;
-  truncate: number | null;
-  link: boolean;
-  removable: boolean;
-}>();
+  modelValue: Tag[]
+  input: boolean
+  truncate: number | null
+  link: boolean
+  removable: boolean
+}>()
 
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"])
 
-const newTagName = ref("");
+const newTagName = ref("")
 
 const fetchOpts = {
   baseURL: runtimeConfig.public.apiBase,
   headers: { authorization: `Bearer ${useCookie("jwt").value}` },
-};
+}
 
 // TODO: Error handling
-const { data: existingTags, error } = await useFetch<Tag[]>("/tags", fetchOpts);
+const { data: existingTags, error } = await useFetch<Tag[]>("/tags", fetchOpts)
 
 const tags = computed({
   get: () => props.modelValue,
   set: (newVal) => emit("update:modelValue", newVal),
-});
+})
 
 const addTag = async () => {
   const options = {
@@ -64,20 +66,20 @@ const addTag = async () => {
     body: { name: newTagName.value },
     baseURL: runtimeConfig.public.apiBase,
     headers: { authorization: `Bearer ${useCookie("jwt").value}` },
-  };
+  }
 
   try {
-    const newTag = await $fetch<Tag>("/tags", options);
-    tags.value.push(newTag);
-    newTagName.value = "";
+    const newTag = await $fetch<Tag>("/tags", options)
+    tags.value.push(newTag)
+    newTagName.value = ""
   } catch (error) {
-    console.error(error);
+    console.error(error)
   }
-};
+}
 
 const removeTag = (index: number) => {
-  tags.value.splice(index, 1);
-};
+  tags.value.splice(index, 1)
+}
 </script>
 
 <style scoped>
