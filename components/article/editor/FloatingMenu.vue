@@ -1,5 +1,6 @@
 <template>
   <FloatingMenu
+    class="menu"
     v-if="editor"
     :editor="editor"
     :tippy-options="{ duration: 100 }"
@@ -7,6 +8,7 @@
     <button
       v-for="level in 3"
       :key="level"
+      class="button"
       :class="{ active: editor.isActive('heading', { level }) }"
       @click="editor.chain().focus().toggleHeading({ level }).run()"
     >
@@ -14,6 +16,7 @@
     </button>
 
     <button
+      class="button"
       :class="{ active: editor.isActive('codeBlock') }"
       @click="editor.chain().focus().toggleCodeBlock().run()"
     >
@@ -21,6 +24,7 @@
     </button>
 
     <button
+      class="button"
       :class="{ active: editor.isActive('bulletList') }"
       @click="editor.chain().focus().toggleBulletList().run()"
     >
@@ -28,6 +32,7 @@
     </button>
 
     <button
+      class="button"
       :class="{ active: editor.isActive('orderedList') }"
       @click="editor.chain().focus().toggleOrderedList().run()"
     >
@@ -36,7 +41,7 @@
 
     <ArticleEditorImageMenu :editor="editor" />
 
-    <button @click="prompt_for_youtube()">
+    <button @click="prompt_for_youtube()" class="button">
       <Icon name="mdi:youtube" />
     </button>
   </FloatingMenu>

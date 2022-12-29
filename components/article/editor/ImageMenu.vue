@@ -1,9 +1,9 @@
 <template>
-  <button class="menu_wrapper" @click="open = !open">
+  <button class="wrapper button" @click="open = !open" :class="{ open }">
     <Icon name="mdi:image-plus" />
 
     <!-- TODO: Consider using a modal instead -->
-    <div v-if="open" class="menu_content" @click.stop>
+    <div v-if="open" class="content" @click.stop>
       <ImageInsert @insert="insertImage($event)" />
     </div>
   </button>
@@ -20,17 +20,19 @@ const insertImage = (src: string) => {
 </script>
 
 <style scoped>
-.menu_wrapper {
+.wrapper {
   position: relative;
 }
 
-.menu_content {
+.wrapper .content {
+  color: var(--text-color);
   position: absolute;
   left: 0;
   bottom: 100%;
   background-color: white;
   text-align: initial;
-  border: 1px solid #dddddd;
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
   padding: 0.5em;
 }
 

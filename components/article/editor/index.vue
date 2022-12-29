@@ -1,8 +1,9 @@
 <template>
-  <!-- TODO: Consider wrapping in a template with v-if -->
   <div class="editor">
-    <ArticleEditorBubbleMenu :editor="editor" v-if="editor" />
-    <ArticleEditorFloatingMenu :editor="editor" v-if="editor" />
+    <template v-if="editor">
+      <ArticleEditorBubbleMenu :editor="editor" />
+      <ArticleEditorFloatingMenu :editor="editor" />
+    </template>
     <EditorContent :editor="editor" />
   </div>
 </template>
@@ -87,5 +88,18 @@ const editor = useEditor({
 })
 </script>
 
-<!-- Not scoped because selecting classes inside editor -->
-<style scoped></style>
+<style scoped>
+.editor:deep() .menu {
+  /* inline-flex needed otherwise overflow */
+  display: inline-flex;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border: 1px solid var(--border-color);
+  background-color: white;
+  border-radius: var(--border-radius);
+}
+
+.editor:deep() .menu > .button {
+  padding: 0.5rem;
+}
+</style>

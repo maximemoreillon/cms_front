@@ -19,6 +19,10 @@
       <ArticleMetadataEditor v-model="article" />
     </section>
   </template>
+
+  <Snackbar v-model="snackbar.show">
+    {{ snackbar.message }}
+  </Snackbar>
 </template>
 
 <script lang="ts" setup>
@@ -30,6 +34,10 @@ const router = useRouter()
 const runtimeConfig = useRuntimeConfig()
 const saving = ref(false)
 const deleting = ref(false)
+const snackbar = reactive({
+  show: false,
+  message: "",
+})
 
 const url = `articles/${route.params.id}`
 
@@ -53,7 +61,8 @@ const saveArticle = async () => {
 
   try {
     await $fetch(url, options)
-    alert("Article saved")
+    snackbar.show = true
+    snackbar.message = `Article saved`
   } catch (error) {
     // TODO: Nicer notification
     alert("Failed to update article")
@@ -96,7 +105,8 @@ onMounted(() => {
   document.addEventListener("keydown", keydownHandler)
 })
 
-onBeforeMount(() => {
+onBeforeUnmount(() => {
+  // TODO: This does not seem to work
   document.removeEventListener("keydown", keydownHandler)
 })
 </script>

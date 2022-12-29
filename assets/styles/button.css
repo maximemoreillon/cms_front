@@ -6,9 +6,11 @@
 
   color: inherit;
   background-color: transparent;
+  border-radius: var(--border-radius);
   border: none;
   cursor: pointer;
   text-decoration: none;
+  /* Not sure if this applies */
   font-size: 100%;
 
   transition: color 0.25s;
@@ -16,4 +18,9 @@
 
 .button:hover {
   color: var(--accent-color);
+}
+
+.button.open {
+  background-color: #444444;
+  color: white;
 }

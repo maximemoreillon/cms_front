@@ -69,6 +69,25 @@ const createArticle = async () => {
 
 <style scoped>
 .content {
-  padding: 1rem 2rem;
+  padding: 2rem 2rem;
+  width: 90vw;
+  max-width: 60rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+h3 {
+  margin: 0;
+}
+
+form {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+input {
+  flex-grow: 1;
 }
 </style>
