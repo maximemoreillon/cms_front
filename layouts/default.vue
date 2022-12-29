@@ -101,6 +101,10 @@ h1 {
   margin: 0;
 }
 
+section {
+  margin: 1rem 0;
+}
+
 .spacer {
   flex-grow: 1;
 }

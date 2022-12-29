@@ -1,40 +1,40 @@
 <template>
-  <!-- Wrapping because using flex column -->
-  <!-- TODO: Consider without -->
-  <div class="page">
-    <h1>Articles</h1>
+  <h1>Articles</h1>
 
-    <ArticlesTagFilter v-if="route.query.tag_id" />
-    <ArticlesAuthorFilter v-if="route.query.author" />
+  <ArticlesTagFilter v-if="route.query.tag_id" />
+  <ArticlesAuthorFilter v-if="route.query.author" />
 
+  <section>
     <ArticlesSearch />
+  </section>
 
-    <div class="sorting_ordering">
-      <ArticlesSorting />
-      <div class="spacer" />
-      <ArticlesOrdering />
-    </div>
+  <section class="sorting_ordering">
+    <ArticlesSorting />
+    <div class="spacer" />
+    <ArticlesOrdering />
+  </section>
 
-    <template v-if="data">
-      <div class="articles">
-        <ArticlePreview
-          v-for="article in data.articles"
-          :key="article._id"
-          :article="article"
-        />
-      </div>
+  <template v-if="data">
+    <section class="articles">
+      <ArticlePreview
+        v-for="article in data.articles"
+        :key="article._id"
+        :article="article"
+      />
+    </section>
 
+    <section>
       <ArticlesPagination :articleCount="data.article_count" />
+    </section>
 
-      <button class="fab" @click="newArticleOpen = true" v-if="user">
-        <Icon name="mdi:file-document-plus" />
-      </button>
-    </template>
+    <button class="fab" @click="newArticleOpen = true" v-if="user">
+      <Icon name="mdi:file-document-plus" />
+    </button>
+  </template>
 
-    <NewArticle v-model="newArticleOpen" />
+  <NewArticle v-model="newArticleOpen" />
 
-    <!-- TODO: Deal with data fetching errors -->
-  </div>
+  <!-- TODO: Deal with data fetching errors -->
 </template>
 
 <script lang="ts" setup>

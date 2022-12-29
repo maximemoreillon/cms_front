@@ -49,7 +49,7 @@ const userIsAuthor = computed(
   flex-wrap: wrap;
   align-items: center;
   gap: 1rem;
-  font-size: 90%;
+  font-size: 80%;
   color: var(--text-light-color);
 }
 .metadatum {

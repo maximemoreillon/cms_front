@@ -122,12 +122,6 @@ useHead({
 </script>
 
 <style scoped>
-article {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
 h1 {
   /* <article> h1 have a different style than normal h1 */
   font-size: 2em;

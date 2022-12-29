@@ -1,7 +1,14 @@
 <template>
-  <div class="edit" v-if="article">
-    <!-- TODO: Fix margin with page top -->
-    <div class="controls">
+  <template v-if="article">
+    <section>
+      <ArticleEditor v-model="article.content" />
+    </section>
+
+    <section>
+      <ArticleMetadataEditor v-model="article" />
+    </section>
+
+    <section class="controller">
       <button @click="deleteArticle()" class="button">
         <Icon name="mdi:delete" />
         <span>Delete article</span>
@@ -10,12 +17,8 @@
         <Icon name="mdi:content-save" />
         <span>Save</span>
       </button>
-    </div>
-
-    <ArticleEditor v-model="article.content" />
-
-    <ArticleMetadataEditor v-model="article" />
-  </div>
+    </section>
+  </template>
 </template>
 
 <script lang="ts" setup>
@@ -99,46 +102,5 @@ onBeforeMount(() => {
 </script>
 
 <style scoped>
-.edit {
-  display: grid;
-  grid-template-areas:
-    "controls controls"
-    "content content"
-    "tags tags"
-    "summary summary"
-    "thumbnail visibility";
-  gap: 1rem;
-}
-
-.edit .controller {
-  grid-area: controller;
-  justify-self: end;
-}
-
-.edit:deep() .editor {
-  grid-area: content;
-}
-
-.edit:deep() .summary {
-  grid-area: summary;
-}
-
-.edit:deep() .visibility {
-  grid-area: visibility;
-}
-
-.edit:deep() .tags {
-  grid-area: tags;
-}
-
-.edit:deep() .thumbnail {
-  grid-area: thumbnail;
-}
-
-.controls {
-  grid-area: controls;
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-}
+/* TODO: Redo CSS */
 </style>
