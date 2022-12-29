@@ -2,28 +2,31 @@
   <div class="pagination">
     <!-- TODO: Buttons for first and last -->
 
-    <NuxtLink :to="{ query: { start_index: 0 } }" class="button">
-      <Icon name="mdi:page-first" />
-    </NuxtLink>
-
-    <NuxtLink :to="{ query: pageQuery(currentPage - 1) }" class="button">
-      <Icon name="mdi:chevron-left" />
-    </NuxtLink>
+    <template v-if="currentPage !== 1">
+      <NuxtLink :to="{ query: { start_index: 0 } }" class="button">
+        <Icon name="mdi:page-first" />
+      </NuxtLink>
+      <NuxtLink :to="{ query: pageQuery(currentPage - 1) }" class="button">
+        <Icon name="mdi:chevron-left" />
+      </NuxtLink>
+    </template>
 
     <span
       >{{ startIndex }} - {{ startIndex + pageSize }} / {{ articleCount }}</span
     >
 
-    <NuxtLink :to="{ query: pageQuery(currentPage + 1) }" class="button">
-      <Icon name="mdi:chevron-right" />
-    </NuxtLink>
+    <template v-if="currentPage !== pageCount">
+      <NuxtLink :to="{ query: pageQuery(currentPage + 1) }" class="button">
+        <Icon name="mdi:chevron-right" />
+      </NuxtLink>
 
-    <NuxtLink
-      :to="{ query: { start_index: articleCount - pageSize } }"
-      class="button"
-    >
-      <Icon name="mdi:page-last" />
-    </NuxtLink>
+      <NuxtLink
+        :to="{ query: { start_index: articleCount - pageSize } }"
+        class="button"
+      >
+        <Icon name="mdi:page-last" />
+      </NuxtLink>
+    </template>
   </div>
 </template>
 

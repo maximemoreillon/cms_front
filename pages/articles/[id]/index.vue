@@ -1,18 +1,21 @@
 <template>
   <article v-if="article">
     <h1 class="title">{{ article.title }}</h1>
+    <section>
+      <ArticleMetadata :article="article" link />
+    </section>
 
-    <ArticleMetadata :article="article" link />
-
-    <TagList
-      v-if="article.tags.length"
-      class="tags"
-      v-model="article.tags"
-      :link="true"
-      :input="false"
-      :truncate="5"
-      :removable="false"
-    />
+    <section>
+      <TagList
+        v-if="article.tags.length"
+        class="tags"
+        v-model="article.tags"
+        :link="true"
+        :input="false"
+        :truncate="5"
+        :removable="false"
+      />
+    </section>
 
     <!-- Ref used for applying image modals and code highlighting -->
     <div class="content" v-html="article?.content" ref="articleContent" />
