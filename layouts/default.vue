@@ -88,6 +88,8 @@ body {
   margin: 0;
 
   color: var(--text-color);
+
+  line-height: var(--line-height);
 }
 
 h1,

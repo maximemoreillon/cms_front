@@ -5,14 +5,28 @@
       <Icon name="mdi:file-document-outline" />
       <span>Articles</span>
     </NuxtLink>
-    <NuxtLink to="/tags">
-      <Icon name="mdi:tag" />
+
+    <!-- TODO: Articles of user -->
+
+    <!-- <NuxtLink to="/tags">
+      <Icon name="mdi:tag-multiple" />
       <span>Tags</span>
+    </NuxtLink> -->
+
+    <NuxtLink
+      v-for="tag in pinnedTags"
+      :key="tag._id"
+      :to="`/?tag_id=${tag._id}`"
+    >
+      <Icon name="mdi:tag" />
+      <span>{{ tag.name }}</span>
     </NuxtLink>
+
     <!-- <NuxtLink to="/authors">
       <Icon name="mdi:account" />
       <span>Auhtors</span>
     </NuxtLink> -->
+
     <NuxtLink v-if="user" to="/logout">
       <Icon name="mdi:logout" />
       <span>Logout</span>
@@ -25,7 +39,18 @@
 </template>
 
 <script lang="ts" setup>
+import type Tag from "~~/types/Tag"
+
 const user = userUser()
+const runtimeConfig = useRuntimeConfig()
+
+const fetchOpts = {
+  baseURL: runtimeConfig.public.apiBase,
+}
+const { data: pinnedTags, error } = await useFetch<Tag[]>(
+  `tags?pinned=true`,
+  fetchOpts
+)
 </script>
 
 <style scoped>

@@ -12,6 +12,8 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: "Articles | Maxime Moreillon",
+      //   TODO: make favicon user customizable
+      link: [{ rel: "icon", type: "image/png", href: "/logo.png" }],
       meta: [
         { name: "description", content: "Articles | Maxime Moreillon" },
 
