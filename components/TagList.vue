@@ -3,13 +3,17 @@
     <!-- <Icon :name="tags.length ? 'mdi:tag' : 'mdi:tag-off'" /> -->
 
     <Tag
-      v-for="(tag, index) in tags"
+      v-for="(tag, index) in tagList"
       :key="tag._id"
       :tag="tag"
       :removable="removable"
       :link="link"
       @remove="removeTag(index)"
     />
+
+    <span v-if="truncate && tags.length > truncate">
+      +{{ tags.length - truncate }}
+    </span>
 
     <input
       v-if="input"
@@ -44,7 +48,10 @@ const props = defineProps<{
 }>()
 
 const emit = defineEmits(["update:modelValue"])
-
+const tagList = computed(() => {
+  if (props.truncate) return props.modelValue.slice(0, props.truncate)
+  else return props.modelValue
+})
 const newTagName = ref("")
 
 const fetchOpts = {
@@ -85,6 +92,7 @@ const removeTag = (index: number) => {
 <style scoped>
 .tag_list {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 0.5em;
 }

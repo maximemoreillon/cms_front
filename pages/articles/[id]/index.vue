@@ -25,7 +25,7 @@
         v-model="article.tags"
         :link="true"
         :input="false"
-        :truncate="5"
+        :truncate="0"
         :removable="false"
       />
     </section>
