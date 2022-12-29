@@ -2,11 +2,11 @@
   <!-- v-if not really nice -->
   <div class="metadata" v-if="article">
     <div class="creation_date metadatum">
-      <Icon name="mdi:calendar-plus" />
+      <Icon name="mdi:calendar" />
       <span>{{ formatNeo4jDate(article.authorship.creation_date) }}</span>
     </div>
 
-    <div class="edition_date metadatum">
+    <div class="edition_date metadatum" v-if="userIsAuthor">
       <Icon name="mdi:calendar-edit" />
       <span>{{ formatNeo4jDate(article.authorship.edition_date) }}</span>
     </div>

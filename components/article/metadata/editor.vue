@@ -66,6 +66,6 @@ const article = computed({
 <style scoped>
 .summary {
   resize: vertical;
-  display: flex;
+  width: 100%;
 }
 </style>

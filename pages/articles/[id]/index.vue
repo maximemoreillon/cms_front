@@ -1,5 +1,18 @@
 <template>
-  <article v-if="article">
+  <article v-if="article" itemscope itemtype="http://schema.org/Article">
+    <!-- Meta tags for SEO -->
+    <!-- TODO: delimiter for date -->
+    <meta itemprop="publisher" content="Maxime Moreillon" />
+    <meta itemprop="image" content="/logo.png" />
+    <meta
+      itemprop="datePublished"
+      :content="formatNeo4jDate(article.authorship.creation_date)"
+    />
+    <meta
+      itemprop="dateModified"
+      :content="formatNeo4jDate(article.authorship.edition_date)"
+    />
+
     <h1 class="title">{{ article.title }}</h1>
     <section>
       <ArticleMetadata :article="article" link />
