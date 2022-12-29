@@ -185,7 +185,7 @@ main a {
   color: var(--accent-color);
 }
 
-article .content img {
+.content img {
   max-width: 80%;
   max-height: 60vh;
   /* border-radius: var(--border-radius); */

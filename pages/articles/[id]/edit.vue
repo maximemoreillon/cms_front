@@ -1,13 +1,5 @@
 <template>
   <template v-if="article">
-    <section>
-      <ArticleEditor v-model="article.content" />
-    </section>
-
-    <section>
-      <ArticleMetadataEditor v-model="article" />
-    </section>
-
     <section class="controller">
       <button @click="deleteArticle()" class="button">
         <Icon name="mdi:delete" />
@@ -17,6 +9,14 @@
         <Icon name="mdi:content-save" />
         <span>Save</span>
       </button>
+    </section>
+
+    <section>
+      <ArticleEditor v-model="article.content" />
+    </section>
+
+    <section>
+      <ArticleMetadataEditor v-model="article" />
     </section>
   </template>
 </template>
