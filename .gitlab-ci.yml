@@ -1,0 +1,22 @@
+stages:
+  - build
+
+variables:
+  APPLICATION_NAME: cms-front
+  CONTAINER_IMAGE_TAGGED: ${DOCKER_HUB_USERNAME}/${APPLICATION_NAME}:nuxt3-${CI_COMMIT_SHORT_SHA}
+
+image: moreillon/ci-dind
+services:
+  - name: docker:19.03.12-dind
+
+build:
+  stage: build
+  tags:
+    - dind
+  only:
+    - nuxt3
+  before_script:
+    - echo "${DOCKER_HUB_PASSWORD}" | docker login --username ${DOCKER_HUB_USERNAME} --password-stdin
+  script:
+    - docker build -t ${CONTAINER_IMAGE_TAGGED} .
+    - docker push ${CONTAINER_IMAGE_TAGGED}

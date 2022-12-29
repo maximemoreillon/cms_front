@@ -155,4 +155,8 @@ h1 {
   /* hide h1 of article.content, show article.title as h1 instead */
   display: none;
 }
+
+article:deep() img {
+  cursor: pointer;
+}
 </style>

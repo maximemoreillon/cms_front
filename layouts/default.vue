@@ -88,8 +88,6 @@ body {
   margin: 0;
 
   color: var(--text-color);
-
-  line-height: var(--line-height);
 }
 
 h1,
@@ -169,6 +167,9 @@ main {
 
   /* Position relaive for FABs */
   position: relative;
+
+  /* TODO: Figure out where to have this */
+  line-height: var(--line-height);
 }
 
 nav {
@@ -184,8 +185,11 @@ main a {
   color: var(--accent-color);
 }
 
-.content img {
+article .content img {
   max-width: 80%;
+  max-height: 60vh;
+  border-radius: var(--border-radius);
+  /* box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); */
 }
 
 /* responsivity */

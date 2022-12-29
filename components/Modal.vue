@@ -48,7 +48,7 @@ const open = computed({
   bottom: 0;
   z-index: 100;
 
-  background-color: #00000022;
+  background-color: #00000066;
 
   display: flex;
   align-items: center;

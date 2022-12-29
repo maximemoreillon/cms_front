@@ -2,7 +2,7 @@
   <nav>
     <NuxtLink to="/">
       <!-- TODO: find icon -->
-      <Icon name="mdi:file-document-outline" />
+      <Icon name="mdi:file-document-multiple-outline" />
       <span>Articles</span>
     </NuxtLink>
 
@@ -47,10 +47,9 @@ const runtimeConfig = useRuntimeConfig()
 const fetchOpts = {
   baseURL: runtimeConfig.public.apiBase,
 }
-const { data: pinnedTags, error } = await useFetch<Tag[]>(
-  `tags?pinned=true`,
-  fetchOpts
-)
+
+const url = `/tags?pinned=true`
+const { data: pinnedTags, error } = await useFetch<Tag[]>(url, fetchOpts)
 </script>
 
 <style scoped>
@@ -76,7 +75,8 @@ nav a:hover {
   border-right-color: #666666;
 }
 
+/* TODO: Selector does not work with query search params */
 nav a.router-link-exact-active {
-  border-right-color: var(--accent-color);
+  /* border-right-color: var(--accent-color); */
 }
 </style>
