@@ -1,9 +1,11 @@
 stages:
   - build
+  - deploy
 
 variables:
   APPLICATION_NAME: cms-front
   CONTAINER_IMAGE_TAGGED: ${DOCKER_HUB_USERNAME}/${APPLICATION_NAME}:nuxt3-${CI_COMMIT_SHORT_SHA}
+  K8S_INGRESS_HOST: next.articles.maximemoreillon.com
 
 image: moreillon/ci-dind
 services:
@@ -20,3 +22,14 @@ build:
   script:
     - docker build -t ${CONTAINER_IMAGE_TAGGED} .
     - docker push ${CONTAINER_IMAGE_TAGGED}
+
+deploy:
+  only:
+    - master
+  stage: deploy
+  tags:
+    - dind
+  before_script:
+    - kubectl config use-context moreillon_ci/moreillon_k8s/kubernetes-agent:cloud
+  script:
+    - envsubst < kubernetes_manifest.yml | kubectl apply -n ${KUBERNETES_NAMESPACE} -f -
