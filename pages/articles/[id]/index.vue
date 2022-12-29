@@ -5,6 +5,7 @@
     <ArticleMetadata :article="article" link />
 
     <TagList
+      v-if="article.tags.length"
       class="tags"
       v-model="article.tags"
       :link="true"
@@ -120,7 +121,7 @@ useHead({
 })
 </script>
 
-<style style>
+<style scoped>
 article {
   display: flex;
   flex-direction: column;
@@ -140,7 +141,7 @@ h1 {
   display: flex;
 }
 
-.content h1 {
+.content:deep() h1 {
   /* hide h1 of article.content, show article.title as h1 instead */
   display: none;
 }

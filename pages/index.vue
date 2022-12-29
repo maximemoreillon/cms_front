@@ -26,10 +26,12 @@
 
       <ArticlesPagination :articleCount="data.article_count" />
 
-      <NuxtLink class="fab" to="/articles/new" v-if="user">
+      <button class="fab" @click="newArticleOpen = true" v-if="user">
         <Icon name="mdi:file-document-plus" />
-      </NuxtLink>
+      </button>
     </template>
+
+    <NewArticle v-model="newArticleOpen" />
 
     <!-- TODO: Deal with data fetching errors -->
   </div>
@@ -52,6 +54,7 @@ type FetchBody = {
 const runtimeConfig = useRuntimeConfig()
 const route = useRoute()
 const query = computed(() => route.query)
+const newArticleOpen = ref(false)
 
 watch(query, () => {
   refresh()
@@ -85,5 +88,6 @@ const { data, error, refresh } = await useFetch<FetchBody>(fetchFnc, fetchOpts)
 
 .sorting_ordering {
   display: flex;
+  gap: 0.5rem;
 }
 </style>

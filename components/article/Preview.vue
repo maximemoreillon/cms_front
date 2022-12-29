@@ -91,6 +91,7 @@ defineProps<{ article: Article }>()
 .thumbnail {
   width: 10rem;
   height: 10rem;
-  object-fit: contain;
+  object-fit: cover;
+  border-radius: var(--border-radius);
 }
 </style>

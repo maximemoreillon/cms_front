@@ -5,7 +5,9 @@
     <Icon name="mdi:pencil" class="edit_badge" />
 
     <Modal v-model="open" @click.stop class="modal">
-      <ImageInsert @insert="src = $event" />
+      <div class="model_content">
+        <ImageInsert @insert="src = $event" />
+      </div>
     </Modal>
   </div>
 </template>
@@ -59,5 +61,9 @@ const open = ref(false)
 
 .modal {
   cursor: initial;
+}
+
+.model_content {
+  padding: 1rem 2rem;
 }
 </style>
