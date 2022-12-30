@@ -8,10 +8,10 @@
 
     <!-- TODO: Articles of user -->
 
-    <!-- <NuxtLink to="/tags">
+    <NuxtLink to="/tags">
       <Icon name="mdi:tag-multiple" />
       <span>Tags</span>
-    </NuxtLink> -->
+    </NuxtLink>
 
     <NuxtLink
       v-for="tag in pinnedTags"
