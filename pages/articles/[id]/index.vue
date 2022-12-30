@@ -1,17 +1,6 @@
 <template>
   <article v-if="article" itemscope itemtype="http://schema.org/Article">
-    <!-- Meta tags for SEO -->
-    <!-- TODO: delimiter for date -->
-    <meta itemprop="publisher" content="Maxime Moreillon" />
-    <meta itemprop="image" content="/logo.png" />
-    <meta
-      itemprop="datePublished"
-      :content="formatNeo4jDate(article.authorship.creation_date)"
-    />
-    <meta
-      itemprop="dateModified"
-      :content="formatNeo4jDate(article.authorship.edition_date)"
-    />
+    <ArticleSeo :article="article" />
 
     <h1 class="title">{{ article.title }}</h1>
     <section>
@@ -118,35 +107,13 @@ const codeBlockSyntaxHightlight = () => {
     if (!code) return
 
     // TODO: use language that is provided if any
+    // Language is provided as a class of pre
     const tree = lowlight.highlightAuto(code.innerText)
     const html = toHtml(tree)
     if (!html) return
     code.innerHTML = html
   })
 }
-
-useHead({
-  title: article.value?.title,
-  meta: [
-    { name: "description", content: article.value?.summary },
-
-    // Twitter
-    { name: "twitter:card", content: "summary" },
-    { name: "twitter:site", content: "@m_moreillon" },
-    { name: "twitter:title", content: article.value?.title },
-    { name: "twitter:description", content: article.value?.summary },
-    { name: "twitter:image", content: article.value?.thumbnail_src },
-    { name: "twitter:image:alt", content: `${article.value?.title} thumbnail` },
-
-    // OpenGraph
-    { name: "og:title", content: article.value?.title },
-    { name: "og:description", content: article.value?.summary },
-    { name: "og:image", content: article.value?.thumbnail_src },
-    // { name: "og:url", content: `${article.value?.title} thumbnail` },
-    { name: "og:type", content: "article" },
-    { name: "og:locale", content: "en_US" },
-  ],
-})
 </script>
 
 <style scoped>
