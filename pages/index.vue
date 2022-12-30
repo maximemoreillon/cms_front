@@ -4,7 +4,7 @@
   <section>
     <ArticlesSearch />
   </section>
-  <section v-if="route.query.tag_id">
+  <section v-if="route.query.tag_id || route.query.tag">
     <ArticlesTagFilter />
   </section>
   <section v-if="route.query.author">

@@ -48,4 +48,8 @@ watch(open, () => {
   left: 50%;
   transform: translateX(-50%);
 }
+
+.snackbar.error {
+  background-color: var(--error-color);
+}
 </style>

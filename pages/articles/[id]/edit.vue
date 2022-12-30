@@ -20,7 +20,7 @@
     </section>
   </template>
 
-  <Snackbar v-model="snackbar.show">
+  <Snackbar v-model="snackbar.show" :class="snackbar.class">
     {{ snackbar.message }}
   </Snackbar>
 </template>
@@ -37,6 +37,7 @@ const deleting = ref(false)
 const snackbar = reactive({
   show: false,
   message: "",
+  class: "",
 })
 
 const url = `articles/${route.params.id}`
@@ -63,9 +64,11 @@ const saveArticle = async () => {
     await $fetch(url, options)
     snackbar.show = true
     snackbar.message = `Article saved`
+    snackbar.class = ""
   } catch (error) {
-    // TODO: Nicer notification
-    alert("Failed to update article")
+    snackbar.show = true
+    snackbar.message = `Failed to save article`
+    snackbar.class = "error"
     console.error(error)
   } finally {
     saving.value = false
@@ -86,8 +89,9 @@ const deleteArticle = async () => {
     await $fetch(url, options)
     router.push("/")
   } catch (error) {
-    // TODO: Nicer notification
-    alert("Failed to delete article")
+    snackbar.show = true
+    snackbar.message = `Failed to delete`
+    snackbar.class = "error"
     console.error(error)
   } finally {
     deleting.value = false

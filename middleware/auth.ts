@@ -1,25 +1,23 @@
-import type Author from '~~/types/Author'
+import type Author from "~~/types/Author"
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
+  const jwt = useCookie("jwt")
+  const user = userUser()
 
-    const jwt = useCookie('jwt').value
+  if (!jwt) {
+    user.value = null
+    return
+  }
 
-    if(!jwt) {
-        userUser().value = null
-        return 
-    }
+  const runtimeConfig = useRuntimeConfig()
+  const { idenfiticationUrl } = runtimeConfig.public
 
-    const runtimeConfig = useRuntimeConfig()
-    const {idenfiticationUrl} = runtimeConfig.public
+  const headers = { authorization: `Bearer ${jwt.value}` }
 
-    const headers = { authorization: `Bearer ${jwt}` }
-
-    try {
-        userUser().value = await $fetch<Author>(idenfiticationUrl, {headers})
-    } catch (error) {
-        console.error(error)
-        userUser().value = null
-    }
-
-
+  try {
+    user.value = await $fetch<Author>(idenfiticationUrl, { headers })
+  } catch (error) {
+    console.error(error)
+    user.value = null
+  }
 })

@@ -42,14 +42,17 @@
 import type Tag from "~~/types/Tag"
 
 const user = userUser()
+const pinnedTags = usePinnedTags()
 const runtimeConfig = useRuntimeConfig()
 
 const fetchOpts = {
   baseURL: runtimeConfig.public.apiBase,
 }
 
+// TODO: use store instead
 const url = `/tags?pinned=true`
-const { data: pinnedTags, error } = await useFetch<Tag[]>(url, fetchOpts)
+const { data, error } = await useFetch<Tag[]>(url, fetchOpts)
+pinnedTags.value = data.value
 </script>
 
 <style scoped>
@@ -64,6 +67,10 @@ nav a {
   transition: border-color 0.25s;
 }
 
+nav a svg {
+  flex-shrink: 0;
+}
+
 /* Ellipsis on nav items that are too long */
 nav a span {
   white-space: nowrap;
@@ -76,7 +83,7 @@ nav a:hover {
 }
 
 /* TODO: Selector does not work with query search params */
-nav a.router-link-exact-active {
-  /* border-right-color: var(--accent-color); */
-}
+/* nav a.router-link-exact-active {
+  border-right-color: var(--accent-color);
+} */
 </style>
