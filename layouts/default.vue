@@ -1,4 +1,5 @@
 <template>
+  <NuxtLoadingIndicator color="#c00000" />
   <!-- Wrapping for CSS -->
   <div class="layout">
     <!-- Header is only visible on mobile -->

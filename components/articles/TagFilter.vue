@@ -15,7 +15,7 @@ const runtimeConfig = useRuntimeConfig()
 
 const tagId = computed(() => route.query.tag_id)
 watch(tagId, () => {
-  if (tagId) refresh()
+  if (tagId.value) refresh()
 })
 const fetchFnc = () => `/tags/${tagId.value}`
 const options = { baseURL: runtimeConfig.public.apiBase }
