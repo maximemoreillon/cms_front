@@ -1,13 +1,15 @@
 <template>
   <template v-if="article">
-    <section class="controller">
+    <section class="controls">
+      <NuxtLink :to="`/articles/${route.params.id}`" class="button">
+        <Icon name="mdi:arrow-left" />
+      </NuxtLink>
+      <div class="spacer" />
       <button @click="deleteArticle()" class="button">
         <Icon name="mdi:delete" />
-        <span>Delete article</span>
       </button>
       <button @click="saveArticle()" class="button">
         <Icon name="mdi:content-save" />
-        <span>Save</span>
       </button>
     </section>
 
@@ -111,7 +113,16 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
-  // TODO: This does not seem to work
   document.removeEventListener("keydown", keydownHandler)
 })
 </script>
+
+<style scoped>
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 0.5rem;
+}
+</style>

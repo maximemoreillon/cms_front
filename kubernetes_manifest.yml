@@ -19,13 +19,15 @@ spec:
             - containerPort: 3000
           env:
             - name: CMS_API_URL
-              value: https://api.cms.maximemoreillon.com
+              value: https://api.articles.maximemoreillon.com
             - name: LOGIN_URL
               value: https://api.users.maximemoreillon.com/v2/auth/login
             - name: IDENTIFICATION_URL
               value: https://api.users.maximemoreillon.com/v2/users/self
             - name: IMAGE_MANAGER_API_URL
               value: https://img.maximemoreillon.com
+            - name: CANONICAL_URL
+              value: https://articles.maximemoreillon.com
           # envFrom:
           # - secretRef:
           #    name: environment-variables

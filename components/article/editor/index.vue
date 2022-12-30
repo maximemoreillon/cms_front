@@ -1,11 +1,9 @@
 <template>
-  <div class="editor">
-    <template v-if="editor">
-      <ArticleEditorBubbleMenu :editor="editor" />
-      <ArticleEditorFloatingMenu :editor="editor" />
-    </template>
-    <EditorContent :editor="editor" />
-  </div>
+  <template v-if="editor">
+    <ArticleEditorBubbleMenu :editor="editor" class="menu" />
+    <ArticleEditorFloatingMenu :editor="editor" class="menu" />
+  </template>
+  <EditorContent :editor="editor" />
 </template>
 
 <script setup>
@@ -29,18 +27,6 @@ import BulletList from "@tiptap/extension-bullet-list"
 import OrderedList from "@tiptap/extension-ordered-list"
 import ListItem from "@tiptap/extension-list-item"
 import Youtube from "@tiptap/extension-youtube"
-
-// Code block syntax highlight
-import { lowlight } from "lowlight/lib/core"
-import css from "highlight.js/lib/languages/css"
-import js from "highlight.js/lib/languages/javascript"
-import ts from "highlight.js/lib/languages/typescript"
-import html from "highlight.js/lib/languages/xml"
-
-lowlight.registerLanguage("html", html)
-lowlight.registerLanguage("css", css)
-lowlight.registerLanguage("js", js)
-lowlight.registerLanguage("ts", ts)
 
 const emit = defineEmits(["update:modelValue"])
 const props = defineProps({
@@ -70,7 +56,7 @@ const editor = useEditor({
     Image.configure({ inline: true }),
     History.configure({}),
     Code,
-    CodeBlockLowlight.configure({ lowlight }),
+    CodeBlockLowlight.configure({ lowlight }), // Note: lowlight auto-imported
     BulletList,
     OrderedList,
     ListItem,
@@ -78,7 +64,6 @@ const editor = useEditor({
   ],
   editorProps: {
     attributes: {
-      // Can put tailwind styles in here
       class: "text_input content",
     },
   },
@@ -89,7 +74,7 @@ const editor = useEditor({
 </script>
 
 <style scoped>
-.editor:deep() .menu {
+.menu:deep() {
   /* inline-flex needed otherwise overflow */
   display: inline-flex;
   gap: 0.25rem;
@@ -99,7 +84,7 @@ const editor = useEditor({
   border-radius: var(--border-radius);
 }
 
-.editor:deep() .menu > .button {
+.menu:deep() > .button {
   padding: 0.5rem;
 }
 </style>

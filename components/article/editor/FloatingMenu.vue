@@ -1,6 +1,5 @@
 <template>
   <FloatingMenu
-    class="menu"
     v-if="editor"
     :editor="editor"
     :tippy-options="{ duration: 100 }"

@@ -1,10 +1,5 @@
 <template>
-  <BubbleMenu
-    class="menu"
-    v-if="editor"
-    :tippy-options="{ duration: 100 }"
-    :editor="editor"
-  >
+  <BubbleMenu v-if="editor" :tippy-options="{ duration: 100 }" :editor="editor">
     <button
       :class="{ active: editor.isActive('bold') }"
       class="button"
