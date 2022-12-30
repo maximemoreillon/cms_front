@@ -30,8 +30,6 @@
       />
     </section>
 
-    <button @click="codeBlockSyntaxHightlight()">HLJS3</button>
-
     <!-- Ref used for applying image modals and code highlighting -->
     <div class="content" v-html="article.content" ref="articleContent" />
     <!-- WARNING: Using TipTap as content renderer might be bad for SEO -->
@@ -61,6 +59,16 @@ import Article from "~~/types/Article"
 import { lowlight } from "lowlight"
 import { toHtml } from "hast-util-to-html"
 
+import css from "highlight.js/lib/languages/css"
+import js from "highlight.js/lib/languages/javascript"
+import ts from "highlight.js/lib/languages/typescript"
+import html from "highlight.js/lib/languages/xml"
+
+lowlight.registerLanguage("html", html)
+lowlight.registerLanguage("css", css)
+lowlight.registerLanguage("js", js)
+lowlight.registerLanguage("ts", ts)
+
 definePageMeta({
   middleware: ["auth"],
 })
@@ -87,7 +95,7 @@ const { data: article, error } = await useFetch<Article>(url, fetchOpts)
 
 onMounted(() => {
   addEventListenerForImageModals()
-  // codeBlockSyntaxHightlight()
+  codeBlockSyntaxHightlight()
 })
 
 const addEventListenerForImageModals = () => {
@@ -104,7 +112,7 @@ const addEventListenerForImageModals = () => {
 }
 
 const codeBlockSyntaxHightlight = () => {
-  console.log(`Highlighting syntax of <code> elements`)
+  // DOES NOT WORK IN PRODUCTION
   articleContent.value?.querySelectorAll("pre").forEach((pre: HTMLElement) => {
     const code = pre.querySelector("code")
     if (!code) return
