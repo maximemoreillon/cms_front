@@ -4,7 +4,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const jwt = useCookie("jwt")
   const user = userUser()
 
-  if (!jwt) {
+  if (!jwt.value) {
     user.value = null
     return
   }
