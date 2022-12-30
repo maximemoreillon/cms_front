@@ -80,6 +80,7 @@ const article = computed({
 .summary {
   resize: vertical;
   width: 100%;
+  height: 10rem;
 }
 
 .thumbnail_visibility {

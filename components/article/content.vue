@@ -1,3 +1,4 @@
+<!-- UNUSED AS THIS MIGHT AFFECT SEO -->
 <template>
   <editor-content :editor="editor" class="content" />
   <!-- Modal to zoom on images -->

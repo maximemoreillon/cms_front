@@ -56,6 +56,8 @@
 
 <script lang="ts" setup>
 import Article from "~~/types/Article"
+import { lowlight } from "lowlight"
+import { toHtml } from "hast-util-to-html"
 
 definePageMeta({
   middleware: ["auth"],
@@ -83,6 +85,7 @@ const { data: article, error } = await useFetch<Article>(url, fetchOpts)
 
 onMounted(() => {
   addEventListenerForImageModals()
+  codeBlockSyntaxHightlight()
 })
 
 const addEventListenerForImageModals = () => {
@@ -95,6 +98,16 @@ const addEventListenerForImageModals = () => {
       },
       false
     )
+  })
+}
+
+const codeBlockSyntaxHightlight = () => {
+  articleContent.value?.querySelectorAll("pre").forEach((pre: HTMLElement) => {
+    const code = pre.querySelector("code")
+    if (!code) return
+    const tree = lowlight.highlightAuto(code.innerText)
+    const html = toHtml(tree)
+    code.innerHTML = html
   })
 }
 
