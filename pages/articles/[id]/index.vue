@@ -30,8 +30,7 @@
       />
     </section>
 
-    <!-- Ref used for applying image modals and code highlighting -->
-    <div class="content" v-html="article?.content" ref="articleContent" />
+    <ArticleContent :content="article.content" />
 
     <!-- Edit button -->
     <!-- TODO: Consider in metadata -->
@@ -54,8 +53,6 @@
 
 <script lang="ts" setup>
 import Article from "~~/types/Article"
-import { lowlight } from "lowlight"
-import { toHtml } from "hast-util-to-html"
 
 definePageMeta({
   middleware: ["auth"],
@@ -83,22 +80,7 @@ const { data: article, error } = await useFetch<Article>(url, fetchOpts)
 
 onMounted(() => {
   addEventListenerForImageModals()
-  // applyCodeStyling()
 })
-
-const applyCodeStyling = () => {
-  // Replaces characters in a weird way, e.g. &lt
-  // probably because parent of <code> is <pre>
-
-  articleContent.value
-    ?.querySelectorAll("code")
-    .forEach((code: HTMLElement) => {
-      // TODO: Would be better to get the language from class of <code>
-      const tree = lowlight.highlightAuto(code.innerHTML)
-      code.innerHTML = toHtml(tree)
-      console.log(toHtml(tree))
-    })
-}
 
 const addEventListenerForImageModals = () => {
   articleContent.value?.querySelectorAll("img").forEach((img: HTMLElement) => {
@@ -141,22 +123,5 @@ useHead({
 h1 {
   /* <article> h1 have a different style than normal h1 */
   font-size: 2em;
-}
-
-.modal_image {
-  border-radius: var(--border-radius);
-  max-width: 100%;
-  max-height: 90vh;
-  object-fit: contain;
-  display: flex;
-}
-
-.content:deep() h1 {
-  /* hide h1 of article.content, show article.title as h1 instead */
-  display: none;
-}
-
-article:deep() img {
-  cursor: pointer;
 }
 </style>
