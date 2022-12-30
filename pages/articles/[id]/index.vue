@@ -120,11 +120,7 @@ const codeBlockSyntaxHightlight = () => {
     // TODO: use language that is provided if any
     const tree = lowlight.highlightAuto(code.innerText)
     const html = toHtml(tree)
-    console.log({
-      original: code.innerText,
-      tree,
-      html,
-    })
+    if (!html) return
     code.innerHTML = html
   })
 }

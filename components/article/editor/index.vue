@@ -9,12 +9,6 @@
 </template>
 
 <script setup>
-import { lowlight } from "lowlight/lib/core"
-import css from "highlight.js/lib/languages/css"
-import js from "highlight.js/lib/languages/javascript"
-import ts from "highlight.js/lib/languages/typescript"
-import html from "highlight.js/lib/languages/xml"
-
 // TipTap and its extensions
 import { useEditor, EditorContent } from "@tiptap/vue-3"
 
@@ -30,12 +24,18 @@ import Italic from "@tiptap/extension-italic"
 import Strike from "@tiptap/extension-strike"
 import TextAlign from "@tiptap/extension-text-align"
 import Code from "@tiptap/extension-code"
-// import CodeBlock from '@tiptap/extension-code-block'
 import CodeBlockLowlight from "@tiptap/extension-code-block-lowlight"
 import BulletList from "@tiptap/extension-bullet-list"
 import OrderedList from "@tiptap/extension-ordered-list"
 import ListItem from "@tiptap/extension-list-item"
 import Youtube from "@tiptap/extension-youtube"
+
+// Code block syntax highlight
+import { lowlight } from "lowlight/lib/core"
+import css from "highlight.js/lib/languages/css"
+import js from "highlight.js/lib/languages/javascript"
+import ts from "highlight.js/lib/languages/typescript"
+import html from "highlight.js/lib/languages/xml"
 
 lowlight.registerLanguage("html", html)
 lowlight.registerLanguage("css", css)
