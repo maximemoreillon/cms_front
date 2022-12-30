@@ -146,6 +146,9 @@ aside {
   border-right: 1px solid var(--border-color);
   transition: transform 0.25s;
   max-height: calc(100vh - 2 * var(--grid-gap));
+
+  /* Allow scroll if screen to small for whole aside */
+  overflow-y: auto;
 }
 
 header {
@@ -178,7 +181,6 @@ nav {
   background-color: white;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
 }
 
 main a {
