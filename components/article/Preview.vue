@@ -10,12 +10,14 @@
     <ArticleMetadata :article="article" :link="false" />
 
     <div class="thumbnail_summary">
-      <img
-        v-if="article.thumbnail_src"
-        class="thumbnail"
-        :src="article.thumbnail_src"
-        :alt="`${article.title} thumbnail`"
-      />
+      <!-- TODO: consider wrapper thumbnail in a div because not playing well with flex -->
+      <div class="thumbnail_wrapper" v-if="article.thumbnail_src">
+        <img
+          class="thumbnail"
+          :src="article.thumbnail_src"
+          :alt="`${article.title} thumbnail`"
+        />
+      </div>
 
       <!-- WARNING: if summary contains tags, especially links, causes hydration problems -->
       <!-- <div v-html="article.summary" /> -->
@@ -81,18 +83,29 @@ defineProps<{ article: Article }>()
 .thumbnail_summary {
   display: flex;
   /* WARNING: flex wrap results in constant wrapped state */
-  /* flex-wrap: wrap; */
-  gap: 2rem;
+  flex-wrap: wrap;
+  gap: 1.5rem;
 }
 
 .summary {
+  flex-basis: 10rem;
   white-space: pre-line;
+  flex-grow: 4;
+}
+
+.thumbnail_wrapper {
+  flex-basis: 5rem;
   flex-grow: 1;
+  flex-shrink: 0;
 }
 
 .thumbnail {
-  width: 10rem;
-  height: 10rem;
+  width: 100%;
+  aspect-ratio: 1;
+  display: flex;
+
+  /* TODO: figure out how height works */
+
   object-fit: cover;
   border-radius: var(--border-radius);
 }
