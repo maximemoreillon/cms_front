@@ -38,6 +38,7 @@ const aside_open = ref(false)
   --main-max-width: 40em;
 
   /* Colors */
+  /* TODO: shoukld have been color-accent, color-border, etc. */
   --accent-color: #c00000;
 
   /* TODO: find better name */
@@ -130,7 +131,7 @@ section {
 }
 
 aside {
-  /* Sticky because still needs to be in the document flow for grid */
+  /* Sticky and not fixed because needs to be in the document flow for grid positioning */
   position: sticky;
 
   grid-area: aside;
@@ -148,6 +149,7 @@ aside {
 }
 
 header {
+  /* Layer only visible on small devices */
   grid-area: header;
   display: none;
   background-color: white;
@@ -162,9 +164,6 @@ header {
 
 main {
   grid-area: main;
-  /* If not set like that, pre code overflows */
-  /* This is absolute horseshit */
-  overflow-x: auto;
 
   /* Position relaive for FABs */
   position: relative;
@@ -192,6 +191,16 @@ main a {
   /* border-radius: var(--border-radius); */
   /* box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23); */
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.content iframe {
+  display: block;
+  /* img, iframe default is inline */
+  margin: 2em auto;
+  max-width: 100%;
+
+  /* This is super useful */
+  aspect-ratio: 3/2;
 }
 
 /* responsivity */
