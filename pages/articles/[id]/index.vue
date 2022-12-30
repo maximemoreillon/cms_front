@@ -31,7 +31,7 @@
     </section>
 
     <!-- Ref used for applying image modals and code highlighting -->
-    <div class="content" v-html="article?.content" ref="articleContent" />
+    <div class="content" v-html="article.content" ref="articleContent" />
     <!-- WARNING: Using TipTap as content renderer might be bad for SEO -->
     <!-- <ArticleContent :content="article.content" /> -->
 
@@ -102,9 +102,11 @@ const addEventListenerForImageModals = () => {
 }
 
 const codeBlockSyntaxHightlight = () => {
+  console.log(`Highlighting syntax of <code> elements`)
   articleContent.value?.querySelectorAll("pre").forEach((pre: HTMLElement) => {
     const code = pre.querySelector("code")
     if (!code) return
+    console.log(code.innerHTML)
     // TODO: use language that is provided if any
     const tree = lowlight.highlightAuto(code.innerText)
     code.innerHTML = toHtml(tree)
