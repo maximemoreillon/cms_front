@@ -1,29 +1,25 @@
 <template>
-    <h2>Logout</h2>
+  <h2>Logout</h2>
 
-    <template v-if="user">
-
-        <div>Logged in as {{ user.display_name }}</div>
-        <button @click="logout()">
-            <Icon name="mdi:logout" />
-            <span>Logout</span>
-        </button>
-
-    </template>
-    <div v-else>Not logged in</div>
-    
+  <template v-if="user">
+    <p>Logged in as {{ user.display_name }}</p>
+    <p>
+      <button @click="logout()" class="button">
+        <Icon name="mdi:logout" />
+        <span>Logout</span>
+      </button>
+    </p>
+  </template>
+  <p v-else>Not logged in</p>
 </template>
 
 <script lang="ts" setup>
-
-const cookie = useCookie('jwt')
+const cookie = useCookie("jwt")
 const router = useRouter()
 const user = userUser()
 
 const logout = () => {
-    cookie.value = null
-    router.push('/')
+  cookie.value = null
+  router.push("/")
 }
-
-
 </script>
