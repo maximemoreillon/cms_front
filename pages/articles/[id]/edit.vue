@@ -15,9 +15,7 @@
       <ArticleEditor v-model="article.content" />
     </section>
 
-    <section>
-      <ArticleMetadataEditor v-model="article" />
-    </section>
+    <ArticleMetadataEditor v-model="article" />
   </template>
 
   <Snackbar v-model="snackbar.show" :class="snackbar.class">
@@ -117,7 +115,3 @@ onBeforeUnmount(() => {
   document.removeEventListener("keydown", keydownHandler)
 })
 </script>
-
-<style scoped>
-/* TODO: Redo CSS */
-</style>

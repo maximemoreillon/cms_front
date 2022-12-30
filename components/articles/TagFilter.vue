@@ -19,11 +19,3 @@ const removeFilter = () => {
   router.push({ query })
 }
 </script>
-
-<style scoped>
-.wrapper {
-  display: flex;
-  align-self: center;
-  gap: 0.5rem;
-}
-</style>
