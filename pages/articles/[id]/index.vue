@@ -30,7 +30,7 @@
       />
     </section>
 
-    <button @click="codeBlockSyntaxHightlight()">HLJS2</button>
+    <button @click="codeBlockSyntaxHightlight()">HLJS3</button>
 
     <!-- Ref used for applying image modals and code highlighting -->
     <div class="content" v-html="article.content" ref="articleContent" />
@@ -108,10 +108,16 @@ const codeBlockSyntaxHightlight = () => {
   articleContent.value?.querySelectorAll("pre").forEach((pre: HTMLElement) => {
     const code = pre.querySelector("code")
     if (!code) return
-    console.log(code.innerText)
+
     // TODO: use language that is provided if any
     const tree = lowlight.highlightAuto(code.innerText)
-    code.innerHTML = toHtml(tree)
+    const html = toHtml(tree)
+    console.log({
+      original: code.innerText,
+      tree,
+      html,
+    })
+    code.innerHTML = html
   })
 }
 
