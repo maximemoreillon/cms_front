@@ -43,17 +43,17 @@ const snackbar = reactive({
   class: "",
 })
 
-const url = `/tags/${tag.value?._id}`
-
 const fetchOpts = {
   baseURL: runtimeConfig.public.apiBase,
   headers: { authorization: `Bearer ${useCookie("jwt").value}` },
 }
 
 const updateTag = async () => {
+  if (!confirm(`Update tag ${tag.value?.name} ?`)) return
+  const url = `/tags/${tag.value?._id}`
   const options = {
-    ...fetchOpts,
     method: "PATCH",
+    ...fetchOpts,
     body: tag.value,
   }
 
@@ -64,6 +64,7 @@ const updateTag = async () => {
     snackbar.show = true
     snackbar.message = `Tag updated`
     snackbar.class = ""
+    await updatePinnedTags()
   } catch (error) {
     snackbar.show = true
     snackbar.message = `Tag update failed`
@@ -83,9 +84,10 @@ const updatePinnedTags = async () => {
 const deleteTag = async () => {
   if (!confirm(`Delete tag ${tag.value?.name} ?`)) return
 
+  const url = `/tags/${tag.value?._id}`
   const options = {
-    ...fetchOpts,
     method: "DELETE",
+    ...fetchOpts,
   }
 
   deleting.value = true
@@ -116,6 +118,5 @@ const pinToNav = async () => {
   if (!tag.value) return
   tag.value.navigation_item = !tag.value.navigation_item
   await updateTag()
-  await updatePinnedTags()
 }
 </script>

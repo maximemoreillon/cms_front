@@ -4,6 +4,7 @@ export default defineNuxtConfig({
     // TODO: use environment variables
     public: {
       apiBase: "https://api.articles.maximemoreillon.com",
+      // apiBase: "http://192.168.1.2:7070",
       loginUrl: "https://api.users.maximemoreillon.com/v2/auth/login",
       idenfiticationUrl: "https://api.users.maximemoreillon.com/v2/users/self",
       imageManagerApiUrl: "https://img.maximemoreillon.com",

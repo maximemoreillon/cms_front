@@ -1,12 +1,5 @@
 <template>
   <aside :class="{ open }">
-    <!-- Open/close navigation -->
-    <div class="nav_button_wrapper">
-      <button class="navigation_button" @click="emit('navToggle')">
-        <Icon name="mdi:menu" />
-      </button>
-    </div>
-
     <!-- Logo as link to homepage -->
     <!-- TODO: Consider whether this is also part of Nav -->
     <NuxtLink class="logo_wrapper" href="https://maximemoreillon.com">
@@ -23,24 +16,10 @@
 </template>
 
 <script lang="ts" setup>
-defineProps({ open: Boolean })
-const emit = defineEmits(["navToggle"])
+defineProps<{ open: boolean }>()
 </script>
 
 <style scoped>
-aside .nav_button_wrapper {
-  display: none;
-}
-
-aside .navigation_button {
-  grid-area: navButton;
-  cursor: pointer;
-}
-
-aside .title {
-  grid-area: title;
-}
-
 aside .logo_wrapper {
   grid-area: logo;
   display: flex;

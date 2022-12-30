@@ -41,7 +41,6 @@ const snackbar = reactive({
 })
 
 const url = `articles/${route.params.id}`
-
 const fetchOpts = {
   baseURL: runtimeConfig.public.apiBase,
   headers: { authorization: `Bearer ${useCookie("jwt").value}` },
@@ -49,6 +48,8 @@ const fetchOpts = {
 const { data: article, error } = await useFetch<Article>(url, fetchOpts)
 
 const saveArticle = async () => {
+  const url = `articles/${route.params.id}`
+
   const options = {
     ...fetchOpts,
     method: "PATCH",
@@ -77,6 +78,8 @@ const saveArticle = async () => {
 
 const deleteArticle = async () => {
   if (!confirm(`Delete this article?`)) return
+
+  const url = `articles/${route.params.id}`
 
   const options = {
     ...fetchOpts,

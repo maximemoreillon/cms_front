@@ -15,6 +15,7 @@ const runtimeConfig = useRuntimeConfig()
 
 const tagId = computed(() => route.query.tag_id)
 watch(tagId, () => {
+  console.log(`Tag ID changed!`)
   refresh()
 })
 const fetchFnc = () => `/tags/${tagId.value}`
