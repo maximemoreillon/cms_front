@@ -1,8 +1,8 @@
 .fab {
   position: fixed;
   bottom: 2rem;
-  /* right: calc(100vw - var(--main-max-width)); */
-  right: 2rem;
+  right: max(calc(5rem + 0.5 * (100vw - var(--main-max-width))), 5rem);
+  /* right: 2rem; */
 
   font-size: 150%;
 
