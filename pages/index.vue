@@ -1,14 +1,15 @@
 <template>
   <h1>Articles</h1>
 
-  <section>
-    <ArticlesSearch />
-  </section>
-  <section v-if="route.query.tag_id || route.query.tag">
+  <section v-if="route.query.tag_id">
     <ArticlesTagFilter />
   </section>
   <section v-if="route.query.author">
     <ArticlesAuthorFilter />
+  </section>
+
+  <section>
+    <ArticlesSearch />
   </section>
 
   <section class="sorting_ordering">
