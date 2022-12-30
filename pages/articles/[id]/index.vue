@@ -30,7 +30,7 @@
       />
     </section>
 
-    <button @click="codeBlockSyntaxHightlight()">HLJS</button>
+    <button @click="codeBlockSyntaxHightlight()">HLJS2</button>
 
     <!-- Ref used for applying image modals and code highlighting -->
     <div class="content" v-html="article.content" ref="articleContent" />
@@ -87,7 +87,7 @@ const { data: article, error } = await useFetch<Article>(url, fetchOpts)
 
 onMounted(() => {
   addEventListenerForImageModals()
-  codeBlockSyntaxHightlight()
+  // codeBlockSyntaxHightlight()
 })
 
 const addEventListenerForImageModals = () => {
