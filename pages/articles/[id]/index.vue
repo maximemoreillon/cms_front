@@ -105,9 +105,9 @@ const codeBlockSyntaxHightlight = () => {
   articleContent.value?.querySelectorAll("pre").forEach((pre: HTMLElement) => {
     const code = pre.querySelector("code")
     if (!code) return
+    // TODO: use language that is provided if any
     const tree = lowlight.highlightAuto(code.innerText)
-    const html = toHtml(tree)
-    code.innerHTML = html
+    code.innerHTML = toHtml(tree)
   })
 }
 
