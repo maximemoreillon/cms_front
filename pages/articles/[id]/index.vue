@@ -142,7 +142,7 @@ useHead({
     { name: "og:title", content: article.value?.title },
     { name: "og:description", content: article.value?.summary },
     { name: "og:image", content: article.value?.thumbnail_src },
-    { name: "og:url", content: `${article.value?.title} thumbnail` },
+    // { name: "og:url", content: `${article.value?.title} thumbnail` },
     { name: "og:type", content: "article" },
     { name: "og:locale", content: "en_US" },
   ],
