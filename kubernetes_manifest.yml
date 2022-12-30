@@ -18,15 +18,15 @@ spec:
           ports:
             - containerPort: 3000
           # env:
-          #   - name: NUXT_ENV_CMS_API_URL
-          #     value: https://api.cms.maximemoreillon.com
-          #   - name: NUXT_ENV_USER_MANAGER_API_URL
-          #     value: https://api.users.maximemoreillon.com
-          #   - name: NUXT_ENV_IMAGE_MANAGER_API_URL
-          #     value: https://img.maximemoreillon.com
+          # - name: NUXT_ENV_CMS_API_URL
+          #   value: https://api.cms.maximemoreillon.com
+          # - name: NUXT_ENV_USER_MANAGER_API_URL
+          #   value: https://api.users.maximemoreillon.com
+          # - name: NUXT_ENV_IMAGE_MANAGER_API_URL
+          #   value: https://img.maximemoreillon.com
           # envFrom:
-          #   - secretRef:
-          #       name: environment-variables
+          # - secretRef:
+          #    name: environment-variables
 ---
 apiVersion: v1
 kind: Service
@@ -49,10 +49,18 @@ metadata:
 spec:
   tls:
     - hosts:
-        - ${K8S_INGRESS_HOST}
+        - cms.maximemoreillon.com
+        - articles.maximemoreillon.com
       secretName: ${APPLICATION_NAME}
   rules:
-    - host: ${K8S_INGRESS_HOST}
+    - host: cms.maximemoreillon.com
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: ${APPLICATION_NAME}
+              servicePort: 3000
+    - host: articles.maximemoreillon.com
       http:
         paths:
           - path: /
