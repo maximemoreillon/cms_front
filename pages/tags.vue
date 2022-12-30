@@ -25,6 +25,9 @@
             {{ tag.article_count }}
           </td>
           <td>
+            <!-- <template v-if="user?.isAdmin">
+              <TagEdit v-model="tag" />
+            </template> -->
             <Icon v-if="tag.navigation_item" name="mdi:pin" />
           </td>
         </tr>
@@ -37,6 +40,7 @@
 import type Tag from "~~/types/Tag"
 
 const runtimeConfig = useRuntimeConfig()
+const user = userUser()
 const search = ref("")
 const url = `/tags`
 const fetchOpts = { baseURL: runtimeConfig.public.apiBase }

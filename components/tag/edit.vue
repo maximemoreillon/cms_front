@@ -49,7 +49,6 @@ const fetchOpts = {
 }
 
 const updateTag = async () => {
-  if (!confirm(`Update tag ${tag.value?.name} ?`)) return
   const url = `/tags/${tag.value?._id}`
   const options = {
     method: "PATCH",
