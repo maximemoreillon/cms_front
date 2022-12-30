@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper" v-if="tag">
     <Tag :tag="tag" :removable="true" :link="false" @remove="removeFilter()" />
     <TagEdit v-if="user?.isAdmin" v-model="tag" />
   </div>
@@ -13,15 +13,10 @@ const route = useRoute()
 const user = userUser()
 const runtimeConfig = useRuntimeConfig()
 
-const tagId = computed(() => route.query.tag_id)
-watch(tagId, () => {
-  if (tagId.value) refresh()
-})
-const fetchFnc = () => `/tags/${tagId.value}`
+const fetchFnc = () => (route.query.tag_id ? `/tags/${route.query.tag_id}` : "")
 const options = { baseURL: runtimeConfig.public.apiBase }
 
-//
-const { data: tag, error, refresh } = await useFetch<Tag>(fetchFnc, options)
+const { data: tag, error } = await useFetch<Tag>(fetchFnc, options)
 
 const removeFilter = () => {
   const { tag_id, ...query } = route.query

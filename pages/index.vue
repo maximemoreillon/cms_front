@@ -60,10 +60,6 @@ const route = useRoute()
 const query = computed(() => route.query)
 const newArticleOpen = ref(false)
 
-watch(query, () => {
-  refresh()
-})
-
 const fetchFnc = () => {
   // TODO: Fix this typing error
   const searchParams = new URLSearchParams(query.value).toString()
