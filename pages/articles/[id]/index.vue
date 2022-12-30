@@ -30,7 +30,10 @@
       />
     </section>
 
-    <ArticleContent :content="article.content" />
+    <!-- Ref used for applying image modals and code highlighting -->
+    <div class="content" v-html="article?.content" ref="articleContent" />
+    <!-- WARNING: Using TipTap as content renderer might be bad for SEO -->
+    <!-- <ArticleContent :content="article.content" /> -->
 
     <!-- Edit button -->
     <!-- TODO: Consider in metadata -->
@@ -123,5 +126,22 @@ useHead({
 h1 {
   /* <article> h1 have a different style than normal h1 */
   font-size: 2em;
+}
+
+.modal_image {
+  border-radius: var(--border-radius);
+  max-width: 100%;
+  max-height: 90vh;
+  object-fit: contain;
+  display: flex;
+}
+
+.content:deep() h1 {
+  /* hide h1 of article.content, show article.title as h1 instead */
+  display: none;
+}
+
+.content:deep() img {
+  cursor: pointer;
 }
 </style>
