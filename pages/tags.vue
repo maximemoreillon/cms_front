@@ -1,166 +1,91 @@
 <template>
-  <div class="tag_list">
-    <h1>Tags</h1>
-    <client-only>
+  <h1>Tags</h1>
 
-      <div
-        v-if="loading"
-        class="loader_container" >
-        <Loader />
-      </div>
+  <!-- TODO: Search -->
 
-      <!-- <div class="tag_container">
-        <Tag
-          v-for="(tag, index) in filtered_tags"
-          :key="`tag_${index}`"
-          :tag="tag"
-        />
-      </div> -->
+  <section class="search_wrapper">
+    <input
+      type="text"
+      class="text_input"
+      placeholder="Search"
+      v-model="search"
+    />
+    <Icon name="mdi:magnify" />
+  </section>
 
-      <table v-if="!loading && filtered_tags.length">
-        <tr>
-          <th class="tag_column_header">
-            <div class="counter">
-              <MaterialIconTag />
-            </div>
-            <div class="tag_search_wrapper">
-              <input v-model="filter" type="search" class="search_bar" placeholder="Search tags">
-              <MaterialIconMagnify />
-            </div>
-            
-          </th>
-          <th>
-            <MaterialIconFileDocumentMultipleOutline />
-          </th>
-          <th v-if="user_is_admin">
-            <MaterialIconPencil />
-          </th>
-        </tr>
-        <tr v-for="(tag, index) in filtered_tags"
-          :key="`tag_${index}`">
+  <section>
+    <table>
+      <tbody>
+        <tr v-for="tag in sortedTags" :key="tag._id">
           <td>
-            <Tag :key="`tag_${index}`" :tag="tag" />
+            <Tag :tag="tag" :link="true" :removable="false" />
           </td>
           <td>
-            {{tag.article_count}}
+            <Icon name="mdi:file-document-multiple-outline" />
+            {{ tag.article_count }}
           </td>
-          <td v-if="user_is_admin">
-            <TagMangement v-model="filtered_tags[index]" />
+          <td>
+            <template v-if="user?.isAdmin">
+              <TagEdit :tag="tag" @update="refresh()" />
+            </template>
+            <Icon v-else-if="tag.navigation_item" name="mdi:pin" />
           </td>
         </tr>
-      </table>
-    </client-only>
-
-  </div>
+      </tbody>
+    </table>
+  </section>
 </template>
 
-<script>
+<script lang="ts" setup>
+import type Tag from "~~/types/Tag"
 
-import Loader from '@/components/Loader'
+definePageMeta({
+  middleware: ["auth"],
+})
 
-import Tag from '@/components/Tag.vue'
-import TagMangement from '@/components/TagManagement.vue' 
+const runtimeConfig = useRuntimeConfig()
+const user = userUser()
+const search = ref("")
+const url = `/tags`
+const fetchOpts = { baseURL: runtimeConfig.public.apiBase }
+const { data: tags, error, refresh } = await useFetch<Tag[]>(url, fetchOpts)
 
-import userUtils from '@/mixins/userUtils'
-import seoUtils from '@/mixins/seoUtils'
+const filteredTags = computed(() => {
+  if (!search.value) return tags.value
+  else
+    return tags.value?.filter((t) =>
+      t.name.toLowerCase().includes(search.value.toLowerCase())
+    )
+})
 
-export default {
-  name: 'Tags',
-  modules: [
-    '@nuxtjs/axios',
-  ],
-  components: {
-    Tag,
-    Loader,
-    TagMangement
-  },
-  auth: false,
-  data () {
-    return {
-      tags: [],
-      loading: false,
-      error: null,
-      filter: '',
-
-    }
-  },
-  mixins: [
-    userUtils,
-    seoUtils
-  ],
-  computed: {
-    filtered_tags(){
-      const sorted_tags = this.tags.slice().sort((a, b) => b.article_count - a.article_count)
-
-
-      if (this.filter === '') return sorted_tags
-      return sorted_tags
-        .filter(t => t.name.toLowerCase().includes(this.filter.toLowerCase()))
-    }
-
-  },
-
-  mounted() {
-    this.get_tags()
-
-  },
-
-
-  methods: {
-
-    get_tags(){
-
-      this.loading = true
-
-      this.$axios.get('/tags')
-      .then( ({data}) => {
-        this.tags = data
-      })
-      .catch(error => {
-        this.loading_error = true
-        if(error.response) console.error(error.response.data)
-        else console.error(error)
-      })
-      .finally(() => { this.loading = false })
-
-    },
-
-
-  }
-
-
-
-}
+const sortedTags = computed(() =>
+  filteredTags.value?.slice().sort((a, b) => b.article_count - a.article_count)
+)
 </script>
 
-
 <style scoped>
+.search_wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+input {
+  flex-grow: 1;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;
-  margin: 0 auto;
-}
-
-tr:first-child {
-  border-bottom: 1px solid #dddddd;
+  /* table-layout: fixed; */
 }
 
 th {
   text-align: left;
 }
 
-td, th{
+td,
+th {
   padding: 0.25em;
-}
-
-.tag_column_header {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1em;
-}
-
-.tag_search_wrapper {
-  display: flex;
-  gap: 0.5em;
 }
 </style>

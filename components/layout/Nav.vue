@@ -1,123 +1,89 @@
 <template>
   <nav>
-    <client-only>
-      <router-link v-if="$auth.user" :to="{ name: 'articles-id-edit', params: {id: 'new'}}">
-        <MaterialIconFileDocumentPlusOutline />
-        <span>New article</span>
-      </router-link>
-    </client-only>
-
-    <router-link :to="{ name: 'index'}">
-      <MaterialIconFileDocumentMultipleOutline />
+    <NuxtLink to="/">
+      <!-- TODO: find icon -->
+      <Icon name="mdi:file-document-multiple-outline" />
       <span>Articles</span>
-    </router-link>
+    </NuxtLink>
 
-    <client-only>
-      <router-link v-if="$auth.user" :to="{ name: 'index', query: { author_id: $auth.user._id}}">
-        <MaterialIconAccount />
-        <span>My articles</span>
-      </router-link>
-      
-      <router-link v-for="(tag, index) in sortedTags" :key="`nav_${index}`"
-        :to="{name: 'index', query: {tag_id: tag._id} }">
-        <MaterialIconTag />
-        <span>{{ tag.name }}</span>
-      </router-link>
-    </client-only>
+    <!-- TODO: Articles of user -->
 
-
-    <router-link :to="{ name: 'tags'}">
-      <MaterialIconTagMultiple />
+    <NuxtLink to="/tags">
+      <Icon name="mdi:tag-multiple" />
       <span>Tags</span>
-    </router-link>
+    </NuxtLink>
 
-    <client-only>
-      <router-link v-if="$auth.user" :to="{ name: 'logout' }">
-        <MaterialIconLogout />
-        <span>Logout</span>
-      </router-link>
+    <NuxtLink
+      v-for="tag in pinnedTags"
+      :key="tag._id"
+      :to="`/?tag_id=${tag._id}`"
+    >
+      <Icon name="mdi:tag" />
+      <span>{{ tag.name }}</span>
+    </NuxtLink>
 
-      <router-link v-else :to="{ name: 'login' }">
-        <MaterialIconLogin />
-        <span>Login</span>
-      </router-link>
-    </client-only>
+    <!-- <NuxtLink to="/authors">
+      <Icon name="mdi:account" />
+      <span>Auhtors</span>
+    </NuxtLink> -->
 
-    <router-link :to="{ name: 'about' }">
-      <MaterialIconInformationOutline />
-      <span>About</span>
-    </router-link>
+    <NuxtLink v-if="user" to="/logout">
+      <Icon name="mdi:logout" />
+      <span>Logout</span>
+    </NuxtLink>
+    <NuxtLink v-else to="/login">
+      <Icon name="mdi:login" />
+      <span>Login</span>
+    </NuxtLink>
   </nav>
-
 </template>
 
-<script>
+<script lang="ts" setup>
+import type Tag from "~~/types/Tag"
 
-export default {
-  name: 'Nav',
-  computed: {
-    sortedTags(){
-      return this.$store.state.pinned_tags.slice().sort( (a, b) => {
-        const x = a.name.toLowerCase()
-        const y = b.name.toLowerCase()
-        if (x < y) { return -1; }
-        if (x > y) { return 1; }
-        return 0;
-      })
-    }
-  }
- 
+const user = userUser()
+const pinnedTags = usePinnedTags()
+const runtimeConfig = useRuntimeConfig()
+
+const fetchOpts = {
+  baseURL: runtimeConfig.public.apiBase,
 }
+
+// TODO: use store instead
+const url = `/tags?pinned=true`
+const { data, error } = await useFetch<Tag[]>(url, fetchOpts)
+pinnedTags.value = data.value
 </script>
 
-<style>
-
-
-/* Note: media queries in main.css */
-
-nav {
-
-  font-size: 1.1em;
-
-  /* Re-applying background color for times where position fixed */
-  background-color: white;
-
-  display: flex;
-  flex-direction: column;
-
-  overflow-y: auto;
-
-}
-
+<style scoped>
 nav a {
   padding: 0.5em 1em;
   text-decoration: none;
   color: var(--nav-color);
-
   display: flex;
   align-items: stretch;
   gap: 1em;
   border-right: 3px solid transparent;
+  transition: border-color 0.25s;
+}
 
-  transition:
-    border-color 0.25s;
+nav a svg {
+  flex-shrink: 0;
 }
 
 /* Ellipsis on nav items that are too long */
-nav a>*:last-child {
+nav a span {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-
 nav a:hover {
   border-right-color: #666666;
 }
 
-nav a.router-link-exact-active {
+/* TODO: Selector does not work with query search params */
+/* nav a.router-link-exact-active {
   border-right-color: var(--accent-color);
-}
-
-
+} */
 </style>

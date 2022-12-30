@@ -1,105 +1,93 @@
 <template>
-  <div class="wrapper">
+  <h1>Login</h1>
 
-    <client-only>
-      <form v-if="!loading" class="container" @submit.prevent="login()">
+  <form @submit.prevent="login()" v-if="!user">
+    <div class="field">
+      <label for="username">
+        <Icon name="mdi:account" />
+      </label>
+      <input
+        class="text_input"
+        id="username"
+        type="text"
+        v-model="credentials.username"
+        placeholder="Username"
+      />
+    </div>
 
-        <div>
-          <MaterialIconAccount />
-          <input id="username" v-model="credentials.username" type="text" placeholder="Username">
-        </div>
+    <div class="field">
+      <label for="password">
+        <Icon name="mdi:key" />
+      </label>
+      <input
+        class="text_input"
+        id="password"
+        type="password"
+        v-model="credentials.password"
+        placeholder="Password"
+      />
+    </div>
 
-        <div>
-          <MaterialIconKey />
-          <input id="password" v-model="credentials.password" type="password" placeholder="Password">
-        </div>
+    <button type="submit" class="button">
+      <Icon name="mdi:login" />
+      <span>Login</span>
+    </button>
+  </form>
 
-        <div>
-          <button type="submit" class="outlined" @click="login()">
-            <MaterialIconLogin />
-            <span>Login</span>
-          </button>
-        </div>
-
-        <div v-if="error" class="error_message">
-          {{ error }}
-        </div>
-      </form>
-
-      <div v-if="loading" class="loader_container">
-        <Loader />
-      </div>
-    </client-only>
-    
+  <div v-else>
+    Already logged in. Click <NuxtLink to="/logout">here</NuxtLink> to log out.
   </div>
 </template>
 
-<script>
-import Loader from '@/components/Loader'
+<script lang="ts" setup>
+const cookie = useCookie("jwt")
+const router = useRouter()
+const runtimeConfig = useRuntimeConfig()
+const user = userUser()
+const loggingIn = ref(false)
+const credentials = reactive({
+  username: "",
+  password: "",
+})
 
-export default {
-  name: 'Login',
-  modules: [
-    '@nuxtjs/axios',
-    'cookie-universal-nuxt',
-  ],
-  axios: { },
-  components: {
-    Loader
-  },
+const login = async () => {
+  const options = {
+    method: "POST",
+    body: credentials,
+  }
 
-  data () {
-    return {
-      loading: false,
-      error: null,
-      credentials: {
-        username: '',
-        password: '',
-      }
-      
-    }
-  },
-  mounted(){
+  const { loginUrl } = runtimeConfig.public
 
-  },
-  methods: {
-    async login() {
-      // Using nuxt auth
-      try {
-        this.loading = true
-        await this.$auth.loginWith('local', { data: this.credentials })
-        this.$router.back()
-      } 
-      catch (error) {
-        this.error = error
-        console.error(error)
-      }
-      finally {
-        this.loading = false
-      }
-    },
+  loggingIn.value = true
 
-  },
-
-
-
-
+  try {
+    const { jwt } = await $fetch<{ jwt: string }>(loginUrl, options)
+    cookie.value = jwt
+    router.back()
+  } catch (error) {
+    console.error(error)
+  } finally {
+    loggingIn.value = false
+  }
 }
 </script>
 
-
 <style scoped>
-
-.container {
-  margin-top: 1em;
+form {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5em;
 }
 
-.container > div {
+/* TODO: Improve selector */
+.field {
   display: flex;
   gap: 0.5em;
+  align-items: center;
+}
+
+input {
+  flex-grow: 1;
 }
 </style>

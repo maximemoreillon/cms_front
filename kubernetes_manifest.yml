@@ -13,20 +13,20 @@ spec:
         app: ${APPLICATION_NAME}
     spec:
       containers:
-      - name: ${APPLICATION_NAME}
-        image: ${CONTAINER_IMAGE_TAGGED}
-        ports:
-        - containerPort: 8080
-        env:
-        - name: NUXT_ENV_CMS_API_URL
-          value: https://api.cms.maximemoreillon.com
-        - name: NUXT_ENV_USER_MANAGER_API_URL
-          value: https://api.users.maximemoreillon.com
-        - name: NUXT_ENV_IMAGE_MANAGER_API_URL
-          value: https://img.maximemoreillon.com
-        envFrom:
-        - secretRef:
-           name: environment-variables
+        - name: ${APPLICATION_NAME}
+          image: ${CONTAINER_IMAGE_TAGGED}
+          ports:
+            - containerPort: 3000
+          # env:
+          #   - name: NUXT_ENV_CMS_API_URL
+          #     value: https://api.cms.maximemoreillon.com
+          #   - name: NUXT_ENV_USER_MANAGER_API_URL
+          #     value: https://api.users.maximemoreillon.com
+          #   - name: NUXT_ENV_IMAGE_MANAGER_API_URL
+          #     value: https://img.maximemoreillon.com
+          # envFrom:
+          #   - secretRef:
+          #       name: environment-variables
 ---
 apiVersion: v1
 kind: Service
@@ -37,34 +37,25 @@ spec:
   selector:
     app: ${APPLICATION_NAME}
   ports:
-  - port: 8080
+    - port: 3000
 ---
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: ${APPLICATION_NAME} # Name of the ingress, named after the application
+  name: ${APPLICATION_NAME}
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    cert-manager.io/cluster-issuer: "letsencrypt-prod" # This is necessary, no idea why
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
 spec:
   tls:
-  - hosts:
-    - cms.maximemoreillon.com
-    - articles.maximemoreillon.com
-    secretName: ${APPLICATION_NAME} # Name of the secret, i.e. the certificates
+    - hosts:
+        - ${K8S_INGRESS_HOST}
+      secretName: ${APPLICATION_NAME}
   rules:
-  - host: cms.maximemoreillon.com
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: ${APPLICATION_NAME} # Name of the service, named after the app
-          servicePort: 8080
-  - host: articles.maximemoreillon.com
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: ${APPLICATION_NAME} # Name of the service, named after the app
-          servicePort: 8080
-
+    - host: ${K8S_INGRESS_HOST}
+      http:
+        paths:
+          - path: /
+            backend:
+              serviceName: ${APPLICATION_NAME}
+              servicePort: 3000

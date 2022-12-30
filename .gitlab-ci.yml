@@ -3,13 +3,9 @@ stages:
   - deploy
 
 variables:
-  APPLICATION_NAME: cms-front
-
-  CONTAINER_REGISTRY: ${DOCKER_HUB_USERNAME}
-  CONTAINER_IMAGE: ${CONTAINER_REGISTRY}/${APPLICATION_NAME}
-  CONTAINER_TAG: ${CI_COMMIT_SHORT_SHA}
-  CONTAINER_IMAGE_TAGGED: ${CONTAINER_IMAGE}:${CONTAINER_TAG}
-
+  APPLICATION_NAME: cms-front-next
+  CONTAINER_IMAGE_TAGGED: ${DOCKER_HUB_USERNAME}/${APPLICATION_NAME}:nuxt3-${CI_COMMIT_SHORT_SHA}
+  K8S_INGRESS_HOST: next.articles.maximemoreillon.com
 
 image: moreillon/ci-dind
 services:
@@ -20,20 +16,16 @@ build:
   tags:
     - dind
   only:
-    - master
+    - nuxt3
   before_script:
-    # Docker hub login
     - echo "${DOCKER_HUB_PASSWORD}" | docker login --username ${DOCKER_HUB_USERNAME} --password-stdin
   script:
-    # Building the container image
     - docker build -t ${CONTAINER_IMAGE_TAGGED} .
-    # Pushing
     - docker push ${CONTAINER_IMAGE_TAGGED}
-
 
 deploy:
   only:
-    - master
+    - nuxt3
   stage: deploy
   tags:
     - dind

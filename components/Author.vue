@@ -1,41 +1,25 @@
 <template>
-  <router-link
+  <!-- TODO: use a NuxtLink instead -->
+  <component
+    v-if="author"
     class="author"
-    :to="{ name: 'index', query: {author_id} }" >
+    :is="link ? 'a' : 'span'"
+    :href="`/?author=${author._id}`"
+  >
     {{ author.display_name }}
-  </router-link>
+  </component>
 </template>
 
-<script>
-
-export default {
-  name: 'Author',
-  props: {
-    author: Object
-  },
-  computed: {
-    author_id(){
-      return this.author._id
-    }
-  },
-  methods: {
-    author_clicked(){
-      const target_route_name = 'index'
-
-      if(!(this.$route.name === target_route_name && this.$route.query.id === this.author_id)){
-        this.$router.push({ name: target_route_name, query: { author_id: this.author_id } })
-      }
-    }
-  },
-}
+<script lang="ts" setup>
+import type Author from "~~/types/Author"
+defineProps<{
+  author: Author | null
+  link: boolean
+}>()
 </script>
 
 <style scoped>
-
-
-
-
-
-
-
+.author {
+  white-space: nowrap;
+}
 </style>

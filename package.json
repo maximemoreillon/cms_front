@@ -1,20 +1,18 @@
 {
-  "name": "cms_gui",
-  "version": "1.0.16",
   "private": true,
+  "version": "2.0.1",
   "scripts": {
-    "dev": "nuxt",
-    "serve": "nuxt",
     "build": "nuxt build",
-    "start": "nuxt start",
+    "dev": "nuxt dev",
     "generate": "nuxt generate",
-    "lint:js": "eslint --ext \".js,.vue\" --ignore-path .gitignore .",
-    "lint": "npm run lint:js",
-    "lintfix": "npm run lint:js -- --fix"
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "devDependencies": {
+    "nuxt": "3.0.0",
+    "nuxt-icon": "^0.1.8"
   },
   "dependencies": {
-    "@nuxtjs/auth-next": "5.0.0-1648802546.c9880dc",
-    "@nuxtjs/axios": "^5.13.6",
     "@tiptap/extension-bullet-list": "^2.0.0-beta.29",
     "@tiptap/extension-code": "^2.0.0-beta.28",
     "@tiptap/extension-code-block": "^2.0.0-beta.41",
@@ -25,26 +23,10 @@
     "@tiptap/extension-ordered-list": "^2.0.0-beta.30",
     "@tiptap/extension-text-align": "^2.0.0-beta.31",
     "@tiptap/extension-youtube": "^2.0.0-beta.5",
-    "@tiptap/starter-kit": "^2.0.0-beta.189",
-    "@tiptap/vue-2": "^2.0.0-beta.83",
-    "core-js": "^3.23.2",
-    "install": "^0.13.0",
-    "npm": "^8.13.1",
-    "nuxt": "^2.15.8",
-    "tiptap": "^1.32.2",
-    "tiptap-extensions": "^1.35.2",
-    "vue": "^2.6.14",
-    "vue-material-design-icons": "^5.0.0",
-    "vue-server-renderer": "^2.6.14",
-    "vue-template-compiler": "^2.6.14",
-    "webpack": "^4.46.0"
-  },
-  "devDependencies": {
-    "@babel/eslint-parser": "^7.18.2",
-    "@nuxtjs/eslint-config": "^8.0.0",
-    "@nuxtjs/eslint-module": "^3.0.2",
-    "eslint": "^8.18.0",
-    "eslint-plugin-nuxt": "^3.1.0",
-    "eslint-plugin-vue": "^8.7.1"
+    "@tiptap/starter-kit": "^2.0.0-beta.209",
+    "@tiptap/vue-3": "^2.0.0-beta.209",
+    "hast-util-to-html": "^8.0.3",
+    "highlight.js": "^11.7.0",
+    "lowlight": "^2.8.0"
   }
 }

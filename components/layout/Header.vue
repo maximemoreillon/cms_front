@@ -1,25 +1,26 @@
 <template>
   <header>
-
     <!-- Open/close navigation -->
-    <MaterialIconMenu class="navigation_button" @click="$emit('navToggle')" />
+    <button class="navigation_button button" @click="emit('navToggle')">
+      <Icon name="mdi:menu" />
+    </button>
 
     <!-- Logo as link to homepage -->
     <a class="logo_wrapper" href="https://maximemoreillon.com">
-      <img class="logo" src="~/assets/images/logo/logo.svg" alt="Maxime Moreillon logo">
+      <img
+        class="logo"
+        src="~/assets/images/logo/logo.svg"
+        alt="Maxime Moreillon logo"
+      />
     </a>
-
   </header>
 </template>
 
-<script>
-export default {
-  name: 'Header',
-}
+<script setup lang="ts">
+const emit = defineEmits(["navToggle"])
 </script>
 
-<style>
-
+<style scoped>
 header .navigation_button {
   grid-area: navButton;
   cursor: pointer;
@@ -30,11 +31,8 @@ header .title {
   grid-area: title;
 }
 
-
 header .logo_wrapper {
-
   grid-area: logo;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -62,15 +60,9 @@ header .logo {
   }
 }
 
-
 /* responsivity */
 /* Not mobile first, I know it's bad practice */
 @media only screen and (max-width: 50rem) {
-
-  header {
-    display: flex;
-  }
-
   header .navigation_button {
     display: block;
     margin-right: 1em;
@@ -78,14 +70,11 @@ header .logo {
 
   header .logo_wrapper {
     padding: 0;
-
   }
 
   header .logo {
     height: 1.75em;
     width: 1.75em;
   }
-
 }
-
 </style>

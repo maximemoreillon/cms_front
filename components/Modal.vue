@@ -1,139 +1,75 @@
 <template>
-  <div
-    class="modal"
-    :class="{open}"
-    @click.self="$emit('close')"
-  >
-    <div class="modal_window_outer">
-      <div class="modal_window_inner">
-
-        <!-- CLose button -->
-        <MaterialIconClose 
-          v-if="close_button"
-          class="modal_close_button"
-          @click="$emit('close')"/>
-
-
-
-
-        <!-- The content of the modal goes here -->
+  <Transition>
+    <div class="modal_background" v-if="open" @click.self="open = false">
+      <!-- TODO: consider having an innder div for fancier animation -->
+      <div class="modal_container">
+        <button @click="open = false" class="modal_close_button button">
+          <Icon name="mdi:close" />
+        </button>
         <slot />
       </div>
     </div>
-  </div>
+  </Transition>
 </template>
 
-<script>
+<script lang="ts" setup>
+const props = defineProps<{
+  modelValue: boolean
+}>()
 
-export default {
-  name: 'Modal',
-  props: {
-    open: Boolean,
-    close_button: {
-      type: Boolean,
-      default: true,
-    }
-  }
-}
+const emits = defineEmits(["update:modelValue"])
+
+const open = computed({
+  get() {
+    return props.modelValue
+  },
+  set(newVal) {
+    emits("update:modelValue", newVal)
+  },
+})
 </script>
 
 <style scoped>
-.modal{
-  /* poisitioning and sizing of background*/
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
+.modal_background {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100vw;
-  height: 100vh;
+  right: 0;
+  bottom: 0;
   z-index: 100;
 
-  /* positioning of content */
+  background-color: #00000066;
+
   display: flex;
-  justify-content: center;
   align-items: center;
-
-  background-color: #444444; /* fallback for legacy browsers */
-  background-color: #444444aa;
-
-  /* values which change when opening the modal */
-  /* here are the defaults */
-  visibility: hidden;
-  opacity: 0;
-
-  transition:
-    visibility 0.5s,
-    opacity 0.5s;
+  justify-content: center;
 }
 
-.modal.open{
-  visibility: visible;
-  opacity: 1;
-
-  /* Delay when OPENING */
-  transition-delay: 0s;
-}
-
-.modal{
-  /* delay when CLOSING */
-  transition-delay: 0.25s;
-}
-
-.modal_window_outer{
-  /* for elements positioned absolutely inside */
+.modal_container {
+  max-width: 95vw;
   position: relative;
 
-  opacity: 0;
-  transform: scaleX(0);
-  transition:
-    opacity 0.25s,
-    transform 0.25s;
-
-  /* delay when CLOSING */
-  transition-delay: 0.25s;
-
-  /* ADDITIONAL VISUALS */
   background-color: white;
-  margin: 50px;
+  border-radius: var(--border-radius);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+
+  /* padding: 1rem; */
 }
 
-
-.modal_window_inner{
-  opacity: 0;
-  transition: opacity 0.25s;
-  /* Delay when CLOSING */
-  transition-delay: 0s;
-
-  /* ADDITIONAL VISUALS */
-  padding: 25px;
-}
-
-.modal.open .modal_window_outer{
-  opacity: 1;
-  transform: scaleX(1);
-
-  /* Delay when OPENING */
-  transition-delay: 0s;
-}
-
-
-.modal.open .modal_window_inner{
-  opacity: 1;
-  /* Delay when OPENING */
-  transition-delay: 0.25s;
-}
-
-/* close button */
-.modal_close_button{
+.modal_close_button {
   position: absolute;
-  top: 0.4em;
-  right: 0.4em;
+  top: 0.5em;
+  right: 0.5em;
   font-size: 150%;
-  font-weight: bold;
-  cursor: pointer;
-  color: #00000066;
-}
-
-.modal_close_button:hover{
-  color: #000000;
 }
 </style>

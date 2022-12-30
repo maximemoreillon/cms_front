@@ -1,80 +1,29 @@
 <template>
-  <div>
-    <client-only>
-      <div v-if="$auth.user" class="container">
-        <div>
-          Logged in as {{ $auth.user.display_name }}
-        </div>
-      
-      
-        <button class="outlined" @click="logout()">
-          <MaterialIconLogout />
-          <span>Logout</span>
+    <h2>Logout</h2>
+
+    <template v-if="user">
+
+        <div>Logged in as {{ user.display_name }}</div>
+        <button @click="logout()">
+            <Icon name="mdi:logout" />
+            <span>Logout</span>
         </button>
-      </div>
-      
-      <div v-if="loading" class="loader_container">
-        <Loader />
-      </div>
-    </client-only>
-  </div>
+
+    </template>
+    <div v-else>Not logged in</div>
+    
 </template>
 
-<script>
-import Loader from '@/components/Loader'
+<script lang="ts" setup>
 
-export default {
-  name: 'Login',
-  modules: [
-    '@nuxtjs/axios',
-    'cookie-universal-nuxt',
-  ],
-  axios: { },
-  components: {
-    Loader
-  },
+const cookie = useCookie('jwt')
+const router = useRouter()
+const user = userUser()
 
-  data () {
-    return {
-      loading: false,
-      error: null,
-    }
-  },
-
-  methods: {
-    
-    async logout(){
-      try {
-        this.loading = true
-        await this.$auth.logout()
-        this.$router.back()
-      } catch (error) {
-        console.error(error)
-        this.error = error
-      }
-      finally {
-        this.loading = false
-      }
-      
-    }
-
-  }
-
-
-
+const logout = () => {
+    cookie.value = null
+    router.push('/')
 }
+
+
 </script>
-
-
-<style scoped>
-
-.container {
-  margin-top: 1em;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5em;
-}
-
-
-</style>
