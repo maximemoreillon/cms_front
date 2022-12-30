@@ -25,10 +25,10 @@
             {{ tag.article_count }}
           </td>
           <td>
-            <!-- <template v-if="user?.isAdmin">
-              <TagEdit v-model="tag" />
-            </template> -->
-            <Icon v-if="tag.navigation_item" name="mdi:pin" />
+            <template v-if="user?.isAdmin">
+              <TagEdit :tag="tag" @update="refresh()" />
+            </template>
+            <Icon v-else-if="tag.navigation_item" name="mdi:pin" />
           </td>
         </tr>
       </tbody>
@@ -39,12 +39,16 @@
 <script lang="ts" setup>
 import type Tag from "~~/types/Tag"
 
+definePageMeta({
+  middleware: ["auth"],
+})
+
 const runtimeConfig = useRuntimeConfig()
 const user = userUser()
 const search = ref("")
 const url = `/tags`
 const fetchOpts = { baseURL: runtimeConfig.public.apiBase }
-const { data: tags, error } = await useFetch<Tag[]>(url, fetchOpts)
+const { data: tags, error, refresh } = await useFetch<Tag[]>(url, fetchOpts)
 
 const filteredTags = computed(() => {
   if (!search.value) return tags.value

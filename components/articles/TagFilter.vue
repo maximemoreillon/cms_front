@@ -1,8 +1,5 @@
 <template>
-  <div class="wrapper" v-if="tag">
-    <Tag :tag="tag" :removable="true" :link="false" @remove="removeFilter()" />
-    <TagEdit v-if="user?.isAdmin" v-model="tag" />
-  </div>
+  <Tag :tag="tag" :removable="true" :link="false" @remove="removeFilter()" />
 </template>
 
 <script setup lang="ts">
@@ -10,7 +7,6 @@ import type Tag from "~~/types/Tag"
 
 const router = useRouter()
 const route = useRoute()
-const user = userUser()
 const runtimeConfig = useRuntimeConfig()
 
 const fetchFnc = () => (route.query.tag_id ? `/tags/${route.query.tag_id}` : "")

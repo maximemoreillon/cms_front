@@ -1,41 +1,39 @@
 <template>
-  <template v-if="tag">
-    <button class="button" @click="promptForRename()">
-      <Icon name="mdi:pencil" />
-    </button>
+  <button class="button" @click="promptForRename()">
+    <Icon name="mdi:pencil" />
+  </button>
 
-    <button
-      class="button"
-      @click="pinToNav()"
-      :class="{ active: tag.navigation_item }"
-    >
-      <Icon name="mdi:pin" />
-    </button>
+  <button
+    class="button"
+    @click="pinToNav()"
+    :class="{ active: tag.navigation_item }"
+  >
+    <Icon name="mdi:pin" />
+  </button>
 
-    <button class="button" @click="deleteTag()">
-      <Icon name="mdi:delete" />
-    </button>
+  <button class="button" @click="deleteTag()">
+    <Icon name="mdi:delete" />
+  </button>
 
-    <Snackbar v-model="snackbar.show" :class="snackbar.class">
-      {{ snackbar.message }}
-    </Snackbar>
-  </template>
+  <Snackbar v-model="snackbar.show" :class="snackbar.class">
+    {{ snackbar.message }}
+  </Snackbar>
 </template>
 
 <script setup lang="ts">
 import type Tag from "~~/types/Tag"
 
+type TagUpdateBody = {
+  name?: string
+  navigation_item?: boolean
+}
+
 const runtimeConfig = useRuntimeConfig()
-const router = useRouter()
 const updating = ref(false)
 const deleting = ref(false)
 const pinnedTags = usePinnedTags()
-const props = defineProps<{ modelValue: Tag | null }>()
-const emit = defineEmits(["update:modelValue"])
-const tag = computed({
-  get: () => props.modelValue,
-  set: (newVal) => emit("update:modelValue", newVal),
-})
+const props = defineProps<{ tag: Tag }>()
+const emit = defineEmits(["update"])
 
 const snackbar = reactive({
   show: false,
@@ -48,22 +46,20 @@ const fetchOpts = {
   headers: { authorization: `Bearer ${useCookie("jwt").value}` },
 }
 
-const updateTag = async () => {
-  const url = `/tags/${tag.value?._id}`
+const updateTag = async (body: TagUpdateBody) => {
+  const url = `/tags/${props.tag._id}`
   const options = {
     method: "PATCH",
+    body,
     ...fetchOpts,
-    body: tag.value,
   }
 
   updating.value = true
 
   try {
     await $fetch(url, options)
-    snackbar.show = true
-    snackbar.message = `Tag updated`
-    snackbar.class = ""
     await updatePinnedTags()
+    emit("update")
   } catch (error) {
     snackbar.show = true
     snackbar.message = `Tag update failed`
@@ -81,9 +77,9 @@ const updatePinnedTags = async () => {
 }
 
 const deleteTag = async () => {
-  if (!confirm(`Delete tag ${tag.value?.name} ?`)) return
+  if (!confirm(`Delete tag ${props.tag?.name} ?`)) return
 
-  const url = `/tags/${tag.value?._id}`
+  const url = `/tags/${props.tag?._id}`
   const options = {
     method: "DELETE",
     ...fetchOpts,
@@ -94,7 +90,7 @@ const deleteTag = async () => {
   try {
     await $fetch(url, options)
     await updatePinnedTags()
-    router.push("/")
+    emit("update")
   } catch (error) {
     snackbar.show = true
     snackbar.message = `Tag deletion failed`
@@ -106,16 +102,14 @@ const deleteTag = async () => {
 }
 
 const promptForRename = () => {
-  if (!tag.value) return
-  const newName = prompt("New tag name", tag.value.name)
-  if (!newName) return
-  tag.value.name = newName
-  updateTag()
+  if (!props.tag) return
+  const name = prompt("New tag name", props.tag.name)
+  if (!name) return
+  updateTag({ name })
 }
 
 const pinToNav = async () => {
-  if (!tag.value) return
-  tag.value.navigation_item = !tag.value.navigation_item
-  await updateTag()
+  if (!props.tag) return
+  await updateTag({ navigation_item: !props.tag.navigation_item })
 }
 </script>
