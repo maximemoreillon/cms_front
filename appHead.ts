@@ -23,14 +23,8 @@ export default {
     { name: "twitter:card", content: "summary" },
     { name: "twitter:site", content: "@m_moreillon" }, // TODO: make twitter username user customizable
     { name: "twitter:title", content: "Articles | Maxime Moreillon" },
-    {
-      name: "twitter:description",
-      content: description,
-    },
-    {
-      name: "twitter:image",
-      content: `${CANONICAL_URL}/logo.png`,
-    },
+    { name: "twitter:description", content: description },
+    { name: "twitter:image", content: `${CANONICAL_URL}/logo.png` },
     { name: "twitter:image:alt", content: "CMS logo" },
   ],
 }
