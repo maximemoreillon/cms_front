@@ -1,5 +1,5 @@
-const { CANONICAL_URL } = process.env
-
+// const { CANONICAL_URL } = process.env
+const CANONICAL_URL = "https://articles.maximemoreillon.com"
 const title = "Articles | Maxime Moreillon"
 const description = "An article management system developed by Maxime Moreillon"
 

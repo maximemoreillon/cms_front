@@ -6,7 +6,15 @@ const {
   IDENTIFICATION_URL,
   IMAGE_MANAGER_API_URL,
   CANONICAL_URL,
-} = process.env
+  //} = process.env
+  // debugging
+} = {
+  CMS_API_URL: "https://api.articles.maximemoreillon.com",
+  LOGIN_URL: "https://api.users.maximemoreillon.com/v2/auth/login",
+  IDENTIFICATION_URL: "https://api.users.maximemoreillon.com/v2/users/self",
+  IMAGE_MANAGER_API_URL: "https://img.maximemoreillon.com",
+  CANONICAL_URL: "https://articles.maximemoreillon.com",
+}
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
