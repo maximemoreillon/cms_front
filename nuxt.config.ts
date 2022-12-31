@@ -1,5 +1,6 @@
 import head from "./appHead"
 
+// PROBLEM: Env vars are read at build time and not runTime
 // const {
 //   CMS_API_URL,
 //   LOGIN_URL,
@@ -8,6 +9,7 @@ import head from "./appHead"
 //   CANONICAL_URL,
 // } = process.env
 
+//  using constants in the meantime
 const CMS_API_URL = "https://api.articles.maximemoreillon.com"
 const LOGIN_URL = "https://api.users.maximemoreillon.com/v2/auth/login"
 const IDENTIFICATION_URL = "https://api.users.maximemoreillon.com/v2/users/self"
@@ -17,7 +19,6 @@ const CANONICAL_URL = "https://articles.maximemoreillon.com"
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   runtimeConfig: {
-    // TODO: use environment variables
     public: {
       apiBase: CMS_API_URL,
       loginUrl: LOGIN_URL,

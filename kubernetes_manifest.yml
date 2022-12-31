@@ -17,6 +17,7 @@ spec:
           image: ${CONTAINER_IMAGE_TAGGED}
           ports:
             - containerPort: 3000
+          # NOTE: Currently unused
           env:
             - name: CMS_API_URL
               value: https://api.articles.maximemoreillon.com
