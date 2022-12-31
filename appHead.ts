@@ -17,13 +17,13 @@ export default {
     { name: "og:description", content: description },
     { name: "og:image", content: imageUrl },
     { name: "og:url", content: CANONICAL_URL },
-    { name: "og:type", content: "article" },
+    { name: "og:type", content: "website" },
     { name: "og:locale", content: "en_US" },
 
     // Twitter
     { name: "twitter:card", content: "summary" },
     { name: "twitter:site", content: "@m_moreillon" }, // TODO: make twitter username user customizable
-    { name: "twitter:title", content: "Articles | Maxime Moreillon" },
+    { name: "twitter:title", content: title },
     { name: "twitter:description", content: description },
     { name: "twitter:image", content: imageUrl },
     { name: "twitter:image:alt", content: "CMS logo" },

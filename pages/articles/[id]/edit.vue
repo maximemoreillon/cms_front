@@ -47,6 +47,17 @@ const fetchOpts = {
 }
 const { data: article, error } = await useFetch<Article>(url, fetchOpts)
 
+const getArticleTitleFromH1 = () => {
+  if (!article.value) return ""
+  const articleDom = new DOMParser().parseFromString(
+    article.value.content,
+    "text/html"
+  )
+  const h1 = articleDom.querySelector("h1")
+  if (!h1) return "Untitled article"
+  return h1.innerText
+}
+
 const saveArticle = async () => {
   const url = `articles/${route.params.id}`
 
@@ -55,6 +66,7 @@ const saveArticle = async () => {
     method: "PATCH",
     body: {
       ...article.value,
+      title: getArticleTitleFromH1(),
       tag_ids: article.value?.tags.map((t: Tag) => t._id),
     },
   }
