@@ -21,7 +21,7 @@ const runtimeConfig = useRuntimeConfig()
 const { _id, title, summary, thumbnail_src } = props.article
 const { canonicalUrl } = runtimeConfig
 
-const imageSrc = ref(thumbnail_src || "/images/meta_img.png")
+const imageSrc = ref(thumbnail_src || `${canonicalUrl}/images/meta_img.png`)
 
 useHead({
   title: title,
