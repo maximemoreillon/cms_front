@@ -2,7 +2,7 @@
 const CANONICAL_URL = "https://articles.maximemoreillon.com"
 const title = "Articles | Maxime Moreillon"
 const description = "An article management system developed by Maxime Moreillon"
-const logoRelPath = "/images/logo.png"
+const logoRelPath = "/images/meta_img.png"
 const imageUrl = `${CANONICAL_URL}${logoRelPath}`
 export default {
   title,

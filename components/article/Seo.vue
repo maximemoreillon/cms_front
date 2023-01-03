@@ -1,8 +1,7 @@
 <template>
-  <!-- TODO: image using full URL -->
   <!-- TODO: delimiter for date -->
   <meta itemprop="publisher" content="Maxime Moreillon" />
-  <meta itemprop="image" content="/logo.png" />
+  <meta itemprop="image" :content="imageSrc" />
   <meta
     itemprop="datePublished"
     :content="formatNeo4jDate(article.authorship.creation_date)"
@@ -22,6 +21,8 @@ const runtimeConfig = useRuntimeConfig()
 const { _id, title, summary, thumbnail_src } = props.article
 const { canonicalUrl } = runtimeConfig
 
+const imageSrc = ref(thumbnail_src || "/images/meta_img.png")
+
 useHead({
   title: title,
   meta: [
@@ -30,7 +31,7 @@ useHead({
     // OpenGraph
     { name: "og:title", content: title },
     { name: "og:description", content: summary },
-    { name: "og:image", content: thumbnail_src },
+    { name: "og:image", content: imageSrc.value },
     { name: "og:url", content: `${canonicalUrl}/articles/${_id}` },
     { name: "og:type", content: "article" },
     { name: "og:locale", content: "en_US" },
@@ -40,7 +41,7 @@ useHead({
     { name: "twitter:site", content: "@m_moreillon" }, // TODO: handle customizable
     { name: "twitter:title", content: title },
     { name: "twitter:description", content: summary },
-    { name: "twitter:image", content: thumbnail_src },
+    { name: "twitter:image", content: imageSrc.value },
     { name: "twitter:image:alt", content: `${title} thumbnail` },
   ],
 })
