@@ -7,7 +7,7 @@ const imageUrl = `${CANONICAL_URL}${logoRelPath}`
 export default {
   title,
   link: [
-    { rel: "icon", type: "image/png", href: logoRelPath }, // TODO: make favicon user customizable
+    { rel: "icon", type: "image/png", href: "/images/logo.png" }, // TODO: make favicon user customizable
   ],
   meta: [
     { name: "description", content: description },
