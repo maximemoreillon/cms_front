@@ -35,13 +35,15 @@ const open = computed({
 
 const runtimeConfig = useRuntimeConfig()
 const router = useRouter()
-const title = ref("")
+const title = ref("My new article")
 const creating = ref(false)
 
 const createArticle = async () => {
   const body = {
     title: title.value,
     content: `<h1>${title.value}</h1><p>This article has no content yet</p>`,
+    summary: "This article has no summary",
+    published: false,
   }
 
   const options = {

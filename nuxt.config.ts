@@ -10,7 +10,8 @@ import head from "./appHead"
 // } = process.env
 
 //  using constants in the meantime
-const CMS_API_URL = "https://api.articles.maximemoreillon.com"
+// const CMS_API_URL = "https://api.articles.maximemoreillon.com"
+const CMS_API_URL = "http://192.168.1.2:7070"
 const LOGIN_URL = "https://api.users.maximemoreillon.com/v2/auth/login"
 const IDENTIFICATION_URL = "https://api.users.maximemoreillon.com/v2/users/self"
 const IMAGE_MANAGER_API_URL = "https://img.maximemoreillon.com"
