@@ -201,6 +201,9 @@ main a {
   margin: 2em auto;
   max-width: 100%;
 
+  border-radius: var(--border-radius);
+  border: none;
+
   /* This is super useful */
   aspect-ratio: 3/2;
 }

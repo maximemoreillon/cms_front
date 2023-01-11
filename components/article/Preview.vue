@@ -101,6 +101,7 @@ defineProps<{ article: Article }>()
 
 .thumbnail {
   width: 100%;
+  max-height: 20vh;
   aspect-ratio: 1;
   display: flex;
 
