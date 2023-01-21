@@ -91,6 +91,11 @@ defineProps<{ article: Article }>()
   flex-basis: 10rem;
   white-space: pre-line;
   flex-grow: 4;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 8;
+  -webkit-box-orient: vertical;
+  overflow-y: hidden;
 }
 
 .thumbnail_wrapper {
