@@ -16,6 +16,7 @@ const open = ref(false)
 
 const insertImage = (src: string) => {
   props.editor?.chain().focus().setImage({ src, alt: "Article image" }).run()
+  open.value = false
 }
 </script>
 
