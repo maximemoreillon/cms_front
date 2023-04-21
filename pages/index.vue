@@ -44,7 +44,7 @@
 <script lang="ts" setup>
 import type Article from "~~/types/Article"
 
-const user = userUser()
+const user = useUser()
 
 definePageMeta({
   middleware: ["auth"],

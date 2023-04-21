@@ -14,7 +14,7 @@
 
 <script lang="ts" setup>
 const route = useRoute()
-const user = userUser()
+const user = useUser()
 const sortingOptions = ref([
   { icon: "mdi:calendar", value: "date", isDefault: true },
   { icon: "mdi:order-alphabetical-ascending", value: "title" },

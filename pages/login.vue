@@ -43,7 +43,7 @@
 const cookie = useCookie("jwt")
 const router = useRouter()
 const runtimeConfig = useRuntimeConfig()
-const user = userUser()
+const user = useUser()
 const loggingIn = ref(false)
 const credentials = reactive({
   username: "",

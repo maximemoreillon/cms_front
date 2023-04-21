@@ -11,21 +11,16 @@ import head from "./appHead"
 
 //  using constants in the meantime
 // const CMS_API_URL = "http://192.168.1.2:7070"
-const CMS_API_URL = "https://api.articles.maximemoreillon.com"
-const LOGIN_URL = "https://api.users.maximemoreillon.com/auth/login"
-const IDENTIFICATION_URL = "https://api.users.maximemoreillon.com/users/self"
-const IMAGE_MANAGER_API_URL = "https://img.maximemoreillon.com"
-const CANONICAL_URL = "https://articles.maximemoreillon.com"
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
-      apiBase: CMS_API_URL,
-      loginUrl: LOGIN_URL,
-      idenfiticationUrl: IDENTIFICATION_URL,
-      imageManagerApiUrl: IMAGE_MANAGER_API_URL,
-      canonicalUrl: CANONICAL_URL,
+      apiBase: "",
+      loginUrl: "",
+      identificationUrl: "",
+      imageManagerApiUrl: "",
+      canonicalUrl: "",
     },
   },
   modules: ["nuxt-icon"],

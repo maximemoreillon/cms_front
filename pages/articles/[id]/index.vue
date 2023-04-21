@@ -53,7 +53,7 @@ definePageMeta({
 
 const route = useRoute()
 const runtimeConfig = useRuntimeConfig()
-const user = userUser()
+const user = useUser()
 
 const userIsAuthor = computed(
   () => article.value?.author._id === user.value?._id

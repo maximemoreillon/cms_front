@@ -41,7 +41,7 @@
 <script lang="ts" setup>
 import type Tag from "~~/types/Tag"
 
-const user = userUser()
+const user = useUser()
 const pinnedTags = usePinnedTags()
 const runtimeConfig = useRuntimeConfig()
 

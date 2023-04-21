@@ -37,7 +37,7 @@ const props = defineProps<{
   link: boolean
 }>()
 
-const user = userUser()
+const user = useUser()
 const userIsAuthor = computed(
   () => props.article?.author._id === user.value?._id
 )

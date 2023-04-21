@@ -17,21 +17,18 @@ spec:
           image: ${CONTAINER_IMAGE_TAGGED}
           ports:
             - containerPort: 3000
-          # NOTE: Currently unused
           env:
-            - name: CMS_API_URL
+            - name: NUXT_PUBLIC_API_BASE
               value: https://api.articles.maximemoreillon.com
-            - name: LOGIN_URL
-              value: https://api.users.maximemoreillon.com/v2/auth/login
-            - name: IDENTIFICATION_URL
-              value: https://api.users.maximemoreillon.com/v2/users/self
-            - name: IMAGE_MANAGER_API_URL
+            - name: NUXT_PUBLIC_LOGIN_URL
+              value: https://api.users.maximemoreillon.com/auth/login
+            - name: NUXT_PUBLIC_IDENTIFICATION_URL
+              value: https://api.users.maximemoreillon.com/users/self
+            - name: NUXT_PUBLIC_IMAGE_MANAGER_API_URL
               value: https://img.maximemoreillon.com
-            - name: CANONICAL_URL
+            - name: NUXT_PUBLIC_CANONICAL_URL
               value: https://articles.maximemoreillon.com
-          # envFrom:
-          # - secretRef:
-          #    name: environment-variables
+
 ---
 apiVersion: v1
 kind: Service

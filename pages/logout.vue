@@ -16,7 +16,7 @@
 <script lang="ts" setup>
 const cookie = useCookie("jwt")
 const router = useRouter()
-const user = userUser()
+const user = useUser()
 
 const logout = () => {
   cookie.value = null

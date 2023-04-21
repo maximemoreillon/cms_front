@@ -44,7 +44,7 @@ definePageMeta({
 })
 
 const runtimeConfig = useRuntimeConfig()
-const user = userUser()
+const user = useUser()
 const search = ref("")
 const url = `/tags`
 const fetchOpts = { baseURL: runtimeConfig.public.apiBase }
