@@ -43,6 +43,31 @@
     <button @click="prompt_for_youtube()" class="button">
       <Icon name="mdi:youtube" />
     </button>
+
+    <button
+      :class="{ active: editor.isActive({ textAlign: 'left' }) }"
+      class="button"
+      @click="editor.chain().focus().setTextAlign('left').run()"
+    >
+      <Icon name="mdi:format-align-left" />
+    </button>
+
+    <button
+      :class="{ active: editor.isActive({ textAlign: 'center' }) }"
+      class="button"
+      @click="editor.chain().focus().setTextAlign('center').run()"
+    >
+      <Icon name="mdi:format-align-center" />
+    </button>
+
+    <button
+      :class="{ active: editor.isActive({ textAlign: 'right' }) }"
+      class="button"
+      @click="editor.chain().focus().setTextAlign('right').run()"
+    >
+      <Icon name="mdi:format-align-right" />
+    </button>
+    
   </FloatingMenu>
 </template>
 
