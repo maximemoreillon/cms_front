@@ -2,7 +2,18 @@
   <template v-if="runtimeConfig.imageManagerApiUrl">
     <h3>Via upload</h3>
     <form @submit.prevent="imageUpload()">
-      <input ref="imageToUpload" type="file" accept="image/*" />
+      <!-- TODO: use an icon -->
+      <label for="image-upload" class="button">
+        <Icon name="mdi:folder" />
+        <span>Browse files</span>
+      </label>
+      <div class="spacer" />
+      <input
+        ref="imageToUpload"
+        type="file"
+        accept="image/*"
+        id="image-upload"
+      />
       <button type="submit" class="button">
         <Icon name="mdi:upload" />
       </button>
@@ -73,5 +84,9 @@ form {
 
 input {
   flex-grow: 1;
+}
+
+input[type="file"] {
+  display: none;
 }
 </style>
