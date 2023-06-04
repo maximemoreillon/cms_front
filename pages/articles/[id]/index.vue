@@ -35,14 +35,14 @@
     </NuxtLink>
   </article>
 
-  <!-- TODO: Error display -->
+  <!-- TODO: Improve error display -->
   <div v-if="error" class="error">
     <span v-if="error.statusCode === 404">Article not found</span>
     <span v-else>Failed to query article</span>
   </div>
 
   <!-- Modal to zoom on images -->
-  <Modal v-model="modalOpen">
+  <Modal v-model="modalOpen" ref="modal">
     <img :src="modalImageSrc" alt="" class="modal_image" />
   </Modal>
 </template>
@@ -62,6 +62,8 @@ const user = useUser()
 const userIsAuthor = computed(
   () => article.value?.author._id === user.value?._id
 )
+
+const modal = ref()
 const modalOpen = ref(false)
 const modalImageSrc = ref("")
 const articleContent = ref<HTMLElement>()
