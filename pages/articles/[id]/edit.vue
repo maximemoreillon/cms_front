@@ -5,12 +5,16 @@
         <Icon name="mdi:arrow-left" />
       </NuxtLink>
       <div class="spacer" />
-      <button @click="deleteArticle()" class="button">
-        <Icon name="mdi:delete" />
-      </button>
-      <button @click="saveArticle()" class="button">
-        <Icon name="mdi:content-save" />
-      </button>
+      <IconButton
+        icon="mdi:delete"
+        :loading="saving"
+        @click="deleteArticle()"
+      />
+      <IconButton
+        icon="mdi:content-save"
+        :loading="saving"
+        @click="saveArticle()"
+      />
     </section>
 
     <section>
