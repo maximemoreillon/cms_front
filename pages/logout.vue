@@ -4,10 +4,7 @@
   <template v-if="user">
     <p>Logged in as {{ user.display_name }}</p>
     <p>
-      <button @click="logout()" class="button">
-        <Icon name="mdi:logout" />
-        <span>Logout</span>
-      </button>
+      <IconButton icon="mdi:logout" text="Logout" @click="logout()" />
     </p>
   </template>
   <p v-else>Not logged in</p>

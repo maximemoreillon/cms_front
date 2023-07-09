@@ -28,15 +28,21 @@
       />
     </div>
 
-    <button type="submit" class="button">
-      <Icon name="mdi:login" />
-      <span>Login</span>
-    </button>
+    <IconButton
+      :loading="loggingIn"
+      type="submit"
+      icon="mdi:login"
+      text="Login"
+    />
   </form>
 
   <div v-else>
     Already logged in. Click <NuxtLink to="/logout">here</NuxtLink> to log out.
   </div>
+
+  <Snackbar v-model="snackbar.show" :class="snackbar.class">
+    {{ snackbar.message }}
+  </Snackbar>
 </template>
 
 <script lang="ts" setup>
@@ -48,6 +54,11 @@ const loggingIn = ref(false)
 const credentials = reactive({
   username: "",
   password: "",
+})
+const snackbar = reactive({
+  show: false,
+  message: "",
+  class: "",
 })
 
 const login = async () => {
@@ -65,7 +76,9 @@ const login = async () => {
     cookie.value = jwt
     router.back()
   } catch (error) {
-    console.error(error)
+    snackbar.show = true
+    snackbar.message = "Login failed"
+    snackbar.class = ""
   } finally {
     loggingIn.value = false
   }

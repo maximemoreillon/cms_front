@@ -7,7 +7,7 @@
       <div class="spacer" />
       <IconButton
         icon="mdi:delete"
-        :loading="saving"
+        :loading="deleting"
         @click="deleteArticle()"
       />
       <IconButton
