@@ -16,12 +16,11 @@
 const route = useRoute()
 const router = useRouter()
 
-// TODO: find right typing
-const searchString = ref<any>("")
+const searchString = ref("")
 
 const setQuery = () => {
-  const query = {
-    // ...route.query,
+  const query: any = {
+    ...route.query,
     search: searchString.value,
   }
   if (route.query.search === query.search) return
@@ -30,8 +29,15 @@ const setQuery = () => {
 }
 
 onMounted(() => {
-  searchString.value = route.query.search
+  searchString.value = route.query.search as string
 })
+
+watch(
+  () => route.query.search,
+  (val) => {
+    if (!val) searchString.value = val as string
+  }
+)
 </script>
 
 <style scoped>

@@ -3,7 +3,7 @@
     <!-- TODO: Buttons for first and last -->
 
     <template v-if="currentPage !== 1">
-      <NuxtLink :to="{ query: { start_index: 0 } }" class="button">
+      <NuxtLink :to="{ query: pageQuery(1) }" class="button">
         <Icon name="mdi:page-first" />
       </NuxtLink>
       <NuxtLink :to="{ query: pageQuery(currentPage - 1) }" class="button">
