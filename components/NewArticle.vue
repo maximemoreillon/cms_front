@@ -12,9 +12,11 @@
           placeholder="Title"
         />
 
-        <button type="submit" class="button">
-          <Icon name="mdi:file-document-plus"></Icon>
-        </button>
+        <IconButton
+          icon="mdi:file-document-plus"
+          type="submit"
+          :loading="creating"
+        />
       </form>
     </div>
   </Modal>
