@@ -1,48 +1,54 @@
 <template>
-  <h1>Login</h1>
+  <template v-if="!user">
+    <h1>Login</h1>
 
-  <form @submit.prevent="login()" v-if="!user">
-    <div class="field">
-      <label for="username">
-        <Icon name="mdi:account" />
-      </label>
-      <input
-        class="text_input"
-        id="username"
-        type="text"
-        v-model="credentials.username"
-        placeholder="Username"
+    <form @submit.prevent="login()">
+      <div class="field">
+        <label for="username">
+          <Icon name="mdi:account" />
+        </label>
+        <input
+          class="text_input"
+          id="username"
+          type="text"
+          v-model="credentials.username"
+          placeholder="Username"
+        />
+      </div>
+
+      <div class="field">
+        <label for="password">
+          <Icon name="mdi:key" />
+        </label>
+        <input
+          class="text_input"
+          id="password"
+          type="password"
+          v-model="credentials.password"
+          placeholder="Password"
+        />
+      </div>
+
+      <IconButton
+        :loading="loggingIn"
+        type="submit"
+        icon="mdi:login"
+        text="Login"
       />
-    </div>
+    </form>
 
-    <div class="field">
-      <label for="password">
-        <Icon name="mdi:key" />
-      </label>
-      <input
-        class="text_input"
-        id="password"
-        type="password"
-        v-model="credentials.password"
-        placeholder="Password"
-      />
-    </div>
+    <Snackbar v-model="snackbar.show" :class="snackbar.class">
+      {{ snackbar.message }}
+    </Snackbar>
+  </template>
 
-    <IconButton
-      :loading="loggingIn"
-      type="submit"
-      icon="mdi:login"
-      text="Login"
-    />
-  </form>
-
-  <div v-else>
-    Already logged in. Click <NuxtLink to="/logout">here</NuxtLink> to log out.
-  </div>
-
-  <Snackbar v-model="snackbar.show" :class="snackbar.class">
-    {{ snackbar.message }}
-  </Snackbar>
+  <template v-if="user">
+    <h1>Logout</h1>
+    <p>Logged in as {{ user.display_name }}</p>
+    <p>
+      <IconButton icon="mdi:logout" text="Logout" @click="logout()" />
+    </p>
+  </template>
 </template>
 
 <script lang="ts" setup>
@@ -82,6 +88,11 @@ const login = async () => {
   } finally {
     loggingIn.value = false
   }
+}
+
+const logout = () => {
+  cookie.value = null
+  router.push("/")
 }
 </script>
 

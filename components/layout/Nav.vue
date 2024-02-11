@@ -27,13 +27,15 @@
       <span>Auhtors</span>
     </NuxtLink> -->
 
-    <NuxtLink v-if="user" to="/logout">
-      <Icon name="mdi:logout" />
-      <span>Logout</span>
-    </NuxtLink>
-    <NuxtLink v-else to="/login">
-      <Icon name="mdi:login" />
-      <span>Login</span>
+    <NuxtLink to="/login">
+      <template v-if="user">
+        <Icon name="mdi:logout" />
+        <span>Logout</span>
+      </template>
+      <template v-else>
+        <Icon name="mdi:login" />
+        <span>Login</span>
+      </template>
     </NuxtLink>
   </nav>
 </template>
