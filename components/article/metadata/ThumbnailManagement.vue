@@ -6,7 +6,7 @@
 
     <Modal v-model="open" @click.stop class="modal">
       <div class="model_content">
-        <ImageInsert @insert="src = $event" />
+        <ImageInsert @insert="handleImageInsert($event)" />
       </div>
     </Modal>
   </div>
@@ -17,6 +17,11 @@
 const props = defineProps<{ modelValue: any }>()
 
 const emit = defineEmits(["update:modelValue"])
+
+const handleImageInsert = (event: any) => {
+  src.value = event
+  open.value = false
+}
 
 const src = computed({
   get: () => props.modelValue,
