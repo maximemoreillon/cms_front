@@ -38,10 +38,8 @@ const aside_open = ref(false)
   --main-max-width: 40em;
 
   /* Colors */
-  /* TODO: shoukld have been color-accent, color-border, etc. */
+  --background-color: #ffffff;
   --accent-color: #c00000;
-
-  /* TODO: find better name */
   --border-color: #dddddd;
 
   --text-color: #444444;
@@ -51,6 +49,7 @@ const aside_open = ref(false)
 
   --error-color: #c00000;
   --success-color: #00c000;
+  --tags-color: #dddddd
 
   /* Text */
   --line-height: 1.5;
@@ -59,9 +58,14 @@ const aside_open = ref(false)
   --border-radius: 0.5rem;
 }
 
-::-webkit-scrollbar {
-  width: 3px;
-  height: 3px;
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #111111;
+    --text-color: #cccccc;
+    --text-light-color: #888888;
+    --border-color: #aaaaaa;
+    --tags-color: #444444;
+  }
 }
 
 ::-webkit-scrollbar-track {
@@ -89,13 +93,14 @@ body {
   padding: 0;
   margin: 0;
 
+  background-color: var(--background-color);
   color: var(--text-color);
 }
 
 h1,
 h2,
 h3 {
-  color: var(--headers-color);
+  color: var(--text-color);
 }
 
 h1 {
@@ -139,7 +144,7 @@ aside {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  background-color: white;
+  background-color: var(--background-color);
 
   top: var(--grid-gap);
   z-index: 11;
@@ -155,7 +160,7 @@ header {
   /* Layer only visible on small devices */
   grid-area: header;
   display: none;
-  background-color: white;
+  background-color: var(--background-color);
   position: sticky;
   top: 0;
   z-index: 8;
@@ -178,7 +183,7 @@ main {
 nav {
   font-size: 1.1em;
   /* Re-applying background color for times where position fixed */
-  background-color: white;
+  background-color: var(--background-color);
   display: flex;
   flex-direction: column;
 }

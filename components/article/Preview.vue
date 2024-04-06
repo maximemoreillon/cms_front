@@ -49,7 +49,7 @@ defineProps<{ article: Article }>()
 /* NOTE: Using flex and not grid because some items do not have tags, some items top not have thumbnails */
 
 .article_preview {
-  border: 1px solid #dddddd;
+  border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
   padding: 1.5rem;
 

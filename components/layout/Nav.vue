@@ -61,7 +61,7 @@ pinnedTags.value = data.value
 nav a {
   padding: 0.5em 1em;
   text-decoration: none;
-  color: var(--nav-color);
+  color: var(--text-color);
   display: flex;
   align-items: stretch;
   gap: 1em;
@@ -81,6 +81,7 @@ nav a span {
 }
 
 nav a:hover {
+  /* TODO: use colors */
   border-right-color: #666666;
 }
 

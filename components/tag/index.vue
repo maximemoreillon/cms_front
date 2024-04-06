@@ -31,8 +31,8 @@ defineProps<{
 <style scoped>
 .tag {
   text-decoration: none;
-  color: initial;
-  background-color: #dddddd;
+  color: var(--text-color);
+  background-color: var(--tags-color);
   /* border: 1px solid #dddddd; */
   font-size: 80%;
   padding: 0.25em 0.75em;
