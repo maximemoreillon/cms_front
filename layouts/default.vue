@@ -49,7 +49,9 @@ const aside_open = ref(false)
 
   --error-color: #c00000;
   --success-color: #00c000;
-  --tags-color: #dddddd
+
+  /* TODO: use a more standardized color */
+  --tags-color: #dddddd;
 
   /* Text */
   --line-height: 1.5;
@@ -201,6 +203,7 @@ main a {
 }
 
 .content iframe {
+  /* Used for Youtube videos embedding */
   display: block;
   /* img, iframe default is inline */
   margin: 2em auto;
@@ -211,6 +214,11 @@ main a {
 
   /* This is super useful */
   aspect-ratio: 3/2;
+}
+
+input {
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 /* responsivity */

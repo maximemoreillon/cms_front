@@ -49,7 +49,5 @@ watch(
 
 input {
   flex-grow: 1;
-  background-color: var(--background-color);
-  color: var(--text-color);
 }
 </style>
