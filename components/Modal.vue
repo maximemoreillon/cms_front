@@ -42,7 +42,13 @@ watch(open, () => {
   font-size: 150%;
 }
 
+dialog::backdrop {
+  background-color: #00000099;
+}
+
 dialog {
+  color: var(--text-color);
+  background-color: var(--background-color);
   padding: 0;
   border: none;
   border-radius: var(--border-radius);

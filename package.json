@@ -3,13 +3,13 @@
   "version": "2.0.2",
   "scripts": {
     "build": "nuxt build",
-    "dev": "nuxt dev",
+    "dev": "nuxt dev --host",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "nuxt": "3.0.0",
+    "nuxt": "^3.0.0",
     "nuxt-icon": "^0.1.8"
   },
   "dependencies": {

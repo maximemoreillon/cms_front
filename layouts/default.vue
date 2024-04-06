@@ -216,7 +216,8 @@ main a {
   aspect-ratio: 3/2;
 }
 
-input {
+input,
+textarea {
   background-color: var(--background-color);
   color: var(--text-color);
 }
