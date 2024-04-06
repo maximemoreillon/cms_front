@@ -63,7 +63,7 @@ const aside_open = ref(false)
 @media (prefers-color-scheme: dark) {
   :root {
     --background-color: #111111;
-    --text-color: #cccccc;
+    --text-color: #eeeeee;
     --text-light-color: #888888;
     --border-color: #aaaaaa;
     --tags-color: #444444;
