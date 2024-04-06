@@ -30,7 +30,7 @@ const insertImage = (src: string) => {
   position: absolute;
   left: 0;
   bottom: 100%;
-  background-color: white;
+  background-color: var(--background-color);
   text-align: initial;
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);

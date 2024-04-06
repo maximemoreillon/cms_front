@@ -64,7 +64,7 @@ button {
   display: flex;
   flex-wrap: nowrap;
 
-  background-color: white;
+  background-color: var(--background-color);
   padding: 0.25rem;
 
   border: 1px solid var(--border-color);

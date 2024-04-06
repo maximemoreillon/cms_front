@@ -80,7 +80,7 @@ const editor = useEditor({
   gap: 0.25rem;
   padding: 0.25rem;
   border: 1px solid var(--border-color);
-  background-color: white;
+  background-color: var(--background-color);
   border-radius: var(--border-radius);
 }
 
