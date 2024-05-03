@@ -11,7 +11,8 @@ export default defineNuxtConfig({
       canonicalUrl: "",
     },
   },
-  modules: ["nuxt-icon"],
+  modules: ["nuxt-icon", "@nuxtjs/robots"],
+
   app: {
     head,
   },
