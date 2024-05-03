@@ -48,7 +48,7 @@
 </template>
 
 <script lang="ts" setup>
-import Article from "~~/types/Article"
+import type Article from "~~/types/Article"
 import { toHtml } from "hast-util-to-html"
 
 definePageMeta({

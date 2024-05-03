@@ -1,5 +1,5 @@
 <template>
-  <template v-if="runtimeConfig.imageManagerApiUrl">
+  <template v-if="runtimeConfig.public.imageManagerApiUrl">
     <h3>Via upload</h3>
     <form @submit.prevent="imageUpload()">
       <!-- TODO: use an icon -->
@@ -37,6 +37,7 @@
 <script lang="ts" setup>
 const uploading = ref(false)
 const runtimeConfig = useRuntimeConfig()
+
 const imageToUpload = ref()
 const imageUrl = ref("")
 const emit = defineEmits(["insert"])

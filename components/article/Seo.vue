@@ -13,13 +13,14 @@
 </template>
 
 <script setup lang="ts">
-import Article from "~~/types/Article"
+import type Article from "~~/types/Article"
 
 const props = defineProps<{ article: Article }>()
 const runtimeConfig = useRuntimeConfig()
 
 const { _id, title, summary, thumbnail_src } = props.article
-const { canonicalUrl } = runtimeConfig
+const { canonicalUrl } = runtimeConfig.public
+console.log({ canonicalUrl })
 
 const imageSrc = ref(thumbnail_src || `${canonicalUrl}/images/meta_img.png`)
 
