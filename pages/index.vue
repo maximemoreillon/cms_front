@@ -89,4 +89,3 @@ const { data, error, refresh } = await useFetch<FetchBody>(fetchFnc, fetchOpts)
   gap: 0.5rem;
 }
 </style>
-~/types/article

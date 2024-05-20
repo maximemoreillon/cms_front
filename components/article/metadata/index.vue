@@ -30,8 +30,6 @@
 </template>
 
 <script lang="ts" setup>
-import type Article from "~~/types/Article"
-
 const props = defineProps<{
   article: Article | null
   link: boolean
@@ -58,4 +56,3 @@ const userIsAuthor = computed(
   gap: 0.5em;
 }
 </style>
-~/types/article

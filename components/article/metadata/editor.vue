@@ -64,8 +64,6 @@
 </template>
 
 <script lang="ts" setup>
-import type Article from "~~/types/Article"
-
 const props = defineProps<{ modelValue: Article }>()
 
 const emit = defineEmits(["update:modelValue"])
@@ -94,4 +92,3 @@ const article = computed({
   flex-basis: 10rem;
 }
 </style>
-~/types/article
