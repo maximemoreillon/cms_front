@@ -26,8 +26,6 @@
 </template>
 
 <script lang="ts" setup>
-import type Author from "~~/types/Author"
-
 const runtimeConfig = useRuntimeConfig()
 
 const url = `/authors`

@@ -52,4 +52,8 @@ watch(open, () => {
 .snackbar.error {
   background-color: var(--error-color);
 }
+
+.snackbar.success {
+  background-color: var(--success-color);
+}
 </style>

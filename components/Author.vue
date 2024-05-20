@@ -11,7 +11,6 @@
 </template>
 
 <script lang="ts" setup>
-import type Author from "~~/types/Author"
 defineProps<{
   author: Author | null
   link: boolean

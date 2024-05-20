@@ -13,8 +13,6 @@
 </template>
 
 <script setup lang="ts">
-import type Article from "~~/types/Article"
-
 const props = defineProps<{ article: Article }>()
 const runtimeConfig = useRuntimeConfig()
 

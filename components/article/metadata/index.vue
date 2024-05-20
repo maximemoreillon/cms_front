@@ -58,3 +58,4 @@ const userIsAuthor = computed(
   gap: 0.5em;
 }
 </style>
+~/types/article

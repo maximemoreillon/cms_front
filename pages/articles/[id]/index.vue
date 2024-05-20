@@ -48,7 +48,6 @@
 </template>
 
 <script lang="ts" setup>
-import type Article from "~~/types/Article"
 import { toHtml } from "hast-util-to-html"
 
 definePageMeta({
@@ -134,3 +133,4 @@ h1 {
   cursor: pointer;
 }
 </style>
+~/types/article

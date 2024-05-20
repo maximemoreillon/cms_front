@@ -42,8 +42,6 @@
 </template>
 
 <script lang="ts" setup>
-import type Article from "~~/types/Article"
-
 const user = useUser()
 
 definePageMeta({
@@ -91,3 +89,4 @@ const { data, error, refresh } = await useFetch<FetchBody>(fetchFnc, fetchOpts)
   gap: 0.5rem;
 }
 </style>
+~/types/article

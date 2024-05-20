@@ -23,8 +23,6 @@
 </template>
 
 <script lang="ts" setup>
-import type Article from "~~/types/Article"
-
 const emit = defineEmits(["update:modelValue"])
 const props = defineProps<{
   modelValue: boolean
@@ -95,3 +93,4 @@ input {
   flex-grow: 1;
 }
 </style>
+~/types/article

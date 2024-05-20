@@ -41,7 +41,6 @@
 </template>
 
 <script lang="ts" setup>
-import type Article from "~~/types/Article"
 defineProps<{ article: Article }>()
 </script>
 

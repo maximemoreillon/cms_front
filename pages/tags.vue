@@ -37,8 +37,6 @@
 </template>
 
 <script lang="ts" setup>
-import type Tag from "~~/types/Tag"
-
 definePageMeta({
   middleware: ["auth"],
 })

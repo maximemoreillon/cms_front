@@ -48,7 +48,7 @@ const aside_open = ref(false)
   --text-light-color: #666666;
 
   --error-color: #c00000;
-  --success-color: #00c000;
+  --success-color: #3aa13a;
 
   /* TODO: use a more standardized color */
   --tags-color: #dddddd;

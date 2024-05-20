@@ -94,3 +94,4 @@ const article = computed({
   flex-basis: 10rem;
 }
 </style>
+~/types/article

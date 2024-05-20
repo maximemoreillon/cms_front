@@ -30,9 +30,6 @@
 </template>
 
 <script lang="ts" setup>
-import type Article from "~~/types/Article"
-import type Tag from "~~/types/Tag"
-
 const route = useRoute()
 const router = useRouter()
 const runtimeConfig = useRuntimeConfig()
@@ -65,11 +62,13 @@ const getArticleTitleFromH1 = () => {
 const saveArticle = async () => {
   const url = `articles/${route.params.id}`
 
+  const { cached, ...articleProperties } = article.value
+
   const options = {
     ...fetchOpts,
     method: "PATCH",
     body: {
-      ...article.value,
+      ...articleProperties,
       title: getArticleTitleFromH1(),
       tag_ids: article.value?.tags.map((t: Tag) => t._id),
     },
@@ -81,7 +80,7 @@ const saveArticle = async () => {
     await $fetch(url, options)
     snackbar.show = true
     snackbar.message = `Article saved`
-    snackbar.class = ""
+    snackbar.class = "success"
   } catch (error) {
     snackbar.show = true
     snackbar.message = `Failed to save article`
