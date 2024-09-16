@@ -20,5 +20,5 @@ const sortingOptions = ref([
   { icon: "mdi:order-alphabetical-ascending", value: "title" },
 ])
 
-if (user) sortingOptions.value.push({ icon: "mdi:eye", value: "views" })
+if (user.value) sortingOptions.value.push({ icon: "mdi:eye", value: "views" })
 </script>
