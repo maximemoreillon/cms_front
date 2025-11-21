@@ -12,8 +12,6 @@ services:
 
 build:
   stage: build
-  tags:
-    - dind
   only:
     - master
   before_script:
@@ -26,8 +24,6 @@ deploy:
   only:
     - master
   stage: deploy
-  tags:
-    - dind
   before_script:
     - kubectl config use-context moreillon_ci/moreillon_k8s/kubernetes-agent:cloud
   script:
