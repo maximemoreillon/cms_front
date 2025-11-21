@@ -15,8 +15,6 @@ spec:
       containers:
         - name: ${APPLICATION_NAME}
           image: ${CONTAINER_IMAGE_TAGGED}
-          ports:
-            - containerPort: 3000
           env:
             - name: NUXT_PUBLIC_API_BASE
               value: https://api.articles.maximemoreillon.com
@@ -52,6 +50,7 @@ spec:
     - hosts:
         - cms.maximemoreillon.com
         - articles.maximemoreillon.com
+        - articles.cloud.maximemoreillon.com
       secretName: ${APPLICATION_NAME}
   rules:
     - host: cms.maximemoreillon.com
@@ -65,6 +64,16 @@ spec:
                 port:
                   number: 3000
     - host: articles.maximemoreillon.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: ${APPLICATION_NAME}
+                port:
+                  number: 3000
+    - host: articles.cloud.maximemoreillon.com
       http:
         paths:
           - path: /
